@@ -21,3 +21,4 @@ chrome-user-data
 *.iml
 .vscode
 *.swp
+package-lock.json
