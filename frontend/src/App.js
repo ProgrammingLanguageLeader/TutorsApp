@@ -22,6 +22,8 @@ class App extends React.Component {
 			activePanel: 'home',
 			fetchedUser: null,
 		};
+
+		this.go = this.go.bind(this);
 	}
 
 	componentDidMount() {
@@ -39,7 +41,9 @@ class App extends React.Component {
 	}
 
 	go = (e) => {
-		this.setState({ activePanel: e.currentTarget.dataset.to })
+		this.setState({ 
+			activePanel: e.currentTarget.dataset.to 
+		});
 	};
 
 	render() {

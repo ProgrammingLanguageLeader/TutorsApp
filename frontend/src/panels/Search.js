@@ -29,7 +29,7 @@ class Search extends React.Component {
 			<Panel id={this.props.id}>
 				<PanelHeader
 					left={
-						<HeaderButton onClick={this.props.go} id="home">
+						<HeaderButton onClick={this.props.go} data-to="home">
 							{osname === IOS ? <Icon28ChevronBack/> : <Icon24Back/>}
 						</HeaderButton>
 					}
