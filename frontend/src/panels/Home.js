@@ -2,40 +2,49 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Panel, ListItem, Button, Group, Div, Avatar, PanelHeader  } from '@vkontakte/vkui';
 
-// import { createProfile } from '../services/backend';
+import CircleButton from '../customComponents/CircleButton';
+import CenteredDiv from '../customComponents/CenteredDiv';
+import FlexDiv from '../customComponents/FlexDiv';
+import student from '../img/student.jpg';
 
 
-const Home = props => (
-	<Panel id={props.id}>
-		<PanelHeader>Tutor</PanelHeader>
-		{props.fetchedUser &&
-		<Group title="User Data Fetched with VK Connect">
-			<ListItem
-				before={<Avatar src={props.fetchedUser.photo_200}/>}
-				description={props.fetchedUser.city.title}
-			>
-				{`${props.fetchedUser.first_name} ${props.fetchedUser.last_name}`}
-			</ListItem>
-		</Group>}
-		
-			<Div>
-				<Button size="xl" level="2" onClick={props.go} data-to="search">
-					Найти репетитора
-				</Button>
-			</Div>
-			<Div>
-				<Button size="xl" level="2" onClick={props.go} data-to="create_vacancy">
-					Я - репетитор
-				</Button>
-			</Div>
-			<Div>
-				<img src="back.jpg"></img>
-			</Div>
-		
-	</Panel>
-);
+class Home extends React.Component {
+	constructor(props) {
+		super(props);
+	}
 
-
+	render() {
+		return (
+			<Panel id={this.props.id}>
+				<PanelHeader>Tutor</PanelHeader>
+					{this.props.fetchedUser &&
+					<Group title="User Data Fetched with VK Connect">
+						<ListItem
+							before={<Avatar src={this.props.fetchedUser.photo_200}/>}
+							description={this.props.fetchedUser.city.title}
+						>
+							{`${this.props.fetchedUser.first_name} ${this.props.fetchedUser.last_name}`}
+						</ListItem>
+					</Group>
+					}
+					<CenteredDiv>
+						<FlexDiv>
+							<CircleButton stretched onClick={this.props.go} data-to="search">
+								Найти репетитора
+							</CircleButton>
+							<CircleButton stretched onClick={this.props.go} data-to="create_vacancy">
+								Я - репетитор
+							</CircleButton>
+						</FlexDiv>
+					</CenteredDiv>
+					<CenteredDiv>
+						Ненужная картинка
+						<img src={student} width="100%"></img>
+					</CenteredDiv>
+			</Panel>
+		);
+	}
+};
 
 Home.propTypes = {
 	id: PropTypes.string.isRequired,
