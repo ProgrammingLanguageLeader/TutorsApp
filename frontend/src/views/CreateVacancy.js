@@ -8,6 +8,27 @@ import Icon24Add from '@vkontakte/icons/dist/24/add';
 import BackIcon from '../customComponents/BackIcon';
 
 class CreateVacancy extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			subjects: new Set(),
+		};
+
+		this.subjectSelect = React.createRef();
+
+		this.addSubjectClick = this.addSubjectClick.bind(this);
+	}
+
+	addSubjectClick() {
+		let { subjects } = this.state;
+		const { title } = this.subjectSelect.current.state;
+		if (title !== 'Выберите предмет')
+			subjects.add(title);
+		this.setState({
+			subjects: subjects
+		});
+	}
+
 	render() {
 		return (
 			<View id={this.props.id} activePanel="create_vacancy">
@@ -29,19 +50,25 @@ class CreateVacancy extends React.Component {
 						>
 							Артур Стамбульцян
 						</Cell>
-						<Input top="Стаж" defaultValue="2 года"/>
-						<Input top="Образование" defaultValue="РЭУ им. Г.В.Плеханова"/>
-						<Input top="Адрес" defaultValue="Москва, ул. Удальцова"/>
-						<Select top="Предмет" placeholder="Выберите предмет" defaultValue="math">
-							<option value="math">Математика</option>
-							<option value="phys">Физика</option>
+						<Input top="Стаж" defaultValue=""/>
+						<Input top="Образование" defaultValue=""/>
+						<Input top="Адрес" defaultValue=""/>
+						<Select ref={this.subjectSelect} top="Предмет" placeholder="Выберите предмет" defaultValue="">
 							<option value="rus">Русский язык</option>
 							<option value="eng">Английский</option>
+							<option value="math">Математика</option>
+							<option value="phys">Физика</option>
 						</Select>
-						<CellButton before={<Icon24Add />}>
+						<div style={{padding: 0, margin: 0}}>
+							{Array.from(this.state.subjects).map((subject, index) => 
+								<Cell size="l" key={index}>{subject}</Cell>
+							)}
+						</div>
+
+						<CellButton onClick={this.addSubjectClick} before={<Icon24Add />}>
 							Добавить предмет
 						</CellButton>
-						<Input top="Оплата за 60 мин" defaultValue="1000"/>
+						<Input top="Оплата за час" defaultValue=""/>
 						<Textarea top="О себе" placeholder="" />
 						<Button size="xl" onClick={this.props.go} data-to="profile">
 							Сохранить
