@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-	View, Panel, PanelHeader, Cell, List, Group, FormLayout, SelectMimicry, HeaderButton
+	View, Panel, PanelHeader, Div, Cell, List, Group, FormLayout, FixedLayout, Button, SelectMimicry, HeaderButton
 } from '@vkontakte/vkui';
 
 import BackIcon from '../customComponents/BackIcon';
@@ -12,6 +12,7 @@ class Filter extends React.Component {
 			subject: '',
 			price: '',
 			experience: '',
+			study_level: '',
 			activePanel: 'filter'
 		};
 
@@ -27,8 +28,8 @@ class Filter extends React.Component {
 	render() {
 		return (
 			<View id={this.props.id} activePanel={this.state.activePanel}>
-				<Panel id="filter">
-					<PanelHeader 
+				<Panel id="filter" theme="white">
+					<PanelHeader noShadow
 						left={
 							<HeaderButton onClick={this.props.go} data-to="search">
 								<BackIcon />
@@ -39,7 +40,7 @@ class Filter extends React.Component {
 					</PanelHeader>
 					<FormLayout>
 						<SelectMimicry
-							top="Выберите предмет"
+							top="Предмет"
 							placeholder="Любой"
 							onClick={() => this.setState({ activePanel: 'subjects'})}
 						>
@@ -59,11 +60,25 @@ class Filter extends React.Component {
 						>
 							{this.state.experience}
 						</SelectMimicry>
+						<SelectMimicry
+							top="Уровень обучения"
+							placeholder="Любой"
+							onClick={() => this.setState({ activePanel: 'study_level'})}
+						>
+							{this.state.study_level}
+						</SelectMimicry>
 					</FormLayout>
+					<FixedLayout vertical="bottom">
+						<Div>
+							<Button size="l" stretched onClick={this.props.go} data-to="search">
+								Применить
+							</Button>
+						</Div>	
+					</FixedLayout>
 				</Panel>
 
 				<Panel id="subjects">
-					<PanelHeader
+					<PanelHeader noShadow
 						left={
 							<HeaderButton onClick={this.returnToFilterPanel}>
 								<BackIcon />
@@ -91,39 +106,42 @@ class Filter extends React.Component {
 				</Panel>
 
 				<Panel id="price">
-					<PanelHeader
+					<PanelHeader noShadow
 						left={
 							<HeaderButton onClick={this.returnToFilterPanel}>
 								<BackIcon />
 							</HeaderButton>
 						}
 					>
-						Цена
+						Цена за час
 					</PanelHeader>
 					<Group>
 						<List>
 							<Cell onClick={() => this.setState({ price: '500-1000', activePanel: 'filter' })}>
-								500-1000
+								500-1000 руб.
 							</Cell>
 							<Cell onClick={() => this.setState({ price: '1000-1500', activePanel: 'filter' })}>
-								1000-1500
+								1000-1500 руб.
 							</Cell>
 							<Cell onClick={() => this.setState({ price: '1500-2000', activePanel: 'filter' })}>
-								1500-2000
+								1500-2000 руб.
+							</Cell>
+              <Cell onClick={() => this.setState({ price: '1500-2000', activePanel: 'filter' })}>
+								Более 2000 руб.
 							</Cell>
 						</List>
 					</Group>
 				</Panel>
 
 				<Panel id="experience">
-					<PanelHeader
+					<PanelHeader noShadow
 						left={
 							<HeaderButton onClick={this.returnToFilterPanel}>
 								<BackIcon />
 							</HeaderButton>
 						}
 					>
-						Стаж работы
+						Стаж преподавания
 					</PanelHeader>
 					<Group>
 						<List>
@@ -141,6 +159,40 @@ class Filter extends React.Component {
 							</Cell>
 							<Cell onClick={() => this.setState({ experience: 'Более 10 лет', activePanel: 'filter' })}>
 								Более 10 лет
+							</Cell>
+						</List>
+					</Group>
+				</Panel>
+
+				<Panel id="study_level">
+					<PanelHeader noShadow
+						left={
+							<HeaderButton onClick={this.returnToFilterPanel}>
+								<BackIcon />
+							</HeaderButton>
+						}
+					>
+						Уровень обучения
+					</PanelHeader>
+					<Group>
+						<List>
+							<Cell onClick={() => this.setState({ study_level: 'Начальная школа', activePanel: 'filter' })}>
+								Начальная школа
+							</Cell>
+							<Cell onClick={() => this.setState({ study_level: 'Средняя школа', activePanel: 'filter' })}>
+								Средняя школа
+							</Cell>
+              <Cell onClick={() => this.setState({ study_level: 'Средняя школа', activePanel: 'filter' })}>
+								Олимпиады
+							</Cell>
+							<Cell onClick={() => this.setState({ study_level: 'Подготовка к ОГЭ', activePanel: 'filter' })}>
+								Подготовка к ОГЭ
+							</Cell>
+							<Cell onClick={() => this.setState({ study_level: 'Подготовка к ЕГЭ', activePanel: 'filter' })}>
+								Подготовка к ЕГЭ
+							</Cell>
+							<Cell onClick={() => this.setState({ study_level: 'Курс высшего образования', activePanel: 'filter' })}>
+								Курс высшего образования
 							</Cell>
 						</List>
 					</Group>

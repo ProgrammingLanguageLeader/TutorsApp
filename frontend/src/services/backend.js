@@ -129,7 +129,7 @@ export const getActiveVacancies = () => {
     }
   })
   .then(res => res.data)
-  .catch(res => res)
+  .catch(res => res.data)
 };
 
 // export const getStudents = (tutors_vk_id) => {
