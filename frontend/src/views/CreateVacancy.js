@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-  View, Panel, PanelHeader, HeaderButton, Cell, Avatar, Button, Input, FormLayout, FormLayoutGroup, Group, FixedLayout,
+  View, Panel, PanelHeader, HeaderButton, Cell, Avatar, Button, Input, FormLayout, FormLayoutGroup, FixedLayout,
   Radio, Checkbox, SelectMimicry, Div, CellButton, Select, Textarea
 } from '@vkontakte/vkui';
 import Icon24Add from '@vkontakte/icons/dist/24/add';
@@ -101,16 +101,14 @@ class CreateVacancy extends React.Component {
             >
               Уровень подготовки
           </PanelHeader>
-          <FormLayout>
-            <Group>
-              <Checkbox>Начальная школа</Checkbox>
-              <Checkbox>Средняя школа</Checkbox>
-              <Checkbox>Олимпиады</Checkbox>
-              <Checkbox>Подготовка к ОГЭ</Checkbox>
-              <Checkbox>Подготовка к ЕГЭ</Checkbox>
-              <Checkbox>Курс высшего образования</Checkbox>
-            </Group>
-          </FormLayout>
+          <FormLayoutGroup>
+						<Checkbox>Начальная школа</Checkbox>
+						<Checkbox>Средняя школа</Checkbox>
+						<Checkbox>Олимпиады</Checkbox>
+						<Checkbox>Подготовка к ОГЭ</Checkbox>
+						<Checkbox>Подготовка к ЕГЭ</Checkbox>
+						<Checkbox>Курс высшего образования</Checkbox>
+          </FormLayoutGroup>
           <FixedLayout vertical="bottom">
 						<Div>
 							<Button size="l" stretched onClick={() => this.setState({ activePanel: 'create_vacancy'})}>
