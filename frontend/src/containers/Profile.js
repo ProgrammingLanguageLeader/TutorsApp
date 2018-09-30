@@ -67,9 +67,4 @@ class Profile extends React.Component {
 	}
 };
 
-Profile.propTypes = {
-	id: PropTypes.string.isRequired,
-	go: PropTypes.func.isRequired,
-};
-
 export default Profile;

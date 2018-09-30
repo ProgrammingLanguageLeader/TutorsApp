@@ -32,9 +32,4 @@ const SettingsWindow = props => (
 	</View>
 );
 
-SettingsWindow.propTypes = {
-	id: PropTypes.string.isRequired,
-	go: PropTypes.func.isRequired,
-};
-
 export default SettingsWindow;

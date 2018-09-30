@@ -122,9 +122,4 @@ class CreateVacancy extends React.Component {
 	}
 };
 
-CreateVacancy.propTypes = {
-	id: PropTypes.string.isRequired,
-	go: PropTypes.func.isRequired,
-};
-
 export default CreateVacancy;

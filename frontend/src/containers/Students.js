@@ -33,9 +33,4 @@ const Students = props => (
 	</View>
 );
 
-Students.propTypes = {
-	id: PropTypes.string.isRequired,
-	go: PropTypes.func.isRequired,
-};
-
 export default Students;

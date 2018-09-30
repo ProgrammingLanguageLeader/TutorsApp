@@ -35,9 +35,4 @@ const Contact = props => (
 	</View>
 );
 
-Contact.propTypes = {
-	id: PropTypes.string.isRequired,
-	go: PropTypes.func.isRequired,
-};
-
 export default Contact;

@@ -1,30 +1,30 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { View, Panel, PanelHeader, HeaderButton, Cell, Group, Div, Button } from '@vkontakte/vkui';
 
-import { getActiveVacancies } from '../services/backend';
 import BackIcon from '../customComponents/BackIcon';
+import { apiActions } from '../actions/api';
 
 class Search extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			activeTab: 'all',
-			tutors: []
+			activeTab: 'all'
 		};
 	}
 
-	async componentDidMount() {
-		const tutors = await getActiveVacancies();
-		if (!tutors) {
-			return;
-		}
-		this.setState({
-			tutors: tutors
-		});
+	componentDidMount() {
+		this.props.dispatch(
+			apiActions.makeRequest('get_active_vacancies', 'get', {})
+		);
 	}
 
 	render() {
+		console.log(this.props);
+		const vacanciesFetched = !this.props.fetching && 
+			this.props.errors.length == 0 &&
+			this.props.vacancies;
+
 		return (
 			<View id={this.props.id} activePanel="search">
 				<Panel id="search">
@@ -42,8 +42,8 @@ class Search extends React.Component {
 							<Button size="xl" onClick={this.props.go} data-to="filter">Фильтр</Button>
 						</Div>
 						<Cell>Здесь будут компенты с информацией о вакансиях</Cell>
-						{ this.state.tutors.map((tutor, index) => {
-							return <Cell key={index}>ID: {tutor.user}</Cell>
+						{ vacanciesFetched && this.props.vacancies.map((vacancy, index) => {
+							return <Cell key={index}>ID: {vacancy.user}</Cell>
 						})}
 					</Group>
 				</Panel>
@@ -52,9 +52,13 @@ class Search extends React.Component {
 	}
 };
 
-Search.propTypes = {
-	id: PropTypes.string.isRequired,
-	go: PropTypes.func.isRequired,
+const mapStateToProps = state => {
+	const { fetching, errors, response } = state.apiReducer;
+	return {
+		vacancies: response,
+		fetching,
+		errors
+	};
 };
 
-export default Search;
+export default connect(mapStateToProps)(Search);
