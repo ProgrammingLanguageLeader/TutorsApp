@@ -1,4 +1,5 @@
 import React from 'react';
+import { withRouter } from 'react-router-dom';
 import {
 	View, Panel, PanelHeader, Div, Cell, List, Group, FormLayout, FixedLayout, Button, SelectMimicry, HeaderButton
 } from '@vkontakte/vkui';
@@ -31,7 +32,7 @@ class Filter extends React.Component {
 				<Panel id="filter" theme="white">
 					<PanelHeader noShadow
 						left={
-							<HeaderButton onClick={this.props.go} data-to="search">
+							<HeaderButton onClick={() => this.props.history.goBack()}>
 								<BackIcon />
 							</HeaderButton>
 						}
@@ -70,7 +71,7 @@ class Filter extends React.Component {
 					</FormLayout>
 					<FixedLayout vertical="bottom">
 						<Div>
-							<Button size="l" stretched onClick={this.props.go} data-to="search">
+							<Button size="l" stretched onClick={() => this.props.history.push('/search')}>
 								Применить
 							</Button>
 						</Div>	
@@ -202,4 +203,4 @@ class Filter extends React.Component {
 	}
 };
 
-export default Filter;
+export default withRouter(Filter);

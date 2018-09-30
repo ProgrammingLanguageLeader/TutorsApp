@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
 import { 
 	View, Panel, PanelHeader, HeaderButton, Cell, Avatar, Button, List, Group, InfoRow 
 } from '@vkontakte/vkui';
@@ -20,7 +20,7 @@ class Profile extends React.Component {
 				<Panel id="profile">
 					<PanelHeader
 						left={
-							<HeaderButton onClick={this.props.go} data-to="search">
+							<HeaderButton onClick={() => this.props.history.goBack()}>
 								<BackIcon />
 							</HeaderButton>
 						}
@@ -33,7 +33,11 @@ class Profile extends React.Component {
 								size="l"
 								description="Школьный учитель, Возраст: 20"
 								before={<Avatar src="https://pp.userapi.com/c841034/v841034569/3b8c1/pt3sOw_qhfg.jpg"/>}
-								bottomContent={<Button onClick={this.props.go} data-to="contact_window">Связаться</Button>}
+								bottomContent={
+									<Button onClick={() => this.props.history.push('/contact')}>
+										Связаться
+									</Button>
+								}
 							>
 								Артур Стамбульцян
 							</Cell>
@@ -67,4 +71,4 @@ class Profile extends React.Component {
 	}
 };
 
-export default Profile;
+export default withRouter(Profile);

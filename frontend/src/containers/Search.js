@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import { View, Panel, PanelHeader, HeaderButton, Cell, Group, Div, Button } from '@vkontakte/vkui';
 
 import BackIcon from '../customComponents/BackIcon';
@@ -20,9 +21,8 @@ class Search extends React.Component {
 	}
 
 	render() {
-		console.log(this.props);
 		const vacanciesFetched = !this.props.fetching && 
-			this.props.errors.length == 0 &&
+			this.props.errors.length === 0 &&
 			this.props.vacancies;
 
 		return (
@@ -30,7 +30,7 @@ class Search extends React.Component {
 				<Panel id="search">
 					<PanelHeader noShadow
 						left={
-							<HeaderButton onClick={this.props.go} data-to="home">
+							<HeaderButton onClick={() => this.props.history.goBack()}>
 								<BackIcon />
 							</HeaderButton>
 						}
@@ -39,7 +39,9 @@ class Search extends React.Component {
 					</PanelHeader>
 					<Group>
 						<Div>
-							<Button size="xl" onClick={this.props.go} data-to="filter">Фильтр</Button>
+							<Button size="xl" onClick={() => this.props.history.push('/filter')}>
+								Фильтр
+							</Button>
 						</Div>
 						<Cell>Здесь будут компенты с информацией о вакансиях</Cell>
 						{ vacanciesFetched && this.props.vacancies.map((vacancy, index) => {
@@ -61,4 +63,4 @@ const mapStateToProps = state => {
 	};
 };
 
-export default connect(mapStateToProps)(Search);
+export default withRouter(connect(mapStateToProps)(Search));

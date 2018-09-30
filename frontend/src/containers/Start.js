@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import { Panel, PanelHeader, View } from '@vkontakte/vkui';
 
 import CircleButton from '../customComponents/CircleButton';
@@ -16,11 +17,13 @@ class Start extends React.Component {
 	}
 
 	registerStudent() {
-		console.log('student');
+		// TODO: register student using backend
+		this.props.history.push('/search');
 	}
 
 	registerTutor() {
-		console.log('tutor');
+		// TODO: register tutor using backend
+		this.props.history.push('/create_vacancy');
 	}
 
 	render() {
@@ -30,10 +33,10 @@ class Start extends React.Component {
 					<PanelHeader>Tutor</PanelHeader>
 					<BackgroundDiv image={student}>
 						<CenteredDiv>
-							<CircleButton onClick={this.registerStudent} data-to="search">
+							<CircleButton onClick={this.registerStudent}>
 								Найти репетитора
 							</CircleButton>
-							<CircleButton onClick={this.registerTutor} data-to="create_vacancy">
+							<CircleButton onClick={this.registerTutor}>
 								Я - репетитор
 							</CircleButton>
 						</CenteredDiv>
@@ -51,4 +54,4 @@ const mapStateToProps = (state) => {
 	};
 };
 
-export default connect(mapStateToProps)(Start);
+export default withRouter(connect(mapStateToProps)(Start));

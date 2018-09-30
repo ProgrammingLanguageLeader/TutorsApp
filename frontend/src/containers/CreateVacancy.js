@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
 import {
   View, Panel, PanelHeader, HeaderButton, Cell, Avatar, Button, Input, FormLayout, FormLayoutGroup, FixedLayout,
   Radio, Checkbox, SelectMimicry, Div, CellButton, Select, Textarea
@@ -38,7 +38,7 @@ class CreateVacancy extends React.Component {
 				<Panel id="create_vacancy" theme="white">
 					<PanelHeader
 						left={
-							<HeaderButton onClick={this.props.go} data-to="home">
+							<HeaderButton onClick={() => this.props.history.goBack()}>
 								<BackIcon />
 							</HeaderButton>
 						}
@@ -85,7 +85,7 @@ class CreateVacancy extends React.Component {
            </div>
            <Input top="Электронная почта" defaultValue=""/>
 					 <Textarea top="О себе" placeholder="" />
-						<Button size="xl" onClick={this.props.go} data-to="profile">
+						<Button size="xl" onClick={() => this.props.history.push('/profile')}>
 							Сохранить
 						</Button>
 					</FormLayout>
@@ -122,4 +122,4 @@ class CreateVacancy extends React.Component {
 	}
 };
 
-export default CreateVacancy;
+export default withRouter(CreateVacancy);
