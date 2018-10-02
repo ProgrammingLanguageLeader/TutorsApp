@@ -1,65 +1,65 @@
 import React from 'react';
-import connect from '@vkontakte/vkui-connect';
-import { Root } from '@vkontakte/vkui';
+import { connect } from 'react-redux';
 import '@vkontakte/vkui/dist/vkui.css';
+import { Route, Redirect } from 'react-router-dom';
 
-import Home from './views/Home';
-import Search from './views/Search';
-import Profile from './views/Profile';
-import CreateVacancy from './views/CreateVacancy';
-import Contact from './views/Contact';
-import SettingsWindow from './views/SettingsWindow';
-import Filter from './views/Filter';
-import Students from './views/Students';
+// import Home from './containers/Home';
+import Search from './containers/Search';
+import Profile from './containers/Profile';
+import CreateVacancy from './containers/CreateVacancy';
+import Contact from './containers/Contact';
+import Settings from './containers/Settings';
+import Filter from './containers/Filter';
+import Students from './containers/Students';
+import Start from './containers/Start';
+
+import { vkActions } from './actions/vk';
+
+const PrivateRoute = ({ component: Component, ...rest }) => (
+	<Route
+		{...rest}
+		render={props => (true) ? (
+				<Component {...props} />
+			) : (
+				<Redirect
+					to={{
+						pathname: "/start",
+						state: { from: props.location }
+					}}
+				/>
+			)
+		}
+	/>
+);
 
 class App extends React.Component {
-	constructor(props) {
-		super(props);
-
-		this.state = {
-			activeView: 'home',
-			fetchedUser: null,
-		};
-
-		this.go = this.go.bind(this);
-	}
-
 	componentDidMount() {
-		connect.subscribe((e) => {
-			switch (e.detail.type) {
-				case 'VKWebAppGetUserInfoResult':
-					this.setState({ 
-						fetchedUser: e.detail.data 
-					});
-					break;
-				default:
-					console.log(e.detail.type);
-			}
-		});
-
-		connect.send("VKWebAppGetUserInfo", {});
+		this.props.dispatch(vkActions.init());
+    	this.props.dispatch(vkActions.fetchAccessToken());
 	}
-
-	go = (e) => {
-		this.setState({ 
-			activeView: e.currentTarget.dataset.to 
-		});
-	};
 
 	render() {
 		return (
-			<Root activeView={this.state.activeView}>
-				<Home id="home" fetchedUser={this.state.fetchedUser} go={this.go} />
-				<Search id="search" go={this.go} />
-				<Profile id="profile" go={this.go} />
-				<CreateVacancy id="create_vacancy" go={this.go} />
-				<Contact id="contact_window" go={this.go} />
-				<SettingsWindow id="settings_window" go={this.go} />
-				<Filter id="filter" go={this.go} />
-				<Students id="students" go={this.go} />
-			</Root>
+			<div>
+				{/* <PrivateRoute exact path="/" component={Home} /> */}
+				<PrivateRoute exact path="/" component={Start} />
+				<PrivateRoute path="/search" component={Search} />
+				<PrivateRoute path="/profile" component={Profile} />
+				<PrivateRoute path="/create_vacancy" component={CreateVacancy} />
+				<PrivateRoute path="/contact" component={Contact} />
+				<PrivateRoute path="/settings" component={Settings} />
+				<PrivateRoute path="/filter" component={Filter} />
+				<PrivateRoute path="/students" component={Students} />
+				<Route path="/start" component={Start} />
+			</div>
 		);
 	}
+};
+
+const mapStateToProps = (state) => {
+	return {
+		...state
+	};
 }
 
-export default App;
+export default connect(mapStateToProps)(App);

@@ -1,17 +1,19 @@
 import styled from 'styled-components';
-import { getClassName, Button } from '@vkontakte/vkui';
 
-const buttonBaseClassName = getClassName('Button');
-
-const CircleButton = styled(Button).attrs({
-  className: buttonBaseClassName
-})`
-  width: 40%;
-  padding-top: 10%;
-  padding-bottom: 10%;
-  border-radius: 20px;
+const CircleButton = styled.button`
+  width: 36vw;
+  padding-top: 18vw;
+  padding-bottom: 18vw;
+  border-radius: 5%;
   margin: 5px;
-  font-size: 28pt;
+  border: none;
+  color: #ffffff;
+  background-color: #5181b8;
+  outline: none;
+
+  &:active {
+    background-color: #4872a3;
+  }
 `;
 
 export default CircleButton;

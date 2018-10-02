@@ -1,15 +1,22 @@
-import 'core-js/es6/map';
-import 'core-js/es6/set';
 import React from 'react';
-import ReactDOM from 'react-dom';
-import connect from '@vkontakte/vkui-connect';
+import ReactDOM from 'react-dom'; 
+import { ConnectedRouter } from 'connected-react-router';
+import { Provider } from 'react-redux';
+
 import App from './App';
 import registerServiceWorker from './sw';
+import configureStore from './store/configureStore';
+import history from './helpers/history';
 
-// Init VK App
-connect.send('VKWebAppInit', {});
+const store = configureStore();
 
-// Service Worker For Cache
+ReactDOM.render(
+  <Provider store={store}>
+    <ConnectedRouter history={history}>
+      <App />
+    </ConnectedRouter>
+  </Provider>,
+  document.getElementById('root')
+);
+
 registerServiceWorker();
-
-ReactDOM.render(<App />, document.getElementById('root'));
