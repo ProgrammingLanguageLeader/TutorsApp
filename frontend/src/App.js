@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import '@vkontakte/vkui/dist/vkui.css';
 import { Route, Redirect } from 'react-router-dom';
 
@@ -12,6 +12,8 @@ import Settings from './containers/Settings';
 import Filter from './containers/Filter';
 import Students from './containers/Students';
 import Start from './containers/Start';
+
+import { vkActions } from './actions/vk';
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
 	<Route
@@ -30,23 +32,34 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
 	/>
 );
 
-const App = ({store}) => (
-	<div>
-		{/* <PrivateRoute exact path="/" component={Home} /> */}
-		<PrivateRoute exact path="/" component={Start} />
-		<PrivateRoute path="/search" component={Search} />
-		<PrivateRoute path="/profile" component={Profile} />
-		<PrivateRoute path="/create_vacancy" component={CreateVacancy} />
-		<PrivateRoute path="/contact" component={Contact} />
-		<PrivateRoute path="/settings" component={Settings} />
-		<PrivateRoute path="/filter" component={Filter} />
-		<PrivateRoute path="/students" component={Students} />
-		<Route path="/start" component={Start} />
-	</div>
-);
+class App extends React.Component {
+	componentDidMount() {
+		this.props.dispatch(vkActions.init());
+    	this.props.dispatch(vkActions.fetchAccessToken());
+	}
 
-App.propTypes = {
-	store: PropTypes.object.isRequired
+	render() {
+		return (
+			<div>
+				{/* <PrivateRoute exact path="/" component={Home} /> */}
+				<PrivateRoute exact path="/" component={Start} />
+				<PrivateRoute path="/search" component={Search} />
+				<PrivateRoute path="/profile" component={Profile} />
+				<PrivateRoute path="/create_vacancy" component={CreateVacancy} />
+				<PrivateRoute path="/contact" component={Contact} />
+				<PrivateRoute path="/settings" component={Settings} />
+				<PrivateRoute path="/filter" component={Filter} />
+				<PrivateRoute path="/students" component={Students} />
+				<Route path="/start" component={Start} />
+			</div>
+		);
+	}
 };
 
-export default App;
+const mapStateToProps = (state) => {
+	return {
+		...state
+	};
+}
+
+export default connect(mapStateToProps)(App);
