@@ -20,7 +20,7 @@ class Home extends React.Component {
 								<CircleButton data-to="search">
 									Найти репетитора
 								</CircleButton>
-								<CircleButton data-to="create_vacancy">
+								<CircleButton data-to="edit_profile">
 									Я - репетитор
 								</CircleButton>
 							</FlexDiv>

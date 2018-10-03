@@ -5,8 +5,9 @@ import { Route, Redirect } from 'react-router-dom';
 
 // import Home from './containers/Home';
 import Search from './containers/Search';
-import Profile from './containers/Profile';
+import MainTutor from './containers/MainTutor';
 import CreateVacancy from './containers/CreateVacancy';
+import EditProfile from './containers/EditProfile';
 import Contact from './containers/Contact';
 import Settings from './containers/Settings';
 import Filter from './containers/Filter';
@@ -44,8 +45,9 @@ class App extends React.Component {
 				{/* <PrivateRoute exact path="/" component={Home} /> */}
 				<PrivateRoute exact path="/" component={Start} />
 				<PrivateRoute path="/search" component={Search} />
-				<PrivateRoute path="/profile" component={Profile} />
+				<PrivateRoute path="/main_tutor" component={MainTutor} />
 				<PrivateRoute path="/create_vacancy" component={CreateVacancy} />
+				<PrivateRoute path="/edit_profile" component={EditProfile} />
 				<PrivateRoute path="/contact" component={Contact} />
 				<PrivateRoute path="/settings" component={Settings} />
 				<PrivateRoute path="/filter" component={Filter} />
