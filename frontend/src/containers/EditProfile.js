@@ -45,7 +45,7 @@ class EditProfile extends React.Component {
 							defaultValue=""/>
 						<File before={<Icon24Document />} size="l" />
 						<Input top="Адрес" defaultValue=""/>
-          	<Input top="Электронная почта" defaultValue=""/>
+          				<Input top="Электронная почта" defaultValue=""/>
 						<Textarea top="О себе" placeholder="" />
 						<Button size="xl" onClick={() => this.props.history.push('/main_tutor')}>
 							Сохранить

@@ -71,7 +71,7 @@ class Filter extends React.Component {
 					</FormLayout>
 					<FixedLayout vertical="bottom">
 						<Div>
-							<Button size="l" stretched onClick={() => this.props.history.push('/search')}>
+							<Button size="l" stretched onClick={() => this.props.history.push('/main_tutor')}>
 								Применить
 							</Button>
 						</Div>	
@@ -127,7 +127,7 @@ class Filter extends React.Component {
 							<Cell onClick={() => this.setState({ price: '1500-2000', activePanel: 'filter' })}>
 								1500-2000 руб.
 							</Cell>
-              <Cell onClick={() => this.setState({ price: '1500-2000', activePanel: 'filter' })}>
+              <Cell onClick={() => this.setState({ price: 'Более 2000 руб.', activePanel: 'filter' })}>
 								Более 2000 руб.
 							</Cell>
 						</List>
