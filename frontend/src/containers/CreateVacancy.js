@@ -1,10 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import {
-  View, Panel, PanelHeader, HeaderButton, Cell, Avatar, Button, Input, FormLayout, FormLayoutGroup, FixedLayout,
-  Radio, Checkbox, SelectMimicry, Div, CellButton, Select, Textarea
+  View, Panel, PanelHeader, HeaderButton, Cell, Avatar, Button, Input, FormLayout, Radio, FormLayoutGroup, FixedLayout,
+  Checkbox, SelectMimicry, Div, CellButton, Select, File, Textarea
 } from '@vkontakte/vkui';
 import Icon24Add from '@vkontakte/icons/dist/24/add';
+import Icon24Document from '@vkontakte/icons/dist/24/document';
 
 import BackIcon from '../customComponents/BackIcon';
 
@@ -75,11 +76,21 @@ class CreateVacancy extends React.Component {
 							placeholder="Любой"
 							onClick={() => this.setState({ activePanel: 'study_level'})}
 						>
+						<div top="Выезд на дом">
+              <Radio name="type">Да</Radio>
+              <Radio name="type">Нет</Radio>
+          	</div>
 						{this.state.study_level}
 						</SelectMimicry>
-            <Input top="Оплата за час" defaultValue=""/>
+            <Input top="Оплата за час" defaultValue="" />
 						<Input top="Стаж преподавания" defaultValue=""/>
-						<Input top="Образование" defaultValue=""/>
+						<FormLayout>
+							<Input
+								top="Образование"
+								bottom='Прикрепите копии документов об образовании и трудовом стаже, если хотите разместить свою заявку с пометкой "Проверенный специалист"'
+								defaultValue=""/>
+							<File before={<Icon24Document />} size="l" />
+						</FormLayout>
 						<Input top="Адрес" defaultValue=""/>
             <div top="Выезд на дом">
               <Radio name="type">Да</Radio>
@@ -125,9 +136,7 @@ class CreateVacancy extends React.Component {
 };
 
 const mapStateToProps = (state) => {
-	return {
-		...state
-	}
+	return state;
 }
 
 export default connect(mapStateToProps)(CreateVacancy);

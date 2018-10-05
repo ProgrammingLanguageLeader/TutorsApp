@@ -36,7 +36,7 @@ class Start extends React.Component {
 	registerTutor() {
 		// TODO: register tutor using backend
 		this.props.dispatch(
-			locationActions.changeLocation('create_vacancy')
+			locationActions.changeLocation('edit_profile')
 		);
 	}
 

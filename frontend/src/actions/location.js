@@ -14,6 +14,6 @@ const goBack = () => dispatch => {
   });
 };
 
-export const locationActions= {
+export const locationActions = {
   changeLocation, goBack,
 };

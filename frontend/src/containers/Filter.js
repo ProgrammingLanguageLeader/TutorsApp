@@ -136,7 +136,7 @@ class Filter extends React.Component {
 							<Cell onClick={() => this.setState({ price: '1500-2000', activePanel: 'filter' })}>
 								1500-2000 руб.
 							</Cell>
-              <Cell onClick={() => this.setState({ price: '1500-2000', activePanel: 'filter' })}>
+              <Cell onClick={() => this.setState({ price: 'Более 2000 руб.', activePanel: 'filter' })}>
 								Более 2000 руб.
 							</Cell>
 						</List>
