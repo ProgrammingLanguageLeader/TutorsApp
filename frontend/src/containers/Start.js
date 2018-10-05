@@ -1,12 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
-import { Panel, PanelHeader, View, Alert, Button } from '@vkontakte/vkui';
+import { Panel, PanelHeader, View } from '@vkontakte/vkui';
 
 import CircleButton from '../customComponents/CircleButton';
 import CenteredDiv from '../customComponents/CenteredDiv';
 import BackgroundDiv from '../customComponents/BackgroundDiv';
 import student from '../img/student.jpg';
+
+import { apiActions } from '../actions/api';
+import { locationActions } from '../actions/location';
 
 class Start extends React.Component {
 	constructor(props) {
@@ -20,40 +22,27 @@ class Start extends React.Component {
 	}
 
 	registerStudent() {
-		// TODO: register student using backend
-		this.props.history.push('/search');
+		this.props.dispatch(
+			apiActions.createProfile({
+				vk_id: this.props.vkReducer.userInfo['id'],
+				is_student: true,
+			})
+		);
+		this.props.dispatch(
+			locationActions.changeLocation('search'),
+		)
 	}
 
 	registerTutor() {
 		// TODO: register tutor using backend
-		this.props.history.push('/create_vacancy');
+		this.props.dispatch(
+			locationActions.changeLocation('create_vacancy')
+		);
 	}
-
-  // TODO: remove this later
-	openSheet () {
-    this.setState({ 
-			popout:
-				<Alert
-					actions={[{
-						title: 'Close',
-						autoclose: true,
-						style: 'destructive'
-					}, {
-						title: 'Cancel',
-						autoclose: true,
-						style: 'cancel'
-					}]}
-					onClose={ () => this.setState({ popout: null }) }
-				>
-					<h2>Hi!</h2>
-					<p>{JSON.stringify(this.props)}</p>
-				</Alert>
-    });
-  }
 
 	render() {
 		return (
-			<View popout={this.state.popout} id={this.props.id} activePanel="home">
+			<View id={this.props.id} activePanel="home">
 				<Panel id="home">
 					<PanelHeader>Tutor</PanelHeader>
 					<BackgroundDiv image={student}>
@@ -64,10 +53,6 @@ class Start extends React.Component {
 							<CircleButton onClick={this.registerTutor}>
 								Я - репетитор
 							</CircleButton>
-              {/* TODO: remove this later */ }
-							<Button onClick={this.openSheet.bind(this)}>
-								Show VK info
-							</Button>
 						</CenteredDiv>
 					</BackgroundDiv>
 				</Panel>
@@ -77,12 +62,10 @@ class Start extends React.Component {
 };
 
 const mapStateToProps = (state) => {
-	const { fetching, response, errors } = state.apiReducer;
-	const { vkReducer } = state;
+	const { vkReducer, apiReducer } = state;
 	return {
-		fetching, response, errors,
-		vkReducer
+		apiReducer, vkReducer
 	};
 };
 
-export default withRouter(connect(mapStateToProps)(Start));
+export default connect(mapStateToProps)(Start);

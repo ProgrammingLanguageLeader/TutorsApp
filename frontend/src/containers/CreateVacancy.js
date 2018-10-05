@@ -1,5 +1,5 @@
 import React from 'react';
-import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 import {
   View, Panel, PanelHeader, HeaderButton, Cell, Avatar, Button, Input, FormLayout, FormLayoutGroup, FixedLayout,
   Radio, Checkbox, SelectMimicry, Div, CellButton, Select, Textarea
@@ -7,6 +7,8 @@ import {
 import Icon24Add from '@vkontakte/icons/dist/24/add';
 
 import BackIcon from '../customComponents/BackIcon';
+
+import { locationActions } from '../actions/location';
 
 class CreateVacancy extends React.Component {
 	constructor(props) {
@@ -38,7 +40,7 @@ class CreateVacancy extends React.Component {
 				<Panel id="create_vacancy" theme="white">
 					<PanelHeader
 						left={
-							<HeaderButton onClick={() => this.props.history.goBack()}>
+							<HeaderButton onClick={() => this.props.dispatch(locationActions.goBack())}>
 								<BackIcon />
 							</HeaderButton>
 						}
@@ -85,7 +87,7 @@ class CreateVacancy extends React.Component {
            </div>
            <Input top="Электронная почта" defaultValue=""/>
 					 <Textarea top="О себе" placeholder="" />
-						<Button size="xl" onClick={() => this.props.history.push('/profile')}>
+						<Button size="xl" onClick={() => this.props.dispatch(locationActions.changeLocation('profile'))}>
 							Сохранить
 						</Button>
 					</FormLayout>
@@ -94,9 +96,9 @@ class CreateVacancy extends React.Component {
         <Panel id="study_level">
           <PanelHeader noShadow
               left={
-                <HeaderButton onClick={() => this.setState({ activePanel: 'create_vacancy'})}>
-                  <BackIcon />
-                </HeaderButton>
+                <HeaderButton onClick={() => this.props.dispatch(locationActions.goBack())}>
+									<BackIcon />
+								</HeaderButton>
               }
             >
               Уровень подготовки
@@ -122,4 +124,10 @@ class CreateVacancy extends React.Component {
 	}
 };
 
-export default withRouter(CreateVacancy);
+const mapStateToProps = (state) => {
+	return {
+		...state
+	}
+}
+
+export default connect(mapStateToProps)(CreateVacancy);

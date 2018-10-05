@@ -1,10 +1,12 @@
 import React from 'react';
-import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 import {
 	View, Panel, PanelHeader, HeaderButton, Cell, Avatar, Button, Group, Input, FormLayout
 } from '@vkontakte/vkui';
 
 import BackIcon from '../customComponents/BackIcon';
+
+import { locationActions } from '../actions/location';
 
 class Contact extends React.Component {
 	render() {
@@ -13,9 +15,10 @@ class Contact extends React.Component {
 				<Panel id="contact">
 					<PanelHeader
 						left={
-							<HeaderButton onClick={() => this.props.history.goBack()}>
+							<HeaderButton onClick={() => this.props.dispatch(locationActions.goBack())}>
 								<BackIcon />
-							</HeaderButton>}
+							</HeaderButton>
+						}
 					>
 						Подача заявки
 					</PanelHeader>
@@ -32,7 +35,7 @@ class Contact extends React.Component {
 							<Input top="ФИО" defaultValue="Ученик"/>
 							<Input top="Телефон" defaultValue="+79817298687"/>
 							<Input top="Адрес" defaultValue="Москва, ул. Удальцова"/>
-							<Button size="xl" onClick={() => this.props.history.push('/search')}>
+							<Button size="xl" onClick={() => this.props.dispatch(locationActions.changeLocation('search'))}>
 								Отправить заявку
 							</Button>
 						</FormLayout>
@@ -43,4 +46,8 @@ class Contact extends React.Component {
 	}
 };
 
-export default withRouter(Contact);
+const mapStateToProps = state => {
+	return state;
+}
+
+export default connect(mapStateToProps)(Contact);

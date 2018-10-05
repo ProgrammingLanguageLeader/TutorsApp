@@ -1,10 +1,12 @@
 import React from 'react';
-import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 import {
 	View, Panel, PanelHeader, Div, Cell, List, Group, FormLayout, FixedLayout, Button, SelectMimicry, HeaderButton
 } from '@vkontakte/vkui';
 
 import BackIcon from '../customComponents/BackIcon';
+
+import { locationActions } from '../actions/location';
 
 class Filter extends React.Component {
 	constructor(props) {
@@ -18,6 +20,7 @@ class Filter extends React.Component {
 		};
 
 		this.returnToFilterPanel = this.returnToFilterPanel.bind(this);
+		this.applyButtonClick = this.applyButtonClick.bind(this);
 	}
 
 	returnToFilterPanel() {
@@ -26,13 +29,19 @@ class Filter extends React.Component {
 		});
 	}
 
+	applyButtonClick() {
+		this.props.dispatch(
+			locationActions.changeLocation('search')
+		);
+	}
+
 	render() {
 		return (
 			<View id={this.props.id} activePanel={this.state.activePanel}>
 				<Panel id="filter" theme="white">
 					<PanelHeader noShadow
 						left={
-							<HeaderButton onClick={() => this.props.history.goBack()}>
+							<HeaderButton onClick={() => this.props.dispatch(locationActions.goBack())}>
 								<BackIcon />
 							</HeaderButton>
 						}
@@ -71,7 +80,7 @@ class Filter extends React.Component {
 					</FormLayout>
 					<FixedLayout vertical="bottom">
 						<Div>
-							<Button size="l" stretched onClick={() => this.props.history.push('/search')}>
+							<Button size="l" stretched onClick={this.applyButtonClick}>
 								Применить
 							</Button>
 						</Div>	
@@ -203,4 +212,8 @@ class Filter extends React.Component {
 	}
 };
 
-export default withRouter(Filter);
+const mapStateToProps = state => {
+	return state;
+}
+
+export default connect(mapStateToProps)(Filter);

@@ -1,10 +1,12 @@
 import React from 'react';
-import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 import { 
 	View, Panel, PanelHeader, HeaderButton, Cell, Avatar, Button, List, Group, InfoRow 
 } from '@vkontakte/vkui';
 
 import BackIcon from '../customComponents/BackIcon';
+
+import { locationActions } from '../actions/location';
 
 class Profile extends React.Component {
 	constructor(props) {
@@ -12,6 +14,14 @@ class Profile extends React.Component {
 		this.setState({
 			activePanel: 'profile'
 		});
+
+		this.contactButtonClick = this.contactButtonClick.bind(this);
+	}
+
+	contactButtonClick() {
+		this.props.dispatch(
+			locationActions.changeLocation('contact')
+		);
 	}
 
 	render() {
@@ -20,7 +30,7 @@ class Profile extends React.Component {
 				<Panel id="profile">
 					<PanelHeader
 						left={
-							<HeaderButton onClick={() => this.props.history.goBack()}>
+							<HeaderButton onClick={() => this.props.dispatch(locationActions.goBack())}>
 								<BackIcon />
 							</HeaderButton>
 						}
@@ -34,7 +44,7 @@ class Profile extends React.Component {
 								description="Школьный учитель, Возраст: 20"
 								before={<Avatar src="https://pp.userapi.com/c841034/v841034569/3b8c1/pt3sOw_qhfg.jpg"/>}
 								bottomContent={
-									<Button onClick={() => this.props.history.push('/contact')}>
+									<Button onClick={this.contactButtonClick}>
 										Связаться
 									</Button>
 								}
@@ -71,4 +81,8 @@ class Profile extends React.Component {
 	}
 };
 
-export default withRouter(Profile);
+const mapStateToProps = (state) => {
+	return state;
+};
+
+export default connect(mapStateToProps)(Profile);
