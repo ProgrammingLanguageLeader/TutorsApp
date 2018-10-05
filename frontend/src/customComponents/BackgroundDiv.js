@@ -4,7 +4,8 @@ const BackgroundDiv = styled.div`
   ${props => props.image ? `background-image: url(${props.image})` : ""};
   background-size: 100%;
   background-repeat: no-repeat;
-  height: 100vh;
+  background-size: cover;
+  height: calc(100vh - 56px - 48px + 12px);
 `;
 
 export default BackgroundDiv;
