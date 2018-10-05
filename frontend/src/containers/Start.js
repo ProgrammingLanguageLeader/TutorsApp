@@ -26,7 +26,7 @@ class Start extends React.Component {
 
 	registerTutor() {
 		// TODO: register tutor using backend
-		this.props.history.push('/create_vacancy');
+		this.props.history.push('/edit_profile');
 	}
 
   // TODO: remove this later

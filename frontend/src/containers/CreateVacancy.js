@@ -1,8 +1,8 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import {
-  View, Panel, PanelHeader, HeaderButton, Cell, Avatar, Button, Input, FormLayout, FormLayoutGroup, FixedLayout,
-  Radio, Checkbox, SelectMimicry, Div, CellButton, Select, Textarea
+  View, Panel, PanelHeader, HeaderButton, Cell, Avatar, Button, Input, FormLayout, Radio, FormLayoutGroup, FixedLayout,
+  Checkbox, SelectMimicry, Div, CellButton, Select,
 } from '@vkontakte/vkui';
 import Icon24Add from '@vkontakte/icons/dist/24/add';
 
@@ -73,19 +73,28 @@ class CreateVacancy extends React.Component {
 							placeholder="Любой"
 							onClick={() => this.setState({ activePanel: 'study_level'})}
 						>
+						<div top="Выезд на дом">
+              <Radio name="type">Да</Radio>
+              <Radio name="type">Нет</Radio>
+          	</div>
 						{this.state.study_level}
 						</SelectMimicry>
             <Input top="Оплата за час" defaultValue=""/>
-						<Input top="Стаж преподавания" defaultValue=""/>
-						<Input top="Образование" defaultValue=""/>
-						<Input top="Адрес" defaultValue=""/>
-            <div top="Выезд на дом">
-              <Radio name="type">Да</Radio>
-              <Radio name="type">Нет</Radio>
-           </div>
-           <Input top="Электронная почта" defaultValue=""/>
-					 <Textarea top="О себе" placeholder="" />
-						<Button size="xl" onClick={() => this.props.history.push('/profile')}>
+					
+						{/* Вот это должно перетянуться с EditProfile */}
+													{/* <Input top="Стаж преподавания" defaultValue=""/>
+													<FormLayout>
+														<Input
+															top="Образование"
+															bottom='Прикрепите копии документов об образовании и трудовом стаже, если хотите разместить свою заявку с пометкой "Проверенный специалист"'
+															defaultValue=""/>
+														<File before={<Icon24Document />} size="l" />
+													</FormLayout>
+													<Input top="Адрес" defaultValue=""/>
+													<Input top="Электронная почта" defaultValue=""/>
+													<Textarea top="О себе" placeholder="" /> */}
+												
+						<Button size="xl" onClick={() => this.props.history.push('/profile_profile')}>
 							Сохранить
 						</Button>
 					</FormLayout>
