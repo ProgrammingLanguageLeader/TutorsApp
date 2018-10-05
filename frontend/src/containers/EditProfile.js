@@ -1,11 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import {
-	View, Panel, PanelHeader, HeaderButton, Cell, Avatar, Button, File, Input, FormLayout, Textarea
+	View, Panel, PanelHeader, Cell, Avatar, Button, File, Input, FormLayout, Textarea
 } from '@vkontakte/vkui';
 import Icon24Document from '@vkontakte/icons/dist/24/document';
-
-import BackIcon from '../customComponents/BackIcon';
 
 import { locationActions } from '../actions/location';
 
@@ -14,21 +12,14 @@ class EditProfile extends React.Component {
 		super(props);
 		this.state = {
 			study_level: '',
-      activePanel: 'edit_profile'
 		};
   }
 
 	render() {
 		return (
-			<View id={this.props.id} activePanel={this.state.activePanel}>
-				<Panel id="edit_profile" theme="white">
-					<PanelHeader noShadow
-						left={
-							<HeaderButton onClick={() => this.props.dispatch(locationActions.goBack())}>
-								<BackIcon />
-							</HeaderButton>
-						}
-					>
+			<View id={this.props.id} activePanel="edit_profile">
+				<Panel id="edit_profile" theme="white">					
+					<PanelHeader noShadow>
 						Профиль
 					</PanelHeader>
 					<FormLayout>
@@ -61,7 +52,10 @@ class EditProfile extends React.Component {
 };
 
 const mapStateToProps = (state) => {
-	return state;
+	const { history } = state.locationReducer;
+	return {
+		history
+	};
 }
 
 export default connect(mapStateToProps)(EditProfile);

@@ -5,7 +5,7 @@ const BackgroundDiv = styled.div`
   background-size: 100%;
   background-repeat: no-repeat;
   background-size: cover;
-  height: calc(100vh - 56px - 48px + 12px);
+  height: calc(100vh - 56px - 48px);
 `;
 
 export default BackgroundDiv;
