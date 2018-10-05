@@ -1,20 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom'; 
-import { ConnectedRouter } from 'connected-react-router';
 import { Provider } from 'react-redux';
 
 import App from './App';
 import registerServiceWorker from './sw';
-import configureStore from './store/configureStore';
-import history from './helpers/history';
+import configureMockConnect from './helpers/mockConnect';
+import store from './store/store';
 
-const store = configureStore();
+configureMockConnect();
 
 ReactDOM.render(
   <Provider store={store}>
-    <ConnectedRouter history={history}>
-      <App />
-    </ConnectedRouter>
+    <App />
   </Provider>,
   document.getElementById('root')
 );

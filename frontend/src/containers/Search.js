@@ -1,10 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
-import { View, Panel, PanelHeader, HeaderButton, Cell, Group, Div, Button } from '@vkontakte/vkui';
+import { 
+	View, Panel, PanelHeader, HeaderButton, Cell, Group, Div, Button, Avatar
+} from '@vkontakte/vkui';
 
 import BackIcon from '../customComponents/BackIcon';
 import { apiActions } from '../actions/api';
+import { vkActions } from '../actions/vk';
+import { locationActions } from '../actions/location';
 
 class Search extends React.Component {
 	constructor(props) {
@@ -16,21 +19,30 @@ class Search extends React.Component {
 
 	componentDidMount() {
 		this.props.dispatch(
-			apiActions.makeRequest('get_active_vacancies', 'get', {})
-		);
+			apiActions.getActiveVacancies()
+		)
+		.then(() => {
+			const { accessToken } = this.props.vkReducer;
+      let vkIds = this.props.apiReducer.vacancies.map(vacancy => {
+        return vacancy.user;
+      });
+			this.props.dispatch(
+				vkActions.fetchUsersInfo(accessToken, vkIds)
+			);
+		})
 	}
 
 	render() {
-		const vacanciesFetched = !this.props.fetching && 
-			this.props.errors.length === 0 &&
-			this.props.vacancies;
+		const { vacancies } = this.props.apiReducer;
+		const { usersInfo } = this.props.vkReducer;
+		const vacanciesFetched = vacancies.length > 0 && usersInfo.size > 0;
 
 		return (
 			<View id={this.props.id} activePanel="search">
 				<Panel id="search">
 					<PanelHeader noShadow
 						left={
-							<HeaderButton onClick={() => this.props.history.goBack()}>
+							<HeaderButton onClick={() => this.props.dispatch(locationActions.goBack())}>
 								<BackIcon />
 							</HeaderButton>
 						}
@@ -39,13 +51,21 @@ class Search extends React.Component {
 					</PanelHeader>
 					<Group>
 						<Div>
-							<Button size="xl" onClick={() => this.props.history.push('/filter')}>
+							<Button size="xl" onClick={() => this.props.dispatch(locationActions.changeLocation('filter'))}>
 								Фильтр
 							</Button>
 						</Div>
-						<Cell>Здесь будут компенты с информацией о вакансиях</Cell>
-						{ vacanciesFetched && this.props.vacancies.map((vacancy, index) => {
-							return <Cell key={index}>ID: {vacancy.user}</Cell>
+						{ vacanciesFetched && vacancies.map(vacancy => {
+							const userInfo = usersInfo.get(Number(vacancy.user));
+							return (
+								<Cell
+									key={vacancy.id}
+									description={`${userInfo.city.title}, ${vacancy.price} рублей/час`}
+									before={<Avatar src={userInfo.photo_100} />}
+								>
+									{`${userInfo.firstName} ${userInfo.lastName}`}
+								</Cell>
+							);
 						})}
 					</Group>
 				</Panel>
@@ -55,12 +75,10 @@ class Search extends React.Component {
 };
 
 const mapStateToProps = state => {
-	const { fetching, errors, response } = state.apiReducer;
+	const { apiReducer, vkReducer } = state;
 	return {
-		vacancies: response,
-		fetching,
-		errors
+		apiReducer, vkReducer
 	};
 };
 
-export default withRouter(connect(mapStateToProps)(Search));
+export default connect(mapStateToProps)(Search);

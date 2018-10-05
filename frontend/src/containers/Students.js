@@ -1,10 +1,12 @@
 import React from 'react';
-import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 import {
 	View, Panel, PanelHeader, HeaderButton, Cell, Avatar, List, Group
 } from '@vkontakte/vkui';
 
 import BackIcon from '../customComponents/BackIcon';
+
+import { locationActions } from '../actions/location';
 
 class Students extends React.Component {
 	render() {
@@ -13,7 +15,7 @@ class Students extends React.Component {
 				<Panel id="students">
 					<PanelHeader
 						left={
-							<HeaderButton onClick={this.props.history.goBack()}>
+							<HeaderButton onClick={() => this.props.dispatch(locationActions.goBack())}>
 								<BackIcon />
 							</HeaderButton>
 						}
@@ -39,4 +41,8 @@ class Students extends React.Component {
 	}
 };
 
-export default withRouter(Students);
+const mapStateToProps = (state) => {
+	return state;
+}
+
+export default connect(mapStateToProps)(Students);

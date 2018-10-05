@@ -7,18 +7,21 @@ const connect = (process.env.REACT_APP_DEBUG) ? mockConnect : realConnect;
 
 const API_VERSION = '5.80';
 
-const fetchAccessToken = () => async () => {
-  // TODO: use system environment to hide App ID
+const fetchAccessToken = () => () => {
   const appId = process.env.REACT_APP_ID || 6700618;
   connect.send('VKWebAppGetAuthToken', {'app_id': appId, "scope": "notify,friends,offline"});
 }
 
-const fetchNotificationStatus = (accessToken) => async (dispatch) => {
-  apiRequest('apps.isNotificationsAllowed', {}, accessToken, response => {
-    dispatch({
-      type: vkConstants.VK_NOTIFICATION_STATUS_FETCHED,
-      notificationStatus: response['is_allowed'],
-    });
+const fetchNotificationStatus = (accessToken) => dispatch => {
+  apiRequest(
+    'apps.isNotificationsAllowed', 
+    {}, 
+    accessToken, 
+    response => {
+      dispatch({
+        type: vkConstants.VK_NOTIFICATION_STATUS_FETCHED,
+        notificationStatus: response['is_allowed'],
+      });
     }, 
     error => {
       dispatch({
@@ -29,15 +32,43 @@ const fetchNotificationStatus = (accessToken) => async (dispatch) => {
   );
 }
 
-const denyNotifications = () => async () => {
+const fetchUsersInfo = (accessToken, vkIds) => dispatch => {
+  const fields = ["photo_100", "photo_200", "city"];
+  apiRequest(
+    'users.get', 
+    {
+      user_ids: vkIds.toString(),
+      fields: fields.toString(),
+    },
+    accessToken, 
+    response => {
+      dispatch({
+        type: vkConstants.VK_API_USERS_GET_FETCHED,
+        usersInfo: response,
+      });
+    }, 
+    error => {
+      dispatch({
+        type: vkConstants.VK_API_USERS_GET_FAILED, 
+        error: error
+      });
+    }
+  );
+}
+
+const denyNotifications = () => () => {
   connect.send('VKWebAppDenyNotifications', {});
 }
 
-const allowNotifications = () => async () => {
+const allowNotifications = () => () => {
   connect.send('VKWebAppAllowNotifications', {});
 }
 
-const init = () => async (dispatch) => {
+const fetchCurrentUserInfo = () => () => {
+  connect.send("VKWebAppGetUserInfo", {});
+}
+
+const init = () => dispatch => {
   connect.subscribe(event => {
     const vkEvent = event.detail;
     if (!vkEvent) {
@@ -73,14 +104,21 @@ const init = () => async (dispatch) => {
       case 'VKWebAppAccessTokenFailed':
         dispatch({
           type: vkConstants.VK_GET_ACCESS_TOKEN_FAILED,
-          logs: data['error_type'],
+          logs: data,
         });
         break;
 
-      case 'VKWebAppUpdateInsets':
+      case 'VKWebAppGetUserInfoResult':
         dispatch({
-          type: vkConstants.VK_INSETS_FETCHED,
-          insets: data.insets
+          type: vkConstants.VK_GET_USER_INFO_FETCHED,
+          userInfo: data,
+        });
+        break;
+
+      case 'VKWebAppGetUserInfoFailed':
+        dispatch({
+          type: vkConstants.VK_GET_USER_INFO_FAILED,
+          logs: data,
         });
         break;
 
@@ -95,10 +133,10 @@ const init = () => async (dispatch) => {
 const apiRequest = (method, params = {}, accessToken = '', successCallback = undefined, errorCallback = undefined) => {
   const requestId = getNewRequestId();
   if (successCallback !== undefined || errorCallback !== undefined) {
-    const clb = function callback(e) {
-      const vkEvent = e.detail;
+    const callback = event => {
+      const vkEvent = event.detail;
       if (!vkEvent) {
-        console.error('invalid event', e);
+        console.error('invalid event', event);
         return;
       }
 
@@ -108,23 +146,21 @@ const apiRequest = (method, params = {}, accessToken = '', successCallback = und
       let found = false;
       if ('VKWebAppCallAPIMethodResult' === type && data['request_id'] === requestId) {
         if (successCallback !== undefined) {
-            successCallback(data['response']);
+          successCallback(data['response']);
         }
         found = true;
       } else if ('VKWebAppCallAPIMethodFailed' === type && data['request_id'] === requestId) {
         if (errorCallback !== undefined) {
           errorCallback(data);
         }
-
         found = true;
       }
 
       if (found) {
-        connect.unsubscribe(clb);
+        connect.unsubscribe(callback);
       }
-
     };
-    connect.subscribe(clb);
+    connect.subscribe(callback);
   }
 
   params['access_token'] = accessToken;
@@ -135,15 +171,15 @@ const apiRequest = (method, params = {}, accessToken = '', successCallback = und
   connect.send('VKWebAppCallAPIMethod', {
     'method': method,
     'params': params,
-    'request_id': requestId
+    'request_id': requestId,
   });
 }
 
 const getNewRequestId = () => (Math.floor(Math.random() * Number.MAX_SAFE_INTEGER)).toString();
 
-
 export const vkActions = {
   fetchAccessToken, fetchNotificationStatus,
+  fetchCurrentUserInfo, fetchUsersInfo,
   denyNotifications, allowNotifications,
   init
 };

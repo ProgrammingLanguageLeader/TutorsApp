@@ -7,13 +7,14 @@ const HEADERS = {
   'Content-Type': 'application/json',
 };
 
-export const makeApiRequest = (endpoint, method, options) => {
+export const makeApiRequest = async (endpoint, method, options) => {
+  const url = (method.toLowerCase() === 'post') ? `${API_URL}/${endpoint}/` : `${API_URL}/${endpoint}`;
+
   return axios({
-    url: `${API_URL}/${endpoint}`,
+    url: url,
     method: method,
     headers: HEADERS,
     data: options,
   })
   .then(res => res.data)
-  .catch(res => res.data)
 }
