@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { 
-	View, Panel, PanelHeader, Cell, Avatar, List, HeaderButton, ScreenSpinner
+	View, Panel, PanelHeader, Cell, Avatar, List, HeaderButton, Spinner, Button, Group
 } from '@vkontakte/vkui';
 
 import Icon24Home from '@vkontakte/icons/dist/24/home';
@@ -9,7 +9,6 @@ import Icon24Education from '@vkontakte/icons/dist/24/education';
 import Icon24Mention from '@vkontakte/icons/dist/24/mention';
 import Icon24Recent from '@vkontakte/icons/dist/24/recent';
 import Icon24Info from '@vkontakte/icons/dist/24/info';
-import Icon28Write from '@vkontakte/icons/dist/28/write';
 
 import BackIcon from '../customComponents/BackIcon';
 
@@ -33,60 +32,69 @@ class ShowProfile extends React.Component {
 
 		return (
       <View 
-        popout={fetching ? <ScreenSpinner /> : null} 
         id={this.props.id} 
         activePanel="tutor_profile"
       >
         <Panel id="tutor_profile">
           <PanelHeader 
-            noShadow
             left={
-              <HeaderButton onClick={() => this.props.dispatch(locationActions.goBack())}>
+              <HeaderButton key="back" onClick={() => this.props.dispatch(locationActions.goBack())}>
                 <BackIcon />
               </HeaderButton>
             }
-            right={
-              <HeaderButton onClick={() => console.log('pressed')}>
-                <Icon28Write />
-              </HeaderButton>}
           >
             Профиль
           </PanelHeader>
-          
-          <List>
-            <Cell
-              size="l"
-              description={city ? city.title : ""}
-              before={<Avatar src={photo_200} />}
-            >
-              {`${first_name} ${last_name}`}
-            </Cell>
-            <Cell
-              before={<Icon24Recent />}
-            >
-              {experience || "Стаж не задан"}
-            </Cell>
-            <Cell
-              before={<Icon24Education />}
-            >
-              {education || "Образование не указано"}
-            </Cell>
-            <Cell
-              before={<Icon24Home />}
-            >
-              {address || "Адрес не указан"}
-            </Cell>
-            <Cell
-              before={<Icon24Mention />}
-            >
-              {email || "E-mail не указан"}
-            </Cell>
-            <Cell
-              before={<Icon24Info />}
-            >
-              {description || "Не указано"}
-            </Cell>
-          </List>
+
+          { fetching ? (
+            <Spinner />
+          ) : (
+            <div>
+              <Group id="profile">
+                <Cell
+                  size="l"
+                  description={city ? city.title : ""}
+                  before={<Avatar src={photo_200} />}
+                  bottomContent={
+                    <Button onClick={() => this.props.dispatch(locationActions.changeLocation('edit_profile'))}>
+                      Редактировать
+                    </Button>
+                  }
+                >
+                  {`${first_name} ${last_name}`}
+                </Cell>
+              </Group>
+              <Group id="profile_info">
+                <List>
+                  <Cell
+                    before={<Icon24Recent />}
+                  >
+                    {experience || "Стаж не задан"}
+                  </Cell>
+                  <Cell
+                    before={<Icon24Education />}
+                  >
+                    {education || "Образование не указано"}
+                  </Cell>
+                  <Cell
+                    before={<Icon24Home />}
+                  >
+                    {address || "Адрес не указан"}
+                  </Cell>
+                  <Cell
+                    before={<Icon24Mention />}
+                  >
+                    {email || "E-mail не указан"}
+                  </Cell>
+                  <Cell
+                    before={<Icon24Info />}
+                  >
+                    {description || "Не указано"}
+                  </Cell>
+                </List>
+              </Group>
+            </div>
+          ) }
         </Panel>
       </View>
     );
