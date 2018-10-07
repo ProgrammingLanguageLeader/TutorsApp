@@ -1,10 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { 
-	View, Panel, PanelHeader, HeaderButton, Cell, Group, Div, Button, Avatar
+	View, Panel, PanelHeader, Cell, Group, Div, Button, Avatar
 } from '@vkontakte/vkui';
 
-import BackIcon from '../customComponents/BackIcon';
 import { apiActions } from '../actions/api';
 import { vkActions } from '../actions/vk';
 import { locationActions } from '../actions/location';
@@ -40,13 +39,7 @@ class Search extends React.Component {
 		return (
 			<View id={this.props.id} activePanel="search">
 				<Panel id="search">
-					<PanelHeader noShadow
-						left={
-							<HeaderButton onClick={() => this.props.dispatch(locationActions.goBack())}>
-								<BackIcon />
-							</HeaderButton>
-						}
-					>
+					<PanelHeader noShadow>
 						Поиск репетиторов
 					</PanelHeader>
 					<Group>

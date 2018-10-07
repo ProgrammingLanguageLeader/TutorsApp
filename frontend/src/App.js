@@ -31,7 +31,9 @@ class App extends React.Component {
 	componentDidMount() {
 		this.props.dispatch(vkActions.init());
 		this.props.dispatch(vkActions.fetchCurrentUserInfo());
-    this.props.dispatch(vkActions.fetchAccessToken());
+		if (!this.props.accessToken) {
+			this.props.dispatch(vkActions.fetchAccessToken());
+		}
 	}
 
 	render() {
@@ -77,8 +79,9 @@ class App extends React.Component {
 
 const mapStateToProps = (state) => {
 	const { activeView } = state.locationReducer;
+	const { accessToken } = state.vkReducer;
 	return {
-		activeView,
+		activeView, accessToken
 	};
 }
 

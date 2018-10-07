@@ -1,7 +1,7 @@
 import { apiConstants } from '../constants/api';
 
 const initialState = {
-  profile: null,
+  profile: {},
   vacancies: [],
   students: [],
   lessonsSchedule: [],
