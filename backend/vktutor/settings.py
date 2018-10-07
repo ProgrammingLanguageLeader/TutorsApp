@@ -22,10 +22,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '*wk$usg35i9)-0p1+n7h1cw3)z+wu%_r$00noz7=jbv%w_!a9o'
+SECRET_KEY = os.environ.get('SECRET_KEY')
+VK_APP_SECRET = os.environ.get('VK_APP_SECRET')
+VK_APP_ID = os.environ.get('VK_APP_ID')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = bool(os.environ.get('DEBUG'))
 
 ALLOWED_HOSTS = [
     '.herokuapp.com',
@@ -130,8 +132,11 @@ USE_TZ = True
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny'
-    ]
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly'
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'backend.auth_backend.VKAppsAuthentication',
+    )
 }
 
 # Static files (CSS, JavaScript, Images)
