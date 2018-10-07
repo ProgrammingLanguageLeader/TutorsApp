@@ -1,12 +1,16 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { 
-	View, Panel, PanelHeader, Cell, Group, Div, Button, Avatar
+	View, Panel, PanelHeader, Cell, Group, Div, Button, Avatar,
 } from '@vkontakte/vkui';
 
 import { apiActions } from '../actions/api';
 import { vkActions } from '../actions/vk';
 import { locationActions } from '../actions/location';
+
+import Icon28Document from '@vkontakte/icons/dist/28/document';
+import Icon28Search from '@vkontakte/icons/dist/28/search';
+import Icon28User from '@vkontakte/icons/dist/28/user';
 
 class Search extends React.Component {
 	constructor(props) {
@@ -39,7 +43,7 @@ class Search extends React.Component {
 		return (
 			<View id={this.props.id} activePanel="search">
 				<Panel id="search">
-					<PanelHeader noShadow>
+					<PanelHeader>
 						Поиск репетиторов
 					</PanelHeader>
 					<Group>

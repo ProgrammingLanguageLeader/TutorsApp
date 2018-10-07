@@ -50,7 +50,7 @@ class Start extends React.Component {
 	componentWillMount() {
 		if (localStorage.get('isTutor')) {
 			this.props.dispatch(
-				locationActions.changeLocation('edit_profile')
+				locationActions.changeLocation('show_profile')
 			)
 		} else if (localStorage.get('isStudent')) {
 			this.props.dispatch(

@@ -1,9 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import {
-	View, Panel, PanelHeader, Cell, Avatar, Button, File, Input, FormLayout, Textarea, Spinner
+	View, Panel, PanelHeader, Cell, Avatar, Button, File, Input, FormLayout, Textarea, Spinner, HeaderButton
 } from '@vkontakte/vkui';
 import Icon24Document from '@vkontakte/icons/dist/24/document';
+
+import BackIcon from '../customComponents/BackIcon';
 
 import { apiActions } from '../actions/api';
 import { locationActions } from '../actions/location';
@@ -59,7 +61,13 @@ class EditProfile extends React.Component {
 				activePanel="edit_profile"
 			>
 				<Panel id="edit_profile" theme="white">					
-					<PanelHeader noShadow>
+					<PanelHeader
+						left={
+							<HeaderButton key="back" onClick={() => this.props.dispatch(locationActions.goBack())}>
+								<BackIcon />
+							</HeaderButton>
+						}
+					>
 						Профиль
 					</PanelHeader>
 					{ fetching ? (

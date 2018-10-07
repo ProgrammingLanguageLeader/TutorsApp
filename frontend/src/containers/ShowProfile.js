@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { 
-	View, Panel, PanelHeader, Cell, Avatar, List, HeaderButton, Spinner, Button, Group
+	View, Panel, PanelHeader, Cell, Avatar, List, Spinner, HeaderButton, Group
 } from '@vkontakte/vkui';
 
 import Icon24Home from '@vkontakte/icons/dist/24/home';
@@ -9,8 +9,7 @@ import Icon24Education from '@vkontakte/icons/dist/24/education';
 import Icon24Mention from '@vkontakte/icons/dist/24/mention';
 import Icon24Recent from '@vkontakte/icons/dist/24/recent';
 import Icon24Info from '@vkontakte/icons/dist/24/info';
-
-import BackIcon from '../customComponents/BackIcon';
+import Icon24Write from '@vkontakte/icons/dist/24/write'
 
 import { apiActions } from '../actions/api';
 import { locationActions } from '../actions/location';
@@ -36,13 +35,7 @@ class ShowProfile extends React.Component {
         activePanel="tutor_profile"
       >
         <Panel id="tutor_profile">
-          <PanelHeader 
-            left={
-              <HeaderButton key="back" onClick={() => this.props.dispatch(locationActions.goBack())}>
-                <BackIcon />
-              </HeaderButton>
-            }
-          >
+          <PanelHeader>
             Профиль
           </PanelHeader>
 
@@ -50,15 +43,15 @@ class ShowProfile extends React.Component {
             <Spinner />
           ) : (
             <div>
-              <Group id="profile">
+              <Group id="profile" style={{ marginTop: 0 }}>
                 <Cell
                   size="l"
                   description={city ? city.title : ""}
                   before={<Avatar src={photo_200} />}
-                  bottomContent={
-                    <Button onClick={() => this.props.dispatch(locationActions.changeLocation('edit_profile'))}>
-                      Редактировать
-                    </Button>
+                  asideContent={
+                    <HeaderButton onClick={() => this.props.dispatch(locationActions.changeLocation('edit_profile'))}>
+                      <Icon24Write />
+                    </HeaderButton>
                   }
                 >
                   {`${first_name} ${last_name}`}

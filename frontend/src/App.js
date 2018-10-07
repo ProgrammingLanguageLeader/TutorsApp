@@ -12,6 +12,7 @@ import ShowProfile from './containers/ShowProfile';
 import CreateVacancy from './containers/CreateVacancy';
 import EditProfile from './containers/EditProfile';
 import Contact from './containers/Contact';
+import ActiveTutor from './containers/ActiveTutor';
 import Settings from './containers/Settings';
 import Filter from './containers/Filter';
 import Students from './containers/Students';
@@ -39,27 +40,26 @@ class App extends React.Component {
 	render() {
 		return (
 			<Epic activeStory="root" tabbar={
-				<Tabbar>
-					<TabbarItem
-						onClick={() => this.props.dispatch(locationActions.changeLocation('search'))}
-						selected={this.props.activeView === 'search'}
-					>
-						<Icon28Search />
-					</TabbarItem>
-					<TabbarItem
-						onClick={() => console.log('Игорь делает')}
-						selected={this.props.activeView === 'active'}
-					>
-						<Icon28Document />
-					</TabbarItem>
-					<TabbarItem
-						onClick={() => this.props.dispatch(locationActions.changeLocation('show_profile'))}
-						selected={this.props.activeView === 'show_profile'}
-						data-story="show_profile"
-					>
-						<Icon28User />
-					</TabbarItem>
-				</Tabbar>
+					<Tabbar>
+						<TabbarItem
+							onClick={() => this.props.dispatch(locationActions.changeLocation('search'))}
+							selected={this.props.activeView === 'search'}
+						>
+							<Icon28Search />
+						</TabbarItem>
+						<TabbarItem
+							onClick={() => this.props.dispatch(locationActions.changeLocation('active_tutor'))}
+							selected={this.props.activeView === 'active_tutor'}
+						>
+							<Icon28Document />
+						</TabbarItem>
+						<TabbarItem
+							onClick={() => this.props.dispatch(locationActions.changeLocation('show_profile'))}
+							selected={this.props.activeView === 'show_profile'}
+						>
+							<Icon28User />
+						</TabbarItem>
+					</Tabbar>
       }>
 				<Root id="root" activeView={this.props.activeView}>
 					<Start id="start" />
@@ -68,6 +68,7 @@ class App extends React.Component {
 					<CreateVacancy id="create_vacancy" />
 					<EditProfile id="edit_profile" />
 					<Contact id="contact" />
+					<ActiveTutor id="active_tutor" />
 					<Settings id="settings" />
 					<Filter id="filter" />
 					<Students id="student" />

@@ -39,7 +39,7 @@ class Filter extends React.Component {
 		return (
 			<View id={this.props.id} activePanel={this.state.activePanel}>
 				<Panel id="filter" theme="white">
-					<PanelHeader noShadow
+					<PanelHeader
 						left={
 							<HeaderButton onClick={() => this.props.dispatch(locationActions.goBack())}>
 								<BackIcon />
@@ -83,12 +83,12 @@ class Filter extends React.Component {
 							<Button size="l" stretched onClick={this.applyButtonClick}>
 								Применить
 							</Button>
-						</Div>	
+						</Div>
 					</FixedLayout>
 				</Panel>
 
 				<Panel id="subjects">
-					<PanelHeader noShadow
+					<PanelHeader
 						left={
 							<HeaderButton onClick={this.returnToFilterPanel}>
 								<BackIcon />
@@ -116,7 +116,7 @@ class Filter extends React.Component {
 				</Panel>
 
 				<Panel id="price">
-					<PanelHeader noShadow
+					<PanelHeader
 						left={
 							<HeaderButton onClick={this.returnToFilterPanel}>
 								<BackIcon />
@@ -144,7 +144,7 @@ class Filter extends React.Component {
 				</Panel>
 
 				<Panel id="experience">
-					<PanelHeader noShadow
+					<PanelHeader
 						left={
 							<HeaderButton onClick={this.returnToFilterPanel}>
 								<BackIcon />
@@ -175,7 +175,7 @@ class Filter extends React.Component {
 				</Panel>
 
 				<Panel id="study_level">
-					<PanelHeader noShadow
+					<PanelHeader
 						left={
 							<HeaderButton onClick={this.returnToFilterPanel}>
 								<BackIcon />
