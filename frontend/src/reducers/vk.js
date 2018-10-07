@@ -14,7 +14,7 @@ const initialState = {
   accessToken: initAccessToken,
   notificationStatus: null,
   logs: null,
-  userInfo: null,
+  userInfo: {},
   usersInfo: new Map(),
 };
 
