@@ -14,7 +14,7 @@ export const makeApiRequest = async (endpoint, method, options) => {
     url: url,
     method: method,
     headers: HEADERS,
-    data: options,
+    params: options,
   })
   .then(res => res.data)
 }
