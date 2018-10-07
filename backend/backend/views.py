@@ -37,21 +37,36 @@ class UpdateProfileView(APIView):
                 data=view_serializer.errors,
                 status=HTTP_400_BAD_REQUEST
             )
-        profile = Profile.objects.get(vk_id__exact=view_serializer.validated_data['vk_id'])
+        profile = Profile.objects.get(
+            vk_id__exact=view_serializer.validated_data['vk_id']
+        )
         val_data = {
-            'description': view_serializer.validated_data.get('description'),
-            'subjects': view_serializer.validated_data.get('subjects'),
-            'mobile': view_serializer.validated_data.get('mobile'),
-            'activity_time_start': view_serializer.validated_data.get('activity_time_start'),
-            'activity_time_end': view_serializer.validated_data.get('activity_time_end'),
-            'latitude': view_serializer.validated_data.get('latitude'),
-            'longitude': view_serializer.validated_data.get('longitude'),
-            'distance_learning': view_serializer.validated_data.get('distance_learning'),
-            'ege': view_serializer.validated_data.get('ege'),
-            'oge': view_serializer.validated_data.get('oge'),
-            'foreign_lang_cert': view_serializer.validated_data.get('foreign_lang_cert'),
-            'university': view_serializer.validated_data.get('university'),
-            'school': view_serializer.validated_data.get('school'),
+            'description':
+                view_serializer.validated_data.get('description'),
+            'subjects':
+                view_serializer.validated_data.get('subjects'),
+            'mobile':
+                view_serializer.validated_data.get('mobile'),
+            'activity_time_start':
+                view_serializer.validated_data.get('activity_time_start'),
+            'activity_time_end':
+                view_serializer.validated_data.get('activity_time_end'),
+            'latitude':
+                view_serializer.validated_data.get('latitude'),
+            'longitude':
+                view_serializer.validated_data.get('longitude'),
+            'distance_learning':
+                view_serializer.validated_data.get('distance_learning'),
+            'ege':
+                view_serializer.validated_data.get('ege'),
+            'oge':
+                view_serializer.validated_data.get('oge'),
+            'foreign_lang_cert':
+                view_serializer.validated_data.get('foreign_lang_cert'),
+            'university':
+                view_serializer.validated_data.get('university'),
+            'school':
+                view_serializer.validated_data.get('school'),
         }
         if val_data['description']:
             profile.description = val_data['description']
@@ -68,15 +83,21 @@ class UpdateProfileView(APIView):
         if val_data['longitude']:
             profile.longitude = view_serializer.validated_data.get('longitude')
         if val_data['distance_learning']:
-            profile.distance_learning = view_serializer.validated_data.get('distance_learning')
+            profile.distance_learning = view_serializer.validated_data.get(
+                'distance_learning'
+            )
         if val_data['ege']:
             profile.ege = view_serializer.validated_data.get('ege')
         if val_data['oge']:
             profile.oge = view_serializer.validated_data.get('oge')
         if val_data['foreign_lang_cert']:
-            profile.foreign_lang_cert = view_serializer.validated_data.get('foreign_lang_cert')
+            profile.foreign_lang_cert = view_serializer.validated_data.get(
+                'foreign_lang_cert'
+            )
         if val_data['university']:
-            profile.university = view_serializer.validated_data.get('university')
+            profile.university = view_serializer.validated_data.get(
+                'university'
+            )
         if val_data['school']:
             profile.school = view_serializer.validated_data.get('school')
         profile.save()
