@@ -49,11 +49,19 @@ class UpdateProfileView(APIView):
                 data=view_serializer.errors,
                 status=HTTP_400_BAD_REQUEST
             )
-        profile = Profile.objects.get(
-            vk_id=view_serializer.validated_data['vk_id']
-        )
-        profile.update(view_serializer.validated_data)
-        return Response(data='OK')
+        try:
+            profile = Profile.objects.get(
+                vk_id=request.data['vk_id']
+            )
+            for (key, value) in view_serializer.validated_data.items():
+                setattr(profile, key, value)
+            profile.save()
+            return Response(data='OK')
+        except Profile.DoesNotExist:
+            return Response(
+                data='Invalid vk id',
+                status=HTTP_400_BAD_REQUEST
+            )
 
 
 class GetProfileView(APIView):

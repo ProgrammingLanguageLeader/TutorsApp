@@ -42,19 +42,7 @@ class CreateProfileSerializer(serializers.ModelSerializer):
 class UpdateProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
-        fields = '__all__'
-
-    def validate(self, attrs):
-        super().validate(attrs)
-        try:
-            Profile.objects.get(vk_id__exact=attrs['vk_id'])
-        except Profile.DoesNotExist:
-            return serializers.ValidationError({
-                'vk_id': [
-                    'Invalid VK ID'
-                ]
-            })
-        return attrs
+        exclude = ('vk_id', )
 
 
 class CreateVacancySerializer(serializers.ModelSerializer):
