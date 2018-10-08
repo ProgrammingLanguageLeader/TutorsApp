@@ -12,6 +12,7 @@ import ShowProfile from './containers/ShowProfile';
 import CreateVacancy from './containers/CreateVacancy';
 import EditProfile from './containers/EditProfile';
 import Contact from './containers/Contact';
+import ActiveTutor from './containers/ActiveTutor';
 import Settings from './containers/Settings';
 import Filter from './containers/Filter';
 import Students from './containers/Students';
@@ -36,37 +37,39 @@ class App extends React.Component {
 	}
 
 	render() {
+		const { activeView, activePanel } = this.props;
+
 		return (
 			<Epic activeStory="root" tabbar={
-				<Tabbar>
-					<TabbarItem
-						onClick={() => this.props.dispatch(locationActions.changeLocation('search'))}
-						selected={this.props.activeView === 'search'}
-					>
-						<Icon28Search />
-					</TabbarItem>
-					<TabbarItem
-						onClick={() => console.log('Игорь делает')}
-						selected={this.props.activeView === 'active'}
-					>
-						<Icon28Document />
-					</TabbarItem>
-					<TabbarItem
-						onClick={() => this.props.dispatch(locationActions.changeLocation('show_profile'))}
-						selected={this.props.activeView === 'show_profile'}
-						data-story="show_profile"
-					>
-						<Icon28User />
-					</TabbarItem>
-				</Tabbar>
+					<Tabbar>
+						<TabbarItem
+							onClick={() => this.props.dispatch(locationActions.changeLocation('search'))}
+							selected={this.props.activeView === 'search'}
+						>
+							<Icon28Search />
+						</TabbarItem>
+						<TabbarItem
+							onClick={() => this.props.dispatch(locationActions.changeLocation('active_tutor', 'requests'))}
+							selected={this.props.activeView === 'active_tutor'}
+						>
+							<Icon28Document />
+						</TabbarItem>
+						<TabbarItem
+							onClick={() => this.props.dispatch(locationActions.changeLocation('show_profile'))}
+							selected={this.props.activeView === 'show_profile'}
+						>
+							<Icon28User />
+						</TabbarItem>
+					</Tabbar>
       }>
-				<Root id="root" activeView={this.props.activeView}>
+				<Root id="root" activeView={activeView}>
 					<Start id="start" />
 					<Search id="search" />
 					<ShowProfile id="show_profile" />
 					<CreateVacancy id="create_vacancy" />
 					<EditProfile id="edit_profile" />
 					<Contact id="contact" />
+					<ActiveTutor id="active_tutor" />
 					<Settings id="settings" />
 					<Filter id="filter" />
 					<Students id="student" />
@@ -77,10 +80,10 @@ class App extends React.Component {
 };
 
 const mapStateToProps = (state) => {
-	const { activeView } = state.locationReducer;
+	const { activeView, activePanel } = state.locationReducer;
 	const { accessToken } = state.vkReducer;
 	return {
-		activeView, accessToken
+		activeView, accessToken, activePanel
 	};
 }
 
