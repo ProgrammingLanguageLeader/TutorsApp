@@ -5,6 +5,7 @@ const configureMockConnect = () => {
     type: 'VKWebAppGetUserInfoResult',
     data: {
       id: 144736529,
+      signed_user_id: process.env.REACT_APP_SIGNED_USER_ID,
       photo_100: 'https://pp.userapi.com/c840025/v840025976/76754/2XXyjhYZiXc.jpg',
       photo_200: 'https://pp.userapi.com/c840025/v840025976/76754/2XXyjhYZiXc.jpg',
       first_name: 'Дмитрий',
