@@ -4,7 +4,7 @@ import {
 	View, Panel, PanelHeader, Div, Cell, List, Group, FormLayout, FixedLayout, Button, SelectMimicry, HeaderButton
 } from '@vkontakte/vkui';
 
-import BackIcon from '../customComponents/BackIcon';
+import BackIcon from '../components/BackIcon';
 
 import { locationActions } from '../actions/location';
 

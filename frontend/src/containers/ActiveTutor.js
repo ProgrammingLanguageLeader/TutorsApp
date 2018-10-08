@@ -6,10 +6,7 @@ import {
 
 import ChangeTab from './ChangeTab';
 
-import BackIcon from '../customComponents/BackIcon';
-
 import { apiActions } from '../actions/api';
-import { locationActions } from '../actions/location';
 
 class ActiveTutor extends React.Component {
 	componentDidMount() {

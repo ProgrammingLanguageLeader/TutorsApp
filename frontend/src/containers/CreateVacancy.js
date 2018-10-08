@@ -7,7 +7,7 @@ import {
 import Icon24Add from '@vkontakte/icons/dist/24/add';
 import Icon24Document from '@vkontakte/icons/dist/24/document';
 
-import BackIcon from '../customComponents/BackIcon';
+import BackIcon from '../components/BackIcon';
 
 import { locationActions } from '../actions/location';
 

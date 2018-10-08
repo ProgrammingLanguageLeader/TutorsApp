@@ -2,9 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Panel, PanelHeader, View } from '@vkontakte/vkui';
 
-import CircleButton from '../customComponents/CircleButton';
-import CenteredDiv from '../customComponents/CenteredDiv';
-import BackgroundDiv from '../customComponents/BackgroundDiv';
+import CircleButton from '../components/CircleButton';
+import CenteredDiv from '../components/CenteredDiv';
+import BackgroundDiv from '../components/BackgroundDiv';
 import student from '../img/student.jpg';
 
 import { apiActions } from '../actions/api';
