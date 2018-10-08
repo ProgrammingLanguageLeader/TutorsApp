@@ -8,10 +8,6 @@ import { apiActions } from '../actions/api';
 import { vkActions } from '../actions/vk';
 import { locationActions } from '../actions/location';
 
-import Icon28Document from '@vkontakte/icons/dist/28/document';
-import Icon28Search from '@vkontakte/icons/dist/28/search';
-import Icon28User from '@vkontakte/icons/dist/28/user';
-
 class Search extends React.Component {
 	constructor(props) {
 		super(props);

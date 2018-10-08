@@ -21,19 +21,7 @@ class CreateVacancy extends React.Component {
 		};
 
 		this.subjectSelect = React.createRef();
-
-		this.addSubjectClick = this.addSubjectClick.bind(this);
   }
-
-	addSubjectClick() {
-		let { subjects } = this.state;
-		const { title } = this.subjectSelect.current.state;
-		if (title !== 'Выберите предмет')
-			subjects.add(title);
-		this.setState({
-			subjects: subjects
-		});
-	}
 
 	render() {
 		return (
@@ -46,68 +34,38 @@ class CreateVacancy extends React.Component {
 							</HeaderButton>
 						}
 					>
-						Регистрация
+						Cоздание вакансии
 					</PanelHeader>
 					<FormLayout>
-						<Cell
-							size="l"
-							description="Школьный учитель, Возраст: 20"
-							before={<Avatar src="https://pp.userapi.com/c841034/v841034569/3b8c1/pt3sOw_qhfg.jpg"/>}
-						>
-							Артур Стамбульцян
-						</Cell>
 						<Select ref={this.subjectSelect} top="Предмет" placeholder="Выберите предмет" defaultValue="">
 							<option value="rus">Русский язык</option>
 							<option value="eng">Английский</option>
 							<option value="math">Математика</option>
 							<option value="phys">Физика</option>
 						</Select>
-						<div style={{padding: 0, margin: 0}}>
-							{Array.from(this.state.subjects).map((subject, index) => 
-								<Cell size="l" key={index}>{subject}</Cell>
-							)}
-						</div>
 
-						<CellButton onClick={this.addSubjectClick} before={<Icon24Add />}>
-							Добавить предмет
-						</CellButton>
             <SelectMimicry
 							top="Уровень подготовки"
 							placeholder="Любой"
 							onClick={() => this.setState({ activePanel: 'study_level'})}
 						>
-						<div top="Выезд на дом">
-              <Radio name="type">Да</Radio>
-              <Radio name="type">Нет</Radio>
-          	</div>
-						{this.state.study_level}
+							{this.state.study_level}
 						</SelectMimicry>
-            <Input top="Оплата за час" defaultValue="" />
-						<Input top="Стаж преподавания" defaultValue=""/>
-						<FormLayout>
-							<Input
-								top="Образование"
-								bottom='Прикрепите копии документов об образовании и трудовом стаже, если хотите разместить свою заявку с пометкой "Проверенный специалист"'
-								defaultValue=""/>
-							<File before={<Icon24Document />} size="l" />
-						</FormLayout>
-						<Input top="Адрес" defaultValue=""/>
-            <div top="Выезд на дом">
+						<Cell top="Выезд на дом">
               <Radio name="type">Да</Radio>
               <Radio name="type">Нет</Radio>
-           </div>
-           <Input top="Электронная почта" defaultValue=""/>
-					 <Textarea top="О себе" placeholder="" />
-						<Button size="xl" onClick={() => this.props.dispatch(locationActions.changeLocation('profile'))}>
-							Сохранить
+          	</Cell>
+            <Input top="Оплата за час" defaultValue="" />
+						<Button size="xl" onClick={() => this.props.dispatch(locationActions.changeLocation('active_tutor'))}>
+							Разместить
 						</Button>
 					</FormLayout>
 				</Panel>
 
-        <Panel id="study_level">
+        <Panel id="study_level" theme="white">
           <PanelHeader noShadow
               left={
-                <HeaderButton onClick={() => this.props.dispatch(locationActions.goBack())}>
+                <HeaderButton onClick={() => this.setState({ activePanel: 'create_vacancy' })}>
 									<BackIcon />
 								</HeaderButton>
               }
