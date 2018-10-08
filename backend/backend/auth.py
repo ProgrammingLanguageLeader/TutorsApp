@@ -2,12 +2,12 @@ import base64
 import hashlib
 from django.conf import settings
 
-from .models import Profile
-
 
 def is_authenticated(request):
     signed_user_id = request.data.get('signed_user_id')
     vk_id = request.data.get('vk_id')
+    if not vk_id or not signed_user_id:
+        return False
     vk_app_secret = settings.VK_APP_SECRET
     vk_app_id = settings.VK_APP_ID
 
