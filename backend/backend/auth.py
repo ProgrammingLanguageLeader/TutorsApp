@@ -4,9 +4,12 @@ from django.conf import settings
 
 
 def is_authenticated(request):
-    signed_user_id = request.data.get('signed_user_id')
-    vk_id = request.data.get('vk_id')
-    if not vk_id or not signed_user_id:
+    signed_user_id = request.data.get('signed_user_id') \
+        or request.query_params.get('signed_user_id')
+    user_id = request.data.get('user_id') \
+        or request.query_params.get('user_id')
+
+    if not user_id or not signed_user_id:
         return False
     vk_app_secret = settings.VK_APP_SECRET
     vk_app_id = settings.VK_APP_ID
@@ -14,7 +17,7 @@ def is_authenticated(request):
     encoded_string = (
             str(vk_app_id) +
             vk_app_secret +
-            str(vk_id) +
+            str(user_id) +
             ')'
     ).encode('utf-8')
     digest = hashlib.sha256(encoded_string).digest()

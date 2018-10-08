@@ -23,7 +23,7 @@ class CreateProfileView(APIView):
     def post(self, request):
         if not is_authenticated(request):
             return Response(
-                data="VK ID or signed VK ID are not valid",
+                data="user id or signed user id are not valid",
                 status=HTTP_403_FORBIDDEN
             )
         view_serializer = CreateProfileSerializer(data=request.data)
@@ -40,7 +40,7 @@ class UpdateProfileView(APIView):
     def post(self, request):
         if not is_authenticated(request):
             return Response(
-                data="VK ID or signed VK ID are not valid",
+                data="user id or signed user id are not valid",
                 status=HTTP_403_FORBIDDEN
             )
         view_serializer = UpdateProfileSerializer(data=request.data)
@@ -60,7 +60,7 @@ class GetProfileView(APIView):
     def get(self, request):
         if not is_authenticated(request):
             return Response(
-                data="VK ID or signed VK ID are not valid",
+                data="user id or signed user id are not valid",
                 status=HTTP_403_FORBIDDEN
             )
         vk_id = self.request.query_params.get('vk_id')
@@ -79,7 +79,7 @@ class CreateVacancyView(APIView):
     def post(self, request):
         if not is_authenticated(request):
             return Response(
-                data="VK ID or signed VK ID are not valid",
+                data="user id or signed user id are not valid",
                 status=HTTP_403_FORBIDDEN
             )
         view_serializer = CreateVacancySerializer(data=request.data)
@@ -96,7 +96,7 @@ class SearchVacancyView(APIView):
     def get(self, request):
         if not is_authenticated(request):
             return Response(
-                data="VK ID or signed VK ID are not valid",
+                data="user id or signed user id are not valid",
                 status=HTTP_403_FORBIDDEN
             )
         subject = self.request.query_params.get('subject')
@@ -135,7 +135,7 @@ class GetActiveVacanciesView(APIView):
     def get(self, request):
         if not is_authenticated(request):
             return Response(
-                data="VK ID or signed VK ID are not valid",
+                data="user id or signed user id are not valid",
                 status=HTTP_403_FORBIDDEN
             )
         vacancies = Vacancy.objects.filter(active__exact=True)
@@ -147,7 +147,7 @@ class GetStudentsView(APIView):
     def get(self, request):
         if not is_authenticated(request):
             return Response(
-                data="VK ID or signed VK ID are not valid",
+                data="user id or signed user id are not valid",
                 status=HTTP_403_FORBIDDEN
             )
         teachers_vk_id = self.request.query_params.get('vk_id')
@@ -168,7 +168,7 @@ class AddLessonView(APIView):
     def post(self, request):
         if not is_authenticated(request):
             return Response(
-                data="VK ID or signed VK ID are not valid",
+                data="user id or signed user id are not valid",
                 status=HTTP_403_FORBIDDEN
             )
         schedule_serializer = LessonSerializer(request.data)
@@ -185,7 +185,7 @@ class DeleteLessonView(APIView):
     def post(self, request):
         if not is_authenticated(request):
             return Response(
-                data="VK ID or signed VK ID are not valid",
+                data="user id or signed user id are not valid",
                 status=HTTP_403_FORBIDDEN
             )
         try:
@@ -209,7 +209,7 @@ class DeleteVacancyView(APIView):
     def post(self, request):
         if not is_authenticated(request):
             return Response(
-                data="VK ID or signed VK ID are not valid",
+                data="user id or signed user id are not valid",
                 status=HTTP_403_FORBIDDEN
             )
         try:
@@ -233,7 +233,7 @@ class DeleteProfileView(APIView):
     def post(self, request):
         if not is_authenticated(request):
             return Response(
-                data="VK ID or signed VK ID are not valid",
+                data="user id or signed user id are not valid",
                 status=HTTP_403_FORBIDDEN
             )
         try:
