@@ -21,7 +21,7 @@ class Start extends React.Component {
 		this.registerStudent = this.registerStudent.bind(this);
 	}
 
-	registerStudent() {
+	componentDidMount() {
 		const { id, signed_user_id } = this.props.vkReducer.userInfo;
 		this.props.dispatch(
 			apiActions.createProfile({
@@ -30,20 +30,15 @@ class Start extends React.Component {
 				signed_user_id: signed_user_id,
 			})
 		);
+	}
+
+	registerStudent() {
 		this.props.dispatch(
 			locationActions.changeLocation('search'),
 		)
 	}
 
 	registerTutor() {
-		const { id, signed_user_id } = this.props.vkReducer.userInfo;
-		this.props.dispatch(
-			apiActions.createProfile({
-				vk_id: id,
-				user_id: id,
-				signed_user_id: signed_user_id,
-			})
-		);
 		this.props.dispatch(
 			locationActions.changeLocation('edit_profile')
 		);
