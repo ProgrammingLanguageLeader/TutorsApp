@@ -38,6 +38,8 @@ class App extends React.Component {
 	}
 
 	render() {
+		const { activeView, activePanel } = this.props;
+
 		return (
 			<Epic activeStory="root" tabbar={
 					<Tabbar>
@@ -48,7 +50,7 @@ class App extends React.Component {
 							<Icon28Search />
 						</TabbarItem>
 						<TabbarItem
-							onClick={() => this.props.dispatch(locationActions.changeLocation('active_tutor'))}
+							onClick={() => this.props.dispatch(locationActions.changeLocation('active_tutor', 'requests'))}
 							selected={this.props.activeView === 'active_tutor'}
 						>
 							<Icon28Document />
@@ -61,7 +63,7 @@ class App extends React.Component {
 						</TabbarItem>
 					</Tabbar>
       }>
-				<Root id="root" activeView={this.props.activeView}>
+				<Root id="root" activeView={activeView}>
 					<Start id="start" />
 					<Search id="search" />
 					<ShowProfile id="show_profile" />
@@ -79,10 +81,10 @@ class App extends React.Component {
 };
 
 const mapStateToProps = (state) => {
-	const { activeView } = state.locationReducer;
+	const { activeView, activePanel } = state.locationReducer;
 	const { accessToken } = state.vkReducer;
 	return {
-		activeView, accessToken
+		activeView, accessToken, activePanel
 	};
 }
 

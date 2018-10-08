@@ -98,7 +98,7 @@ const searchVacancy = (options) => {
     dispatch({
       type: apiConstants.SEARCH_VACANCY_REQUEST,
     });
-    return makeApiRequest('search_vacancy', 'get', options)
+    return makeApiRequest('search_vacancies', 'get', options)
     .then(
       response => {
         dispatch({

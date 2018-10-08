@@ -1,8 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import {
-	View, Panel, PanelHeader, HeaderButton, Cell, Avatar, Group, List, Tabs, TabsItem, FixedLayout
+	View, Panel, PanelHeader, HeaderButton, Cell, Avatar, Group, List
 } from '@vkontakte/vkui';
+
+import ChangeTab from './ChangeTab';
 
 import BackIcon from '../customComponents/BackIcon';
 
@@ -10,49 +12,52 @@ import { apiActions } from '../actions/api';
 import { locationActions } from '../actions/location';
 
 class ActiveTutor extends React.Component {
-	constructor(props) {
-    super(props);
-    
-    this.state = {
-      activeTab: 'request'
-    }
-	}
+	componentDidMount() {
+    const { id, signed_user_id } = this.props.userInfo;
+
+    this.props.dispatch(
+      apiActions.getStudents({
+        user_id: id,
+        signed_user_id: signed_user_id,
+        vk_id: id,
+      })
+    );
+  }
 
 	render() {
+    const activePanel = this.props.activePanel || "requests";
+
 		return (
-			<View id={this.props.id} activePanel="active_tutor">
-				<Panel id={this.props.activePanel}>
+			<View id={this.props.id} activePanel={activePanel}>
+				<Panel id="requests">
 					<PanelHeader noShadow>
 						Активные
 					</PanelHeader>
-          <FixedLayout vertical="top">
-            <Tabs 
-              theme="header"
-              type="buttons"
-            >
-              <TabsItem onClick={() => this.setState({ activeTab: 'request' })}
-                selected={this.state.activeTab === 'request'}
-              >
-                Мои завки
-              </TabsItem>
-              <TabsItem onClick={() => this.setState({ activeTab: 'students' })}
-                selected={this.state.activeTab === 'students'}
-              >
-                Ученики
-              </TabsItem>
-            </Tabs>
-          </FixedLayout>
-        
-          <Group style={{ marginTop: 52 }}>
+          <ChangeTab />
+          <Group>
             <List>
               <Cell
-                size="l"
-                description="89045678463. Москва, ул. Удальцова, д. 4"
-                before={
-                  <Avatar src="https://pp.userapi.com/c841034/v841034569/3b8c1/pt3sOw_qhfg.jpg"/>
-                }
+                description="телефон"
+                before={<Avatar src={"photo_200"} />}
               >
-                Артур
+                Дима Шорохов
+              </Cell>
+            </List>
+          </Group>
+        </Panel>
+
+        <Panel id="students">
+					<PanelHeader noShadow>
+						Активные
+					</PanelHeader>
+          <ChangeTab />
+          <Group>
+            <List>
+              <Cell
+                description="телефон"
+                before={<Avatar src={"photo_200"} />}
+              >
+                Игорек.., ладно, не буду
               </Cell>
             </List>
           </Group>
@@ -63,7 +68,12 @@ class ActiveTutor extends React.Component {
 };
 
 const mapStateToProps = state => {
-	return state;
+  const { students } = state.apiReducer;
+  const { userInfo } = state.vkReducer;
+  const { activePanel } = state.locationReducer;
+  return {
+    students, userInfo, activePanel,
+  };
 }
 
 export default connect(mapStateToProps)(ActiveTutor);
