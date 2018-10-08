@@ -16,10 +16,12 @@ import { locationActions } from '../actions/location';
 
 class ShowProfile extends React.Component {
   componentDidMount() {
-    const { id } = this.props.userInfo;
+    const { id, signed_user_id } = this.props.userInfo;
     this.props.dispatch(
       apiActions.getProfile({
         vk_id: id,
+        user_id: id,
+        signed_user_id: signed_user_id,
       })
     );
   }

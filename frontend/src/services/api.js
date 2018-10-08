@@ -8,13 +8,22 @@ const HEADERS = {
 };
 
 export const makeApiRequest = async (endpoint, method, options) => {
-  const url = (method.toLowerCase() === 'post') ? `${API_URL}/${endpoint}/` : `${API_URL}/${endpoint}`;
+  const url = `${API_URL}/${endpoint}/`;
 
+  if (method.toLowerCase() === 'get') {
+    return axios({
+      url: url,
+      method: method,
+      headers: HEADERS,
+      params: options,
+    })
+    .then(res => res.data)
+  }
   return axios({
     url: url,
     method: method,
     headers: HEADERS,
-    params: options,
+    data: options,
   })
   .then(res => res.data)
 }

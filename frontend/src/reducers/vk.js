@@ -1,17 +1,7 @@
 import { vkConstants } from '../constants/vk';
 
-import localStorage from '../helpers/localStorage';
-
-let initAccessToken;
-try {
-  initAccessToken = localStorage.get('accessToken');
-}
-catch (err) {
-  initAccessToken = null;
-}
-
 const initialState = {
-  accessToken: initAccessToken,
+  accessToken: null,
   notificationStatus: null,
   logs: null,
   userInfo: {},
@@ -36,7 +26,6 @@ const vkReducer = (state = initialState, action) => {
       };
 
     case vkConstants.VK_GET_ACCESS_TOKEN_FETCHED:
-      localStorage.set('accessToken', action.accessToken);
       return {
         ...state,
         accessToken: action.accessToken,

@@ -8,8 +8,8 @@ const connect = (process.env.REACT_APP_DEBUG) ? mockConnect : realConnect;
 const API_VERSION = '5.80';
 
 const fetchAccessToken = () => () => {
-  const appId = process.env.REACT_APP_ID || 6700618;
-  connect.send('VKWebAppGetAuthToken', {'app_id': appId, "scope": "notify,friends,offline"});
+  const appId = 6700618;
+  connect.send('VKWebAppGetAuthToken', {'app_id': appId});
 }
 
 const fetchNotificationStatus = (accessToken) => dispatch => {

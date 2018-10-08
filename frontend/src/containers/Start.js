@@ -10,8 +10,6 @@ import student from '../img/student.jpg';
 import { apiActions } from '../actions/api';
 import { locationActions } from '../actions/location';
 
-import localStorage from '../helpers/localStorage';
-
 class Start extends React.Component {
 	constructor(props) {
 		super(props);
@@ -24,10 +22,12 @@ class Start extends React.Component {
 	}
 
 	registerStudent() {
-		localStorage.set('isStudent', true);
+		const { id, signed_user_id } = this.props.vkReducer.userInfo;
 		this.props.dispatch(
 			apiActions.createProfile({
-				vk_id: this.props.vkReducer.userInfo['id'],
+				vk_id: id,
+				user_id: id,
+				signed_user_id: signed_user_id,
 			})
 		);
 		this.props.dispatch(
@@ -36,27 +36,17 @@ class Start extends React.Component {
 	}
 
 	registerTutor() {
-		localStorage.set('isTutor', true);
+		const { id, signed_user_id } = this.props.vkReducer.userInfo;
 		this.props.dispatch(
 			apiActions.createProfile({
-				vk_id: this.props.vkReducer.userInfo['id'],
+				vk_id: id,
+				user_id: id,
+				signed_user_id: signed_user_id,
 			})
 		);
 		this.props.dispatch(
 			locationActions.changeLocation('edit_profile')
 		);
-	}
-
-	componentWillMount() {
-		if (localStorage.get('isTutor')) {
-			this.props.dispatch(
-				locationActions.changeLocation('show_profile')
-			)
-		} else if (localStorage.get('isStudent')) {
-			this.props.dispatch(
-				locationActions.changeLocation('search')
-			)
-		}
 	}
 
 	render() {

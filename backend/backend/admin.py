@@ -3,11 +3,11 @@ from django.contrib import admin
 from .models import (
     Profile,
     Report,
-    Schedule,
+    Lesson,
     Vacancy
 )
 
 admin.site.register(Profile)
 admin.site.register(Report)
-admin.site.register(Schedule)
+admin.site.register(Lesson)
 admin.site.register(Vacancy)

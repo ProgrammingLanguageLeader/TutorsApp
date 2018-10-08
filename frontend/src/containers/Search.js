@@ -21,8 +21,13 @@ class Search extends React.Component {
 	}
 
 	componentDidMount() {
+		const { id, signed_user_id } = this.props.vkReducer.userInfo;
 		this.props.dispatch(
-			apiActions.getActiveVacancies()
+			apiActions.getActiveVacancies({
+				vk_id: id,
+				user_id: id,
+				signed_user_id: signed_user_id,
+			})
 		)
 		.then(() => {
 			const { accessToken } = this.props.vkReducer;

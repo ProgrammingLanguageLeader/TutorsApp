@@ -19,7 +19,7 @@ class Profile(models.Model):
     )
     subjects = models.ManyToManyField(
         Subject,
-        null=True
+        blank=True
     )
     description = models.TextField(
         null=True,
@@ -58,14 +58,26 @@ class Profile(models.Model):
     university = models.BooleanField(
         default=False
     )
+    experience = models.TextField(
+        null=True,
+        max_length=4096
+    )
+    education = models.TextField(
+        null=True,
+        max_length=4096
+    )
+    address = models.TextField(
+        null=True,
+        max_length=128
+    )
+
+    def __str__(self):
+        return self.vk_id
 
 
 class Vacancy(models.Model):
     user = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    subjects = models.ManyToManyField(
-        Subject,
-        null=True
-    )
+    subjects = models.ManyToManyField(Subject, blank=True)
     extra_info = models.TextField(
         null=True,
         max_length=1024
@@ -81,12 +93,12 @@ class Vacancy(models.Model):
     active = models.BooleanField(default=True)
 
 
-class Schedule(models.Model):
+class Lesson(models.Model):
     tutor = models.ForeignKey(
-        Profile, on_delete=models.CASCADE, related_name='schedule_tutor'
+        Profile, on_delete=models.CASCADE, related_name='lesson_tutor'
     )
     student = models.ForeignKey(
-        Profile, on_delete=models.CASCADE, related_name='schedule_student'
+        Profile, on_delete=models.CASCADE, related_name='lesson_student'
     )
     beginning_time = models.TimeField(
         null=False
