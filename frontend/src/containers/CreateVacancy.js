@@ -2,13 +2,15 @@ import React from 'react';
 import { connect } from 'react-redux';
 import {
   View, Panel, PanelHeader, HeaderButton, Cell, Button, Input, FormLayout, Radio, List, FixedLayout, 
-  Checkbox, SelectMimicry, Div, Group, colors
+  Checkbox, SelectMimicry, Div, Group, colors, platform, IOS
 } from '@vkontakte/vkui';
 
 import BackIcon from '../components/BackIcon';
 import Icon24Done from '@vkontakte/icons/dist/24/done';
 
 import { locationActions } from '../actions/location';
+
+const osname = platform();
 
 class CreateVacancy extends React.Component {
 	constructor(props) {
@@ -33,7 +35,7 @@ class CreateVacancy extends React.Component {
 					>
 						Cоздание вакансии
 					</PanelHeader>
-					<FormLayout>
+					<FormLayout style={{ marginBottom: osname === IOS ? 0 : 48 }}>
 						<SelectMimicry
 							top="Предмет"
 							onClick={() => this.setState({ activePanel: 'subject'})}
@@ -51,12 +53,9 @@ class CreateVacancy extends React.Component {
               <Radio name="type">Нет</Radio>
           	</Cell>
             <Input top="Оплата за час" defaultValue="" />
-						<FixedLayout vertical="bottom" style={{ marginBottom: 10 }}>
-							<Button size="xl" onClick={() => this.props.dispatch(locationActions.changeLocation('active_tutor', 'requests'))}>
-								Разместить
-{/* Отклонить, если поля пустые */}
-							</Button>
-						</FixedLayout>
+						<Button size="xl" onClick={() => this.props.dispatch(locationActions.changeLocation('active_tutor', 'requests'))}>
+							Разместить
+						</Button>
 					</FormLayout>
 				</Panel>
 
@@ -99,6 +98,7 @@ class CreateVacancy extends React.Component {
 						</List>
 					</Group>
 				</Panel>
+
         <Panel id="study_level">
           <PanelHeader
               left={
@@ -118,7 +118,7 @@ class CreateVacancy extends React.Component {
 						<Checkbox>Курс высшего образования</Checkbox>
 					</Group>
 
-          <FixedLayout vertical="bottom">
+          <FixedLayout vertical="bottom" style={{ marginBottom: osname === IOS ? 0 : 48 }}>
 						<Div>
 							<Button size="l" stretched onClick={() => this.setState({ activePanel: 'create_vacancy'})}>
 								Применить
