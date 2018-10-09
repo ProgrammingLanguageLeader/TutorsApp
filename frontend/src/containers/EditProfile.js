@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import {
-	View, Panel, PanelHeader, Cell, Avatar, Button, File, Input, FormLayout, Textarea, Spinner, HeaderButton
+	View, Panel, PanelHeader, Cell, Avatar, Button, File, Input, FormLayout, FixedLayout, Textarea, Spinner, HeaderButton
 } from '@vkontakte/vkui';
 import Icon24Document from '@vkontakte/icons/dist/24/document';
 
@@ -120,7 +120,6 @@ class EditProfile extends React.Component {
 								placeholder={description ? description : ""} 
 								onChange={this.handleChange}
 							/>
-							
 							<Button size="xl" onClick={this.updateProfile}>
 								Сохранить
 							</Button>

@@ -1,10 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import {
-	View, Panel, PanelHeader, HeaderButton, Cell, Avatar, Group, List, Button
+	View, Panel, PanelHeader, Cell, Avatar, Group, List, Button
 } from '@vkontakte/vkui';
 
 import ChangeTab from './ChangeTab';
+import FlexDiv from '../components/FlexDiv';
 
 import { apiActions } from '../actions/api';
 import { locationActions } from '../actions/location';
@@ -35,16 +36,21 @@ class ActiveTutor extends React.Component {
           <Group>
             <List>
               <Cell
+              // TODO: Добавляемый список вакансий
                 description="телефон"
                 before={<Avatar src={"photo_200"} />}
               >
                 Дима Шорохов
               </Cell>
             </List>
-            <Button onClick={() => this.props.dispatch(locationActions.changeLocation('create_vacancy'))}>
-              Создать вакансию
-            </Button>
           </Group>
+
+          <FlexDiv>
+            <Button size="xl"
+              onClick={() => this.props.dispatch(locationActions.changeLocation('create_vacancy'))}>
+                Создать вакансию
+            </Button>
+          </FlexDiv>
         </Panel>
 
         <Panel id="students">
