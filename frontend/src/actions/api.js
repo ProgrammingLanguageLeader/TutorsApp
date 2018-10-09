@@ -93,7 +93,7 @@ const getProfile = (options) => {
   };
 };
 
-const searchVacancy = (options) => {
+const searchVacancies = (options) => {
   return dispatch => {
     dispatch({
       type: apiConstants.SEARCH_VACANCY_REQUEST,
@@ -233,7 +233,7 @@ const deleteProfile = (options) => {
 
 export const apiActions = {
   createProfile, createVacancy, addSchedule,
-  getProfile, searchVacancy, getActiveVacancies,
+  getProfile, searchVacancies, getActiveVacancies,
   getStudents, deleteSchedule, deleteVacancy, 
   deleteProfile,
 };

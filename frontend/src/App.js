@@ -7,7 +7,7 @@ import Icon28Document from '@vkontakte/icons/dist/28/document';
 import Icon28Search from '@vkontakte/icons/dist/28/search';
 import Icon28User from '@vkontakte/icons/dist/28/user';
 
-import Search from './containers/Search';
+import SearchVacancies from './containers/SearchVacancies';
 import ShowProfile from './containers/ShowProfile';
 import CreateVacancy from './containers/CreateVacancy';
 import EditProfile from './containers/EditProfile';
@@ -37,7 +37,7 @@ class App extends React.Component {
 	}
 
 	render() {
-		const { activeView, activePanel } = this.props;
+		const { activeView } = this.props;
 
 		return (
 			<Epic activeStory="root" tabbar={
@@ -64,7 +64,7 @@ class App extends React.Component {
       }>
 				<Root id="root" activeView={activeView}>
 					<Start id="start" />
-					<Search id="search" />
+					<SearchVacancies id="search" />
 					<ShowProfile id="show_profile" />
 					<CreateVacancy id="create_vacancy" />
 					<EditProfile id="edit_profile" />
