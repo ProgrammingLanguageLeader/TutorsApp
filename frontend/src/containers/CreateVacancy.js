@@ -33,7 +33,7 @@ class CreateVacancy extends React.Component {
 					>
 						Cоздание вакансии
 					</PanelHeader>
-					<FormLayout>		
+					<FormLayout>
 						<SelectMimicry
 							top="Предмет"
 							onClick={() => this.setState({ activePanel: 'subject'})}
