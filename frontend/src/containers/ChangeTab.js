@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Tabs, TabsItem, platform, IOS } from '@vkontakte/vkui';
+import { Tabs, TabsItem, FixedLayout, platform, IOS } from '@vkontakte/vkui';
 
 import { locationActions } from '../actions/location';
 
@@ -11,39 +11,44 @@ class ChangeTab extends React.Component {
 
     if (osname === IOS) {
       return (
-        <Tabs theme="header" type="buttons">
-          <TabsItem 
-            style={{ width: "40%", marginLeft: "5%", marginRight: "5%" }}
-            onClick={() => this.props.dispatch(locationActions.changeLocation(activeView, 'requests'))}
-            selected={activePanel === 'requests'}
-          >
-            Мои завки
-          </TabsItem>
-          <TabsItem 
-            style={{ width: "40%", marginLeft: "5%", marginRight: "5%" }}
-            onClick={() => this.props.dispatch(locationActions.changeLocation(activeView, 'students'))}
-            selected={activePanel === 'students'}
-          >
-            Ученики
-          </TabsItem>
-        </Tabs>
+        <FixedLayout vertical="top">
+          <Tabs theme="header" type="buttons">
+            <TabsItem 
+              style={{ width: "40%", marginLeft: "5%", marginRight: "5%" }}
+              onClick={() => this.props.dispatch(locationActions.changeLocation(activeView, 'requests'))}
+              selected={activePanel === 'requests'}
+            >
+              Мои завки
+            </TabsItem>
+            <TabsItem 
+              style={{ width: "40%", marginLeft: "5%", marginRight: "5%" }}
+              onClick={() => this.props.dispatch(locationActions.changeLocation(activeView, 'students'))}
+              selected={activePanel === 'students'}
+            >
+              Ученики
+            </TabsItem>
+          </Tabs>
+        </FixedLayout>
       );
     }
   return (
-    <Tabs theme="header">
-          <TabsItem 
-            onClick={() => this.props.dispatch(locationActions.changeLocation(activeView, 'requests'))}
-            selected={activePanel === 'requests'}
-          >
-            Мои завки
-          </TabsItem>
-          <TabsItem 
-            onClick={() => this.props.dispatch(locationActions.changeLocation(activeView, 'students'))}
-            selected={activePanel === 'students'}
-          >
-            Ученики
-          </TabsItem>
-        </Tabs>
+    <FixedLayout vertical="top">
+      <Tabs theme="header">
+    
+        <TabsItem 
+          onClick={() => this.props.dispatch(locationActions.changeLocation(activeView, 'requests'))}
+          selected={activePanel === 'requests'}
+        >
+          Мои завки
+        </TabsItem>
+        <TabsItem 
+          onClick={() => this.props.dispatch(locationActions.changeLocation(activeView, 'students'))}
+          selected={activePanel === 'students'}
+        >
+          Ученики
+        </TabsItem>
+      </Tabs>
+    </FixedLayout>
     );
   };
 }

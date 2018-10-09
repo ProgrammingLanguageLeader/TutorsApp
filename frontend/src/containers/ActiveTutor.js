@@ -33,7 +33,7 @@ class ActiveTutor extends React.Component {
 						Активные
 					</PanelHeader>
           <ChangeTab />
-          <Group>
+          <Group style={{ marginTop: "60px" }}>
             <List>
               <Cell
               // TODO: Добавляемый список вакансий
@@ -58,7 +58,7 @@ class ActiveTutor extends React.Component {
 						Активные
 					</PanelHeader>
           <ChangeTab />
-          <Group>
+          <Group style={{ marginTop: "60px" }}>
             <List>
               <Cell
                 description="телефон"
