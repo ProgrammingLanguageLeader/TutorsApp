@@ -75,7 +75,7 @@ class EditProfile extends React.Component {
 					{ fetching ? (
 						<Spinner />
 					) : (
-						<FormLayout>
+						<FormLayout style={{ marginBottom: 48 }}>
 							<Cell
 								size="l"
 								description={city ? city.title : ""}

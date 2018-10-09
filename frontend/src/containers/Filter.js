@@ -1,7 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import {
-	View, Panel, PanelHeader, Cell, List, Group, FormLayout, FixedLayout, Button, SelectMimicry, HeaderButton, RangeSlider, colors
+	View, Panel, PanelHeader, Cell, List, Group, FormLayout, 
+	FixedLayout, Button, SelectMimicry, HeaderButton, RangeSlider, colors,
+	platform, IOS
 } from '@vkontakte/vkui';
 
 import BackIcon from '../components/BackIcon';
@@ -10,6 +12,7 @@ import FlexDiv from '../components/FlexDiv';
 import Icon24Done from '@vkontakte/icons/dist/24/done';
 import { locationActions } from '../actions/location';
 import { filterActions } from '../actions/filter';
+
 
 const initialState = {
 	subject: '',
@@ -25,6 +28,8 @@ const initialState = {
 	activePanel: 'filter',
 	studyLevel: '',
 };
+
+const osname = platform();
 
 class Filter extends React.Component {
 	constructor(props) {
@@ -160,19 +165,20 @@ class Filter extends React.Component {
 						Фильтр
 					</PanelHeader>
 					<FormLayout style={{ paddingBottom: 60 }}>
-					<SelectMimicry
+						<SelectMimicry
 							top="Предмет"
 							placeholder="Любой"
 							onClick={() => this.setState({ activePanel: 'subjects'})}
 						>
 							{this.state.subject}
 						</SelectMimicry>
+
 						<RangeSlider 
 							top={`Цена - (от ${this.state.price_min} до ${this.state.price_max} рублей/час)`}
 							min={0}
 							max={5000}
 							step={100}
-							defaultValue={[this.state.price_min, this.state.price_max]}
+							value={[this.state.price_min, this.state.price_max]}
 							onChange={([price_min, price_max]) => this.setState({ price_min: price_min, price_max: price_max })}
 						/>
 						
@@ -184,7 +190,7 @@ class Filter extends React.Component {
 							{this.state.studyLevel}
 						</SelectMimicry>
 					</FormLayout>
-					<FixedLayout vertical="bottom">
+					<FixedLayout vertical="bottom" style={{ marginBottom: osname === IOS ? 0 : 48 }}>
 						<FlexDiv>
 							<Button size="l" stretched style={{	marginRight: "8px" }} onClick={this.applyButtonClick}>
 								Применить

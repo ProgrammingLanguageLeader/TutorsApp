@@ -1,7 +1,9 @@
 import React from 'react';
+import styled from 'styled-components';
 import { connect } from 'react-redux';
 import {
-	View, Panel, PanelHeader, Cell, Avatar, Group, List, Button
+  View, Panel, PanelHeader, Cell, Avatar, Group, List, Button,
+  platform, IOS
 } from '@vkontakte/vkui';
 
 import ChangeTab from './ChangeTab';
@@ -9,6 +11,14 @@ import FlexDiv from '../components/FlexDiv';
 
 import { apiActions } from '../actions/api';
 import { locationActions } from '../actions/location';
+
+
+const osname = platform();
+const ChangeTabContentDiv = styled.div
+`
+  margin-top: 60px;
+  margin-bottom: ${osname === IOS ? 0 : 48}px;
+`;
 
 class ActiveTutor extends React.Component {
 	componentDidMount() {
@@ -33,24 +43,128 @@ class ActiveTutor extends React.Component {
 						Активные
 					</PanelHeader>
           <ChangeTab />
-          <Group style={{ marginTop: "60px" }}>
-            <List>
-              <Cell
-              // TODO: Добавляемый список вакансий
-                description="телефон"
-                before={<Avatar src={"photo_200"} />}
+          <ChangeTabContentDiv>
+            <Group>
+              <List>
+                <Cell
+                  description="телефон"
+                  before={<Avatar src={"photo_200"} />}
+                >
+                  Дима Шорохов
+                </Cell>
+                <Cell
+                  description="телефон"
+                  before={<Avatar src={"photo_200"} />}
+                >
+                  Дима Шорохов
+                </Cell>
+                <Cell
+                  description="телефон"
+                  before={<Avatar src={"photo_200"} />}
+                >
+                  Дима Шорохов
+                </Cell>
+                <Cell
+                  description="телефон"
+                  before={<Avatar src={"photo_200"} />}
+                >
+                  Дима Шорохов
+                </Cell>
+                <Cell
+                  description="телефон"
+                  before={<Avatar src={"photo_200"} />}
+                >
+                  Дима Шорохов
+                </Cell>
+                <Cell
+                  description="телефон"
+                  before={<Avatar src={"photo_200"} />}
+                >
+                  Дима Шорохов
+                </Cell>
+                <Cell
+                  description="телефон"
+                  before={<Avatar src={"photo_200"} />}
+                >
+                  Дима Шорохов
+                </Cell>
+                <Cell
+                  description="телефон"
+                  before={<Avatar src={"photo_200"} />}
+                >
+                  Дима Шорохов
+                </Cell>
+                <Cell
+                  description="телефон"
+                  before={<Avatar src={"photo_200"} />}
+                >
+                  Дима Шорохов
+                </Cell>
+                <Cell
+                  description="телефон"
+                  before={<Avatar src={"photo_200"} />}
+                >
+                  Дима Шорохов
+                </Cell>
+                <Cell
+                  description="телефон"
+                  before={<Avatar src={"photo_200"} />}
+                >
+                  Дима Шорохов
+                </Cell>
+                <Cell
+                  description="телефон"
+                  before={<Avatar src={"photo_200"} />}
+                >
+                  Дима Шорохов
+                </Cell>
+                <Cell
+                  description="телефон"
+                  before={<Avatar src={"photo_200"} />}
+                >
+                  Дима Шорохов
+                </Cell>
+                <Cell
+                  description="телефон"
+                  before={<Avatar src={"photo_200"} />}
+                >
+                  Дима Шорохов
+                </Cell>
+                <Cell
+                  description="телефон"
+                  before={<Avatar src={"photo_200"} />}
+                >
+                  Дима Шорохов
+                </Cell>
+                <Cell
+                  description="телефон"
+                  before={<Avatar src={"photo_200"} />}
+                >
+                  Дима Шорохов
+                </Cell>
+                <Cell
+                  description="телефон"
+                  before={<Avatar src={"photo_200"} />}
+                >
+                  Дима Шорохов
+                </Cell>
+                <Cell
+                  description="телефон"
+                  before={<Avatar src={"photo_200"} />}
+                >
+                  Дима Шорохов
+                </Cell>
+              </List>
+            </Group>
+            <FlexDiv>
+              <Button 
+                size="xl"
+                onClick={() => this.props.dispatch(locationActions.changeLocation('create_vacancy'))}
               >
-                Дима Шорохов
-              </Cell>
-            </List>
-          </Group>
-
-          <FlexDiv>
-            <Button size="xl"
-              onClick={() => this.props.dispatch(locationActions.changeLocation('create_vacancy'))}>
-                Создать вакансию
-            </Button>
-          </FlexDiv>
+                  Создать вакансию
+              </Button>
+            </FlexDiv>
+          </ChangeTabContentDiv>
         </Panel>
 
         <Panel id="students">
@@ -58,7 +172,7 @@ class ActiveTutor extends React.Component {
 						Активные
 					</PanelHeader>
           <ChangeTab />
-          <Group style={{ marginTop: "60px" }}>
+          <ChangeTabContentDiv>
             <List>
               <Cell
                 description="телефон"
@@ -66,8 +180,98 @@ class ActiveTutor extends React.Component {
               >
                 Игорек.., ладно, не буду
               </Cell>
+              <Cell
+                description="телефон"
+                before={<Avatar src={"photo_200"} />}
+              >
+                Игорек.., ладно, не буду
+              </Cell>
+              <Cell
+                description="телефон"
+                before={<Avatar src={"photo_200"} />}
+              >
+                Игорек.., ладно, не буду
+              </Cell>
+              <Cell
+                description="телефон"
+                before={<Avatar src={"photo_200"} />}
+              >
+                Игорек.., ладно, не буду
+              </Cell>
+              <Cell
+                description="телефон"
+                before={<Avatar src={"photo_200"} />}
+              >
+                Игорек.., ладно, не буду
+              </Cell>
+              <Cell
+                description="телефон"
+                before={<Avatar src={"photo_200"} />}
+              >
+                Игорек.., ладно, не буду
+              </Cell>
+              <Cell
+                description="телефон"
+                before={<Avatar src={"photo_200"} />}
+              >
+                Игорек.., ладно, не буду
+              </Cell>
+              <Cell
+                description="телефон"
+                before={<Avatar src={"photo_200"} />}
+              >
+                Игорек.., ладно, не буду
+              </Cell>
+              <Cell
+                description="телефон"
+                before={<Avatar src={"photo_200"} />}
+              >
+                Игорек.., ладно, не буду
+              </Cell>
+              <Cell
+                description="телефон"
+                before={<Avatar src={"photo_200"} />}
+              >
+                Игорек.., ладно, не буду
+              </Cell>
+              <Cell
+                description="телефон"
+                before={<Avatar src={"photo_200"} />}
+              >
+                Игорек.., ладно, не буду
+              </Cell>
+              <Cell
+                description="телефон"
+                before={<Avatar src={"photo_200"} />}
+              >
+                Игорек.., ладно, не буду
+              </Cell>
+              <Cell
+                description="телефон"
+                before={<Avatar src={"photo_200"} />}
+              >
+                Игорек.., ладно, не буду
+              </Cell>
+              <Cell
+                description="телефон"
+                before={<Avatar src={"photo_200"} />}
+              >
+                Игорек.., ладно, не буду
+              </Cell>
+              <Cell
+                description="телефон"
+                before={<Avatar src={"photo_200"} />}
+              >
+                Игорек.., ладно, не буду
+              </Cell>
+              <Cell
+                description="телефон"
+                before={<Avatar src={"photo_200"} />}
+              >
+                Игорек.., ладно, не буду
+              </Cell>
             </List>
-          </Group>
+          </ChangeTabContentDiv>
         </Panel>
       </View>
 		);

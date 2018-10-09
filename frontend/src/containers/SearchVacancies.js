@@ -1,8 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { 
-	View, Panel, PanelHeader, Cell, FixedLayout, Button, Avatar, Div
+	View, Panel, PanelHeader, Cell, HeaderButton, Avatar, Div
 } from '@vkontakte/vkui';
+
+import Icon24Filter from '@vkontakte/icons/dist/24/filter';
 
 import DivSpinner from '../components/DivSpinner';
 
@@ -53,14 +55,20 @@ class SearchVacancies extends React.Component {
 		return (
 			<View id={this.props.id} activePanel="search">
 				<Panel id="search" theme="white">
-					<PanelHeader>
+					<PanelHeader
+						left={
+							<HeaderButton size="xl" onClick={() => this.props.dispatch(locationActions.changeLocation('filter'))}>
+								<Icon24Filter />
+							</HeaderButton>
+						}
+					>
 						Поиск репетиторов
 					</PanelHeader>
 					{ fetching ? (
 						<DivSpinner />
 					) : (
 						<div>
-							<Div style={{paddingBottom: 60}}>
+							<Div>
 								{ vacanciesFound ? vacancies.map(vacancy => {
 									const userInfo = usersInfo.get(Number(vacancy.user));
 									return (
@@ -79,13 +87,6 @@ class SearchVacancies extends React.Component {
 									</Div>
 								)}
 							</Div>
-							<FixedLayout vertical="bottom">
-								<Div>
-									<Button size="xl" onClick={() => this.props.dispatch(locationActions.changeLocation('filter'))}>
-										Фильтр
-									</Button>
-								</Div>
-							</FixedLayout>
 						</div>
 					)}
 				</Panel>
