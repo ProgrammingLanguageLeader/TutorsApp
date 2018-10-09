@@ -6,6 +6,7 @@ import { Root, Epic, Tabbar, TabbarItem } from '@vkontakte/vkui';
 import Icon28Document from '@vkontakte/icons/dist/28/document';
 import Icon28Search from '@vkontakte/icons/dist/28/search';
 import Icon28User from '@vkontakte/icons/dist/28/user';
+import Icon28Notification from '@vkontakte/icons/dist/28/notification';
 
 import SearchVacancies from './containers/SearchVacancies';
 import ShowProfile from './containers/ShowProfile';
@@ -17,6 +18,7 @@ import Settings from './containers/Settings';
 import Filter from './containers/Filter';
 import Students from './containers/Students';
 import Start from './containers/Start';
+import Notifications from './containers/Notifications';
 
 import { vkActions } from './actions/vk';
 import { locationActions } from './actions/location';
@@ -55,6 +57,12 @@ class App extends React.Component {
 						<Icon28Document />
 					</TabbarItem>
 					<TabbarItem
+						onClick={() => this.props.dispatch(locationActions.changeLocation('notifications'))}
+						selected={this.props.activeView === 'notifications'}
+					>
+						<Icon28Notification />
+					</TabbarItem>
+					<TabbarItem
 						onClick={() => this.props.dispatch(locationActions.changeLocation('show_profile'))}
 						selected={this.props.activeView === 'show_profile'}
 					>
@@ -73,6 +81,7 @@ class App extends React.Component {
 					<Settings id="settings" />
 					<Filter id="filter" />
 					<Students id="student" />
+					<Notifications id="notifications" />
 				</Root>
 			</Epic>
 		);
