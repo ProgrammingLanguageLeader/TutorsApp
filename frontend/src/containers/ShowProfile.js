@@ -9,7 +9,7 @@ import Icon24Education from '@vkontakte/icons/dist/24/education';
 import Icon24Mention from '@vkontakte/icons/dist/24/mention';
 import Icon24Recent from '@vkontakte/icons/dist/24/recent';
 import Icon24Info from '@vkontakte/icons/dist/24/info';
-import Icon24Write from '@vkontakte/icons/dist/24/write'
+import Icon24Write from '@vkontakte/icons/dist/24/write';
 
 import { apiActions } from '../actions/api';
 import { locationActions } from '../actions/location';
