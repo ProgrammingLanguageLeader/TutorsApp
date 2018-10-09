@@ -1,14 +1,14 @@
 import { filterConstants } from '../constants/filter';
 
 const updateFilter = (params) => (dispatch) => {
-  dispatch({
+  return dispatch({
     type: filterConstants.VACANCIES_FILTER_UPDATE,
     params,
   })
 };
 
 const deleteFilter = () => dispatch => {
-  dispatch({
+  return dispatch({
     type: filterConstants.VACANCIES_FILTER_DELETE
   });
 };

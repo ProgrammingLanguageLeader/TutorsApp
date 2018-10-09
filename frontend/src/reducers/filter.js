@@ -1,16 +1,18 @@
 import { filterConstants } from '../constants/filter';
 
 const initialState = {
-  subject: null,
-  price_min: null,
-  price_max: null,
-  experience: null,
-  ege: null,
-  oge: null,
-  foreign_lang_cert: null,
-  school: null,
-  university: null,
-  distance_learning: null,
+  subject: '',
+  price_min: 0,
+  price_max: 1500,
+  primary_school: false,
+  secondary_school: false,
+  olympiads: false,
+  ege: false,
+  oge: false,
+  university: false,
+  foreign_lang_cert: false,
+  university: false,
+  distance_learning: false,
 };
 
 const filterReducer = (state = initialState, action) => {

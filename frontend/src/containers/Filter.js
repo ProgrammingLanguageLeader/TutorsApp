@@ -5,31 +5,61 @@ import {
 } from '@vkontakte/vkui';
 
 import BackIcon from '../components/BackIcon';
+import FlexDiv from '../components/FlexDiv';
 
 import { locationActions } from '../actions/location';
 import { filterActions } from '../actions/filter';
 
+const initialState = {
+	subject: '',
+	price_min: 0,
+	price_max: 1500,
+	primary_school: false,
+	secondary_school: false,
+	olympiads: false,
+	ege: false,
+	oge: false,
+	university: false,
+
+	activePanel: 'filter',
+	studyLevel: '',
+};
+
 class Filter extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = {
-			subject: '',
-			price_min: 0,
-			price_max: 1500,
-			primary_school: false,
-			secondary_school: false,
-			olympiads: false,
-			ege: false,
-			oge: false,
-			university: false,
-
-			activePanel: 'filter',
-			studyLevel: '',
-		};
+		this.state = initialState;
 
 		this.returnToFilterPanel = this.returnToFilterPanel.bind(this);
 		this.applyButtonClick = this.applyButtonClick.bind(this);
+		this.deleteButtonClick = this.deleteButtonClick.bind(this);
 		this.updateStudyLevel = this.updateStudyLevel.bind(this);
+		this.updateStateFromFilterReducer = this.updateStateFromFilterReducer.bind(this);
+	}
+
+	componentDidMount() {
+		this.updateStateFromFilterReducer();
+	}
+
+	updateStateFromFilterReducer() {
+		this.setState({
+			...this.props.filterReducer,
+		}, () => {
+			let studyLevel = '';
+			if (this.state.primary_school)
+				studyLevel = 'primary_school';
+			else if (this.state.secondary_school)
+				studyLevel = 'secondary_school';
+			else if (this.state.olympiads)
+				studyLevel = 'olympiads';
+			else if (this.state.ege)
+				studyLevel = 'ege';
+			else if (this.state.oge)
+				studyLevel = 'oge';
+			else if (this.state.university)
+				studyLevel = 'university';
+			this.updateStudyLevel(studyLevel);
+		});
 	}
 
 	returnToFilterPanel() {
@@ -50,12 +80,19 @@ class Filter extends React.Component {
 			oge, university
 		};
 		this.props.dispatch(
-			filterActions.updateFilter(
-				params
-			)
+			filterActions.updateFilter(params)
 		);
 		this.props.dispatch(
 			locationActions.changeLocation('search')
+		);
+	}
+
+	deleteButtonClick() {
+		this.setState({
+			...initialState,
+		});
+		this.props.dispatch(
+			filterActions.deleteFilter()
 		);
 	}
 
@@ -148,11 +185,14 @@ class Filter extends React.Component {
 						</SelectMimicry>
 					</FormLayout>
 					<FixedLayout vertical="bottom">
-						<Div>
-							<Button size="l" stretched onClick={this.applyButtonClick}>
+						<FlexDiv>
+							<Button size="l" stretched style={{	marginRight: "8px" }} onClick={this.applyButtonClick}>
 								Применить
 							</Button>
-						</Div>
+							<Button size="l" stretched style={{ background: "#E64646" }} stretched onClick={this.deleteButtonClick}>
+								Очистить
+							</Button>
+						</FlexDiv>
 					</FixedLayout>
 				</Panel>
 
@@ -223,7 +263,10 @@ class Filter extends React.Component {
 };
 
 const mapStateToProps = state => {
-	return state;
+	const { filterReducer } = state;
+	return {
+		filterReducer, 
+	};
 }
 
 export default connect(mapStateToProps)(Filter);
