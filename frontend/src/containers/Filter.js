@@ -4,7 +4,8 @@ import {
 	View, Panel, PanelHeader, Div, Cell, List, Group, FormLayout, FixedLayout, Button, SelectMimicry, HeaderButton
 } from '@vkontakte/vkui';
 
-import BackIcon from '../customComponents/BackIcon';
+import BackIcon from '../components/BackIcon';
+import FlexDiv from '../components/FlexDiv';
 
 import { locationActions } from '../actions/location';
 
@@ -34,6 +35,8 @@ class Filter extends React.Component {
 			locationActions.changeLocation('search')
 		);
 	}
+
+// TODO deleteButtonClick() {}
 
 	render() {
 		return (
@@ -79,11 +82,21 @@ class Filter extends React.Component {
 						</SelectMimicry>
 					</FormLayout>
 					<FixedLayout vertical="bottom">
-						<Div>
-							<Button size="l" stretched onClick={this.applyButtonClick}>
+						<FlexDiv>
+							<Button size="l" stretched style={{	marginRight: "8px" }} onClick={this.applyButtonClick}>
 								Применить
 							</Button>
-						</Div>
+							<Button
+								size="l"
+								stretched
+								style={{ background: "#E64646" }}
+								stretched onClick={
+// TODO: Delete filter
+									this.applyButtonClick
+								}>
+								Очистить
+							</Button>
+						</FlexDiv>
 					</FixedLayout>
 				</Panel>
 

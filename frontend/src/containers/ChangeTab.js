@@ -9,10 +9,7 @@ class ChangeTab extends React.Component {
     const { activeView, activePanel } = this.props.locationReducer;
 
     return (
-      <Tabs 
-        theme="header"
-        type="buttons"
-      >
+      <Tabs theme="header">
         <TabsItem 
           onClick={() => this.props.dispatch(locationActions.changeLocation(activeView, 'requests'))}
           selected={activePanel === 'requests'}

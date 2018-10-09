@@ -29,7 +29,7 @@ class App extends React.Component {
 		}
 	}
 
-	componentDidMount() {
+	componentWillMount() {
 		this.props.dispatch(vkActions.init());
 		this.props.dispatch(vkActions.fetchCurrentUserInfo());
 		// Можем ли мы не спрашивать токен каждый раз?
@@ -41,26 +41,26 @@ class App extends React.Component {
 
 		return (
 			<Epic activeStory="root" tabbar={
-					<Tabbar>
-						<TabbarItem
-							onClick={() => this.props.dispatch(locationActions.changeLocation('search'))}
-							selected={this.props.activeView === 'search'}
-						>
-							<Icon28Search />
-						</TabbarItem>
-						<TabbarItem
-							onClick={() => this.props.dispatch(locationActions.changeLocation('active_tutor', 'requests'))}
-							selected={this.props.activeView === 'active_tutor'}
-						>
-							<Icon28Document />
-						</TabbarItem>
-						<TabbarItem
-							onClick={() => this.props.dispatch(locationActions.changeLocation('show_profile'))}
-							selected={this.props.activeView === 'show_profile'}
-						>
-							<Icon28User />
-						</TabbarItem>
-					</Tabbar>
+				<Tabbar>
+					<TabbarItem
+						onClick={() => this.props.dispatch(locationActions.changeLocation('search'))}
+						selected={this.props.activeView === 'search'}
+					>
+						<Icon28Search />
+					</TabbarItem>
+					<TabbarItem
+						onClick={() => this.props.dispatch(locationActions.changeLocation('active_tutor', 'requests'))}
+						selected={this.props.activeView === 'active_tutor'}
+					>
+						<Icon28Document />
+					</TabbarItem>
+					<TabbarItem
+						onClick={() => this.props.dispatch(locationActions.changeLocation('show_profile'))}
+						selected={this.props.activeView === 'show_profile'}
+					>
+						<Icon28User />
+					</TabbarItem>
+				</Tabbar>
       }>
 				<Root id="root" activeView={activeView}>
 					<Start id="start" />

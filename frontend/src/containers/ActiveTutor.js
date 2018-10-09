@@ -1,12 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import {
-	View, Panel, PanelHeader, HeaderButton, Cell, Avatar, Group, List
+	View, Panel, PanelHeader, HeaderButton, Cell, Avatar, Group, List, Button
 } from '@vkontakte/vkui';
 
 import ChangeTab from './ChangeTab';
-
-import BackIcon from '../customComponents/BackIcon';
 
 import { apiActions } from '../actions/api';
 import { locationActions } from '../actions/location';
@@ -43,6 +41,9 @@ class ActiveTutor extends React.Component {
                 Дима Шорохов
               </Cell>
             </List>
+            <Button onClick={() => this.props.dispatch(locationActions.changeLocation('create_vacancy'))}>
+              Создать вакансию
+            </Button>
           </Group>
         </Panel>
 

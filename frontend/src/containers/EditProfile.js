@@ -5,7 +5,7 @@ import {
 } from '@vkontakte/vkui';
 import Icon24Document from '@vkontakte/icons/dist/24/document';
 
-import BackIcon from '../customComponents/BackIcon';
+import BackIcon from '../components/BackIcon';
 
 import { apiActions } from '../actions/api';
 import { locationActions } from '../actions/location';
