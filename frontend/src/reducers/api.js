@@ -2,6 +2,7 @@ import { apiConstants } from '../constants/api';
 
 const initialState = {
   profile: {},
+  vacancy: {},
   vacancies: [],
   students: [],
   applications: [],
@@ -25,6 +26,7 @@ const apiReducer = (state = initialState, action) => {
     case apiConstants.GET_LESSONS_REQUEST:
     case apiConstants.GET_PROFILE_REQUEST:
     case apiConstants.GET_STUDENTS_REQUEST:
+    case apiConstants.GET_VACANCY_REQUEST:
     case apiConstants.SEARCH_VACANCIES_REQUEST:
     case apiConstants.UPDATE_PROFILE_REQUEST:
       return {
@@ -45,6 +47,7 @@ const apiReducer = (state = initialState, action) => {
     case apiConstants.GET_LESSONS_FAILURE:
     case apiConstants.GET_PROFILE_FAILURE:
     case apiConstants.GET_STUDENTS_FAILURE:
+    case apiConstants.GET_VACANCY_FAILURE:
     case apiConstants.SEARCH_VACANCIES_FAILURE:
     case apiConstants.UPDATE_PROFILE_FAILURE:
       return {
@@ -103,6 +106,13 @@ const apiReducer = (state = initialState, action) => {
         vacancies: action.payload,
       };
     
+    case apiConstants.GET_VACANCY_SUCCESS:
+      return {
+        ...state,
+        fetching: false,
+        vacancy: action.payload,
+      }
+
     default:
       return state;
   }
