@@ -1,10 +1,6 @@
 from rest_framework import serializers
 
-from .models import (
-    Profile,
-    Vacancy,
-    Lesson,
-)
+from .models import Profile, Vacancy, Lesson, Application
 
 
 class LessonSerializer(serializers.ModelSerializer):
@@ -29,3 +25,9 @@ class UpdateProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
         exclude = ('vk_id', )
+
+
+class ApplicationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Application
+        fields = '__all__'

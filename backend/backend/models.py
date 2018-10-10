@@ -67,3 +67,14 @@ class Report(models.Model):
     )
     ball = models.IntegerField(null=False)
     text = models.TextField(null=False, max_length=512)
+
+
+class Application(models.Model):
+    vacancy = models.ForeignKey(
+        Vacancy, on_delete=models.CASCADE, related_name='application_vacancy'
+    )
+    student = models.ForeignKey(
+        Profile, on_delete=models.CASCADE, related_name='application_student'
+    )
+    is_active = models.BooleanField(default=True)
+    accepted = models.BooleanField(default=True)

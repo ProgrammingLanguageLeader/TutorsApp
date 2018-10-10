@@ -8,13 +8,10 @@ from .serializers import (
     VacancySerializer,
     ProfileSerializer,
     UpdateProfileSerializer,
-    LessonSerializer
+    LessonSerializer,
+    ApplicationSerializer
 )
-from .models import (
-    Profile,
-    Vacancy,
-    Lesson
-)
+from .models import Profile, Vacancy, Lesson, Application
 
 
 class CreateProfileView(APIView):
@@ -145,16 +142,14 @@ class GetStudentsView(APIView):
                 status=HTTP_403_FORBIDDEN
             )
         tutor_vk_id = self.request.query_params.get('vk_id')
-        try:
-            lessons = Lesson.objects.filter(
-                tutor__vk_id=tutor_vk_id
-            )
-            students = set()
-            for lesson in lessons:
-                students.add(lesson.student.vk_id)
-            return Response(data=list(students))
-        except Lesson.DoesNotExist:
-            return Response(data=[])
+        lessons = Lesson.objects.filter(
+            tutor__vk_id=tutor_vk_id
+        )
+        students = set()
+        for lesson in lessons:
+            students.add(lesson.student)
+        student_serializer = ProfileSerializer(students, many=True)
+        return Response(data=student_serializer.data)
 
 
 class AddLessonView(APIView):
@@ -172,6 +167,96 @@ class AddLessonView(APIView):
             data=lesson_serializer.errors,
             status=HTTP_400_BAD_REQUEST
         )
+
+
+class GetLessonsView(APIView):
+    def get(self, request):
+        if not is_authenticated(request):
+            return Response(
+                data="user id or signed user id are not valid",
+                status=HTTP_403_FORBIDDEN
+            )
+        tutor_id = self.request.query_params.get('tutor')
+        student_id = self.request.query_params.get('student')
+        lessons = []
+        if tutor_id:
+            lessons = Lesson.objects.filter(
+                tutor__vk_id=tutor_id
+            )
+        elif student_id:
+            lessons = Lesson.objects.filter(
+                student__vk_id=student_id
+            )
+        lesson_serializer = LessonSerializer(lessons, many=True)
+        return Response(data=lesson_serializer.data)
+
+
+class AddApplicationView(APIView):
+    def post(self, request):
+        if not is_authenticated(request):
+            return Response(
+                data="user id or signed user id are not valid",
+                status=HTTP_403_FORBIDDEN
+            )
+        application_serializer = ApplicationSerializer(data=request.data)
+        if application_serializer.is_valid():
+            application_serializer.save()
+            return Response(data='OK')
+        return Response(
+            data=application_serializer.errors,
+            status=HTTP_400_BAD_REQUEST
+        )
+
+
+class GetApplicationsView(APIView):
+    def get(self, request):
+        if not is_authenticated(request):
+            return Response(
+                data="user id or signed user id are not valid",
+                status=HTTP_403_FORBIDDEN
+            )
+        vk_id = self.request.query_params.get('vk_id')
+        vacancies = Vacancy.objects.filter(
+            owner=vk_id
+        )
+        applications = []
+        for vacancy in vacancies:
+            current_vacancy_applications = Application.objects.filter(
+                vacancy_id=vacancy.id, is_active=True
+            )
+            for application in current_vacancy_applications:
+                applications.append(application)
+        application_serializer = ApplicationSerializer(applications, many=True)
+        return Response(data=application_serializer.data)
+
+
+class AcceptApplicationView(APIView):
+    def post(self, request):
+        if not is_authenticated(request):
+            return Response(
+                data="user id or signed user id are not valid",
+                status=HTTP_403_FORBIDDEN
+            )
+        try:
+            application_id = request.data['id']
+            application = Application.objects.get(pk=application_id)
+        except Application.DoesNotExist:
+            return Response(
+                data={
+                    "application_id": [
+                        "application_id is not valid"
+                    ]
+                },
+                status=HTTP_400_BAD_REQUEST
+            )
+        application.is_active = False
+        application.accepted = True
+        application.save()
+        Lesson.objects.create(
+            tutor=application.vacancy.owner,
+            student=application.student
+        )
+        return Response(data='OK')
 
 
 class DeleteLessonView(APIView):
@@ -232,7 +317,7 @@ class DeleteProfileView(APIView):
         try:
             vk_id = request.data['vk_id']
             profile = Profile.objects.get(pk=vk_id)
-        except ProfileSerializer.DoesNotExist:
+        except Profile.DoesNotExist:
             return Response(
                 data={
                     "vk_id": [
@@ -243,4 +328,28 @@ class DeleteProfileView(APIView):
             )
         profile.is_active = False
         profile.save()
+        return Response(data='OK')
+
+
+class DeleteApplicationView(APIView):
+    def post(self, request):
+        if not is_authenticated(request):
+            return Response(
+                data="user id or signed user id are not valid",
+                status=HTTP_403_FORBIDDEN
+            )
+        try:
+            application_id = request.data['id']
+            application = Application.objects.get(pk=application_id)
+        except Application.DoesNotExist:
+            return Response(
+                data={
+                    "id": [
+                        "id is not valid"
+                    ]
+                },
+                status=HTTP_400_BAD_REQUEST
+            )
+        application.is_active = False
+        application.save()
         return Response(data='OK')

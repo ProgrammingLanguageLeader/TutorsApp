@@ -13,6 +13,11 @@ from .views import (
     DeleteLessonView,
     DeleteVacancyView,
     DeleteProfileView,
+    AddApplicationView,
+    GetApplicationsView,
+    AcceptApplicationView,
+    DeleteApplicationView,
+    GetLessonsView
 )
 
 
@@ -70,5 +75,30 @@ urlpatterns = [
         'delete_profile/',
         DeleteProfileView.as_view(),
         name='delete_profile'
+    ),
+    path(
+        'add_application/',
+        AddApplicationView.as_view(),
+        name='add_application'
+    ),
+    path(
+        'get_applications/',
+        GetApplicationsView.as_view(),
+        name='get_applications'
+    ),
+    path(
+        'accept_application/',
+        AcceptApplicationView.as_view(),
+        name='accept_application'
+    ),
+    path(
+        'delete_application/',
+        DeleteApplicationView.as_view(),
+        name='delete_application'
+    ),
+    path(
+        'get_lessons/',
+        GetLessonsView.as_view(),
+        name='get_lessons'
     ),
 ]
