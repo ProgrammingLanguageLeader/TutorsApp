@@ -1,14 +1,18 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import {
-	View, Panel, PanelHeader, Cell, Avatar, Button, File, Input, FormLayout, FixedLayout, Textarea, Spinner, HeaderButton
+	View, Panel, PanelHeader, Cell, Avatar, Button, File, Input, FormLayout, 
+	Textarea, HeaderButton, platform, IOS
 } from '@vkontakte/vkui';
 import Icon24Document from '@vkontakte/icons/dist/24/document';
 
 import BackIcon from '../components/BackIcon';
+import DivSpinner from '../components/DivSpinner';
 
 import { apiActions } from '../actions/api';
 import { locationActions } from '../actions/location';
+
+const osname = platform();
 
 class EditProfile extends React.Component {
 	constructor(props) {
@@ -17,7 +21,6 @@ class EditProfile extends React.Component {
 			experience: '',
 			education: '',
 			address: '',
-			email: '',
 			description: '',
 		};
 
@@ -36,6 +39,12 @@ class EditProfile extends React.Component {
 		);
 	}
 
+	componentWillReceiveProps(nextProps) {
+		this.setState({
+			...nextProps.profile
+		});
+	}
+
 	handleChange(event) {
     const target = event.target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
@@ -47,15 +56,27 @@ class EditProfile extends React.Component {
     });
   }
 
-	updateProfile() {
-		// TODO: send form using apiActions
-		this.props.dispatch(locationActions.changeLocation('show_profile'));
+	updateProfile(event) {
+		event.preventDefault();
+
+		const { id, signed_user_id } = this.props.userInfo;
+		this.props.dispatch(
+			apiActions.updateProfile({
+				user_id: id,
+				signed_user_id: signed_user_id,
+				vk_id: id,
+				...this.state
+			})
+		)
+		.then(() => {
+			this.props.dispatch(locationActions.changeLocation('show_profile'));
+		})
 	}
 
 	render() {
 		const { fetching } = this.props;
     const { city, photo_200, first_name, last_name } = this.props.userInfo;
-    const { description, experience, education, address, email } = this.props.profile;
+    const { description, experience, education, address } = this.state;
 
 		return (
 			<View 
@@ -73,9 +94,9 @@ class EditProfile extends React.Component {
 						Профиль
 					</PanelHeader>
 					{ fetching ? (
-						<Spinner />
+						<DivSpinner />
 					) : (
-						<FormLayout style={{ marginBottom: 48 }}>
+						<FormLayout style={{ marginBottom: osname === IOS ? 0 : 48 }}>
 							<Cell
 								size="l"
 								description={city ? city.title : ""}
@@ -87,7 +108,7 @@ class EditProfile extends React.Component {
 							<Input
 								name="experience"
 								top="Стаж преподавания" 
-								defaultValue={experience ? experience : ""}
+								value={experience ? experience : ""}
 								onChange={this.handleChange}
 							/>
 							
@@ -95,7 +116,7 @@ class EditProfile extends React.Component {
 								name="education"
 								top="Образование"
 								bottom='Прикрепите копии документов об образовании и трудовом стаже, если хотите разместить свою заявку с пометкой "Проверенный специалист"'
-								defaultValue={education ? education : ""}
+								value={education ? education : ""}
 								onChange={this.handleChange}
 							/>
 								<File before={<Icon24Document />} size="l" />
@@ -103,21 +124,14 @@ class EditProfile extends React.Component {
 							<Input 
 								name="address"
 								top="Адрес" 
-								defaultValue={address ? address : ""}
-								onChange={this.handleChange}
-							/>
-							
-							<Input
-								name="email"
-								top="Электронная почта" 
-								defaultValue={email ? email : ""}
+								value={address ? address : ""}
 								onChange={this.handleChange}
 							/>
 							
 							<Textarea 
 								name="description"
 								top="О себе" 
-								placeholder={description ? description : ""} 
+								value={description ? description : ""} 
 								onChange={this.handleChange}
 							/>
 							<Button size="xl" onClick={this.updateProfile}>

@@ -21,6 +21,7 @@ const apiReducer = (state = initialState, action) => {
     case apiConstants.DELETE_SCHEDULE_REQUEST:
     case apiConstants.DELETE_VACANCY_REQUEST:
     case apiConstants.DELETE_PROFILE_REQUEST: 
+    case apiConstants.UPDATE_PROFILE_REQUEST:
       return {
         ...state,
         fetching: true,
@@ -36,6 +37,7 @@ const apiReducer = (state = initialState, action) => {
     case apiConstants.DELETE_SCHEDULE_FAILURE:
     case apiConstants.DELETE_VACANCY_FAILURE:
     case apiConstants.DELETE_PROFILE_FAILURE:
+    case apiConstants.UPDATE_PROFILE_FAILURE:
       return {
         ...state,
         fetching: false,
@@ -48,6 +50,7 @@ const apiReducer = (state = initialState, action) => {
     case apiConstants.DELETE_PROFILE_SUCCESS:
     case apiConstants.DELETE_SCHEDULE_SUCCESS:
     case apiConstants.DELETE_VACANCY_SUCCESS:
+    case apiConstants.UPDATE_PROFILE_SUCCESS:
       return {
         ...state,
         fetching: false,

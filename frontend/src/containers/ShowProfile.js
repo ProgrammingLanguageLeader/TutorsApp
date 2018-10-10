@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { 
-	View, Panel, PanelHeader, Cell, Avatar, List, Spinner, HeaderButton, Group
+	View, Panel, PanelHeader, Cell, Avatar, List, HeaderButton, Group
 } from '@vkontakte/vkui';
 
 import Icon24Home from '@vkontakte/icons/dist/24/home';
@@ -10,6 +10,8 @@ import Icon24Mention from '@vkontakte/icons/dist/24/mention';
 import Icon24Recent from '@vkontakte/icons/dist/24/recent';
 import Icon24Info from '@vkontakte/icons/dist/24/info';
 import Icon24Write from '@vkontakte/icons/dist/24/write';
+
+import DivSpinner from '../components/DivSpinner';
 
 import { apiActions } from '../actions/api';
 import { locationActions } from '../actions/location';
@@ -42,7 +44,7 @@ class ShowProfile extends React.Component {
           </PanelHeader>
 
           { fetching ? (
-            <Spinner />
+            <DivSpinner />
           ) : (
             <div>
               <Group id="profile" style={{ marginTop: 0 }}>

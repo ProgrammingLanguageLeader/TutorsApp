@@ -145,7 +145,7 @@ class Filter extends React.Component {
 				break;
 
 			default:
-				console.log('Unsupported study level');
+				updatedState.studyLevel = '';
 				break;
 		}
 		this.setState(updatedState);
@@ -164,7 +164,7 @@ class Filter extends React.Component {
 					>
 						Фильтр
 					</PanelHeader>
-					<FormLayout style={{ paddingBottom: 60 }}>
+					<FormLayout style={{ marginBottom: osname === IOS ? 0 : 48 }}>
 						<SelectMimicry
 							top="Предмет"
 							placeholder="Любой"
@@ -189,8 +189,6 @@ class Filter extends React.Component {
 						>
 							{this.state.studyLevel}
 						</SelectMimicry>
-					</FormLayout>
-					<FixedLayout vertical="bottom" style={{ marginBottom: osname === IOS ? 0 : 48 }}>
 						<FlexDiv>
 							<Button size="l" stretched style={{	marginRight: "8px" }} onClick={this.applyButtonClick}>
 								Применить
@@ -199,7 +197,7 @@ class Filter extends React.Component {
 								Очистить
 							</Button>
 						</FlexDiv>
-					</FixedLayout>
+					</FormLayout>
 				</Panel>
 
 				<Panel id="subjects">

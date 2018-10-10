@@ -21,8 +21,8 @@ class Start extends React.Component {
 		this.registerStudent = this.registerStudent.bind(this);
 	}
 
-	componentDidMount() {
-		const { id, signed_user_id } = this.props.vkReducer.userInfo;
+	componentWillReceiveProps(nextProps) {
+		const { id, signed_user_id } = nextProps.vkReducer.userInfo;
 		this.props.dispatch(
 			apiActions.createProfile({
 				vk_id: id,
@@ -66,9 +66,9 @@ class Start extends React.Component {
 };
 
 const mapStateToProps = (state) => {
-	const { vkReducer, apiReducer } = state;
+	const { vkReducer } = state;
 	return {
-		apiReducer, vkReducer
+		vkReducer
 	};
 };
 
