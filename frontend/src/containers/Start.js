@@ -1,14 +1,37 @@
 import React from 'react';
+import styled from 'styled-components';
 import { connect } from 'react-redux';
-import { Panel, PanelHeader, View, Button, InfoRow, Div, Cell, Group} from '@vkontakte/vkui';
+import { 
+	Panel, PanelHeader, View, Button, Div, Gallery, FixedLayout
+} from '@vkontakte/vkui';
 
-import FlexDiv from '../components/FlexDiv';
-import CenteredDiv from '../components/CenteredDiv';
-import BackgroundDiv from '../components/BackgroundDiv';
-import student from '../img/student.jpg';
+import './Start.css';
+
+import introOne from '../assets/intro_one.png'
+import introTwo from '../assets/intro_two.png'
+import introThree from '../assets/intro_three.png'
 
 import { apiActions } from '../actions/api';
 import { locationActions } from '../actions/location';
+
+const Main = styled.div`
+	background-color: '#ffffff';
+	display: 'flex'; 
+	align-items: center;
+	justify-content: center; 
+	padding-bottom: 80px;
+	padding-top: 60px;
+`;
+
+const IntroText = styled.p`
+	padding-bottom: 36px;
+	line-height: 1.5;
+`;
+
+const IntroImage = styled.img`
+	width: 70%;
+	height: auto;
+`;
 
 class Start extends React.Component {
 	constructor(props) {
@@ -48,30 +71,41 @@ class Start extends React.Component {
 		return (
 			<View id={this.props.id} activePanel="home">
 				<Panel id="home">
-					<PanelHeader>Tutor</PanelHeader>
-					<BackgroundDiv image={student}>
-						<Group style={{ marginTop: 0 }}>
-							<Div>
-								Мы поможем найти вам лучшего репетитора
-							</Div>
-						</Group>
-						<FlexDiv style={{ marginTop: "10%" }}>
-							<Button stretched level="secondary" 
-								style={{ width: "40%", paddingTop: "5%", paddingBottom: "5%", borderRadius: "5%"}}
-								onClick={this.registerStudent}
-							>
-								Найти репетитора
+					<PanelHeader noShadow>
+						Tutor
+					</PanelHeader>
+					<Main>
+						<Gallery bullets="dark" style={{ height: 'auto', textAlign: 'center' }}>
+							<div>
+								<IntroImage src={introOne} />
+								<IntroText>
+									Мы поможем найти вам <br /> лучшего репетитора
+								</IntroText>
+							</div>
+							<div>
+								<IntroImage src={introTwo} />
+								<IntroText>
+									Бесплатный подбор репетиторов  <br /> для очных и дистанционных <br /> занятий в любом регионе!
+								</IntroText>
+							</div>
+							<div>
+								<IntroImage src={introThree} />
+								<IntroText>
+									Выбери удобный <br /> для себя график
+								</IntroText>
+							</div>
+						</Gallery>
+					</Main>
+					<FixedLayout vertical="bottom">
+						<Div style={{ display: 'flex' }}>
+							<Button style={{ margin: 2, height: 52, display: 'flex', flex: 1, justifyContent: 'center' }} onClick={this.registerStudent}>
+								Найти репититора
 							</Button>
-							<Button 
-								stretched
-								level="secondary"
-								style={{ width: "40%", paddingTop: "5%", paddingBottom: "5%", borderRadius: "5%", marginLeft: 8,  }} 
-								onClick={this.registerTutor}
-							>
-								Я - репетитор
+							<Button style={{ margin: 2, height: 52, display: 'flex', flex: 1, justifyContent: 'center' }} onClick={this.registerTutor}>
+								Я репетитор
 							</Button>
-						</FlexDiv>
-					</BackgroundDiv>
+						</Div>
+					</FixedLayout>
 				</Panel>
 			</View>
 		);
