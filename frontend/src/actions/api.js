@@ -93,6 +93,29 @@ const getProfile = (options) => {
   };
 };
 
+const updateProfile = (options) => {
+  return dispatch => {
+    dispatch({
+      type: apiConstants.UPDATE_PROFILE_REQUEST,
+    });
+    return makeApiRequest('update_profile', 'post', options)
+    .then(
+      response => {
+        dispatch({
+          type: apiConstants.UPDATE_PROFILE_SUCCESS,
+          payload: response,
+        })
+      },
+      errors => {
+        dispatch({
+          type: apiConstants.UPDATE_PROFILE_FAILURE,
+          payload: errors,
+        })
+      }
+    )
+  }
+};
+
 const searchVacancies = (options) => {
   return dispatch => {
     dispatch({
@@ -235,5 +258,5 @@ export const apiActions = {
   createProfile, createVacancy, addSchedule,
   getProfile, searchVacancies, getActiveVacancies,
   getStudents, deleteSchedule, deleteVacancy, 
-  deleteProfile,
+  deleteProfile, updateProfile, 
 };
