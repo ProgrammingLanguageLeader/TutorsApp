@@ -124,7 +124,7 @@ class SearchVacancies extends React.Component {
 								before={<Avatar src={photo_200} />}
 								bottomContent={
 									<Button>
-										Связаться
+										Отправить заявку
 									</Button>
 								}
 							>
