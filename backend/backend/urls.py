@@ -7,8 +7,7 @@ from .views import (
     UpdateProfileView,
     GetProfileView,
     CreateVacancyView,
-    SearchVacancyView,
-    GetActiveVacanciesView,
+    SearchVacanciesView,
     GetStudentsView,
     AddLessonView,
     DeleteLessonView,
@@ -44,13 +43,8 @@ urlpatterns = [
     ),
     path(
         'search_vacancies/',
-        SearchVacancyView.as_view(),
+        SearchVacanciesView.as_view(),
         name='search_vacancies'
-    ),
-    path(
-        'get_active_vacancies/',
-        GetActiveVacanciesView.as_view(),
-        name='get_active_vacancy'
     ),
     path(
         'get_students/',

@@ -5,8 +5,6 @@ from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_403_FORBIDDEN
 from .auth import is_authenticated
 
 from .serializers import (
-    CreateProfileSerializer,
-    CreateVacancySerializer,
     VacancySerializer,
     ProfileSerializer,
     UpdateProfileSerializer,
@@ -26,7 +24,7 @@ class CreateProfileView(APIView):
                 data="user id or signed user id are not valid",
                 status=HTTP_403_FORBIDDEN
             )
-        view_serializer = CreateProfileSerializer(data=request.data)
+        view_serializer = ProfileSerializer(data=request.data)
         if not view_serializer.is_valid():
             return Response(
                 data=view_serializer.errors,
@@ -90,7 +88,7 @@ class CreateVacancyView(APIView):
                 data="user id or signed user id are not valid",
                 status=HTTP_403_FORBIDDEN
             )
-        view_serializer = CreateVacancySerializer(data=request.data)
+        view_serializer = VacancySerializer(data=request.data)
         if not view_serializer.is_valid():
             return Response(
                 data=view_serializer.errors,
@@ -100,7 +98,7 @@ class CreateVacancyView(APIView):
         return Response(data='OK')
 
 
-class SearchVacancyView(APIView):
+class SearchVacanciesView(APIView):
     def get(self, request):
         if not is_authenticated(request):
             return Response(
@@ -118,7 +116,7 @@ class SearchVacancyView(APIView):
         distance_learning = self.request.query_params.get('distance_learning')
         vacancies = Vacancy.objects.all()
         if subject:
-            vacancies = vacancies.filter(subjects__name__contains=subject)
+            vacancies = vacancies.filter(subject__exact=subject)
         if price_min:
             vacancies = vacancies.filter(price__gt=price_min)
         if price_max:
@@ -139,18 +137,6 @@ class SearchVacancyView(APIView):
         return Response(data=vacancies_serializer.data)
 
 
-class GetActiveVacanciesView(APIView):
-    def get(self, request):
-        if not is_authenticated(request):
-            return Response(
-                data="user id or signed user id are not valid",
-                status=HTTP_403_FORBIDDEN
-            )
-        vacancies = Vacancy.objects.filter(active__exact=True)
-        vacancies_serializer = VacancySerializer(vacancies, many=True)
-        return Response(data=vacancies_serializer.data)
-
-
 class GetStudentsView(APIView):
     def get(self, request):
         if not is_authenticated(request):
@@ -158,18 +144,17 @@ class GetStudentsView(APIView):
                 data="user id or signed user id are not valid",
                 status=HTTP_403_FORBIDDEN
             )
-        teachers_vk_id = self.request.query_params.get('vk_id')
+        tutor_vk_id = self.request.query_params.get('vk_id')
         try:
-            students = Lesson.objects.get(
-                tutor__vk_id__exact=teachers_vk_id
-            ).valudes('student')
-            students_serializer = ProfileSerializer(students, many=True)
-            return Response(data=students_serializer.data)
-        except Profile.DoesNotExist:
-            return Response(
-                data="VK ID is not valid",
-                status=HTTP_400_BAD_REQUEST
+            lessons = Lesson.objects.filter(
+                tutor__vk_id=tutor_vk_id
             )
+            students = set()
+            for lesson in lessons:
+                students.add(lesson.student.vk_id)
+            return Response(data=list(students))
+        except Lesson.DoesNotExist:
+            return Response(data=[])
 
 
 class AddLessonView(APIView):
@@ -179,12 +164,12 @@ class AddLessonView(APIView):
                 data="user id or signed user id are not valid",
                 status=HTTP_403_FORBIDDEN
             )
-        schedule_serializer = LessonSerializer(request.data)
-        if schedule_serializer.is_valid():
-            schedule_serializer.save()
+        lesson_serializer = LessonSerializer(data=request.data)
+        if lesson_serializer.is_valid():
+            lesson_serializer.save()
             return Response(data='OK')
         return Response(
-            data=schedule_serializer.errors,
+            data=lesson_serializer.errors,
             status=HTTP_400_BAD_REQUEST
         )
 
@@ -208,7 +193,7 @@ class DeleteLessonView(APIView):
                 },
                 status=HTTP_400_BAD_REQUEST
             )
-        schedule.active = False
+        schedule.is_active = False
         schedule.save()
         return Response(data='OK')
 
@@ -232,7 +217,7 @@ class DeleteVacancyView(APIView):
                 },
                 status=HTTP_400_BAD_REQUEST
             )
-        vacancy.active = False
+        vacancy.is_active = False
         vacancy.save()
         return Response(data='OK')
 
