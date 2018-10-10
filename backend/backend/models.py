@@ -8,15 +8,15 @@ class Profile(models.Model):
         blank=False
     )
     is_active = models.BooleanField(default=True)
-    experience = models.TextField(null=True, max_length=4096)
-    education = models.TextField(null=True, max_length=4096)
-    address = models.TextField(null=True, max_length=128)
-    description = models.TextField(null=True, max_length=4096)
+    experience = models.TextField(null=True, blank=True, max_length=4096)
+    education = models.TextField(null=True, blank=True, max_length=4096)
+    address = models.TextField(null=True, blank=True, max_length=128)
+    description = models.TextField(null=True,blank=True, max_length=4096)
     home_schooling = models.BooleanField(default=False)
-    activity_time_start = models.TimeField(null=True)
-    activity_time_end = models.TimeField(null=True)
-    latitude = models.FloatField(null=True)
-    longitude = models.FloatField(null=True)
+    activity_time_start = models.TimeField(blank=True, null=True)
+    activity_time_end = models.TimeField(blank=True, null=True)
+    latitude = models.FloatField(blank=True, null=True)
+    longitude = models.FloatField(blank=True, null=True)
     distance_learning = models.BooleanField(default=False)
     ege = models.BooleanField(default=False)
     oge = models.BooleanField(default=False)
@@ -33,7 +33,7 @@ class Profile(models.Model):
 class Vacancy(models.Model):
     owner = models.ForeignKey(Profile, on_delete=models.CASCADE)
     is_active = models.BooleanField(default=True)
-    subject = models.CharField(max_length=128, null=True)
+    subject = models.CharField(max_length=128)
     ege = models.BooleanField(default=False)
     oge = models.BooleanField(default=False)
     foreign_lang_cert = models.BooleanField(default=False)
@@ -43,7 +43,7 @@ class Vacancy(models.Model):
     university = models.BooleanField(default=False)
     home_schooling = models.BooleanField(default=False)
     price = models.IntegerField(blank=False)
-    extra_info = models.TextField(null=True, max_length=1024)
+    extra_info = models.TextField(null=True, blank=True, max_length=1024)
 
 
 class Lesson(models.Model):
@@ -54,8 +54,8 @@ class Lesson(models.Model):
         Profile, on_delete=models.CASCADE, related_name='lesson_student'
     )
     is_active = models.BooleanField(default=True)
-    beginning_time = models.TimeField(null=True)
-    ending_time = models.TimeField(null=True)
+    beginning_time = models.TimeField(null=True, blank=True)
+    ending_time = models.TimeField(null=True, blank=True)
 
 
 class Report(models.Model):
@@ -65,10 +65,5 @@ class Report(models.Model):
     recipient = models.ForeignKey(
         Profile, models.CASCADE, related_name='report_recipient'
     )
-    ball = models.IntegerField(
-        null=False
-    )
-    text = models.TextField(
-        null=False,
-        max_length=512
-    )
+    ball = models.IntegerField(null=False)
+    text = models.TextField(null=False, max_length=512)
