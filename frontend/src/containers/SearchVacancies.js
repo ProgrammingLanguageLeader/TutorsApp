@@ -22,9 +22,9 @@ class SearchVacancies extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			id: '',
-			activePanel: 'search'
-		};
+			id: -1,
+			activePanel: 'search',
+		}
 
 		this.searchVacancies = this.searchVacancies.bind(this);
 	}
@@ -59,8 +59,11 @@ class SearchVacancies extends React.Component {
 		const { usersInfo } = this.props.vkReducer;
 		const vacanciesFound = vacancies.length > 0 && usersInfo.size > 0;
 
+		const vacancy = vacancies[Number(this.state.id) - 1];
+		const userProfile = vacancy ? usersInfo.get(Number(vacancy.owner)) : undefined;
+
 		return (
-			<View id={this.props.id} activePanel={this.state.activePanel} >
+			<View id={this.props.id} activePanel={this.state.activePanel}>
 				<Panel id="search" theme="white">
 					<PanelHeader
 						left={
@@ -81,9 +84,9 @@ class SearchVacancies extends React.Component {
 									return (
 										<Cell
 											expandable 
-											onClick={() => this.setState({ activePanel: 'show_vacancy'})}
+											onClick={() => this.setState({ activePanel: 'show_vacancy', id: vacancy.id })}
 											key={vacancy.id}
-											description={`${userInfo.city.title}, ${vacancy.price} рублей/час`}
+											description={`${userInfo.city.title}, ${vacancy.price} рублей/час, ${vacancy.subject}`}
 											before={<Avatar src={userInfo.photo_100} />}
 										>
 											{`${userInfo.firstName} ${userInfo.lastName}`}
@@ -103,7 +106,7 @@ class SearchVacancies extends React.Component {
 				<Panel id="show_vacancy">
 					<PanelHeader
 						left={
-							<HeaderButton onClick={() => this.setState({ activePanel: 'search'})}>
+							<HeaderButton onClick={() => this.setState({ activePanel: 'search' })}>
 								<BackIcon />
 							</HeaderButton>
 						}
@@ -111,56 +114,41 @@ class SearchVacancies extends React.Component {
 						Репетитор
 					</PanelHeader>
 
-					{/* { fetching ? (
+					{ fetching ? (
             <DivSpinner />
           ) : (
-					<div>
-						<Group id="tutor" style={{ marginTop: 0 }}>
-							<Cell
-								size="l"
-								description={city ? city.title : ""}
-								before={<Avatar src={photo_200} />}
-								bottomContent={
-									<Button>
-										Связаться
-									</Button>
-								}
-							>
-								{`${first_name} ${last_name}`}
-							</Cell>
-						</Group>
-
-						<Group id="tutor_info">
-							<List>
-								<Cell
-									before={<Icon24Recent />}
-								>
-									{experience || "Стаж не задан"}
-								</Cell>
-								<Cell
-									before={<Icon24Education />}
-								>
-									{education || "Образование не указано"}
-								</Cell>
-								<Cell
-									before={<Icon24Home />}
-								>
-									{address || "Адрес не указан"}
-								</Cell>
-								<Cell
-									before={<Icon24Mention />}
-								>
-									{email || "E-mail не указан"}
-								</Cell>
-								<Cell
-									before={<Icon24Info />}
-								>
-									{description || "Не указано"}
-								</Cell>
-							</List>
-						</Group>
-					</div> */}
-					) }
+						userProfile && vacancy && (
+							<div>
+								<Group id="tutor" style={{ marginTop: 0 }}>
+									<Cell
+										size="l"
+										description={userProfile.city ? userProfile.city.title : ""}
+										before={<Avatar src={userProfile.photo_200} />}
+										bottomContent={
+											<Button>
+												Связаться
+											</Button>
+										}
+									>
+										{`${userProfile.firstName} ${userProfile.lastName}`}
+									</Cell>
+								</Group>
+								<Group id="tutor_info">
+									<List>
+										<Cell before={<Icon24Recent />}>
+											{vacancy.subject || "Предмет не задан"}
+										</Cell>
+										<Cell before={<Icon24Education />}>
+											{`${vacancy.price || "Цена не указана"} рублей/час`}
+										</Cell>
+										<Cell before={<Icon24Info />}>
+											{vacancy.extra_info || "Не указано"}
+										</Cell>
+									</List>
+								</Group>
+							</div>
+						)
+					)}
 				</Panel>
 			</View>
 		);

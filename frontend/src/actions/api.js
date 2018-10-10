@@ -346,10 +346,34 @@ const getLessons = (options) => {
   };
 };
 
+const getVacancy = (options) => {
+  return dispatch => {
+    dispatch({
+      type: apiConstants.GET_VACANCY_REQUEST,
+    });
+    return makeApiRequest('get_vacancy', 'get', options)
+    .then(
+      response => {
+        dispatch({
+          type: apiConstants.GET_VACANCY_SUCCESS,
+          payload: response,
+        })
+      },
+      errors => {
+        dispatch({
+          type: apiConstants.GET_VACANCY_FAILURE,
+          payload: errors,
+        });
+      }
+    )
+  };
+};
+
 export const apiActions = {
   createProfile, createVacancy, getProfile, 
   searchVacancies, getStudents, deleteLesson, 
   deleteVacancy, deleteProfile, updateProfile, 
   acceptApplication, addApplication, addLesson, 
   deleteApplication, getApplications, getLessons, 
+  getVacancy, 
 };
