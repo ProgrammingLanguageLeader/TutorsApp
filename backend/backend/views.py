@@ -353,3 +353,22 @@ class DeleteApplicationView(APIView):
         application.is_active = False
         application.save()
         return Response(data='OK')
+
+
+class GetVacancyView(APIView):
+    def get(self, request):
+        if not is_authenticated(request):
+            return Response(
+                data="user id or signed user id are not valid",
+                status=HTTP_403_FORBIDDEN
+            )
+        vacancy_id = self.request.query_params.get('id')
+        try:
+            vacancy = Vacancy.objects.get(id=vacancy_id)
+            vacancy_serializer = VacancySerializer(vacancy)
+            return Response(data=vacancy_serializer.data)
+        except Vacancy.DoesNotExist:
+            return Response(
+                data="ID is not valid",
+                status=HTTP_400_BAD_REQUEST
+            )
