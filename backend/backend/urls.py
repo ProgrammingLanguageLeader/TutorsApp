@@ -17,7 +17,8 @@ from .views import (
     GetApplicationsView,
     AcceptApplicationView,
     DeleteApplicationView,
-    GetLessonsView
+    GetLessonsView,
+    GetVacancyView
 )
 
 
@@ -100,5 +101,10 @@ urlpatterns = [
         'get_lessons/',
         GetLessonsView.as_view(),
         name='get_lessons'
+    ),
+    path(
+        'get_vacancy/',
+        GetVacancyView.as_view(),
+        name='get_vacancy'
     ),
 ]
