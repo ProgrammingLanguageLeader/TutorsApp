@@ -42,7 +42,7 @@ class SearchVacancies extends React.Component {
 		.then(() => {
 			const { accessToken } = this.props.vkReducer;
       let vkIds = this.props.apiReducer.vacancies.map(vacancy => {
-        return vacancy.user;
+        return vacancy.owner;
       });
 			this.props.dispatch(
 				vkActions.fetchUsersInfo(accessToken, vkIds)
@@ -57,8 +57,6 @@ class SearchVacancies extends React.Component {
 	render() {
 		const { vacancies, fetching } = this.props.apiReducer;
 		const { usersInfo } = this.props.vkReducer;
-		const { city, photo_200, first_name, last_name } = this.props.userInfo;
-		const { description, experience, education, address, email } = this.props.profile;
 		const vacanciesFound = vacancies.length > 0 && usersInfo.size > 0;
 
 		return (
@@ -79,7 +77,7 @@ class SearchVacancies extends React.Component {
 						<div>
 							<Div>
 								{ vacanciesFound ? vacancies.map(vacancy => {
-									const userInfo = usersInfo.get(Number(vacancy.user));
+									const userInfo = usersInfo.get(Number(vacancy.owner));
 									return (
 										<Cell
 											expandable 
@@ -113,7 +111,7 @@ class SearchVacancies extends React.Component {
 						Репетитор
 					</PanelHeader>
 
-					{ fetching ? (
+					{/* { fetching ? (
             <DivSpinner />
           ) : (
 					<div>
@@ -161,7 +159,7 @@ class SearchVacancies extends React.Component {
 								</Cell>
 							</List>
 						</Group>
-					</div>
+					</div> */}
 					) }
 				</Panel>
 			</View>
@@ -170,12 +168,9 @@ class SearchVacancies extends React.Component {
 };
 
 const mapStateToProps = state => {
-	const { userInfo } = state.vkReducer;
 	const { apiReducer, vkReducer, filterReducer } = state;
-	const { profile } = state.apiReducer;
 	return {
-		apiReducer, vkReducer, filterReducer, 
-		profile, userInfo
+		apiReducer, vkReducer, filterReducer,
 	};
 };
 
