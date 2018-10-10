@@ -1,12 +1,18 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { 
-	View, Panel, PanelHeader, Cell, HeaderButton, Avatar, Div
+	View, Panel, PanelHeader, Cell, HeaderButton, Avatar, Div, Group, List, Button
 } from '@vkontakte/vkui';
 
 import Icon24Filter from '@vkontakte/icons/dist/24/filter';
+import Icon24Home from '@vkontakte/icons/dist/24/home';
+import Icon24Education from '@vkontakte/icons/dist/24/education';
+import Icon24Mention from '@vkontakte/icons/dist/24/mention';
+import Icon24Recent from '@vkontakte/icons/dist/24/recent';
+import Icon24Info from '@vkontakte/icons/dist/24/info';
 
 import DivSpinner from '../components/DivSpinner';
+import BackIcon from '../components/BackIcon';
 
 import { apiActions } from '../actions/api';
 import { vkActions } from '../actions/vk';
@@ -16,7 +22,8 @@ class SearchVacancies extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			activeTab: 'all'
+			id: '',
+			activePanel: 'search'
 		};
 
 		this.searchVacancies = this.searchVacancies.bind(this);
@@ -50,10 +57,12 @@ class SearchVacancies extends React.Component {
 	render() {
 		const { vacancies, fetching } = this.props.apiReducer;
 		const { usersInfo } = this.props.vkReducer;
+		const { city, photo_200, first_name, last_name } = this.props.userInfo;
+		const { description, experience, education, address, email } = this.props.profile;
 		const vacanciesFound = vacancies.length > 0 && usersInfo.size > 0;
 
 		return (
-			<View id={this.props.id} activePanel="search">
+			<View id={this.props.id} activePanel={this.state.activePanel} >
 				<Panel id="search" theme="white">
 					<PanelHeader
 						left={
@@ -73,6 +82,8 @@ class SearchVacancies extends React.Component {
 									const userInfo = usersInfo.get(Number(vacancy.user));
 									return (
 										<Cell
+											expandable 
+											onClick={() => this.setState({ activePanel: 'show_vacancy'})}
 											key={vacancy.id}
 											description={`${userInfo.city.title}, ${vacancy.price} рублей/час`}
 											before={<Avatar src={userInfo.photo_100} />}
@@ -90,15 +101,81 @@ class SearchVacancies extends React.Component {
 						</div>
 					)}
 				</Panel>
+
+				<Panel id="show_vacancy">
+					<PanelHeader
+						left={
+							<HeaderButton onClick={() => this.setState({ activePanel: 'search'})}>
+								<BackIcon />
+							</HeaderButton>
+						}
+					>
+						Репетитор
+					</PanelHeader>
+
+					{ fetching ? (
+            <DivSpinner />
+          ) : (
+					<div>
+						<Group id="tutor" style={{ marginTop: 0 }}>
+							<Cell
+								size="l"
+								description={city ? city.title : ""}
+								before={<Avatar src={photo_200} />}
+								bottomContent={
+									<Button>
+										Связаться
+									</Button>
+								}
+							>
+								{`${first_name} ${last_name}`}
+							</Cell>
+						</Group>
+
+						<Group id="tutor_info">
+							<List>
+								<Cell
+									before={<Icon24Recent />}
+								>
+									{experience || "Стаж не задан"}
+								</Cell>
+								<Cell
+									before={<Icon24Education />}
+								>
+									{education || "Образование не указано"}
+								</Cell>
+								<Cell
+									before={<Icon24Home />}
+								>
+									{address || "Адрес не указан"}
+								</Cell>
+								<Cell
+									before={<Icon24Mention />}
+								>
+									{email || "E-mail не указан"}
+								</Cell>
+								<Cell
+									before={<Icon24Info />}
+								>
+									{description || "Не указано"}
+								</Cell>
+							</List>
+						</Group>
+					</div>
+					) }
+				</Panel>
 			</View>
 		);
 	}
 };
 
 const mapStateToProps = state => {
+	const { userInfo } = state.vkReducer;
 	const { apiReducer, vkReducer, filterReducer } = state;
+	const { profile } = state.apiReducer;
 	return {
 		apiReducer, vkReducer, filterReducer, 
+		profile, userInfo
 	};
 };
 
