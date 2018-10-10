@@ -27,7 +27,7 @@ class Profile(models.Model):
     university = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.vk_id
+        return str(self.vk_id)
 
 
 class Vacancy(models.Model):
