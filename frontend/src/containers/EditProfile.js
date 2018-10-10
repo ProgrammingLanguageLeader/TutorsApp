@@ -1,7 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import {
-	View, Panel, PanelHeader, Cell, Avatar, Button, File, Input, FormLayout, Textarea, HeaderButton
+	View, Panel, PanelHeader, Cell, Avatar, Button, File, Input, FormLayout, 
+	Textarea, HeaderButton, platform, IOS
 } from '@vkontakte/vkui';
 import Icon24Document from '@vkontakte/icons/dist/24/document';
 
@@ -10,6 +11,8 @@ import DivSpinner from '../components/DivSpinner';
 
 import { apiActions } from '../actions/api';
 import { locationActions } from '../actions/location';
+
+const osname = platform();
 
 class EditProfile extends React.Component {
 	constructor(props) {
@@ -64,8 +67,10 @@ class EditProfile extends React.Component {
 				vk_id: id,
 				...this.state
 			})
-		);
-		this.props.dispatch(locationActions.changeLocation('show_profile'));
+		)
+		.then(() => {
+			this.props.dispatch(locationActions.changeLocation('show_profile'));
+		})
 	}
 
 	render() {
@@ -91,7 +96,7 @@ class EditProfile extends React.Component {
 					{ fetching ? (
 						<DivSpinner />
 					) : (
-						<FormLayout style={{ marginBottom: 48 }}>
+						<FormLayout style={{ marginBottom: osname === IOS ? 0 : 48 }}>
 							<Cell
 								size="l"
 								description={city ? city.title : ""}
