@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Panel, PanelHeader, View } from '@vkontakte/vkui';
+import { Panel, PanelHeader, View, Button, InfoRow, Div, Cell, Group} from '@vkontakte/vkui';
 
-import CircleButton from '../components/CircleButton';
+import FlexDiv from '../components/FlexDiv';
 import CenteredDiv from '../components/CenteredDiv';
 import BackgroundDiv from '../components/BackgroundDiv';
 import student from '../img/student.jpg';
@@ -50,14 +50,27 @@ class Start extends React.Component {
 				<Panel id="home">
 					<PanelHeader>Tutor</PanelHeader>
 					<BackgroundDiv image={student}>
-						<CenteredDiv>
-							<CircleButton onClick={this.registerStudent}>
+						<Group style={{ marginTop: 0 }}>
+							<Div>
+								Мы поможем найти вам лучшего репетитора
+							</Div>
+						</Group>
+						<FlexDiv style={{ marginTop: "10%" }}>
+							<Button stretched level="secondary" 
+								style={{ width: "40%", paddingTop: "5%", paddingBottom: "5%", borderRadius: "5%"}}
+								onClick={this.registerStudent}
+							>
 								Найти репетитора
-							</CircleButton>
-							<CircleButton onClick={this.registerTutor}>
+							</Button>
+							<Button 
+								stretched
+								level="secondary"
+								style={{ width: "40%", paddingTop: "5%", paddingBottom: "5%", borderRadius: "5%", marginLeft: 8,  }} 
+								onClick={this.registerTutor}
+							>
 								Я - репетитор
-							</CircleButton>
-						</CenteredDiv>
+							</Button>
+						</FlexDiv>
 					</BackgroundDiv>
 				</Panel>
 			</View>
