@@ -372,3 +372,18 @@ class GetVacancyView(APIView):
                 data="ID is not valid",
                 status=HTTP_400_BAD_REQUEST
             )
+
+
+class GetVacanciesView(APIView):
+    def get(self, request):
+        if not is_authenticated(request):
+            return Response(
+                data="user id or signed user id are not valid",
+                status=HTTP_403_FORBIDDEN
+            )
+        owner_id = self.request.query_params.get('owner_id')
+        vacancies = Vacancy.objects.filter(
+            owner__vk_id=owner_id, is_active=True
+        )
+        vacancies_serializer = VacancySerializer(vacancies, many=True)
+        return Response(data=vacancies_serializer.data)
