@@ -54,7 +54,7 @@ class Notifications extends React.Component {
           ) : (
             <Main>
               <Group title="Заявки">
-                { applications.length ? applications.map(application => {
+                { applications.length > 0 && usersInfo.size > 0 ? applications.map(application => {
                   const userInfo = usersInfo.get(Number(application.student));
                   return (
                     <Cell

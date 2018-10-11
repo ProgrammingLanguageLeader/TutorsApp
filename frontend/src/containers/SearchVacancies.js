@@ -25,6 +25,7 @@ class SearchVacancies extends React.Component {
 		}
 
 		this.searchVacancies = this.searchVacancies.bind(this);
+		this.sendApplication = this.sendApplication.bind(this);
 	}
 
 	searchVacancies() {
@@ -53,11 +54,21 @@ class SearchVacancies extends React.Component {
 		this.searchVacancies();
 	}
 
+	sendApplication(vacancyId, studentId) {
+		this.props.dispatch(
+			apiActions.addApplication({
+				vacancy: vacancyId,
+				student: studentId,
+			})
+		);
+	}
+
 	render() {
 		const { vacancies, fetching } = this.props.apiReducer;
 		const { usersInfo } = this.props.vkReducer;
 		const vacanciesFound = Object.keys(vacancies).length > 0 && usersInfo.size > 0;
 
+		const currentUser = this.props.vkReducer.userInfo;
 		const vacancy = vacancies[this.state.id];
 		const userProfile = vacancy ? usersInfo.get(Number(vacancy.owner)) : undefined;
 
@@ -121,9 +132,9 @@ class SearchVacancies extends React.Component {
 									<Cell
 										size="l"
 										description={userProfile.city ? userProfile.city.title : ""}
-										before={<Avatar src={userProfile.photo_200} />}
+										before={<Avatar src={userProfile.photo_200} size={80} />}
 										bottomContent={
-											<Button>
+											<Button onClick={() => this.sendApplication(vacancy.id, currentUser.id)}>
 												Связаться
 											</Button>
 										}
