@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import {
 	View, Panel, PanelHeader, Cell, List, Group, FormLayout, 
-	FixedLayout, Button, SelectMimicry, HeaderButton, RangeSlider, colors,
+	Button, SelectMimicry, HeaderButton, RangeSlider, colors,
 	platform, IOS
 } from '@vkontakte/vkui';
 
@@ -15,15 +15,15 @@ import { filterActions } from '../actions/filter';
 
 
 const initialState = {
-	subject: '',
+	subject: null,
 	price_min: 0,
-	price_max: 1500,
-	primary_school: false,
-	secondary_school: false,
-	olympiads: false,
-	ege: false,
-	oge: false,
-	university: false,
+	price_max: 10000,
+	primary_school: null,
+	secondary_school: null,
+	olympiads: null,
+	ege: null,
+	oge: null,
+	university: null,
 
 	activePanel: 'filter',
 	studyLevel: '',
@@ -48,8 +48,9 @@ class Filter extends React.Component {
 	}
 
 	updateStateFromFilterReducer() {
+		const params = this.props.filterReducer;
 		this.setState({
-			...this.props.filterReducer,
+			...params,
 		}, () => {
 			let studyLevel = '';
 			if (this.state.primary_school)
@@ -103,16 +104,7 @@ class Filter extends React.Component {
 	}
 
 	updateStudyLevel(studyLevel) {
-		let updatedState = {
-			primary_school: false,
-			secondary_school: false,
-			olympiads: false,
-			ege: false,
-			oge: false,
-			university: false,
-			studyLevel: '',
-			activePanel: 'filter',
-		}
+		let updatedState = {};
 		switch (studyLevel) {
 			case 'primary_school':
 				updatedState.primary_school = true;
@@ -145,7 +137,6 @@ class Filter extends React.Component {
 				break;
 
 			default:
-				updatedState.studyLevel = '';
 				break;
 		}
 		this.setState(updatedState);
@@ -176,7 +167,7 @@ class Filter extends React.Component {
 						<RangeSlider 
 							top={`Цена - (от ${this.state.price_min} до ${this.state.price_max} рублей/час)`}
 							min={0}
-							max={5000}
+							max={10000}
 							step={100}
 							value={[this.state.price_min, this.state.price_max]}
 							onChange={([price_min, price_max]) => this.setState({ price_min: price_min, price_max: price_max })}

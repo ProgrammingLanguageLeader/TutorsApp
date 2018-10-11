@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { 
-	Panel, PanelHeader, View, Button, Div, Gallery, FixedLayout
+	Panel, PanelHeader, View, Button, Div, Gallery, FixedLayout, platform, IOS
 } from '@vkontakte/vkui';
 
 import './Start.css';
@@ -14,9 +14,13 @@ import introThree from '../assets/intro_three.png'
 import { apiActions } from '../actions/api';
 import { locationActions } from '../actions/location';
 
-const Main = styled.div`
-	background-color: '#ffffff';
-	display: 'flex'; 
+const osname = platform();
+
+const Main = styled.div.attrs({
+	className: "fullHeight",
+})`
+	background-color: #ffffff;
+	display: flex; 
 	align-items: center;
 	justify-content: center; 
 	padding-bottom: 80px;

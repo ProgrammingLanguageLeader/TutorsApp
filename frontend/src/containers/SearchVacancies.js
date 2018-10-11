@@ -5,9 +5,7 @@ import {
 } from '@vkontakte/vkui';
 
 import Icon24Filter from '@vkontakte/icons/dist/24/filter';
-import Icon24Home from '@vkontakte/icons/dist/24/home';
 import Icon24Education from '@vkontakte/icons/dist/24/education';
-import Icon24Mention from '@vkontakte/icons/dist/24/mention';
 import Icon24Recent from '@vkontakte/icons/dist/24/recent';
 import Icon24Info from '@vkontakte/icons/dist/24/info';
 
@@ -31,7 +29,7 @@ class SearchVacancies extends React.Component {
 
 	searchVacancies() {
 		const { id, signed_user_id } = this.props.vkReducer.userInfo;
-		const { params } = this.props.filterReducer;
+		const params = this.props.filterReducer;
 		this.props.dispatch(
 			apiActions.searchVacancies({
 				user_id: id,
@@ -94,7 +92,7 @@ class SearchVacancies extends React.Component {
 									);
 								}) : (
 									<Div onClick={this.searchVacancies}>
-										Что-то пошло не так... Попробуйте повторить попытку или изменить параметры фильтра.
+										Попробуйте повторить попытку или изменить параметры фильтра. <br />
 										Нажмите, чтобы повторить.
 									</Div>
 								)}

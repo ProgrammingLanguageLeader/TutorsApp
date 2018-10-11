@@ -7,6 +7,8 @@ import registerServiceWorker from './sw';
 import configureMockConnect from './helpers/mockConnect';
 import store from './store/store';
 
+import './index.css';
+
 configureMockConnect();
 
 ReactDOM.render(

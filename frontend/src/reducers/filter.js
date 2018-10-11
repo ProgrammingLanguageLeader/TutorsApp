@@ -1,27 +1,28 @@
 import { filterConstants } from '../constants/filter';
 
 const initialState = {
-  subject: '',
+  subject: null,
   price_min: 0,
-  price_max: 1500,
-  primary_school: false,
-  secondary_school: false,
-  olympiads: false,
-  ege: false,
-  oge: false,
-  university: false,
-  foreign_lang_cert: false,
-  university: false,
-  distance_learning: false,
+  price_max: 10000,
+  primary_school: null,
+  secondary_school: null,
+  olympiads: null,
+  ege: null,
+  oge: null,
+  university: null,
+  foreign_lang_cert: null,
+  university: null,
+  distance_learning: null,
 };
 
 const filterReducer = (state = initialState, action) => {
   switch (action.type) {
     case filterConstants.VACANCIES_FILTER_UPDATE: {
+      const { params } = action;
       return {
         ...state,
-        ...action.params,
-      };
+        ...params,
+      }
     }
     
     case filterConstants.VACANCIES_FILTER_DELETE: {
