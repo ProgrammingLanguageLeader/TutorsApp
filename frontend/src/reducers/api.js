@@ -8,7 +8,8 @@ const initialState = {
   applications: [],
   lessons: [],
   fetching: false,
-  errors: [],
+  errors: undefined,
+  vacancyCreated: null,
 };
 
 const apiReducer = (state = initialState, action) => {
@@ -17,7 +18,6 @@ const apiReducer = (state = initialState, action) => {
     case apiConstants.ADD_APPLICATION_REQUEST:
     case apiConstants.ADD_LESSON_REQUEST:
     case apiConstants.CREATE_PROFILE_REQUEST: 
-    case apiConstants.CREATE_VACANCY_REQUEST:
     case apiConstants.DELETE_APPLICATION_REQUEST:
     case apiConstants.DELETE_LESSON_REQUEST:
     case apiConstants.DELETE_PROFILE_REQUEST: 
@@ -31,14 +31,22 @@ const apiReducer = (state = initialState, action) => {
     case apiConstants.UPDATE_PROFILE_REQUEST:
       return {
         ...state,
+        errors: undefined,
         fetching: true,
+      };
+
+    case apiConstants.CREATE_VACANCY_REQUEST:
+      return {
+        ...state,
+        errors: undefined,
+        fetching: true,
+        vacancyCreated: null,
       };
 
     case apiConstants.ACCEPT_APPLICATION_FAILURE:
     case apiConstants.ADD_APPLICATION_FAILURE:
     case apiConstants.ADD_LESSON_FAILURE:
     case apiConstants.CREATE_PROFILE_FAILURE: 
-    case apiConstants.CREATE_VACANCY_FAILURE:
     case apiConstants.DELETE_APPLICATION_FAILURE:
     case apiConstants.DELETE_LESSON_FAILURE:
     case apiConstants.DELETE_PROFILE_FAILURE: 
@@ -56,11 +64,18 @@ const apiReducer = (state = initialState, action) => {
         errors: action.payload,
       };
 
+    case apiConstants.CREATE_VACANCY_FAILURE:
+      return {
+        ...state,
+        fetching: false,
+        errors: action.payload,
+        vacancyCreated: false,
+      };
+
     case apiConstants.ACCEPT_APPLICATION_SUCCESS:
     case apiConstants.ADD_APPLICATION_SUCCESS:
     case apiConstants.ADD_LESSON_SUCCESS:
     case apiConstants.CREATE_PROFILE_SUCCESS:
-    case apiConstants.CREATE_VACANCY_SUCCESS:
     case apiConstants.DELETE_APPLICATION_SUCCESS:
     case apiConstants.DELETE_LESSON_SUCCESS:
     case apiConstants.DELETE_PROFILE_SUCCESS:
@@ -69,6 +84,13 @@ const apiReducer = (state = initialState, action) => {
       return {
         ...state,
         fetching: false,
+      };
+
+    case apiConstants.CREATE_VACANCY_SUCCESS:
+      return {
+        ...state,
+        fetching: false,
+        vacancyCreated: true,
       };
 
     case apiConstants.GET_APPLICATIONS_SUCCESS: 

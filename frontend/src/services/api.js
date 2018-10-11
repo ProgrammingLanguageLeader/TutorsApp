@@ -10,6 +10,8 @@ const HEADERS = {
 export const makeApiRequest = async (endpoint, method, options) => {
   const url = `${API_URL}/${endpoint}/`;
 
+  Object.keys(options).forEach((key) => (options[key] == null) && delete options[key]);
+
   if (method.toLowerCase() === 'get') {
     return axios({
       url: url,

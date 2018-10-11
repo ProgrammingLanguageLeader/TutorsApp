@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import {
   View, Panel, PanelHeader, HeaderButton, Cell, Button, Input, FormLayout, Radio, List,
-  Checkbox, SelectMimicry, Group, colors, FormLayoutGroup
+  Checkbox, SelectMimicry, Group, colors, FormLayoutGroup, Alert
 } from '@vkontakte/vkui';
 
 import Main from '../components/Main';
@@ -11,6 +11,7 @@ import BackIcon from '../components/BackIcon';
 import Icon24Done from '@vkontakte/icons/dist/24/done';
 
 import { locationActions } from '../actions/location';
+import { apiActions } from '../actions/api';
 
 class CreateVacancy extends React.Component {
 	constructor(props) {
@@ -26,10 +27,13 @@ class CreateVacancy extends React.Component {
 			university: null,
 			home_schooling: null,
 			price: null,
-      activePanel: 'create_vacancy',
+
+			activePanel: 'create_vacancy',
+			popout: null,
 		};
 
 		this.handleChange = this.handleChange.bind(this);
+		this.createVacancy = this.createVacancy.bind(this);
 	}
 	
 	handleChange(event) {
@@ -42,9 +46,62 @@ class CreateVacancy extends React.Component {
     });
   }
 
+	createVacancy(event) {
+		event.preventDefault();
+
+		const params = this.state;
+		const { id } = this.props.userInfo;
+		this.props.dispatch(
+			apiActions.createVacancy({
+				...params,
+				owner: id,
+			})
+		);
+	}
+
+	componentWillReceiveProps(nextProps) {
+		console.log(nextProps.vacancyCreated);
+		if (nextProps.vacancyCreated) {
+			this.setState({
+				popout: (
+					<Alert 
+						actions={[{
+							title: 'Close',
+							autoclose: true,
+							style: 'destructive'
+						}]}
+						onClose={() => this.props.dispatch(locationActions.changeLocation('active_tutor', 'requests'))}
+					>
+						<h2>Сообщение</h2>
+						<p>Вакансия успешно создана</p>
+					</Alert>
+				),
+				fetching: false,
+			});
+		}
+		else if (nextProps.vacancyCreated !== null) {
+			this.setState({
+				popout: (
+					<Alert 
+						actions={[{
+							title: 'Close',
+							autoclose: true,
+							style: 'destructive'
+						}]}
+						onClose={() => this.setState({ popout: null })}
+					>
+						<h2>Ошибка</h2>
+						<p>Проверьте правильность ввода</p>
+					</Alert>
+				),
+				fetching: false,
+			});
+		}
+	}
+
 	render() {
 		return (
-			<View id={this.props.id} activePanel={this.state.activePanel}>
+			<View popout={this.state.popout} id={this.props.id} activePanel={this.state.activePanel}>
 				<Panel id="create_vacancy" theme="white">
 					<PanelHeader
 						left={
@@ -77,7 +134,7 @@ class CreateVacancy extends React.Component {
 							<FormLayoutGroup top="Плата за час обучения">
 								<Input name="price" type="number" onChange={this.handleChange} />
 							</FormLayoutGroup>
-							<Button size="xl" onClick={() => this.props.dispatch(locationActions.changeLocation('active_tutor', 'requests'))}>
+							<Button size="xl" onClick={this.createVacancy}>
 								Разместить
 							</Button>
 						</FormLayout>
@@ -131,7 +188,11 @@ class CreateVacancy extends React.Component {
 };
 
 const mapStateToProps = (state) => {
-	return state;
+	const { userInfo } = state.vkReducer;
+	const { vacancyCreated } = state.apiReducer;
+	return {
+		userInfo, vacancyCreated, 
+	};
 }
 
 export default connect(mapStateToProps)(CreateVacancy);
