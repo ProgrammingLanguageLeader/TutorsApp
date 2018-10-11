@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import {
 	View, Panel, PanelHeader, Cell, List, Group, FormLayout, 
-	Button, SelectMimicry, HeaderButton, RangeSlider, colors
+	Button, SelectMimicry, HeaderButton, RangeSlider, colors, Div
 } from '@vkontakte/vkui';
 
 import BackIcon from '../components/BackIcon';
@@ -22,7 +22,7 @@ const initialState = {
 	olympiads: null,
 	ege: null,
 	oge: null,
-	university: null,
+	university: null,		
 
 	activePanel: 'filter',
 	studyLevel: '',
@@ -241,38 +241,56 @@ class Filter extends React.Component {
 					<Group>
 						<List>
 							<Cell 
-								onClick={() => this.updateStudyLevel('primary_school')}
-								asideContent={this.state.primary_school === true ? <Icon24Done fill={colors.blue_300} /> : null}
+								onClick={() => {
+									this.updateStudyLevel('primary_school');
+									this.returnToFilterPanel();
+								}}
+								asideContent={this.state.primary_school ? <Icon24Done fill={colors.blue_300} /> : null}
 							>
 								Начальная школа
 							</Cell>
 							<Cell
-								onClick={() => this.updateStudyLevel('secondary_school')}							
-								asideContent={this.state.secondary_school === true ? <Icon24Done fill={colors.blue_300} /> : null}
+								onClick={() => {
+									this.updateStudyLevel('secondary_school');
+									this.returnToFilterPanel();
+								}}
+								asideContent={this.state.secondary_school ? <Icon24Done fill={colors.blue_300} /> : null}
 							>
 								Средняя школа
 							</Cell>
               <Cell
-								onClick={() => this.updateStudyLevel('olympiads')}
-								asideContent={this.state.olympiads === true ? <Icon24Done fill={colors.blue_300} /> : null}
+								onClick={() => {
+									this.updateStudyLevel('olympiads');
+									this.returnToFilterPanel();
+								}}
+								asideContent={this.state.olympiads ? <Icon24Done fill={colors.blue_300} /> : null}
 							>
 								Олимпиады
 							</Cell>
 							<Cell
-								onClick={() => this.updateStudyLevel('oge')}
-								asideContent={this.state.oge === true ? <Icon24Done fill={colors.blue_300} /> : null}
+								onClick={() => {
+									this.updateStudyLevel('oge');
+									this.returnToFilterPanel();
+								}}
+								asideContent={this.state.oge ? <Icon24Done fill={colors.blue_300} /> : null}
 							>
 								Подготовка к ОГЭ
 							</Cell>
 							<Cell
-								onClick={() => this.updateStudyLevel('ege')}
-								asideContent={this.state.ege === true ? <Icon24Done fill={colors.blue_300} /> : null}
+								onClick={() => {
+									this.updateStudyLevel('ege');
+									this.returnToFilterPanel();
+								}}
+								asideContent={this.state.ege ? <Icon24Done fill={colors.blue_300} /> : null}
 							>
 								Подготовка к ЕГЭ
 							</Cell>
 							<Cell
-								onClick={() => this.updateStudyLevel('university')}
-								asideContent={this.state.university === true ? <Icon24Done fill={colors.blue_300} /> : null}	
+								onClick={() => {
+									this.updateStudyLevel('university');
+									this.returnToFilterPanel();
+								}}
+								asideContent={this.state.university ? <Icon24Done fill={colors.blue_300} /> : null}	
 							>
 								Курс высшего образования
 							</Cell>
