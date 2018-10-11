@@ -108,7 +108,8 @@ class SearchVacanciesView(APIView):
         ege = self.request.query_params.get('ege')
         oge = self.request.query_params.get('oge')
         foreign_lang_cert = self.request.query_params.get('foreign_lang_cert')
-        school = self.request.query_params.get('school')
+        primary_school = self.request.query_params.get('primary_school')
+        secondary_school = self.request.query_params.get('secondary_school')
         university = self.request.query_params.get('university')
         distance_learning = self.request.query_params.get('distance_learning')
         vacancies = Vacancy.objects.all()
@@ -124,8 +125,10 @@ class SearchVacanciesView(APIView):
             vacancies = vacancies.filter(oge__exact=True)
         elif foreign_lang_cert:
             vacancies = vacancies.filter(foreign_lang_cert__exact=True)
-        elif school:
-            vacancies = vacancies.filter(school__exact=True)
+        elif primary_school:
+            vacancies = vacancies.filter(primary_school__exact=True)
+        elif secondary_school:
+            vacancies = vacancies.filter(secondary_school__exact=True)
         elif university:
             vacancies = vacancies.filter(university__exact=True)
         if distance_learning:
