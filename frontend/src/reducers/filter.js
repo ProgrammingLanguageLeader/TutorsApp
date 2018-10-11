@@ -9,7 +9,6 @@ const initialState = {
   olympiads: null,
   ege: null,
   oge: null,
-  university: null,
   foreign_lang_cert: null,
   university: null,
   distance_learning: null,

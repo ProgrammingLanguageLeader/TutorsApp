@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import {
 	View, Panel, PanelHeader, Cell, Avatar, Button, File, Input, FormLayout, 
-	Textarea, HeaderButton, platform, IOS
+	Textarea, HeaderButton
 } from '@vkontakte/vkui';
 import Icon24Document from '@vkontakte/icons/dist/24/document';
 
@@ -11,8 +11,6 @@ import DivSpinner from '../components/DivSpinner';
 
 import { apiActions } from '../actions/api';
 import { locationActions } from '../actions/location';
-
-const osname = platform();
 
 class EditProfile extends React.Component {
 	constructor(props) {
@@ -50,7 +48,6 @@ class EditProfile extends React.Component {
     const value = target.type === 'checkbox' ? target.checked : target.value;
     const name = target.name;
 
-		console.log(name, value);
     this.setState({
       [name]: value
     });
@@ -96,7 +93,7 @@ class EditProfile extends React.Component {
 					{ fetching ? (
 						<DivSpinner />
 					) : (
-						<FormLayout style={{ marginBottom: osname === IOS ? 0 : 48 }}>
+						<FormLayout style={{ paddingBottom: 80 }}>
 							<Cell
 								size="l"
 								description={city ? city.title : ""}

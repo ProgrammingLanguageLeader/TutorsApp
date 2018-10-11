@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { 
-	Panel, PanelHeader, View, Button, Div, Gallery, FixedLayout, platform, IOS
+	Panel, PanelHeader, View, Button, Div, Gallery, FixedLayout
 } from '@vkontakte/vkui';
 
 import './Start.css';
@@ -13,8 +13,6 @@ import introThree from '../assets/intro_three.png'
 
 import { apiActions } from '../actions/api';
 import { locationActions } from '../actions/location';
-
-const osname = platform();
 
 const Main = styled.div.attrs({
 	className: "fullHeight",

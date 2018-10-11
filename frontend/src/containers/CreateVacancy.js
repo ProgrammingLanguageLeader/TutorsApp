@@ -1,25 +1,45 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import {
-  View, Panel, PanelHeader, HeaderButton, Cell, Button, Input, FormLayout, Radio, List, FixedLayout, 
-  Checkbox, SelectMimicry, Div, Group, colors, platform, IOS
+  View, Panel, PanelHeader, HeaderButton, Cell, Button, Input, FormLayout, Radio, List,
+  Checkbox, SelectMimicry, Group, colors, FormLayoutGroup
 } from '@vkontakte/vkui';
 
+import Main from '../components/Main';
 import BackIcon from '../components/BackIcon';
+
 import Icon24Done from '@vkontakte/icons/dist/24/done';
 
 import { locationActions } from '../actions/location';
-
-const osname = platform();
 
 class CreateVacancy extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			study_level: '',
-      subject: '',
-      activePanel: 'create_vacancy'
+			subject: '',
+			studyLevel: '',
+			primary_school: null,
+			secondary_school: null,
+			olympiads: null,
+			ege: null,
+			oge: null,
+			university: null,
+			home_schooling: null,
+			price: null,
+      activePanel: 'create_vacancy',
 		};
+
+		this.handleChange = this.handleChange.bind(this);
+	}
+	
+	handleChange(event) {
+    const target = event.target;
+    const value = target.type === 'checkbox' ? target.checked : target.value;
+    const name = target.name;
+
+    this.setState({
+      [name]: value
+    });
   }
 
 	render() {
@@ -35,97 +55,76 @@ class CreateVacancy extends React.Component {
 					>
 						Cоздание вакансии
 					</PanelHeader>
-					<FormLayout style={{ marginBottom: osname === IOS ? 0 : 48 }}>
-						<SelectMimicry
-							top="Предмет"
-							onClick={() => this.setState({ activePanel: 'subject'})}
-						>
-							{this.state.subject}
-						</SelectMimicry>
-            <SelectMimicry
-							top="Уровень подготовки"
-							onClick={() => this.setState({ activePanel: 'study_level'})}
-						>
-							{this.state.study_level}
-						</SelectMimicry>
-						<Cell top="Выезд на дом">
-              <Radio name="type">Да</Radio>
-              <Radio name="type">Нет</Radio>
-          	</Cell>
-            <Input top="Оплата за час" defaultValue="" />
-						<Button size="xl" onClick={() => this.props.dispatch(locationActions.changeLocation('active_tutor', 'requests'))}>
-							Разместить
-						</Button>
-					</FormLayout>
+					<Main>
+						<FormLayout>
+							<FormLayoutGroup top="Предмет">
+								<SelectMimicry onClick={() => this.setState({ activePanel: 'subject' })}>
+									{this.state.subject}
+								</SelectMimicry>
+							</FormLayoutGroup>
+							<FormLayoutGroup top="Уровень обучения">
+								<Checkbox name="primary_school" onChange={this.handleChange}>Начальная школа</Checkbox>
+								<Checkbox name="secondary_school" onChange={this.handleChange}>Средняя школа</Checkbox>
+								<Checkbox name="olympiads" onChange={this.handleChange}>Олимпиады</Checkbox>
+								<Checkbox name="ege" onChange={this.handleChange}>Подготовка к ОГЭ</Checkbox>
+								<Checkbox name="oge" onChange={this.handleChange}>Подготовка к ЕГЭ</Checkbox>
+								<Checkbox name="university" onChange={this.handleChange}>Курс высшего образования</Checkbox>
+							</FormLayoutGroup>
+							<FormLayoutGroup top="Выезд на дом">
+								<Radio value={true} name="home_schooling" onChange={this.handleChange}>Да</Radio>
+								<Radio value={false} name="home_schooling" onChange={this.handleChange}>Нет</Radio>
+							</FormLayoutGroup>
+							<FormLayoutGroup top="Плата за час обучения">
+								<Input name="price" type="number" onChange={this.handleChange} />
+							</FormLayoutGroup>
+							<Button size="xl" onClick={() => this.props.dispatch(locationActions.changeLocation('active_tutor', 'requests'))}>
+								Разместить
+							</Button>
+						</FormLayout>
+					</Main>
 				</Panel>
 
 				<Panel id="subject">
           <PanelHeader
-              left={
-                <HeaderButton onClick={() => this.setState({ activePanel: 'create_vacancy' })}>
-									<BackIcon />
-								</HeaderButton>
-              }
-            >
-              Предмет
+						left={
+							<HeaderButton onClick={() => this.setState({ activePanel: 'create_vacancy' })}>
+								<BackIcon />
+							</HeaderButton>
+						}
+          >
+						Предмет
           </PanelHeader>
-					<Group>
-						<List>
-							<Cell
-								onClick={() => this.setState({ subject: 'Математика', activePanel: 'create_vacancy' })}
-								asideContent={this.state.subject === 'Математика' ? <Icon24Done fill={colors.blue_300} /> : null}
-							>
-								Математика
-							</Cell>
-							<Cell
-								onClick={() => this.setState({ subject: 'Физика', activePanel: 'create_vacancy' })}
-								asideContent={this.state.subject === 'Физика' ? <Icon24Done fill={colors.blue_300} /> : null}
-							>
-								Физика
-							</Cell>
-							<Cell
-								onClick={() => this.setState({ subject: 'Русский язык', activePanel: 'create_vacancy' })}
-								asideContent={this.state.subject === 'Русский язык' ? <Icon24Done fill={colors.blue_300} /> : null}
+					<Main>
+						<Group>
+							<List>
+								<Cell
+									onClick={() => this.setState({ subject: 'Математика', activePanel: 'create_vacancy' })}
+									asideContent={this.state.subject === 'Математика' ? <Icon24Done fill={colors.blue_300} /> : null}
 								>
-								Русский язык
-							</Cell>
-							<Cell
-								onClick={() => this.setState({ subject: 'Английский язык', activePanel: 'create_vacancy' })}
-								asideContent={this.state.subject === 'Английский язык' ? <Icon24Done fill={colors.blue_300} /> : null}
-							>
-								Английский язык
-							</Cell>
-						</List>
-					</Group>
+									Математика
+								</Cell>
+								<Cell
+									onClick={() => this.setState({ subject: 'Физика', activePanel: 'create_vacancy' })}
+									asideContent={this.state.subject === 'Физика' ? <Icon24Done fill={colors.blue_300} /> : null}
+								>
+									Физика
+								</Cell>
+								<Cell
+									onClick={() => this.setState({ subject: 'Русский язык', activePanel: 'create_vacancy' })}
+									asideContent={this.state.subject === 'Русский язык' ? <Icon24Done fill={colors.blue_300} /> : null}
+									>
+									Русский язык
+								</Cell>
+								<Cell
+									onClick={() => this.setState({ subject: 'Английский язык', activePanel: 'create_vacancy' })}
+									asideContent={this.state.subject === 'Английский язык' ? <Icon24Done fill={colors.blue_300} /> : null}
+								>
+									Английский язык
+								</Cell>
+							</List>
+						</Group>
+					</Main>
 				</Panel>
-
-        <Panel id="study_level">
-          <PanelHeader
-              left={
-                <HeaderButton onClick={() => this.setState({ activePanel: 'create_vacancy' })}>
-									<BackIcon />
-								</HeaderButton>
-              }
-            >
-              Уровень подготовки
-          </PanelHeader>
-					<Group>
-						<Checkbox>Начальная школа</Checkbox>
-						<Checkbox>Средняя школа</Checkbox>
-						<Checkbox>Олимпиады</Checkbox>
-						<Checkbox>Подготовка к ОГЭ</Checkbox>
-						<Checkbox>Подготовка к ЕГЭ</Checkbox>
-						<Checkbox>Курс высшего образования</Checkbox>
-					</Group>
-
-          <FixedLayout vertical="bottom" style={{ marginBottom: osname === IOS ? 0 : 48 }}>
-						<Div>
-							<Button size="l" stretched onClick={() => this.setState({ activePanel: 'create_vacancy'})}>
-								Применить
-							</Button>
-						</Div>	
-					</FixedLayout>
-        </Panel>
 			</View>
 		);
 	}

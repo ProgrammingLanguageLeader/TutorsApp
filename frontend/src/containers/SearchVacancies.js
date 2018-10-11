@@ -75,29 +75,27 @@ class SearchVacancies extends React.Component {
 					{ fetching ? (
 						<DivSpinner />
 					) : (
-						<div>
-							<Div>
-								{ vacanciesFound ? vacancies.map(vacancy => {
-									const userInfo = usersInfo.get(Number(vacancy.owner));
-									return (
-										<Cell
-											expandable 
-											onClick={() => this.setState({ activePanel: 'show_vacancy', id: vacancy.id })}
-											key={vacancy.id}
-											description={`${userInfo.city.title}, ${vacancy.price} рублей/час, ${vacancy.subject}`}
-											before={<Avatar src={userInfo.photo_100} />}
-										>
-											{`${userInfo.firstName} ${userInfo.lastName}`}
-										</Cell>
-									);
-								}) : (
-									<Div onClick={this.searchVacancies}>
-										Попробуйте повторить попытку или изменить параметры фильтра. <br />
-										Нажмите, чтобы повторить.
-									</Div>
-								)}
-							</Div>
-						</div>
+						<Div>
+							{ vacanciesFound ? vacancies.map(vacancy => {
+								const userInfo = usersInfo.get(Number(vacancy.owner));
+								return (
+									<Cell
+										expandable 
+										onClick={() => this.setState({ activePanel: 'show_vacancy', id: vacancy.id })}
+										key={vacancy.id}
+										description={`${userInfo.city.title}, ${vacancy.price} рублей/час, ${vacancy.subject}`}
+										before={<Avatar src={userInfo.photo_100} />}
+									>
+										{`${userInfo.firstName} ${userInfo.lastName}`}
+									</Cell>
+								);
+							}) : (
+								<Div onClick={this.searchVacancies}>
+									Попробуйте повторить попытку или изменить параметры фильтра. <br />
+									Нажмите, чтобы повторить.
+								</Div>
+							)}
+						</Div>
 					)}
 				</Panel>
 

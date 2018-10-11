@@ -2,8 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import {
 	View, Panel, PanelHeader, Cell, List, Group, FormLayout, 
-	Button, SelectMimicry, HeaderButton, RangeSlider, colors,
-	platform, IOS
+	Button, SelectMimicry, HeaderButton, RangeSlider, colors
 } from '@vkontakte/vkui';
 
 import BackIcon from '../components/BackIcon';
@@ -28,8 +27,6 @@ const initialState = {
 	activePanel: 'filter',
 	studyLevel: '',
 };
-
-const osname = platform();
 
 class Filter extends React.Component {
 	constructor(props) {
@@ -155,7 +152,7 @@ class Filter extends React.Component {
 					>
 						Фильтр
 					</PanelHeader>
-					<FormLayout style={{ marginBottom: osname === IOS ? 0 : 48 }}>
+					<FormLayout style={{ paddingBottom: 80 }}>
 						<SelectMimicry
 							top="Предмет"
 							placeholder="Любой"
@@ -181,10 +178,10 @@ class Filter extends React.Component {
 							{this.state.studyLevel}
 						</SelectMimicry>
 						<FlexDiv>
-							<Button size="l" stretched style={{	marginRight: "8px" }} onClick={this.applyButtonClick}>
+							<Button size="l" stretched style={{ margin: 2, height: 52, display: 'flex', flex: 1, justifyContent: 'center' }} onClick={this.applyButtonClick}>
 								Применить
 							</Button>
-							<Button size="l" stretched style={{ background: "#E64646" }} stretched onClick={this.deleteButtonClick}>
+							<Button size="l" stretched style={{ margin: 2, height: 52, display: 'flex', flex: 1, justifyContent: 'center', background: "#E64646" }} onClick={this.deleteButtonClick}>
 								Очистить
 							</Button>
 						</FlexDiv>

@@ -2,22 +2,19 @@ import React from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import {
-  View, Panel, PanelHeader, Cell, Avatar, Group, List, Button,
-  platform, IOS
+  View, Panel, PanelHeader, Cell, Avatar, Group, List, Button, Div
 } from '@vkontakte/vkui';
 
 import ChangeTab from './ChangeTab';
-import FlexDiv from '../components/FlexDiv';
 
 import { apiActions } from '../actions/api';
 import { locationActions } from '../actions/location';
 
 
-const osname = platform();
-const ChangeTabContentDiv = styled.div
-`
+const ChangeTabContentDiv = styled.div`
   margin-top: 60px;
-  margin-bottom: ${osname === IOS ? 0 : 48}px;
+  background-color: #ffffff;
+	padding-bottom: 80px;
 `;
 
 class ActiveTutor extends React.Component {
@@ -156,14 +153,14 @@ class ActiveTutor extends React.Component {
                 </Cell>
               </List>
             </Group>
-            <FlexDiv>
+            <Div>
               <Button 
                 size="xl"
                 onClick={() => this.props.dispatch(locationActions.changeLocation('create_vacancy'))}
               >
                   Создать вакансию
               </Button>
-            </FlexDiv>
+            </Div>
           </ChangeTabContentDiv>
         </Panel>
 

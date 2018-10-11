@@ -6,12 +6,12 @@ import {
 
 import Icon24Home from '@vkontakte/icons/dist/24/home';
 import Icon24Education from '@vkontakte/icons/dist/24/education';
-import Icon24Mention from '@vkontakte/icons/dist/24/mention';
 import Icon24Recent from '@vkontakte/icons/dist/24/recent';
 import Icon24Info from '@vkontakte/icons/dist/24/info';
 import Icon24Write from '@vkontakte/icons/dist/24/write';
 
 import DivSpinner from '../components/DivSpinner';
+import Main from '../components/Main';
 
 import { apiActions } from '../actions/api';
 import { locationActions } from '../actions/location';
@@ -31,13 +31,10 @@ class ShowProfile extends React.Component {
 	render() {
     const { fetching } = this.props;
     const { city, photo_200, first_name, last_name } = this.props.userInfo;
-    const { description, experience, education, address, email } = this.props.profile;
+    const { description, experience, education, address } = this.props.profile;
 
 		return (
-      <View 
-        id={this.props.id} 
-        activePanel="tutor_profile"
-      >
+      <View id={this.props.id} activePanel="tutor_profile">
         <Panel id="tutor_profile">
           <PanelHeader>
             Профиль
@@ -46,7 +43,7 @@ class ShowProfile extends React.Component {
           { fetching ? (
             <DivSpinner />
           ) : (
-            <div>
+            <Main>
               <Group id="profile" style={{ marginTop: 0 }}>
                 <Cell
                   size="l"
@@ -63,35 +60,22 @@ class ShowProfile extends React.Component {
               </Group>
               <Group id="profile_info">
                 <List>
-                  <Cell
-                    before={<Icon24Recent />}
-                  >
+                  <Cell multiline before={<Icon24Recent />}>
                     {experience || "Стаж не задан"}
                   </Cell>
-                  <Cell
-                    before={<Icon24Education />}
-                  >
+                  <Cell multiline before={<Icon24Education />}>
                     {education || "Образование не указано"}
                   </Cell>
-                  <Cell
-                    before={<Icon24Home />}
-                  >
+                  <Cell multiline before={<Icon24Home />}>
                     {address || "Адрес не указан"}
                   </Cell>
-                  <Cell
-                    before={<Icon24Mention />}
-                  >
-                    {email || "E-mail не указан"}
-                  </Cell>
-                  <Cell
-                    before={<Icon24Info />}
-                  >
+                  <Cell multiline before={<Icon24Info />}>
                     {description || "Не указано"}
                   </Cell>
                 </List>
               </Group>
-            </div>
-          ) }
+            </Main>
+          )}
         </Panel>
       </View>
     );
