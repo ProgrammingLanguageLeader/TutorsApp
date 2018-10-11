@@ -20,9 +20,13 @@ class Notifications extends React.Component {
     this.state = {
       activePanel: 'notifications'
     }
+
+    this.acceptApplication = this.acceptApplication.bind(this);
+    this.rejectApplication = this.rejectApplication.bind(this);
+    this.fetchNotifications = this.fetchNotifications.bind(this);
   }
 
-  componentDidMount() {
+  fetchNotifications() {
     const vk_id = this.props.userInfo.id;
     this.props.dispatch(
       apiActions.getApplications({
@@ -34,10 +38,32 @@ class Notifications extends React.Component {
       const studentIds = applications.map(application => {
         return application.student;
       })
-      return this.props.dispatch(
+      this.props.dispatch(
         vkActions.fetchUsersInfo(accessToken, studentIds)
       )
     })
+  }
+
+  componentDidMount() {
+    this.fetchNotifications();
+  }
+
+  acceptApplication(id) {
+    this.props.dispatch(
+      apiActions.acceptApplication({
+        id, 
+      })
+    )
+    .then(() => this.fetchNotifications());
+  }
+
+  rejectApplication(id) {
+    this.props.dispatch(
+      apiActions.deleteApplication({
+        id, 
+      })
+    )
+    .then(() => this.fetchNotifications());
   }
 
   render () {
@@ -59,16 +85,15 @@ class Notifications extends React.Component {
                   return (
                     <Cell
                       expandable
-                      onClick={() => this.setState({ activePanel: 'show_student'})}
                       size="l"
                       description={userInfo.city ? userInfo.city.title : ""}
-                      before={<Avatar src={userInfo.photo_200} />}
+                      before={<Avatar onClick={() => this.setState({ activePanel: 'show_student'})} src={userInfo.photo_200} />}
                       bottomContent={
                         <FlexdDiv>
-                          <Button size="l" stretched style={{ width: 120 }}>
+                          <Button size="l" stretched style={{ width: 120 }} onClick={() => this.acceptApplication(application.id)}>
                             Принять
                           </Button>
-                          <Button size="l" level="outline" stretched style={{ marginLeft: 8 }}>
+                          <Button size="l" level="outline" stretched style={{ marginLeft: 8 }} onClick={() => this.rejectApplication(application.id)}>
                             Отклонить
                           </Button>
                         </FlexdDiv>
@@ -98,7 +123,7 @@ class Notifications extends React.Component {
             Уведомления
           </PanelHeader>
           <Main>
-            
+            <Div>Coming soon</Div>
           </Main>
         </Panel>
       </View>
