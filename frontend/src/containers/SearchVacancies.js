@@ -39,8 +39,9 @@ class SearchVacancies extends React.Component {
 		)
 		.then(() => {
 			const { accessToken } = this.props.vkReducer;
-      let vkIds = this.props.apiReducer.vacancies.map(vacancy => {
-        return vacancy.owner;
+			const { vacancies } = this.props.apiReducer;
+      const vkIds = Object.keys(vacancies).map(vacancyId => {
+        return vacancies[vacancyId].owner;
       });
 			this.props.dispatch(
 				vkActions.fetchUsersInfo(accessToken, vkIds)
@@ -55,9 +56,9 @@ class SearchVacancies extends React.Component {
 	render() {
 		const { vacancies, fetching } = this.props.apiReducer;
 		const { usersInfo } = this.props.vkReducer;
-		const vacanciesFound = vacancies.length > 0 && usersInfo.size > 0;
+		const vacanciesFound = Object.keys(vacancies).length > 0 && usersInfo.size > 0;
 
-		const vacancy = vacancies[Number(this.state.id) - 1];
+		const vacancy = vacancies[this.state.id];
 		const userProfile = vacancy ? usersInfo.get(Number(vacancy.owner)) : undefined;
 
 		return (
@@ -76,7 +77,8 @@ class SearchVacancies extends React.Component {
 						<DivSpinner />
 					) : (
 						<Div>
-							{ vacanciesFound ? vacancies.map(vacancy => {
+							{ vacanciesFound ? Object.keys(vacancies).map(vacancyId => {
+								const vacancy = vacancies[vacancyId];
 								const userInfo = usersInfo.get(Number(vacancy.owner));
 								return (
 									<Cell

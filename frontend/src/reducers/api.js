@@ -3,7 +3,7 @@ import { apiConstants } from '../constants/api';
 const initialState = {
   profile: {},
   vacancy: {},
-  vacancies: [],
+  vacancies: {},
   students: [],
   applications: [],
   lessons: [],
@@ -121,12 +121,17 @@ const apiReducer = (state = initialState, action) => {
         students: action.payload,
       };
 
-    case apiConstants.SEARCH_VACANCIES_SUCCESS:
+    case apiConstants.SEARCH_VACANCIES_SUCCESS: {
+      let vacancies = {};
+      action.payload.forEach(vacancy => {
+        vacancies[vacancy.id] = vacancy;
+      });
       return {
         ...state,
         fetching: false,
-        vacancies: action.payload,
+        vacancies: vacancies,
       };
+    }
     
     case apiConstants.GET_VACANCY_SUCCESS:
       return {
