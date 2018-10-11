@@ -39,7 +39,7 @@ class ChangeTab extends React.Component {
           onClick={() => this.props.dispatch(locationActions.changeLocation(activeView, 'requests'))}
           selected={activePanel === 'requests'}
         >
-          Мои завки
+          Мои вакансии
         </TabsItem>
         <TabsItem 
           onClick={() => this.props.dispatch(locationActions.changeLocation(activeView, 'students'))}

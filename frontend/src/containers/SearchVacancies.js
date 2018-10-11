@@ -91,6 +91,9 @@ class SearchVacancies extends React.Component {
 							{ vacanciesFound ? Object.keys(vacancies).map(vacancyId => {
 								const vacancy = vacancies[vacancyId];
 								const userInfo = usersInfo.get(Number(vacancy.owner));
+								if (!userInfo) {
+									return;
+								}
 								return (
 									<Cell
 										expandable 

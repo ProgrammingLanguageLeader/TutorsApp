@@ -101,7 +101,14 @@ class Filter extends React.Component {
 	}
 
 	updateStudyLevel(studyLevel) {
-		let updatedState = {};
+		let updatedState = {
+			primary_school: null,
+			secondary_school: null,
+			olympiads: null,
+			ege: null,
+			oge: null,
+			university: null,
+		};
 		switch (studyLevel) {
 			case 'primary_school':
 				updatedState.primary_school = true;
