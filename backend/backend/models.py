@@ -7,6 +7,7 @@ class Profile(models.Model):
         unique=True,
         blank=False
     )
+    creation_time = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=True)
     experience = models.TextField(null=True, blank=True, max_length=4096)
     education = models.TextField(null=True, blank=True, max_length=4096)
@@ -31,6 +32,7 @@ class Profile(models.Model):
 
 
 class Vacancy(models.Model):
+    creation_time = models.DateTimeField(auto_now_add=True)
     owner = models.ForeignKey(Profile, on_delete=models.CASCADE)
     is_active = models.BooleanField(default=True)
     subject = models.CharField(max_length=128)
@@ -47,6 +49,7 @@ class Vacancy(models.Model):
 
 
 class Lesson(models.Model):
+    creation_time = models.DateTimeField(auto_now_add=True)
     tutor = models.ForeignKey(
         Profile, on_delete=models.CASCADE, related_name='lesson_tutor'
     )
@@ -59,6 +62,7 @@ class Lesson(models.Model):
 
 
 class Report(models.Model):
+    creation_time = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey(
         Profile, models.CASCADE, related_name='report_author'
     )
@@ -70,6 +74,7 @@ class Report(models.Model):
 
 
 class Application(models.Model):
+    creation_time = models.DateTimeField(auto_now_add=True)
     vacancy = models.ForeignKey(
         Vacancy, on_delete=models.CASCADE, related_name='application_vacancy'
     )
