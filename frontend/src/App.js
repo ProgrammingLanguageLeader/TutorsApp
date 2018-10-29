@@ -31,10 +31,9 @@ class App extends React.Component {
 		}
 	}
 
-	componentWillMount() {
+	componentDidMount() {
 		this.props.dispatch(vkActions.init());
 		this.props.dispatch(vkActions.fetchCurrentUserInfo());
-		// Можем ли мы не спрашивать токен каждый раз?
 		this.props.dispatch(vkActions.fetchAccessToken());
 	}
 

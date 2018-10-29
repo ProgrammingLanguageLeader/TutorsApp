@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { 
-	Panel, PanelHeader, View, Button, Div, Gallery, FixedLayout
+	Panel, PanelHeader, View, Button, Div, Gallery, FixedLayout, ScreenSpinner
 } from '@vkontakte/vkui';
 
 import './Start.css';
@@ -39,39 +39,71 @@ class Start extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			popout: null,
+			popout: <ScreenSpinner />,
 		};
 
-		this.registerTutor = this.registerTutor.bind(this);
-		this.registerStudent = this.registerStudent.bind(this);
+		this.goToProfile = this.goToProfile.bind(this);
+		this.goToVacanciesSearch = this.goToVacanciesSearch.bind(this);
 	}
 
-	componentWillReceiveProps(nextProps) {
-		const { id, signed_user_id } = nextProps.vkReducer.userInfo;
+	componentDidUpdate(prevProps) {
+		if (this.props.userInfo.id === prevProps.userInfo.id) {
+			return;
+		}
+		const { id, signed_user_id } = this.props.userInfo;
+		this.setState({
+			popout: <ScreenSpinner />
+		});
 		this.props.dispatch(
-			apiActions.createProfile({
-				vk_id: id,
-				user_id: id,
-				signed_user_id: signed_user_id,
-			})
-		);
+			apiActions.getProfile({
+        vk_id: id,
+        user_id: id,
+        signed_user_id: signed_user_id,
+      })
+		)
+		.then(() => {
+			if (this.props.profile.vk_id) {
+				return Promise.resolve();
+			}
+			return this.props.dispatch(
+				apiActions.createProfile({
+					vk_id: id,
+					user_id: id,
+					signed_user_id: signed_user_id,
+				})
+			)
+		})
+		.then(() => {
+			this.setState({
+				popout: null
+			});
+		});
 	}
 
-	registerStudent() {
+	goToVacanciesSearch() {
 		this.props.dispatch(
 			locationActions.changeLocation('search'),
 		)
 	}
 
-	registerTutor() {
-		this.props.dispatch(
-			locationActions.changeLocation('edit_profile')
-		);
+	goToProfile() {
+		const { profile } = this.props;
+		const profileFilled = profile.experience || profile.education || profile.address || profile.description;
+		if (profileFilled) {
+			this.props.dispatch(
+				locationActions.changeLocation('show_profile')
+			)
+		}
+		else {
+			this.props.dispatch(
+				locationActions.changeLocation('edit_profile')
+			);
+		}
 	}
 
 	render() {
 		return (
-			<View id={this.props.id} activePanel="home">
+			<View popout={this.state.popout} id={this.props.id} activePanel="home">
 				<Panel id="home">
 					<PanelHeader noShadow>
 						Tutor
@@ -100,10 +132,10 @@ class Start extends React.Component {
 					</Main>
 					<FixedLayout vertical="bottom">
 						<Div style={{ display: 'flex' }}>
-							<Button style={{ margin: 2, height: 52, display: 'flex', flex: 1, justifyContent: 'center' }} onClick={this.registerStudent}>
+							<Button style={{ margin: 2, height: 52, display: 'flex', flex: 1, justifyContent: 'center' }} onClick={this.goToVacanciesSearch}>
 								Найти репититора
 							</Button>
-							<Button style={{ margin: 2, height: 52, display: 'flex', flex: 1, justifyContent: 'center' }} onClick={this.registerTutor}>
+							<Button style={{ margin: 2, height: 52, display: 'flex', flex: 1, justifyContent: 'center' }} onClick={this.goToProfile}>
 								Я репетитор
 							</Button>
 						</Div>
@@ -115,9 +147,10 @@ class Start extends React.Component {
 };
 
 const mapStateToProps = (state) => {
-	const { vkReducer } = state;
+	const { userInfo } = state.vkReducer;
+	const { profile } = state.apiReducer;
 	return {
-		vkReducer
+		userInfo, profile, 
 	};
 };
 
