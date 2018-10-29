@@ -14,13 +14,20 @@ from .serializers import (
 from .models import Profile, Vacancy, Lesson, Application
 
 
-class CreateProfileView(APIView):
-    def post(self, request):
+def check_authentication(method):
+    def wrapper(view_instance, request):
         if not is_authenticated(request):
             return Response(
                 data="user id or signed user id are not valid",
                 status=HTTP_403_FORBIDDEN
             )
+        return method(view_instance, request)
+    return wrapper
+
+
+class CreateProfileView(APIView):
+    @check_authentication
+    def post(self, request):
         view_serializer = ProfileSerializer(data=request.data)
         if not view_serializer.is_valid():
             return Response(
@@ -32,12 +39,8 @@ class CreateProfileView(APIView):
 
 
 class UpdateProfileView(APIView):
+    @check_authentication
     def post(self, request):
-        if not is_authenticated(request):
-            return Response(
-                data="user id or signed user id are not valid",
-                status=HTTP_403_FORBIDDEN
-            )
         view_serializer = UpdateProfileSerializer(data=request.data)
         if not view_serializer.is_valid():
             return Response(
@@ -60,12 +63,8 @@ class UpdateProfileView(APIView):
 
 
 class GetProfileView(APIView):
+    @check_authentication
     def get(self, request):
-        if not is_authenticated(request):
-            return Response(
-                data="user id or signed user id are not valid",
-                status=HTTP_403_FORBIDDEN
-            )
         vk_id = self.request.query_params.get('vk_id')
         try:
             profile = Profile.objects.get(vk_id__exact=vk_id)
@@ -79,12 +78,8 @@ class GetProfileView(APIView):
 
 
 class CreateVacancyView(APIView):
+    @check_authentication
     def post(self, request):
-        if not is_authenticated(request):
-            return Response(
-                data="user id or signed user id are not valid",
-                status=HTTP_403_FORBIDDEN
-            )
         view_serializer = VacancySerializer(data=request.data)
         if not view_serializer.is_valid():
             return Response(
@@ -96,12 +91,8 @@ class CreateVacancyView(APIView):
 
 
 class SearchVacanciesView(APIView):
+    @check_authentication
     def get(self, request):
-        if not is_authenticated(request):
-            return Response(
-                data="user id or signed user id are not valid",
-                status=HTTP_403_FORBIDDEN
-            )
         subject = self.request.query_params.get('subject')
         price_min = self.request.query_params.get('price_min')
         price_max = self.request.query_params.get('price_max')
@@ -140,13 +131,15 @@ class SearchVacanciesView(APIView):
         return Response(data=vacancies_serializer.data)
 
 
+# class SearchVacanciesByTextView(APIView):
+#     @check_authentication
+#     def get(self, request):
+#
+
+
 class GetStudentsView(APIView):
+    @check_authentication
     def get(self, request):
-        if not is_authenticated(request):
-            return Response(
-                data="user id or signed user id are not valid",
-                status=HTTP_403_FORBIDDEN
-            )
         tutor_vk_id = self.request.query_params.get('vk_id')
         lessons = Lesson.objects.filter(
             tutor__vk_id=tutor_vk_id
@@ -159,12 +152,8 @@ class GetStudentsView(APIView):
 
 
 class AddLessonView(APIView):
+    @check_authentication
     def post(self, request):
-        if not is_authenticated(request):
-            return Response(
-                data="user id or signed user id are not valid",
-                status=HTTP_403_FORBIDDEN
-            )
         lesson_serializer = LessonSerializer(data=request.data)
         if lesson_serializer.is_valid():
             lesson_serializer.save()
@@ -176,12 +165,8 @@ class AddLessonView(APIView):
 
 
 class GetLessonsView(APIView):
+    @check_authentication
     def get(self, request):
-        if not is_authenticated(request):
-            return Response(
-                data="user id or signed user id are not valid",
-                status=HTTP_403_FORBIDDEN
-            )
         tutor_id = self.request.query_params.get('tutor')
         student_id = self.request.query_params.get('student')
         lessons = []
@@ -198,12 +183,8 @@ class GetLessonsView(APIView):
 
 
 class AddApplicationView(APIView):
+    @check_authentication
     def post(self, request):
-        if not is_authenticated(request):
-            return Response(
-                data="user id or signed user id are not valid",
-                status=HTTP_403_FORBIDDEN
-            )
         application_serializer = ApplicationSerializer(data=request.data)
         if application_serializer.is_valid():
             application_serializer.save()
@@ -215,12 +196,8 @@ class AddApplicationView(APIView):
 
 
 class GetApplicationsView(APIView):
+    @check_authentication
     def get(self, request):
-        if not is_authenticated(request):
-            return Response(
-                data="user id or signed user id are not valid",
-                status=HTTP_403_FORBIDDEN
-            )
         vk_id = self.request.query_params.get('vk_id')
         vacancies = Vacancy.objects.filter(
             owner=vk_id
@@ -237,12 +214,8 @@ class GetApplicationsView(APIView):
 
 
 class AcceptApplicationView(APIView):
+    @check_authentication
     def post(self, request):
-        if not is_authenticated(request):
-            return Response(
-                data="user id or signed user id are not valid",
-                status=HTTP_403_FORBIDDEN
-            )
         try:
             application_id = request.data['id']
             application = Application.objects.get(pk=application_id)
@@ -266,12 +239,8 @@ class AcceptApplicationView(APIView):
 
 
 class DeleteLessonView(APIView):
+    @check_authentication
     def post(self, request):
-        if not is_authenticated(request):
-            return Response(
-                data="user id or signed user id are not valid",
-                status=HTTP_403_FORBIDDEN
-            )
         try:
             id = request.data['id']
             schedule = Lesson.objects.get(pk=id)
@@ -290,12 +259,8 @@ class DeleteLessonView(APIView):
 
 
 class DeleteVacancyView(APIView):
+    @check_authentication
     def post(self, request):
-        if not is_authenticated(request):
-            return Response(
-                data="user id or signed user id are not valid",
-                status=HTTP_403_FORBIDDEN
-            )
         try:
             id = request.data['id']
             vacancy = Vacancy.objects.get(pk=id)
@@ -314,12 +279,8 @@ class DeleteVacancyView(APIView):
 
 
 class DeleteProfileView(APIView):
+    @check_authentication
     def post(self, request):
-        if not is_authenticated(request):
-            return Response(
-                data="user id or signed user id are not valid",
-                status=HTTP_403_FORBIDDEN
-            )
         try:
             vk_id = request.data['vk_id']
             profile = Profile.objects.get(pk=vk_id)
@@ -338,12 +299,8 @@ class DeleteProfileView(APIView):
 
 
 class DeleteApplicationView(APIView):
+    @check_authentication
     def post(self, request):
-        if not is_authenticated(request):
-            return Response(
-                data="user id or signed user id are not valid",
-                status=HTTP_403_FORBIDDEN
-            )
         try:
             application_id = request.data['id']
             application = Application.objects.get(pk=application_id)
@@ -362,12 +319,8 @@ class DeleteApplicationView(APIView):
 
 
 class GetVacancyView(APIView):
+    @check_authentication
     def get(self, request):
-        if not is_authenticated(request):
-            return Response(
-                data="user id or signed user id are not valid",
-                status=HTTP_403_FORBIDDEN
-            )
         vacancy_id = self.request.query_params.get('id')
         try:
             vacancy = Vacancy.objects.get(id=vacancy_id)
@@ -381,12 +334,8 @@ class GetVacancyView(APIView):
 
 
 class GetVacanciesView(APIView):
+    @check_authentication
     def get(self, request):
-        if not is_authenticated(request):
-            return Response(
-                data="user id or signed user id are not valid",
-                status=HTTP_403_FORBIDDEN
-            )
         owner_id = self.request.query_params.get('owner_id')
         vacancies = Vacancy.objects.filter(
             owner__vk_id=owner_id, is_active=True

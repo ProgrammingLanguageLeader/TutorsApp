@@ -4,10 +4,6 @@ from django.conf import settings
 
 
 def is_authenticated(request):
-    # delete this after VK Apps authorization release
-    if settings.ITS_NOT_TIME_YET:
-        return True
-
     signed_user_id = request.data.get('signed_user_id') \
         or request.query_params.get('signed_user_id')
     user_id = request.data.get('user_id') \
@@ -21,8 +17,7 @@ def is_authenticated(request):
     encoded_string = (
             str(vk_app_id) +
             vk_app_secret +
-            str(user_id) +
-            ')'
+            str(user_id)
     ).encode('utf-8')
     digest = hashlib.sha256(encoded_string).digest()
     real_signature = base64.b64encode(digest)
