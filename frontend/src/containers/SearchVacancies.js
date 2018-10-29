@@ -63,7 +63,7 @@ class SearchVacancies extends React.Component {
 		);
 	}
 
-	render() {
+	render() {	
 		const { vacancies, fetching } = this.props.apiReducer;
 		const { usersInfo } = this.props.vkReducer;
 		const vacanciesFound = Object.keys(vacancies).length > 0 && usersInfo.size > 0;
@@ -94,12 +94,14 @@ class SearchVacancies extends React.Component {
 								if (!userInfo) {
 									return;
 								}
+								const cityTitle = userInfo.city ? userInfo.city.title : "";
+								const description = `${cityTitle} ${vacancy.price} рублей/час ${vacancy.subject}`;
 								return (
 									<Cell
 										expandable 
 										onClick={() => this.setState({ activePanel: 'show_vacancy', id: vacancy.id })}
 										key={vacancy.id}
-										description={`${userInfo.city.title}, ${vacancy.price} рублей/час, ${vacancy.subject}`}
+										description={description}
 										before={<Avatar src={userInfo.photo_100} />}
 									>
 										{`${userInfo.firstName} ${userInfo.lastName}`}
