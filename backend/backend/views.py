@@ -25,6 +25,17 @@ def check_authentication(method):
     return wrapper
 
 
+def get_error_message_response(variable_name):
+    return Response(
+        data={
+            variable_name: [
+                "{} is not valid".format(variable_name)
+            ]
+        },
+        status=HTTP_400_BAD_REQUEST
+    )
+
+
 class CreateProfileView(APIView):
     @check_authentication
     def post(self, request):
@@ -93,17 +104,27 @@ class CreateVacancyView(APIView):
 class SearchVacanciesView(APIView):
     @check_authentication
     def get(self, request):
-        subject = self.request.query_params.get('subject')
-        price_min = self.request.query_params.get('price_min')
-        price_max = self.request.query_params.get('price_max')
-        ege = self.request.query_params.get('ege')
-        oge = self.request.query_params.get('oge')
-        foreign_lang_cert = self.request.query_params.get('foreign_lang_cert')
-        primary_school = self.request.query_params.get('primary_school')
-        secondary_school = self.request.query_params.get('secondary_school')
-        olympiads = self.request.query_params.get('olympiads')
-        university = self.request.query_params.get('university')
-        distance_learning = self.request.query_params.get('distance_learning')
+        params = self.request.query_params
+        offset = self.validate_offset(params.get('offset') or 0)
+        if offset is None:
+            return get_error_message_response('offset')
+
+        limit = self.validate_limit(params.get('limit') or 100)
+        if limit is None:
+            return get_error_message_response('limit')
+
+        price_min = self.validate_price_min(params.get('price_min'))
+        price_max = self.validate_price_max(params.get('price_max'))
+
+        subject = params.get('subject')
+        ege = params.get('ege')
+        oge = params.get('oge')
+        foreign_lang_cert = params.get('foreign_lang_cert')
+        primary_school = params.get('primary_school')
+        secondary_school = params.get('secondary_school')
+        olympiads = params.get('olympiads')
+        university = params.get('university')
+        distance_learning = params.get('distance_learning')
         vacancies = Vacancy.objects.all()
         if subject:
             vacancies = vacancies.filter(subject__exact=subject)
@@ -127,14 +148,54 @@ class SearchVacanciesView(APIView):
             vacancies = vacancies.filter(university__exact=True)
         if distance_learning:
             vacancies = vacancies.filter(distance_learning__exact=True)
+        vacancies = vacancies.order_by(
+            '-creation_time'
+        )[offset:offset + limit]
         vacancies_serializer = VacancySerializer(vacancies, many=True)
         return Response(data=vacancies_serializer.data)
 
+    @staticmethod
+    def validate_offset(offset):
+        try:
+            offset = int(offset)
+            return offset
+        except (ValueError, TypeError):
+            return None
+
+    @staticmethod
+    def validate_limit(limit):
+        try:
+            limit = int(limit)
+            if not (1 <= limit <= 1000):
+                return None
+            return limit
+        except (ValueError, TypeError):
+            return None
+
+    @staticmethod
+    def validate_price_min(price_min):
+        try:
+            price_min = int(price_min)
+            return price_min
+        except (ValueError, TypeError):
+            return None
+
+    @staticmethod
+    def validate_price_max(price_max):
+        try:
+            price_max = int(price_max)
+            return price_max
+        except (ValueError, TypeError):
+            return None
+
 
 # class SearchVacanciesByTextView(APIView):
-#     @check_authentication
-#     def get(self, request):
-#
+#      @check_authentication
+#      def get(self, request):
+#          text = self.request.query_params.get('text')
+#          vacancies = Vacancy.objects.all()
+#          if text:
+#              vacancies = vacancies.filter()
 
 
 class GetStudentsView(APIView):
@@ -220,14 +281,7 @@ class AcceptApplicationView(APIView):
             application_id = request.data['id']
             application = Application.objects.get(pk=application_id)
         except Application.DoesNotExist:
-            return Response(
-                data={
-                    "application_id": [
-                        "application_id is not valid"
-                    ]
-                },
-                status=HTTP_400_BAD_REQUEST
-            )
+            return get_error_message_response('application_id')
         application.is_active = False
         application.accepted = True
         application.save()
@@ -245,14 +299,7 @@ class DeleteLessonView(APIView):
             id = request.data['id']
             schedule = Lesson.objects.get(pk=id)
         except Vacancy.DoesNotExist:
-            return Response(
-                data={
-                    "id": [
-                        "id is not valid"
-                    ]
-                },
-                status=HTTP_400_BAD_REQUEST
-            )
+            return get_error_message_response('id')
         schedule.is_active = False
         schedule.save()
         return Response(data='OK')
@@ -265,14 +312,7 @@ class DeleteVacancyView(APIView):
             id = request.data['id']
             vacancy = Vacancy.objects.get(pk=id)
         except Vacancy.DoesNotExist:
-            return Response(
-                data={
-                    "id": [
-                        "id is not valid"
-                    ]
-                },
-                status=HTTP_400_BAD_REQUEST
-            )
+            return get_error_message_response('id')
         vacancy.is_active = False
         vacancy.save()
         return Response(data='OK')
@@ -285,14 +325,7 @@ class DeleteProfileView(APIView):
             vk_id = request.data['vk_id']
             profile = Profile.objects.get(pk=vk_id)
         except Profile.DoesNotExist:
-            return Response(
-                data={
-                    "vk_id": [
-                        "vk_id is not valid"
-                    ]
-                },
-                status=HTTP_400_BAD_REQUEST
-            )
+            return get_error_message_response('vk_id')
         profile.is_active = False
         profile.save()
         return Response(data='OK')
@@ -305,14 +338,7 @@ class DeleteApplicationView(APIView):
             application_id = request.data['id']
             application = Application.objects.get(pk=application_id)
         except Application.DoesNotExist:
-            return Response(
-                data={
-                    "id": [
-                        "id is not valid"
-                    ]
-                },
-                status=HTTP_400_BAD_REQUEST
-            )
+            return get_error_message_response('id')
         application.is_active = False
         application.save()
         return Response(data='OK')

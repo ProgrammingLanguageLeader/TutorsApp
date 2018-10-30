@@ -124,7 +124,37 @@ class CreateVacancyViewTest(TestCase):
 
 
 class SearchVacanciesViewTest(TestCase):
-    pass
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.vk_id = 144736529
+        self.subject = "Math"
+        self.ege = True
+        self.price = 1000
+
+    def setUp(self):
+        profile = Profile.objects.create(vk_id=self.vk_id)
+        Vacancy.objects.create(
+            owner=profile,
+            subject=self.subject,
+            ege=self.ege,
+            price=self.price
+        )
+
+    def test(self):
+        response = client.get(
+            "/api/v1/search_vacancies/",
+            {
+                "signed_user_id":
+                    "6vD8zvWh6BxSAyhkcbdmVhg8EyzXs8XURmMdAbvlhL8",
+                "user_id": str(self.vk_id),
+                "subject": self.subject,
+                "ege": self.ege,
+                "price_min": self.price - 1
+            },
+            format="json"
+        )
+        self.assertEqual(response.status_code, HTTP_200_OK)
+        self.assertIsNotNone(response.data[0:1])
 
 
 class GetStudentsViewTest(TestCase):
