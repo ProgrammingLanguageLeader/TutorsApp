@@ -24,10 +24,8 @@ class Profile(models.Model):
     experience = models.TextField(null=True, blank=True, max_length=4096)
     education = models.TextField(null=True, blank=True, max_length=4096)
     address = models.TextField(null=True, blank=True, max_length=128)
-    description = models.TextField(null=True,blank=True, max_length=4096)
+    description = models.TextField(null=True, blank=True, max_length=4096)
     home_schooling = models.BooleanField(default=False)
-    activity_time_start = models.TimeField(blank=True, null=True)
-    activity_time_end = models.TimeField(blank=True, null=True)
     latitude = models.FloatField(blank=True, null=True)
     longitude = models.FloatField(blank=True, null=True)
     distance_learning = models.BooleanField(default=False)
@@ -57,7 +55,7 @@ class Students(models.Model):
     def __str__(self):
         return 'tutor: {} | {} students'.format(
             self.tutor_id,
-            len(self.students)
+            self.students.count()
         ).capitalize()
 
 
@@ -96,8 +94,8 @@ class Lesson(models.Model):
     student = models.ForeignKey(
         Profile, on_delete=models.CASCADE, related_name='lesson_student'
     )
-    beginning_time = models.DateTimeField(null=True, blank=True)
-    ending_time = models.DateTimeField(null=True, blank=True)
+    beginning_time = models.DateTimeField()
+    ending_time = models.DateTimeField()
 
     def __str__(self):
         return 'tutor: {} | student: {} | created: {}'.format(
@@ -154,7 +152,7 @@ class Notification(models.Model):
     )
     event = models.IntegerField(
         choices=[
-            (event, event.value)
+            (event.value, event.name)
             for event in NotificationEventChoice
         ]
     )
