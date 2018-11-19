@@ -6,31 +6,32 @@ from rest_framework.status import HTTP_200_OK
 from .models import Profile, Vacancy
 
 
-settings.VK_APP_SECRET = 'IbUTB1WaCVtp2aoFLF8A'
+settings.VK_APP_SECRET = "IbUTB1WaCVtp2aoFLF8A"
 client = APIClient()
+
+VK_ID = 1
+SIGNED_USER_ID = "UEJKUQvZntDyCJo0tdo3e_AmJnS_jmwWEGHod1bCsl0"
 
 
 class CreateProfileViewTest(TestCase):
     def test(self):
-        vk_id = 144736529
         response = client.post(
             "/api/v1/create_profile/",
             {
-                "signed_user_id":
-                    "6vD8zvWh6BxSAyhkcbdmVhg8EyzXs8XURmMdAbvlhL8",
-                "user_id": str(vk_id),
-                "vk_id": str(vk_id)
+                "signed_user_id": SIGNED_USER_ID,
+                "user_id": str(VK_ID),
+                "vk_id": str(VK_ID)
             },
             format="json"
         )
         self.assertEqual(response.status_code, HTTP_200_OK)
-        self.assertIsNotNone(Profile.objects.get(vk_id=144736529))
+        self.assertIsNotNone(Profile.objects.get(vk_id=VK_ID))
 
 
 class UpdateProfileViewTest(TestCase):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.vk_id = 144736529
+        self.vk_id = VK_ID
 
     def setUp(self):
         Profile.objects.create(vk_id=self.vk_id)
@@ -40,8 +41,7 @@ class UpdateProfileViewTest(TestCase):
         response = client.post(
             "/api/v1/update_profile/",
             {
-                "signed_user_id":
-                    "6vD8zvWh6BxSAyhkcbdmVhg8EyzXs8XURmMdAbvlhL8",
+                "signed_user_id": SIGNED_USER_ID,
                 "user_id": str(self.vk_id),
                 "vk_id": str(self.vk_id),
                 "description": description
@@ -58,7 +58,7 @@ class UpdateProfileViewTest(TestCase):
 class GetProfileViewTest(TestCase):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.vk_id = 144736529
+        self.vk_id = VK_ID
         self.description = "desc"
 
     def setUp(self):
@@ -70,8 +70,7 @@ class GetProfileViewTest(TestCase):
         response = client.get(
             "/api/v1/get_profile/",
             {
-                "signed_user_id":
-                    "6vD8zvWh6BxSAyhkcbdmVhg8EyzXs8XURmMdAbvlhL8",
+                "signed_user_id": SIGNED_USER_ID,
                 "user_id": str(self.vk_id),
                 "vk_id": str(self.vk_id)
             },
@@ -87,7 +86,7 @@ class GetProfileViewTest(TestCase):
 class CreateVacancyViewTest(TestCase):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.vk_id = 144736529
+        self.vk_id = VK_ID
         self.owner = self.vk_id
         self.price = 1000
         self.subject = "Math"
@@ -100,8 +99,7 @@ class CreateVacancyViewTest(TestCase):
         response = client.post(
             "/api/v1/create_vacancy/",
             {
-                "signed_user_id":
-                    "6vD8zvWh6BxSAyhkcbdmVhg8EyzXs8XURmMdAbvlhL8",
+                "signed_user_id": SIGNED_USER_ID,
                 "user_id": str(self.vk_id),
                 "owner": str(self.vk_id),
                 "subject": self.subject,
@@ -126,7 +124,7 @@ class CreateVacancyViewTest(TestCase):
 class SearchVacanciesViewTest(TestCase):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.vk_id = 144736529
+        self.vk_id = VK_ID
         self.subject = "Math"
         self.ege = True
         self.price = 1000
@@ -144,8 +142,7 @@ class SearchVacanciesViewTest(TestCase):
         response = client.get(
             "/api/v1/search_vacancies/",
             {
-                "signed_user_id":
-                    "6vD8zvWh6BxSAyhkcbdmVhg8EyzXs8XURmMdAbvlhL8",
+                "signed_user_id": SIGNED_USER_ID,
                 "user_id": str(self.vk_id),
                 "subject": self.subject,
                 "ege": self.ege,
