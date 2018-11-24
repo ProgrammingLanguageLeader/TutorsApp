@@ -10,7 +10,7 @@ settings.VK_APP_SECRET = "IbUTB1WaCVtp2aoFLF8A"
 client = APIClient()
 
 VK_ID = 1
-SIGNED_USER_ID = "UEJKUQvZntDyCJo0tdo3e_AmJnS_jmwWEGHod1bCsl0"
+SIGNED_USER_ID = "tiriQZvWz6CTigfIJ7skn6Th0a2evJ1-fTbrmzqClMA"
 
 
 class CreateProfileViewTest(TestCase):
