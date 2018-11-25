@@ -1,0 +1,10 @@
+FROM node:latest
+
+RUN mkdir -p /opt/services/tutors-frontend
+WORKDIR /opt/services/tutors-frontend
+
+COPY package.json package-lock.json /opt/services/tutors-frontend/
+RUN npm install --silent
+
+COPY . /opt/services/tutors-frontend/
+RUN npm run build

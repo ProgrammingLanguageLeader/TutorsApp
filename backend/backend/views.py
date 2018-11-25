@@ -212,6 +212,7 @@ class GetStudentsView(APIView):
         return Response(data=student_serializer.data)
 
 
+# TODO: check if lesson number is less than 100
 class AddLessonView(APIView):
     @check_authentication
     def post(self, request):
@@ -318,6 +319,7 @@ class DeleteVacancyView(APIView):
         return Response(data='OK')
 
 
+# TODO: rename
 class DeleteProfileView(APIView):
     @check_authentication
     def post(self, request):
