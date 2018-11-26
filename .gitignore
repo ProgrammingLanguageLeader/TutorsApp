@@ -1,2 +1,5 @@
 .env
-.vscode
+.vscode/
+backups/
+staticfiles/
+build/
