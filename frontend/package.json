@@ -1,6 +1,6 @@
 {
   "name": "tutor-app",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "React application",
   "main": "src/index.js",
   "scripts": {
@@ -12,7 +12,7 @@
   "license": "MIT",
   "devDependencies": {
     "cross-env": "^5.2.0",
-    "react-hot-loader": "^4.3.4",
+    "react-hot-loader": "^4.3.11",
     "react-scripts": "^1.1.5",
     "redux-devtools-extension": "^2.13.5"
   },
@@ -26,7 +26,6 @@
     "prop-types": "^15.6.2",
     "react": "^16.5.0",
     "react-dom": "^16.5.0",
-    "react-hot-loader": "^4.3.11",
     "react-redux": "^5.0.7",
     "redux": "^4.0.0",
     "redux-thunk": "^2.3.0",

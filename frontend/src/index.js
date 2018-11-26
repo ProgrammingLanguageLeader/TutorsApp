@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 
 import App from './App';
-import registerServiceWorker from './sw';
 import configureMockConnect from './helpers/mockConnect';
 import store from './store/store';
 
@@ -17,5 +16,3 @@ ReactDOM.render(
   </Provider>,
   document.getElementById('root')
 );
-
-registerServiceWorker();

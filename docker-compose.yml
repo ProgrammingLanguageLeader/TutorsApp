@@ -6,7 +6,7 @@ services:
     container_name: tutors-backend
     build: ./backend/
     volumes:
-      - ./staticfiles:/var/www/tutors-backend/staticfiles
+      - tutors-backend:/opt/services/tutors-backend/staticfiles
     command: sh entrypoint.sh
     ports:
       - 8000:8000
@@ -19,7 +19,7 @@ services:
     container_name: tutors-frontend
     build: ./frontend/
     volumes: 
-      - ./build:/var/www/tutors-frontend
+      - tutors-frontend:/opt/services/tutors-frontend/build
 
   nginx:
     restart: always
@@ -28,8 +28,8 @@ services:
       - 80:80
     volumes: 
       - ./docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
-      - ./frontend/build:/var/www/tutors-frontend
-      - ./backend/staticfiles:/var/www/tutors-backend/staticfiles
+      - tutors-backend:/var/www/tutors-backend/staticfiles
+      - tutors-frontend:/var/www/tutors-frontend/
     depends_on: 
       - tutors-backend
       - tutors-frontend
@@ -41,12 +41,8 @@ services:
     image: postgres:latest
     volumes:
       - ./docker/postgres/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
-      - ./backups/postgresql:/backup
     env_file: .env
 
-  data:
-    restart: always
-    image: alpine
-    volumes:
-      - /var/lib/postgresql
-    command: "true"
+volumes:
+  tutors-backend:
+  tutors-frontend:
