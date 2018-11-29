@@ -28,11 +28,8 @@ VK_APP_ID = os.environ.get('VK_APP_ID')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(os.environ.get('DEBUG'))
 
-ALLOWED_HOSTS = [
-    '.herokuapp.com',
-    '127.0.0.1',
-    'localhost',
-]
+
+ALLOWED_HOSTS = (os.environ.get('ALLOWED_HOSTS') or '').split()
 
 
 # Application definition
@@ -128,17 +125,17 @@ LOGGING = {
 
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
-DB_USER = os.environ.get('DB_USER')
-DB_PASSWORD = os.environ.get('DB_PASSWORD')
-DB_NAME = os.environ.get('DB_NAME')
+POSTGRES_USER = os.environ.get('POSTGRES_USER')
+POSTGRES_PASSWORD = os.environ.get('POSTGRES_PASSWORD')
+POSTGRES_DB = os.environ.get('POSTGRES_DB')
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': DB_NAME,
-        'USER': DB_USER,
-        'PASSWORD': DB_PASSWORD,
+        'NAME': POSTGRES_DB,
+        'USER': POSTGRES_USER,
+        'PASSWORD': POSTGRES_PASSWORD,
         'HOST': 'postgresql',
-        'PORT': '5432',
+        'PORT': 5432,
     }
 }
 
