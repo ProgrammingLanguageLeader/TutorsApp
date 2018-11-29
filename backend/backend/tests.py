@@ -14,7 +14,7 @@ SIGNED_USER_ID = "tiriQZvWz6CTigfIJ7skn6Th0a2evJ1-fTbrmzqClMA"
 
 
 class CreateProfileViewTest(TestCase):
-    def test(self):
+    def test_creation(self):
         response = client.post(
             "/api/v1/create_profile/",
             {
@@ -26,6 +26,18 @@ class CreateProfileViewTest(TestCase):
         )
         self.assertEqual(response.status_code, HTTP_200_OK)
         self.assertIsNotNone(Profile.objects.get(vk_id=VK_ID))
+
+    def test_failure(self):
+        response = client.post(
+            "/api/v1/create_profile/",
+            {
+                "signed_user_id": SIGNED_USER_ID,
+                "user_id": str(VK_ID),
+                "vk_id": str(VK_ID + 1)
+            },
+            format="json"
+        )
+        self.assertNotEqual(response.status_code, HTTP_200_OK)
 
 
 class UpdateProfileViewTest(TestCase):

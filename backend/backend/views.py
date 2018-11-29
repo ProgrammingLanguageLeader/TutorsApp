@@ -12,6 +12,7 @@ from .serializers import (
     ApplicationSerializer
 )
 from .models import Profile, Vacancy, Lesson, Application
+from .permissions import CreateProfilePermission
 
 
 def check_authentication(method):
@@ -37,6 +38,8 @@ def get_error_message_response(variable_name):
 
 
 class CreateProfileView(APIView):
+    permission_classes = (CreateProfilePermission, )
+
     @check_authentication
     def post(self, request):
         view_serializer = ProfileSerializer(data=request.data)
