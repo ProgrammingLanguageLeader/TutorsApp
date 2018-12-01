@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-export const API_URL = 'https://tutors-backend.herokuapp.com/api/v1';
+// export const API_URL = 'https://tutors-backend.herokuapp.com/api/v1';
+export const API_URL = 'http://localhost/api/v1';
 
 const HEADERS = {
   'Accept': 'application/json',
