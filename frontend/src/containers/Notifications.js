@@ -27,10 +27,10 @@ class Notifications extends React.Component {
   }
 
   fetchNotifications() {
-    const vk_id = this.props.userInfo.id;
+    const profile_id = this.props.userInfo.id;
     this.props.dispatch(
       apiActions.getApplications({
-        vk_id,
+        profile_id,
       })
     )
     .then(() => {

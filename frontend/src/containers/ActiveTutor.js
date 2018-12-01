@@ -28,7 +28,7 @@ class ActiveTutor extends React.Component {
       apiActions.getStudents({
         user_id: id,
         signed_user_id: signed_user_id,
-        vk_id: id,
+        tutor_id: id,
       })
     )
     .then(() => {

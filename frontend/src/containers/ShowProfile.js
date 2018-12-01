@@ -21,7 +21,7 @@ class ShowProfile extends React.Component {
     const { id, signed_user_id } = this.props.userInfo;
     this.props.dispatch(
       apiActions.getProfile({
-        vk_id: id,
+        profile_id: id,
         user_id: id,
         signed_user_id: signed_user_id,
       })
