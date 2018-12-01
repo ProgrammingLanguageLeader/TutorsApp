@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Profile, Vacancy, Lesson, Application
+from backend.models import Profile, Vacancy, Lesson, Application
 
 
 class LessonSerializer(serializers.ModelSerializer):
@@ -15,6 +15,12 @@ class VacancySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class UpdateVacancySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Vacancy
+        exclude = ('vacancy_id', )
+
+
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
@@ -24,7 +30,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 class UpdateProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
-        exclude = ('vk_id', )
+        exclude = ('profile_id', )
 
 
 class ApplicationSerializer(serializers.ModelSerializer):

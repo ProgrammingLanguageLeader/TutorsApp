@@ -1,8 +1,7 @@
 import logging
 import time
-
-from django.conf import settings
 import psycopg2
+from django.conf import settings
 
 
 if __name__ == '__main__':

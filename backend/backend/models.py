@@ -14,7 +14,7 @@ class NotificationEventChoice(Enum):
 
 
 class Profile(models.Model):
-    vk_id = models.IntegerField(
+    profile_id = models.IntegerField(
         primary_key=True,
         unique=True,
         blank=False
@@ -38,17 +38,18 @@ class Profile(models.Model):
     university = models.BooleanField(default=False)
 
     def __str__(self):
-        return 'VK ID: {} | created: {} | active: {}'.format(
-            self.vk_id,
+        return 'profile ID: {} | created: {} | active: {}'.format(
+            self.profile_id,
             self.creation_time.strftime('%B %d %Y %H:%M'),
             self.is_active
         ).capitalize()
 
 
 class Students(models.Model):
-    tutor = models.ForeignKey(
+    tutor = models.OneToOneField(
         Profile, on_delete=models.CASCADE,
-        related_name='students_tutor'
+        related_name='students_tutor',
+        primary_key=True
     )
     students = models.ManyToManyField(Profile)
 
@@ -60,6 +61,7 @@ class Students(models.Model):
 
 
 class Vacancy(models.Model):
+    vacancy_id = models.AutoField(primary_key=True)
     creation_time = models.DateTimeField(auto_now_add=True)
     owner = models.ForeignKey(
         Profile, on_delete=models.CASCADE,
@@ -86,6 +88,7 @@ class Vacancy(models.Model):
 
 
 class Lesson(models.Model):
+    lesson_id = models.AutoField(primary_key=True)
     creation_time = models.DateTimeField(auto_now_add=True)
     modification_time = models.DateTimeField(auto_now_add=True)
     tutor = models.ForeignKey(
@@ -106,6 +109,7 @@ class Lesson(models.Model):
 
 
 class Report(models.Model):
+    report_id = models.AutoField(primary_key=True)
     creation_time = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey(
         Profile, models.CASCADE, related_name='report_author'
@@ -125,6 +129,7 @@ class Report(models.Model):
 
 
 class Application(models.Model):
+    application_id = models.AutoField(primary_key=True)
     creation_time = models.DateTimeField(auto_now_add=True)
     answer_time = models.DateTimeField(null=True, blank=True)
     vacancy = models.ForeignKey(
@@ -146,6 +151,7 @@ class Application(models.Model):
 
 
 class Notification(models.Model):
+    notification_id = models.AutoField(primary_key=True)
     profile = models.ForeignKey(
         Profile, on_delete=models.CASCADE,
         related_name='notification_profile'

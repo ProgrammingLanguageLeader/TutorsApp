@@ -1,33 +1,32 @@
-from django.urls import path
+from django.urls import path, include
 from rest_framework.schemas import get_schema_view
 
+from backend.views.profile_views import CreateProfileView
+from backend.views.profile_views import UpdateProfileView
+from backend.views.profile_views import GetProfileView
+from backend.views.profile_views import DeactivateProfileView
 
-from .views import (
-    CreateProfileView,
-    UpdateProfileView,
-    GetProfileView,
-    CreateVacancyView,
-    SearchVacanciesView,
-    GetStudentsView,
-    AddLessonView,
-    DeleteLessonView,
-    DeleteVacancyView,
-    DeleteProfileView,
-    AddApplicationView,
-    GetApplicationsView,
-    AcceptApplicationView,
-    DeleteApplicationView,
-    GetLessonsView,
-    GetVacancyView,
-    GetVacanciesView,
-)
+from backend.views.vacancy_views import CreateVacancyView
+from backend.views.vacancy_views import UpdateVacancyView
+from backend.views.vacancy_views import SearchVacanciesView
+from backend.views.vacancy_views import GetVacancyView
+from backend.views.vacancy_views import GetProfileVacanciesView
+from backend.views.vacancy_views import DeactivateVacancyView
+from backend.views.vacancy_views import DeleteVacancyView
+
+from backend.views.students_views import GetStudentsView
+
+from backend.views.lesson_views import AddLessonView
+from backend.views.lesson_views import GetLessonsView
+from backend.views.lesson_views import DeleteLessonView
+
+from backend.views.application_views import AddApplicationView
+from backend.views.application_views import GetApplicationsView
+from backend.views.application_views import AcceptApplicationView
+from backend.views.application_views import DeleteApplicationView
 
 
-urlpatterns = [
-    path(
-        '',
-        get_schema_view()
-    ),
+profile_urlpatterns = [
     path(
         'create_profile/',
         CreateProfileView.as_view(),
@@ -44,9 +43,22 @@ urlpatterns = [
         name='get_profile'
     ),
     path(
+        'deactivate_profile/',
+        DeactivateProfileView.as_view(),
+        name='delete_profile'
+    ),
+]
+
+vacancy_urlpatterns = [
+    path(
         'create_vacancy/',
         CreateVacancyView.as_view(),
         name='create_vacancy'
+    ),
+    path(
+        'update_vacancy/',
+        UpdateVacancyView.as_view(),
+        name='update_vacancy'
     ),
     path(
         'search_vacancies/',
@@ -54,30 +66,54 @@ urlpatterns = [
         name='search_vacancies'
     ),
     path(
-        'get_students/',
-        GetStudentsView.as_view(),
-        name='get_students'
+        'get_vacancy/',
+        GetVacancyView.as_view(),
+        name='get_vacancy'
     ),
     path(
-        'add_lesson/',
-        AddLessonView.as_view(),
-        name='add_lesson'
+        'get_profile_vacancies/',
+        GetProfileVacanciesView.as_view(),
+        name='get_profile_vacancies'
     ),
     path(
-        'delete_lesson/',
-        DeleteLessonView.as_view(),
-        name='delete_lesson'
+        'deactivate_vacancy/',
+        DeactivateVacancyView.as_view(),
+        name='deactivate_vacancy'
     ),
     path(
         'delete_vacancy/',
         DeleteVacancyView.as_view(),
         name='delete_vacancy'
     ),
+]
+
+students_urlpatterns = [
     path(
-        'delete_profile/',
-        DeleteProfileView.as_view(),
-        name='delete_profile'
+        'get_students/',
+        GetStudentsView.as_view(),
+        name='get_students'
     ),
+]
+
+lesson_urlpatterns = [
+    path(
+        'add_lesson/',
+        AddLessonView.as_view(),
+        name='add_lesson'
+    ),
+    path(
+        'get_lessons/',
+        GetLessonsView.as_view(),
+        name='get_lessons'
+    ),
+    path(
+        'delete_lesson/',
+        DeleteLessonView.as_view(),
+        name='delete_lesson'
+    ),
+]
+
+application_urlpatterns = [
     path(
         'add_application/',
         AddApplicationView.as_view(),
@@ -98,19 +134,16 @@ urlpatterns = [
         DeleteApplicationView.as_view(),
         name='delete_application'
     ),
+]
+
+urlpatterns = [
     path(
-        'get_lessons/',
-        GetLessonsView.as_view(),
-        name='get_lessons'
+        '',
+        get_schema_view()
     ),
-    path(
-        'get_vacancy/',
-        GetVacancyView.as_view(),
-        name='get_vacancy'
-    ),
-    path(
-        'get_vacancies/',
-        GetVacanciesView.as_view(),
-        name='get_vacancies'
-    ),
+    path('', include(profile_urlpatterns)),
+    path('', include(vacancy_urlpatterns)),
+    path('', include(students_urlpatterns)),
+    path('', include(lesson_urlpatterns)),
+    path('', include(application_urlpatterns)),
 ]
