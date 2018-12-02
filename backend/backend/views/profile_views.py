@@ -12,7 +12,7 @@ from backend.views.tools import get_error_message_response
 class CreateProfileView(APIView):
     @check_authentication
     def post(self, request):
-        request.data['profile_id'] = request.data['user_id']
+        request.data['profile_id'] = request.data.get('user_id')
         view_serializer = ProfileSerializer(data=request.data)
         if not view_serializer.is_valid():
             return Response(
@@ -35,7 +35,7 @@ class UpdateProfileView(APIView):
             )
         try:
             profile = Profile.objects.get(
-                pk=request.data['user_id']
+                pk=request.data.get('user_id')
             )
             for (key, value) in view_serializer.validated_data.items():
                 setattr(profile, key, value)
@@ -61,7 +61,7 @@ class DeactivateProfileView(APIView):
     @check_authentication
     def post(self, request):
         try:
-            user_id = request.data['user_id']
+            user_id = request.data.get('user_id')
             profile = Profile.objects.get(pk=user_id)
         except Profile.DoesNotExist:
             return get_error_message_response('user_id')

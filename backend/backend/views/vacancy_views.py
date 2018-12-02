@@ -13,7 +13,7 @@ from backend.permissions import EditVacancyPermission
 class CreateVacancyView(APIView):
     @check_authentication
     def post(self, request):
-        request.data['owner'] = request.data['user_id']
+        request.data['owner'] = request.data.get('user_id')
         view_serializer = VacancySerializer(data=request.data)
         if not view_serializer.is_valid():
             return Response(
@@ -29,7 +29,7 @@ class UpdateVacancyView(APIView):
 
     @check_authentication
     def post(self, request):
-        request.data['owner'] = request.data['user_id']
+        request.data['owner'] = request.data.get('user_id')
         view_serializer = UpdateVacancySerializer(data=request.data)
         if not view_serializer.is_valid():
             return Response(
@@ -37,7 +37,7 @@ class UpdateVacancyView(APIView):
                 status=HTTP_400_BAD_REQUEST
             )
         try:
-            vacancy = Vacancy.objects.get(pk=request.data['vacancy_id'])
+            vacancy = Vacancy.objects.get(pk=request.data.get('vacancy_id'))
             for (key, value) in view_serializer.validated_data.items():
                 setattr(vacancy, key, value)
             vacancy.save()
@@ -162,8 +162,8 @@ class DeactivateVacancyView(APIView):
 
     @check_authentication
     def post(self, request):
+        vacancy_id = request.data.get('vacancy_id')
         try:
-            vacancy_id = request.data['vacancy_id']
             vacancy = Vacancy.objects.get(pk=vacancy_id)
         except Vacancy.DoesNotExist:
             return get_error_message_response('vacancy_id')
@@ -177,8 +177,8 @@ class DeleteVacancyView(APIView):
 
     @check_authentication
     def post(self, request):
+        vacancy_id = request.data.get('vacancy_id')
         try:
-            vacancy_id = request.data['vacancy_id']
             vacancy = Vacancy.objects.get(pk=vacancy_id)
         except Vacancy.DoesNotExist:
             return get_error_message_response('vacancy_id')

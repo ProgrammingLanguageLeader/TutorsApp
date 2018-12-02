@@ -19,8 +19,8 @@ class GetStudentsView(APIView):
 class DeleteStudentView(APIView):
     @check_authentication
     def post(self, request):
-        student_id = request.data['student_id']
-        tutor_id = request.data['user_id']
+        student_id = request.data.get('student_id')
+        tutor_id = request.data.get('user_id')
         try:
             students = Students.objects.get(pk=tutor_id).students
             students.remove(student_id)
