@@ -48,8 +48,7 @@ class Profile(models.Model):
 class Students(models.Model):
     tutor = models.OneToOneField(
         Profile, on_delete=models.CASCADE,
-        related_name='students_tutor',
-        primary_key=True
+        related_name='students_tutor'
     )
     students = models.ManyToManyField(Profile)
 

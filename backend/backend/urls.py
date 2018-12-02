@@ -15,6 +15,7 @@ from backend.views.vacancy_views import DeactivateVacancyView
 from backend.views.vacancy_views import DeleteVacancyView
 
 from backend.views.students_views import GetStudentsView
+from backend.views.students_views import DeleteStudentView
 
 from backend.views.lesson_views import AddLessonView
 from backend.views.lesson_views import GetLessonsView
@@ -92,6 +93,11 @@ students_urlpatterns = [
         'get_students/',
         GetStudentsView.as_view(),
         name='get_students'
+    ),
+    path(
+        'delete_student/',
+        DeleteStudentView.as_view(),
+        name='delete_student'
     ),
 ]
 
