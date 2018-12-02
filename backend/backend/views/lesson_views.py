@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from django.db.models import Q
 from django.utils.dateparse import parse_datetime
 
@@ -8,12 +6,14 @@ from rest_framework.response import Response
 from rest_framework.status import HTTP_400_BAD_REQUEST
 
 from backend.serializers import LessonSerializer
-from backend.models import Vacancy
+from backend.serializers import UpdateLessonSerializer
 from backend.models import Lesson
 from backend.models import Students
 from backend.models import Profile
 from backend.views.tools import check_authentication
 from backend.views.tools import get_error_message_response
+from backend.permissions import EditLessonPermission
+from backend.permissions import DeleteLessonPermission
 
 
 class CreateLessonView(APIView):
@@ -51,13 +51,13 @@ class CreateLessonView(APIView):
 
     @check_authentication
     def post(self, request):
-        tutor_id = request.data['user_id']
-        student_id = request.data['student_id']
+        tutor_id = request.data.get('user_id')
+        student_id = request.data.get('student_id')
         beginning_time = parse_datetime(
-            request.data['beginning_time']
+            request.data.get('beginning_time')
         )
         ending_time = parse_datetime(
-            request.data['ending_time']
+            request.data.get('ending_time')
         )
         request.data['tutor'] = tutor_id
         request.data['student'] = student_id
@@ -93,14 +93,37 @@ class GetLessonsView(APIView):
         return Response(data=lesson_serializer.data)
 
 
-class DeleteLessonView(APIView):
+class UpdateLessonView(APIView):
+    permission_classes = (EditLessonPermission, )
+
     @check_authentication
     def post(self, request):
+        lesson_id = request.data.get('lesson_id')
+        view_serializer = UpdateLessonSerializer(data=request.data)
+        if not view_serializer.is_valid():
+            return Response(
+                data=view_serializer.errors,
+                status=HTTP_400_BAD_REQUEST
+            )
         try:
-            id = request.data['id']
-            schedule = Lesson.objects.get(pk=id)
-        except Vacancy.DoesNotExist:
-            return get_error_message_response('id')
-        schedule.is_active = False
-        schedule.save()
+            lesson = Lesson.objects.get(pk=lesson_id)
+            for (key, value) in view_serializer.validated_data.items():
+                setattr(lesson, key, value)
+        except Lesson.DoesNotExist:
+            return get_error_message_response('lesson_id')
+        lesson.save()
+        return Response(data='OK')
+
+
+class DeleteLessonView(APIView):
+    permission_classes = (DeleteLessonPermission, )
+
+    @check_authentication
+    def post(self, request):
+        lesson_id = request.data.get('lesson_id')
+        try:
+            lesson = Lesson.objects.get(pk=lesson_id)
+        except Lesson.DoesNotExist:
+            return get_error_message_response('lesson_id')
+        lesson.delete()
         return Response(data='OK')

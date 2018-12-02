@@ -9,6 +9,12 @@ class LessonSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class UpdateLessonSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Lesson
+        exclude = ('lesson_id', 'student', 'tutor', )
+
+
 class VacancySerializer(serializers.ModelSerializer):
     class Meta:
         model = Vacancy

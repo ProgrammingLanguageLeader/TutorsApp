@@ -19,6 +19,7 @@ from backend.views.students_views import DeleteStudentView
 
 from backend.views.lesson_views import CreateLessonView
 from backend.views.lesson_views import GetLessonsView
+from backend.views.lesson_views import UpdateLessonView
 from backend.views.lesson_views import DeleteLessonView
 
 from backend.views.application_views import AddApplicationView
@@ -111,6 +112,11 @@ lesson_urlpatterns = [
         'get_lessons/',
         GetLessonsView.as_view(),
         name='get_lessons'
+    ),
+    path(
+        'update_lesson/',
+        UpdateLessonView.as_view(),
+        name='update_lesson'
     ),
     path(
         'delete_lesson/',
