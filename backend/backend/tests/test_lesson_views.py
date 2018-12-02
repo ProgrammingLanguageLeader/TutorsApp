@@ -73,3 +73,57 @@ class CreateLessonViewTest(TestCase):
         self.assertEqual(response.status_code, HTTP_400_BAD_REQUEST)
         with self.assertRaises(Lesson.DoesNotExist):
             Lesson.objects.get(pk=self.lesson_id)
+
+
+class GetLessonsViewTest(TestCase):
+    user_id = MOCK_USER_ID
+    tutor_id = MOCK_USER_ID + 1
+    student_id = MOCK_USER_ID + 2
+    user_lessons_number = 3
+    first_lesson_start = datetime.now(tz=timezone.utc)
+    first_lesson_end = first_lesson_start + timedelta(hours=1)
+    second_lesson_start = datetime.now(tz=timezone.utc) + timedelta(hours=2)
+    second_lesson_end = second_lesson_start + timedelta(hours=1)
+    third_lesson_start = datetime.now(tz=timezone.utc) + timedelta(hours=4)
+    third_lesson_end = third_lesson_start + timedelta(hours=1)
+
+    def setUp(self):
+        Profile.objects.create(pk=self.user_id)
+        Profile.objects.create(pk=self.tutor_id)
+        Profile.objects.create(pk=self.student_id)
+        tutor_students_table = Students.objects.create(tutor_id=self.tutor_id)
+        tutor_students_table.students.add(
+            self.student_id, self.user_id
+        )
+        user_students_table = Students.objects.create(tutor_id=self.user_id)
+        user_students_table.students.add(self.student_id)
+        Lesson.objects.create(
+            tutor_id=self.tutor_id,
+            student_id=self.user_id,
+            beginning_time=self.first_lesson_start,
+            ending_time=self.first_lesson_end
+        )
+        Lesson.objects.create(
+            tutor_id=self.user_id,
+            student_id=self.student_id,
+            beginning_time=self.second_lesson_start,
+            ending_time=self.second_lesson_end
+        )
+        Lesson.objects.create(
+            tutor_id=self.tutor_id,
+            student_id=self.user_id,
+            beginning_time=self.third_lesson_start,
+            ending_time=self.third_lesson_end
+        )
+
+    def test(self):
+        response = client.get(
+            "/api/v1/get_lessons/",
+            {
+                "signed_user_id": MOCK_SIGNED_USER_ID,
+                "user_id": self.user_id
+            },
+            format="json"
+        )
+        self.assertEqual(response.status_code, HTTP_200_OK)
+        self.assertEqual(len(response.data), self.user_lessons_number)

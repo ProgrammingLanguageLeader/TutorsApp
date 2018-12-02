@@ -1,3 +1,5 @@
+from django.db.models import Q
+
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.status import HTTP_400_BAD_REQUEST
@@ -47,17 +49,10 @@ class CreateLessonView(APIView):
 class GetLessonsView(APIView):
     @check_authentication
     def get(self, request):
-        tutor_id = self.request.query_params.get('tutor')
-        student_id = self.request.query_params.get('student')
-        lessons = []
-        if tutor_id:
-            lessons = Lesson.objects.filter(
-                tutor__vk_id=tutor_id
-            )
-        elif student_id:
-            lessons = Lesson.objects.filter(
-                student__vk_id=student_id
-            )
+        user_id = self.request.query_params.get('user_id')
+        lessons = Lesson.objects.filter(
+            Q(tutor_id=user_id) | Q(student_id=user_id)
+        )
         lesson_serializer = LessonSerializer(lessons, many=True)
         return Response(data=lesson_serializer.data)
 
