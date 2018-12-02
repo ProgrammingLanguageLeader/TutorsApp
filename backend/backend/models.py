@@ -91,10 +91,12 @@ class Lesson(models.Model):
     creation_time = models.DateTimeField(auto_now_add=True)
     modification_time = models.DateTimeField(auto_now_add=True)
     tutor = models.ForeignKey(
-        Profile, on_delete=models.CASCADE, related_name='lesson_tutor'
+        Profile, on_delete=models.CASCADE,
+        related_name='lesson_tutor'
     )
     student = models.ForeignKey(
-        Profile, on_delete=models.CASCADE, related_name='lesson_student'
+        Profile, on_delete=models.CASCADE,
+        related_name='lesson_student'
     )
     beginning_time = models.DateTimeField()
     ending_time = models.DateTimeField()

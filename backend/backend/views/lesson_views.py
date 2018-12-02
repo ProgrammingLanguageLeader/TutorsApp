@@ -3,23 +3,45 @@ from rest_framework.response import Response
 from rest_framework.status import HTTP_400_BAD_REQUEST
 
 from backend.serializers import LessonSerializer
-from backend.models import Vacancy, Lesson
+from backend.models import Vacancy
+from backend.models import Lesson
+from backend.models import Students
+from backend.models import Profile
 from backend.views.tools import check_authentication
 from backend.views.tools import get_error_message_response
 
 
-# TODO: check if lesson number is less than 100
-class AddLessonView(APIView):
+class CreateLessonView(APIView):
+    lessons_limit = 100
+
     @check_authentication
     def post(self, request):
+        tutor_id = request.data['user_id']
+        student_id = request.data['student_id']
+        request.data['tutor'] = tutor_id
+        request.data['student'] = student_id
         lesson_serializer = LessonSerializer(data=request.data)
-        if lesson_serializer.is_valid():
-            lesson_serializer.save()
-            return Response(data='OK')
-        return Response(
-            data=lesson_serializer.errors,
-            status=HTTP_400_BAD_REQUEST
-        )
+        if not lesson_serializer.is_valid():
+            return Response(
+                data=lesson_serializer.errors,
+                status=HTTP_400_BAD_REQUEST
+            )
+        existing_lessons = Lesson.objects.filter(tutor_id=tutor_id)
+        if len(existing_lessons) >= self.lessons_limit:
+            return Response(
+                data="You have reached a limit of lessons number",
+                status=HTTP_400_BAD_REQUEST
+            )
+        try:
+            Students.objects.get(
+                tutor_id=tutor_id
+            ).students.get(
+                profile_id=student_id
+            )
+        except Profile.DoesNotExist:
+            return get_error_message_response('student_id')
+        lesson_serializer.save()
+        return Response(data='OK')
 
 
 class GetLessonsView(APIView):
