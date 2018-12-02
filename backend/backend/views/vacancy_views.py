@@ -158,6 +158,8 @@ class GetProfileVacanciesView(APIView):
 
 
 class DeactivateVacancyView(APIView):
+    permission_classes = (EditVacancyPermission, )
+
     @check_authentication
     def post(self, request):
         try:
@@ -171,6 +173,8 @@ class DeactivateVacancyView(APIView):
 
 
 class DeleteVacancyView(APIView):
+    permission_classes = (EditVacancyPermission, )
+
     @check_authentication
     def post(self, request):
         try:
