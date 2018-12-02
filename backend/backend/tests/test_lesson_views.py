@@ -29,7 +29,10 @@ class CreateLessonViewTest(TestCase):
         day=3, month=9, year=2018, hour=14, minute=30,
         tzinfo=timezone.utc
     )
-    ending_time = beginning_time + timedelta(hours=1, minutes=30)
+    ending_time = datetime(
+        day=3, month=9, year=2018, hour=16, minute=00,
+        tzinfo=timezone.utc
+    )
 
     def setUp(self):
         Profile.objects.create(pk=self.tutor_id)
@@ -45,8 +48,8 @@ class CreateLessonViewTest(TestCase):
                 "signed_user_id": MOCK_SIGNED_USER_ID,
                 "user_id": self.tutor_id,
                 "student_id": self.student_id_1,
-                "beginning_time": self.beginning_time,
-                "ending_time": self.ending_time
+                "beginning_time": self.beginning_time.isoformat(),
+                "ending_time": self.ending_time.isoformat()
             },
             format="json"
         )
@@ -65,8 +68,8 @@ class CreateLessonViewTest(TestCase):
                 "signed_user_id": MOCK_SIGNED_USER_ID,
                 "user_id": self.tutor_id,
                 "student_id": self.student_id_2,
-                "beginning_time": self.beginning_time,
-                "ending_time": self.ending_time
+                "beginning_time": self.beginning_time.isoformat(),
+                "ending_time": self.ending_time.isoformat()
             },
             format="json"
         )

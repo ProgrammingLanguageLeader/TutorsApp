@@ -15,12 +15,13 @@ def check_authentication(method):
     return wrapper
 
 
-def get_error_message_response(variable_name):
+def get_error_message_response(*args):
+    variable_names = args
     return Response(
-        data={
+        data=[{
             variable_name: [
                 "{} is not valid".format(variable_name)
-            ]
-        },
+            ] for variable_name in variable_names
+        }],
         status=HTTP_400_BAD_REQUEST
     )
