@@ -3,68 +3,115 @@ from rest_framework.response import Response
 from rest_framework.status import HTTP_400_BAD_REQUEST
 
 from backend.serializers import ApplicationSerializer
-from backend.models import Vacancy, Lesson, Application
+from backend.models import Vacancy
+from backend.models import Students
+from backend.models import Application
+from backend.models import Notification
+from backend.models import NotificationEventChoice
+from backend.permissions import ApplicationAnswerPermission
 from backend.views.tools import check_authentication
 from backend.views.tools import get_error_message_response
 
 
-class AddApplicationView(APIView):
+class CreateApplicationView(APIView):
+    @staticmethod
+    def check_repeating_application(vacancy_id, student_id):
+        vacancy = Vacancy.objects.get(pk=vacancy_id)
+        tutor_id = vacancy.owner_id
+        try:
+            students = Students.objects.get(tutor_id=tutor_id).students
+        except Students.DoesNotExist:
+            return True
+        return len(students.filter(profile_id=student_id)) == 0
+
     @check_authentication
     def post(self, request):
+        user_id = request.data.get('user_id')
+        vacancy_id = request.data.get('vacancy_id')
+        request.data['vacancy'] = vacancy_id
+        request.data['student'] = user_id
         application_serializer = ApplicationSerializer(data=request.data)
-        if application_serializer.is_valid():
-            application_serializer.save()
-            return Response(data='OK')
-        return Response(
-            data=application_serializer.errors,
-            status=HTTP_400_BAD_REQUEST
-        )
+        if not application_serializer.is_valid():
+            return Response(
+                data=application_serializer.errors,
+                status=HTTP_400_BAD_REQUEST
+            )
+        if not self.check_repeating_application(vacancy_id, user_id):
+            return Response(
+                data="You have already become a student",
+                status=HTTP_400_BAD_REQUEST
+            )
+        application_serializer.save()
+        return Response(data='OK')
 
 
-class GetApplicationsView(APIView):
+class GetTutorApplicationsView(APIView):
     @check_authentication
     def get(self, request):
-        vk_id = self.request.query_params.get('vk_id')
-        vacancies = Vacancy.objects.filter(
-            owner=vk_id
+        user_id = self.request.query_params.get('user_id')
+        applications = Application.objects.filter(
+            vacancy__owner_id=user_id
         )
-        applications = []
-        for vacancy in vacancies:
-            current_vacancy_applications = Application.objects.filter(
-                vacancy_id=vacancy.id, is_active=True
-            )
-            for application in current_vacancy_applications:
-                applications.append(application)
-        application_serializer = ApplicationSerializer(applications, many=True)
+        application_serializer = ApplicationSerializer(
+            applications, many=True
+        )
+        return Response(data=application_serializer.data)
+
+
+class GetStudentApplicationView(APIView):
+    @check_authentication
+    def get(self, request):
+        user_id = self.request.query_params.get('user_id')
+        applications = Application.objects.filter(
+            student_id=user_id
+        )
+        application_serializer = ApplicationSerializer(
+            applications, many=True
+        )
         return Response(data=application_serializer.data)
 
 
 class AcceptApplicationView(APIView):
+    permission_classes = (ApplicationAnswerPermission, )
+
     @check_authentication
     def post(self, request):
+        application_id = request.data.get('application_id')
         try:
-            application_id = request.data['id']
             application = Application.objects.get(pk=application_id)
         except Application.DoesNotExist:
             return get_error_message_response('application_id')
-        application.is_active = False
-        application.accepted = True
-        application.save()
-        Lesson.objects.create(
-            tutor=application.vacancy.owner,
-            student=application.student
+        student_id = application.student_id
+        tutor_id = application.vacancy.owner_id
+        students_table, created = Students.objects.get_or_create(
+            tutor_id=tutor_id
         )
+        students_table.students.add(student_id)
+        Notification.objects.create(
+            profile_id=student_id,
+            tutor_id=tutor_id,
+            event=NotificationEventChoice.STUDENT_ACCEPT.value
+        )
+        application.delete()
         return Response(data='OK')
 
 
-class DeleteApplicationView(APIView):
+class RejectApplicationView(APIView):
+    permission_classes = (ApplicationAnswerPermission,)
+
     @check_authentication
     def post(self, request):
+        application_id = request.data.get('application_id')
         try:
-            application_id = request.data['id']
             application = Application.objects.get(pk=application_id)
         except Application.DoesNotExist:
-            return get_error_message_response('id')
-        application.is_active = False
-        application.save()
+            return get_error_message_response('application_id')
+        student_id = application.student_id
+        tutor_id = application.vacancy.owner_id
+        Notification.objects.create(
+            profile_id=student_id,
+            tutor_id=tutor_id,
+            event=NotificationEventChoice.STUDENT_REJECT.value
+        )
+        application.delete()
         return Response(data='OK')

@@ -2,6 +2,7 @@ from rest_framework import permissions
 
 from backend.models import Vacancy
 from backend.models import Lesson
+from backend.models import Application
 
 
 class EditVacancyPermission(permissions.BasePermission):
@@ -33,12 +34,26 @@ class EditLessonPermission(permissions.BasePermission):
 class DeleteLessonPermission(permissions.BasePermission):
     def has_permission(self, request, view):
         user_id = request.data.get('user_id') \
-                  or request.query_params.get('user_id')
+            or request.query_params.get('user_id')
         lesson_id = request.data.get('lesson_id') \
-                    or request.query_params.get('lesson_id')
+            or request.query_params.get('lesson_id')
         try:
             lesson = Lesson.objects.get(pk=lesson_id)
         except Lesson.DoesNotExist:
             return False
         return lesson.tutor_id == int(user_id) \
             or lesson.student_id == int(user_id)
+
+
+class ApplicationAnswerPermission(permissions.BasePermission):
+    def has_permission(self, request, view):
+        user_id = request.data.get('user_id') \
+            or request.query_params.get('user_id')
+        application_id = request.data.get('application_id') \
+            or request.query_params.get('application_id')
+        try:
+            application = Application.objects.get(pk=application_id)
+        except Application.DoesNotExist:
+            return False
+        tutor_id = application.vacancy.owner_id
+        return int(user_id) == int(tutor_id)

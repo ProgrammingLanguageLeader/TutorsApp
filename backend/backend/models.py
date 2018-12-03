@@ -6,7 +6,8 @@ from django.db import models
 @unique
 class NotificationEventChoice(Enum):
     APPLICATION_CREATION = 0
-    APPLICATION_ANSWER = 1
+    STUDENT_ACCEPT = 1
+    STUDENT_REJECT = 6
     LESSON_CREATION = 2
     DELETION_FROM_STUDENTS = 3
     LESSON_CHANGING = 4
@@ -132,7 +133,6 @@ class Report(models.Model):
 class Application(models.Model):
     application_id = models.AutoField(primary_key=True)
     creation_time = models.DateTimeField(auto_now_add=True)
-    answer_time = models.DateTimeField(null=True, blank=True)
     vacancy = models.ForeignKey(
         Vacancy, on_delete=models.CASCADE,
         related_name='application_vacancy'
@@ -141,13 +141,15 @@ class Application(models.Model):
         Profile, on_delete=models.CASCADE,
         related_name='application_student'
     )
-    accepted = models.BooleanField(null=True, blank=True)
+
+    class Meta:
+        unique_together = (("vacancy", "student"), )
 
     def __str__(self):
-        return 'created: {} | from: {} | accepted: {}'.format(
+        return 'created: {} | vacancy: {} | student: {}'.format(
             self.creation_time.strftime('%B %d %Y %H:%M'),
-            self.student_id,
-            self.accepted
+            self.vacancy_id,
+            self.student_id
         ).capitalize()
 
 
@@ -167,6 +169,10 @@ class Notification(models.Model):
         Application, on_delete=models.CASCADE,
         null=True, blank=True
     )
+    tutor = models.ForeignKey(
+        Profile, on_delete=models.CASCADE,
+        null=True, blank=True
+    )
     lesson = models.ForeignKey(
         Lesson, on_delete=models.CASCADE,
         null=True, blank=True
@@ -174,7 +180,8 @@ class Notification(models.Model):
     seen = models.BooleanField(default=False)
 
     def __str__(self):
-        return 'profile: {} | seen: {}'.format(
+        return 'profile: {} | event: {} | seen: {}'.format(
             self.profile_id,
+            NotificationEventChoice(self.event).name,
             self.seen
         ).capitalize()

@@ -22,10 +22,11 @@ from backend.views.lesson_views import GetLessonsView
 from backend.views.lesson_views import UpdateLessonView
 from backend.views.lesson_views import DeleteLessonView
 
-from backend.views.application_views import AddApplicationView
-from backend.views.application_views import GetApplicationsView
+from backend.views.application_views import CreateApplicationView
+from backend.views.application_views import GetTutorApplicationsView
+from backend.views.application_views import GetStudentApplicationView
 from backend.views.application_views import AcceptApplicationView
-from backend.views.application_views import DeleteApplicationView
+from backend.views.application_views import RejectApplicationView
 
 
 profile_urlpatterns = [
@@ -127,14 +128,19 @@ lesson_urlpatterns = [
 
 application_urlpatterns = [
     path(
-        'add_application/',
-        AddApplicationView.as_view(),
-        name='add_application'
+        'create_application/',
+        CreateApplicationView.as_view(),
+        name='create_application'
     ),
     path(
-        'get_applications/',
-        GetApplicationsView.as_view(),
-        name='get_applications'
+        'get_tutor_applications/',
+        GetTutorApplicationsView.as_view(),
+        name='get_tutor_applications'
+    ),
+    path(
+        'get_student_applications/',
+        GetStudentApplicationView.as_view(),
+        name='get_student_applications'
     ),
     path(
         'accept_application/',
@@ -142,11 +148,15 @@ application_urlpatterns = [
         name='accept_application'
     ),
     path(
-        'delete_application/',
-        DeleteApplicationView.as_view(),
-        name='delete_application'
+        'reject_application/',
+        RejectApplicationView.as_view(),
+        name='reject_application'
     ),
 ]
+
+notification_urlpatterns = []
+
+report_urlpatterns = []
 
 urlpatterns = [
     path(
@@ -158,4 +168,6 @@ urlpatterns = [
     path('', include(students_urlpatterns)),
     path('', include(lesson_urlpatterns)),
     path('', include(application_urlpatterns)),
+    path('', include(notification_urlpatterns)),
+    path('', include(report_urlpatterns)),
 ]
