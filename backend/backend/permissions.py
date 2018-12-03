@@ -3,6 +3,7 @@ from rest_framework import permissions
 from backend.models import Vacancy
 from backend.models import Lesson
 from backend.models import Application
+from backend.models import Notification
 
 
 class EditVacancyPermission(permissions.BasePermission):
@@ -57,3 +58,16 @@ class ApplicationAnswerPermission(permissions.BasePermission):
             return False
         tutor_id = application.vacancy.owner_id
         return int(user_id) == int(tutor_id)
+
+
+class MarkNotificationAsSeenPermission(permissions.BasePermission):
+    def has_permission(self, request, view):
+        user_id = request.data.get('user_id') \
+            or request.query_params.get('user_id')
+        notification_id = request.data.get('notification_id') \
+            or request.query_params.get('notification_id')
+        try:
+            notification = Notification.objects.get(pk=notification_id)
+        except Notification.DoesNotExist:
+            return False
+        return int(user_id) == int(notification.profile_id)

@@ -94,7 +94,7 @@ class SearchVacanciesView(APIView):
         if distance_learning:
             vacancies = vacancies.filter(distance_learning__exact=True)
         vacancies = vacancies.order_by(
-            'creation_time'
+            '-creation_time'
         )[offset:offset + limit]
         vacancies_serializer = VacancySerializer(vacancies, many=True)
         return Response(data=vacancies_serializer.data)

@@ -28,6 +28,9 @@ from backend.views.application_views import GetStudentApplicationView
 from backend.views.application_views import AcceptApplicationView
 from backend.views.application_views import RejectApplicationView
 
+from backend.views.notification_views import GetNotificationsView
+from backend.views.notification_views import MarkNotificationAsSeenView
+
 
 profile_urlpatterns = [
     path(
@@ -154,7 +157,18 @@ application_urlpatterns = [
     ),
 ]
 
-notification_urlpatterns = []
+notification_urlpatterns = [
+    path(
+        'get_notifications/',
+        GetNotificationsView.as_view(),
+        name='get_notifications'
+    ),
+    path(
+        'mark_notification_as_seen/',
+        MarkNotificationAsSeenView.as_view(),
+        name='mark_as_seen_notification'
+    ),
+]
 
 report_urlpatterns = []
 

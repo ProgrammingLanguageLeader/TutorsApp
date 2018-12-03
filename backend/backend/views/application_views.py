@@ -41,7 +41,13 @@ class CreateApplicationView(APIView):
                 data="You have already become a student",
                 status=HTTP_400_BAD_REQUEST
             )
-        application_serializer.save()
+        application = application_serializer.save()
+        tutor_id = Vacancy.objects.get(pk=vacancy_id).owner_id
+        Notification.objects.create(
+            profile_id=tutor_id,
+            application_id=application.application_id,
+            event=NotificationEventChoice.APPLICATION_CREATION.value
+        )
         return Response(data='OK')
 
 

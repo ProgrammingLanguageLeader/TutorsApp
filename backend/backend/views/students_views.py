@@ -5,6 +5,8 @@ from backend.serializers import ProfileSerializer
 from backend.views.tools import check_authentication
 from backend.views.tools import get_error_message_response
 from backend.models import Students
+from backend.models import Notification
+from backend.models import NotificationEventChoice
 
 
 class GetStudentsView(APIView):
@@ -24,6 +26,10 @@ class DeleteStudentView(APIView):
         try:
             students = Students.objects.get(pk=tutor_id).students
             students.remove(student_id)
+            Notification.objects.create(
+                profile_id=student_id,
+                event=NotificationEventChoice.DELETION_FROM_STUDENTS.value
+            )
         except Students.DoesNotExist:
             return get_error_message_response('tutor_id')
         return Response(data='OK')

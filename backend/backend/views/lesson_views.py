@@ -10,6 +10,8 @@ from backend.serializers import UpdateLessonSerializer
 from backend.models import Lesson
 from backend.models import Students
 from backend.models import Profile
+from backend.models import Notification
+from backend.models import NotificationEventChoice
 from backend.views.tools import check_authentication
 from backend.views.tools import get_error_message_response
 from backend.permissions import EditLessonPermission
@@ -78,7 +80,12 @@ class CreateLessonView(APIView):
                 tutor_id, student_id, beginning_time, ending_time
         ):
             return get_error_message_response('beginning_time', 'ending_time')
-        lesson_serializer.save()
+        lesson = lesson_serializer.save()
+        Notification.objects.create(
+            profile_id=student_id,
+            lesson_id=lesson.lesson_id,
+            event=NotificationEventChoice.LESSON_CREATION.value
+        )
         return Response(data='OK')
 
 
@@ -112,6 +119,11 @@ class UpdateLessonView(APIView):
         except Lesson.DoesNotExist:
             return get_error_message_response('lesson_id')
         lesson.save()
+        Notification.objects.create(
+            profile_id=lesson.student_id,
+            lesson_id=lesson_id,
+            event=NotificationEventChoice.LESSON_CHANGING.value
+        )
         return Response(data='OK')
 
 
@@ -120,10 +132,19 @@ class DeleteLessonView(APIView):
 
     @check_authentication
     def post(self, request):
+        user_id = request.data.get('user_id')
         lesson_id = request.data.get('lesson_id')
         try:
             lesson = Lesson.objects.get(pk=lesson_id)
         except Lesson.DoesNotExist:
             return get_error_message_response('lesson_id')
+        notifying_user_id = lesson.tutor_id
+        if int(user_id) == int(lesson.tutor_id):
+            notifying_user_id = lesson.student_id
         lesson.delete()
+        Notification.objects.create(
+            profile_id=notifying_user_id,
+            lesson_id=lesson_id,
+            event=NotificationEventChoice.LESSON_DELETION.value
+        )
         return Response(data='OK')

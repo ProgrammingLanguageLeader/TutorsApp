@@ -155,6 +155,7 @@ class Application(models.Model):
 
 class Notification(models.Model):
     notification_id = models.AutoField(primary_key=True)
+    creation_time = models.DateTimeField(auto_now_add=True)
     profile = models.ForeignKey(
         Profile, on_delete=models.CASCADE,
         related_name='notification_profile'
