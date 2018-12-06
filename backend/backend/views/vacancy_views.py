@@ -5,6 +5,7 @@ from rest_framework.status import HTTP_400_BAD_REQUEST
 from backend.views.tools import check_authentication
 from backend.views.tools import get_error_message_response
 from backend.serializers import VacancySerializer
+from backend.serializers import GetVacancySerializer
 from backend.serializers import UpdateVacancySerializer
 from backend.models import Vacancy
 from backend.permissions import EditVacancyPermission
@@ -96,7 +97,7 @@ class SearchVacanciesView(APIView):
         vacancies = vacancies.order_by(
             '-creation_time'
         )[offset:offset + limit]
-        vacancies_serializer = VacancySerializer(vacancies, many=True)
+        vacancies_serializer = GetVacancySerializer(vacancies, many=True)
         return Response(data=vacancies_serializer.data)
 
     @staticmethod
@@ -140,7 +141,7 @@ class GetVacancyView(APIView):
         vacancy_id = self.request.query_params.get('vacancy_id')
         try:
             vacancy = Vacancy.objects.get(pk=vacancy_id)
-            vacancy_serializer = VacancySerializer(vacancy)
+            vacancy_serializer = GetVacancySerializer(vacancy)
             return Response(data=vacancy_serializer.data)
         except Vacancy.DoesNotExist:
             return get_error_message_response('vacancy_id')
@@ -153,7 +154,7 @@ class GetProfileVacanciesView(APIView):
         vacancies = Vacancy.objects.filter(
             owner_id=owner_id, is_active=True
         )
-        vacancies_serializer = VacancySerializer(vacancies, many=True)
+        vacancies_serializer = GetVacancySerializer(vacancies, many=True)
         return Response(data=vacancies_serializer.data)
 
 

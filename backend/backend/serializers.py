@@ -25,6 +25,13 @@ class VacancySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class GetVacancySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Vacancy
+        fields = '__all__'
+        depth = 1
+
+
 class UpdateVacancySerializer(serializers.ModelSerializer):
     class Meta:
         model = Vacancy
