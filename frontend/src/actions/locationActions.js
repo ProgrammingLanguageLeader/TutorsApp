@@ -1,11 +1,11 @@
-import { locationConstants } from '../constants/location';
+import { locationConstants } from '../constants';
 
-const changeLocation = (activeView, activePanel = "", extraParams = {}) => (dispatch) => {
+const changeLocation = (activeView, activePanel = "", params = {}) => (dispatch) => {
   dispatch({
     type: locationConstants.LOCATION_CHANGE,
     activeView,
     activePanel,
-    extraParams,
+    params,
   })
 };
 

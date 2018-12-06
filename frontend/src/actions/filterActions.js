@@ -1,4 +1,4 @@
-import { filterConstants } from '../constants/filter';
+import { filterConstants } from '../constants';
 
 const updateFilter = (params) => (dispatch) => {
   return dispatch({

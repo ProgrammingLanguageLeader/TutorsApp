@@ -1,4 +1,4 @@
-import { filterConstants } from '../constants/filter';
+import { filterConstants } from '../constants/filterConstants';
 
 const initialState = {
   subject: null,

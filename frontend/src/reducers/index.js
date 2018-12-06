@@ -1,13 +1,25 @@
 import { combineReducers } from 'redux';
 
-import apiReducer from './api';
-import vkReducer from './vk';
-import locationReducer from './location';
-import filterReducer from './filter';
+import apiApplicationReducer from './apiApplicationReducer';
+import apiLessonReducer from './apiLessonReducer';
+import apiNotificationReducer from './apiNotificationReducer';
+import apiProfileReducer from './apiProfileReducer';
+import apiStudentsReducer from './apiStudentsReducer';
+import apiVacancyReducer from './apiVacancyReducer';
+import vkAppsReducer from './vkAppsReducer';
+import vkApiReducer from './vkApiReducer';
+import locationReducer from './locationReducer';
+import filterReducer from './filterReducer';
 
 const rootReducer = combineReducers({
-  apiReducer,
-  vkReducer,
+  apiApplicationReducer,
+  apiLessonReducer,
+  apiNotificationReducer,
+  apiProfileReducer,
+  apiStudentsReducer,
+  apiVacancyReducer,
+  vkAppsReducer,
+  vkApiReducer,
   locationReducer,
   filterReducer,
 });

@@ -1,6 +1,6 @@
 {
   "name": "tutor-app",
-  "version": "0.2.2",
+  "version": "0.3.1",
   "description": "React application",
   "main": "src/index.js",
   "scripts": {
@@ -29,6 +29,7 @@
     "react-redux": "^5.0.7",
     "redux": "^4.0.0",
     "redux-thunk": "^2.3.0",
+    "seamless-immutable": "^7.1.4",
     "styled-components": "^3.4.9"
   }
 }

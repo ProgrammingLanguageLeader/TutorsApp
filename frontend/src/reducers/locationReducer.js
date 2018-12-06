@@ -1,9 +1,9 @@
-import { locationConstants } from '../constants/location';
+import { locationConstants } from '../constants/locationConstants';
 
 const initialState = {
   activeView: "start",
   activePanel: "",
-  extraParams: {},
+  params: {},
   history: [],
 };
 
@@ -13,27 +13,27 @@ const locationReducer = (state = initialState, action) => {
       let { history } = state;
       const prevActiveView = state.activeView;
       const prevActivePanel = state.activePanel;
-      const prevExtraParams = state.extraParams;
+      const prevParams = state.params;
       history.push({
         activeView: prevActiveView,
         activePanel: prevActivePanel,
-        extraParams: prevExtraParams,
+        params: prevParams,
       });
       return {
         activeView: action.activeView,
         activePanel: action.activePanel,
-        extraParams: action.extraParams,
+        params: action.params,
         history,
       };
     }
     
     case locationConstants.LOCATION_GO_BACK: {
       let { history } = state;
-      const { activePanel, activeView, extraParams } = history.pop();
+      const { activePanel, activeView, params } = history.pop();
       return {
         activePanel,
         activeView,
-        extraParams,
+        params,
         history,
       };
     }
