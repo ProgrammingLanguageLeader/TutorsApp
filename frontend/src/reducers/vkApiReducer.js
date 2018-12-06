@@ -30,12 +30,14 @@ const vkApiReducer = (state = initialState, action) => {
       });
       return state.merge({
         vkUsersInfo: vkUsersInfo,
+        errors: null,
         fetching: false,
       });
 
     case vkApiConstants.VK_API_NOTIFICATION_STATUS_FETCHED:
       return state.merge({
         notificationStatus: action.payload,
+        errors: null,
         fetching: false,
       });
 

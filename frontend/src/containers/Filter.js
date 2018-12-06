@@ -2,15 +2,15 @@ import React from 'react';
 import { connect } from 'react-redux';
 import {
   View, Panel, PanelHeader, Cell, List, Group, FormLayout, 
-  Button, SelectMimicry, HeaderButton, RangeSlider, colors, Div
+  Button, SelectMimicry, HeaderButton, RangeSlider, colors
 } from '@vkontakte/vkui';
 
 import BackIcon from '../components/BackIcon';
 import FlexDiv from '../components/FlexDiv';
 
 import Icon24Done from '@vkontakte/icons/dist/24/done';
-import { locationActions } from '../actions/location';
-import { filterActions } from '../actions/filter';
+import { locationActions } from '../actions/locationActions';
+import { filterActions } from '../actions/filterActions';
 
 
 const initialState = {

@@ -12,14 +12,14 @@ const fetchAccessToken = () => () => {
 
 const denyNotifications = () => dispatch => {
   dispatch({
-    type: vkAppsConstants.VK_DENY_NOTIFICATIONS,
+    type: vkAppsConstants.VK_DENY_NOTIFICATIONS_REQUEST,
   });
   connect.send('VKWebAppDenyNotifications', {});
 };
 
 const allowNotifications = () => dispatch => {
   dispatch({
-    type: vkAppsConstants.VK_ALLOW_NOTIFICATIONS,
+    type: vkAppsConstants.VK_ALLOW_NOTIFICATIONS_REQUEST,
   });
   connect.send('VKWebAppAllowNotifications', {});
 };
@@ -48,15 +48,26 @@ const init = () => dispatch => {
     switch (type) {
       case 'VKWebAppAllowNotificationsResult':
         dispatch({
-          type: vkAppsConstants.VK_NOTIFICATION_STATUS_FETCHED,
-          payload: true,
+          type: vkAppsConstants.VK_ALLOW_NOTIFICATIONS_SUCCESS,
+        });
+        break;
+
+      case 'VKWebAppAllowNotificationsFailed':
+        dispatch({
+          type: vkAppsConstants.VK_ALLOW_NOTIFICATIONS_FAILURE,
+          payload: data,
         });
         break;
 
       case 'VKWebAppDenyNotificationsResult':
         dispatch({
-          type: vkAppsConstants.VK_NOTIFICATION_STATUS_FETCHED,
-          payload: false,
+          type: vkAppsConstants.VK_DENY_NOTIFICATIONS_SUCCESS,
+        });
+        break;
+
+      case 'VKWebAppDinyNotificationsFailed':
+        dispatch({
+          type: vkAppsConstants.VK_DENY_NOTIFICATIONS_FAILURE
         });
         break;
 

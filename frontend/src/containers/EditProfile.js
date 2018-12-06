@@ -9,8 +9,17 @@ import Icon24Document from '@vkontakte/icons/dist/24/document';
 import BackIcon from '../components/BackIcon';
 import DivSpinner from '../components/DivSpinner';
 
-import { apiActions } from '../actions/api';
-import { locationActions } from '../actions/location';
+import { apiProfileActions, locationActions  } from '../actions';
+
+const mapStateToProps = (state) => {
+  const { vkUserInfo } = state.vkAppsReducer;
+  const { profile } = state.apiProfileReducer;
+  const apiProfileFetching = state.apiProfileReducer.fetching;
+  const vkAppsFetching = state.vkAppsReducer.fetching;
+  return {
+    vkUserInfo, profile, apiProfileFetching, vkAppsFetching,
+  };
+};
 
 class EditProfile extends React.Component {
   constructor(props) {
@@ -27,12 +36,12 @@ class EditProfile extends React.Component {
   }
 
   componentDidMount() {
-    const { id, signed_user_id } = this.props.userInfo;
+    const { id, signed_user_id } = this.props.vkUserInfo;
     this.props.dispatch(
-      apiActions.getProfile({
-        profile_id: id,
+      apiProfileActions.getProfile({
         user_id: id,
         signed_user_id: signed_user_id,
+        profile_id: id,
       })
     );
   }
@@ -56,9 +65,9 @@ class EditProfile extends React.Component {
   updateProfile(event) {
     event.preventDefault();
 
-    const { id, signed_user_id } = this.props.userInfo;
+    const { id, signed_user_id } = this.props.vkUserInfo;
     this.props.dispatch(
-      apiActions.updateProfile({
+      apiProfileActions.updateProfile({
         user_id: id,
         signed_user_id: signed_user_id,
         ...this.state
@@ -70,8 +79,8 @@ class EditProfile extends React.Component {
   }
 
   render() {
-    const { fetching } = this.props;
-    const { city, photo_200, first_name, last_name } = this.props.userInfo;
+    const { apiProfileFetching, vkAppsFetching } = this.props;
+    const { city, photo_200, first_name, last_name } = this.props.vkUserInfo;
     const { description, experience, education, address } = this.state;
 
     return (
@@ -89,7 +98,7 @@ class EditProfile extends React.Component {
           >
             Профиль
           </PanelHeader>
-          { fetching ? (
+          { apiProfileFetching || vkAppsFetching ? (
             <DivSpinner />
           ) : (
             <FormLayout style={{ paddingBottom: 80 }}>
@@ -139,15 +148,6 @@ class EditProfile extends React.Component {
       </View>
     );
   }
-};
-
-const mapStateToProps = (state) => {
-  const { userInfo } = state.vkReducer;
-  const { fetching } = state.apiReducer;
-  const { profile } = state.apiReducer;
-  return {
-    userInfo, fetching, profile, 
-  };
 }
 
 export default connect(mapStateToProps)(EditProfile);

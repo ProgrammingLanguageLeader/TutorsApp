@@ -35,11 +35,13 @@ const apiVacancyReducer = (state = initialState, action) => {
     case apiVacancyConstants.GET_PROFILE_VACANCIES_SUCCESS:
       return state.merge({
         vacancies: action.payload,
+        errors: null,
       });
 
     case apiVacancyConstants.GET_VACANCY_SUCCESS:
       return state.merge({
         vacancy: action.payload,
+        errors: null,
       });
 
     case apiVacancyConstants.CREATE_VACANCY_FAILURE:

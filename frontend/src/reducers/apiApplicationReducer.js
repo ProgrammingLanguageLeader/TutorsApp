@@ -31,11 +31,13 @@ const apiApplicationReducer = (state = initialState, action) => {
     case apiApplicationConstants.GET_TUTOR_APPLICATIONS_SUCCESS:
       return state.merge({
         tutorApplications: action.payload,
+        errors: null,
       });
 
     case apiApplicationConstants.GET_STUDENT_APPLICATIONS_SUCCESS:
       return state.merge({
         studentApplications: action.payload,
+        errors: null,
       });
 
     case apiApplicationConstants.CREATE_APPLICATION_FAILURE:

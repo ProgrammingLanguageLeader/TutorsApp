@@ -6,7 +6,7 @@ import {
 
 import BackIcon from '../components/BackIcon';
 
-import { locationActions } from '../actions/location';
+import { locationActions } from '../actions/locationActions';
 
 class Contact extends React.Component {
   constructor(props) {

@@ -10,8 +10,8 @@ import BackIcon from '../components/BackIcon';
 
 import Icon24Done from '@vkontakte/icons/dist/24/done';
 
-import { locationActions } from '../actions/location';
-import { apiActions } from '../actions/api';
+import { locationActions } from '../actions';
+import { apiVacancyActions } from '../actions';
 
 class CreateVacancy extends React.Component {
   constructor(props) {
@@ -50,7 +50,7 @@ class CreateVacancy extends React.Component {
     event.preventDefault();
 
     this.props.dispatch(
-      apiActions.createVacancy(this.state)
+      apiVacancyActions.createVacancy(this.state)
     );
   }
 
@@ -65,7 +65,9 @@ class CreateVacancy extends React.Component {
               autoclose: true,
               style: 'destructive'
             }]}
-            onClose={() => this.props.dispatch(locationActions.changeLocation('active_tutor', 'requests'))}
+            onClose={() => this.props.dispatch(
+              locationActions.changeLocation('active_tutor', 'requests')
+            )}
           >
             <h2>Сообщение</h2>
             <p>Вакансия успешно создана</p>
@@ -180,7 +182,7 @@ class CreateVacancy extends React.Component {
       </View>
     );
   }
-};
+}
 
 const mapStateToProps = (state) => {
   const { userInfo } = state.vkReducer;
@@ -188,6 +190,6 @@ const mapStateToProps = (state) => {
   return {
     userInfo, vacancyCreated, 
   };
-}
+};
 
 export default connect(mapStateToProps)(CreateVacancy);

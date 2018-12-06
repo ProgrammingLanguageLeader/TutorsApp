@@ -9,9 +9,9 @@ import DivSpinner from '../components/DivSpinner';
 
 import ChangeTab from './ChangeTab';
 
-import { apiActions } from '../actions/api';
-import { vkActions } from '../actions/vk';
-import { locationActions } from '../actions/location';
+import { apiStudentsActions } from '../actions';
+import { vkApiActions } from '../actions';
+import { locationActions } from '../actions';
 
 
 const ChangeTabContentDiv = styled.div`
@@ -20,12 +20,26 @@ const ChangeTabContentDiv = styled.div`
 	padding-bottom: 80px;
 `;
 
+const mapStateToProps = state => {
+  const apiProfileFetching = state.apiProfileReducer.fetching;
+  const vkAppsFetching = state.vkAppsReducer.fetching;
+  const vkApiFetching = state.vkApiReducer.fetching;
+  const { students } = state.apiStudentsReducer;
+  const { vkUserInfo, accessToken } = state.vkAppsReducer;
+  const { vkUsersInfo } = state.vkApiReducer;
+  const { activePanel } = state.locationReducer;
+  return {
+    students, vkUserInfo, activePanel, vkUsersInfo,
+    apiProfileFetching, vkAppsFetching, vkApiFetching, accessToken,
+  };
+};
+
 class ActiveTutor extends React.Component {
-	componentDidMount() {
-    const { id, signed_user_id } = this.props.userInfo;
+  componentDidMount() {
+    const { id, signed_user_id } = this.props.vkUserInfo;
 
     this.props.dispatch(
-      apiActions.getStudents({
+      apiStudentsActions.getStudents({
         user_id: id,
         signed_user_id: signed_user_id,
         tutor_id: id,
@@ -38,14 +52,15 @@ class ActiveTutor extends React.Component {
         return student.vk_id;
       });
       this.props.dispatch(
-        vkActions.fetchUsersInfo(accessToken, studentsIds)
+        vkApiActions.fetchUsersInfo(accessToken, studentsIds)
       );
     });
   }
 
 	render() {
     const activePanel = this.props.activePanel || "requests";
-    const { students, usersInfo, fetching } = this.props;
+    const { students, vkUsersInfo, apiProfileFetching, vkAppsFetching, vkApiFetching } = this.props;
+    const fetching = apiProfileFetching || vkAppsFetching || vkApiFetching;
 
 		return (
 			<View id={this.props.id} activePanel={activePanel}>
@@ -67,7 +82,9 @@ class ActiveTutor extends React.Component {
                 <Div>
                   <Button 
                     size="xl"
-                    onClick={() => this.props.dispatch(locationActions.changeLocation('create_vacancy'))}
+                    onClick={() => this.props.dispatch(
+                      locationActions.changeLocation('create_vacancy')
+                    )}
                   >
                       Создать вакансию
                   </Button>
@@ -87,25 +104,26 @@ class ActiveTutor extends React.Component {
                 <DivSpinner />
               ) : (
                 <List>
-                  { (students.length > 0 && usersInfo.size > 0) ? students.map(student => {
-                    const userInfo = usersInfo.get(Number(student.vk_id));
-                    if (!userInfo) {
-                      return;
-                    }
-                    return (
-                      <Cell
-                        size="l"
-                        description={userInfo.city ? userInfo.city.title : ""}
-                        before={<Avatar src={userInfo.photo_200} />}
-                      >
-                        {userInfo.firstName} {userInfo.lastName}
+                  { (students.length > 0 && vkUsersInfo.size > 0) ?
+                    students
+                      .filter(student => vkUsersInfo.get(student.profile_id))
+                      .map(student => {
+                        const userInfo = vkUsersInfo.get(Number(student.profile_id));
+                        return (
+                          <Cell
+                            size="l"
+                            description={userInfo.city ? userInfo.city.title : ""}
+                            before={<Avatar src={userInfo.photo_200} />}
+                          >
+                            {userInfo.firstName} {userInfo.lastName}
+                          </Cell>
+                        )
+                      })
+                    : (
+                      <Cell>
+                        Ученики отсутствуют
                       </Cell>
-                    );
-                  }) : (
-                    <Cell>
-                      Ученики отсутствуют
-                    </Cell>
-                  )}
+                    )}
                 </List>
               )}
           </ChangeTabContentDiv>
@@ -113,16 +131,6 @@ class ActiveTutor extends React.Component {
       </View>
 		);
 	}
-};
-
-const mapStateToProps = state => {
-  const { fetching, students } = state.apiReducer;
-  const { userInfo, usersInfo, accessToken } = state.vkReducer;
-  const { activePanel } = state.locationReducer;
-  return {
-    students, userInfo, activePanel, usersInfo, 
-    fetching, accessToken, 
-  };
 }
 
 export default connect(mapStateToProps)(ActiveTutor);

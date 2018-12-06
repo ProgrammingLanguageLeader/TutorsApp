@@ -11,8 +11,7 @@ import introOne from '../assets/intro_one.png'
 import introTwo from '../assets/intro_two.png'
 import introThree from '../assets/intro_three.png'
 
-import { apiActions } from '../actions/api';
-import { locationActions } from '../actions/location';
+import { apiProfileActions, locationActions } from '../actions';
 
 const Main = styled.div.attrs({
   className: "fullHeight",
@@ -47,26 +46,26 @@ class Start extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.userInfo.id === prevProps.userInfo.id) {
+    if (this.props.vkUserInfo.id === prevProps.vkUserInfo.id) {
       return;
     }
-    const { id, signed_user_id } = this.props.userInfo;
+    const { id, signed_user_id } = this.props.vkUserInfo;
     this.setState({
       popout: <ScreenSpinner />
     });
     this.props.dispatch(
-      apiActions.getProfile({
+      apiProfileActions.getProfile({
         profile_id: id,
         user_id: id,
         signed_user_id: signed_user_id,
       })
     )
     .then(() => {
-      if (this.props.profile.vk_id) {
+      if (this.props.profile.profile_id) {
         return Promise.resolve();
       }
       return this.props.dispatch(
-        apiActions.createProfile({
+        apiProfileActions.createProfile({
           user_id: id,
           signed_user_id: signed_user_id,
         })
@@ -131,10 +130,28 @@ class Start extends React.Component {
           </Main>
           <FixedLayout vertical="bottom">
             <Div style={{ display: 'flex' }}>
-              <Button style={{ margin: 2, height: 52, display: 'flex', flex: 1, justifyContent: 'center' }} onClick={this.goToVacanciesSearch}>
+              <Button
+                style={{
+                  margin: 2,
+                  height: 52,
+                  display: 'flex',
+                  flex: 1,
+                  justifyContent: 'center'
+                }}
+                onClick={this.goToVacanciesSearch}
+              >
                 Найти репититора
               </Button>
-              <Button style={{ margin: 2, height: 52, display: 'flex', flex: 1, justifyContent: 'center' }} onClick={this.goToProfile}>
+              <Button
+                style={{
+                  margin: 2,
+                  height: 52,
+                  display: 'flex',
+                  flex: 1,
+                  justifyContent: 'center'
+                }}
+                onClick={this.goToProfile}
+              >
                 Я репетитор
               </Button>
             </Div>
@@ -143,13 +160,13 @@ class Start extends React.Component {
       </View>
     );
   }
-};
+}
 
 const mapStateToProps = (state) => {
-  const { userInfo } = state.vkReducer;
-  const { profile } = state.apiReducer;
+  const { vkUserInfo } = state.vkAppsReducer;
+  const { profile } = state.apiProfileReducer;
   return {
-    userInfo, profile, 
+    vkUserInfo, profile,
   };
 };
 

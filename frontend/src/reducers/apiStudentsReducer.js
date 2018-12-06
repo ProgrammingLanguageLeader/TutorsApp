@@ -25,6 +25,7 @@ const apiStudentsReducer = (state = initialState, action) => {
     case apiStudentsConstants.GET_STUDENTS_SUCCESS:
       return state.merge({
         students: action.payload,
+        errors: null,
       });
 
     case apiStudentsConstants.GET_STUDENTS_FAILURE:

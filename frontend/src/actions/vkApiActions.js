@@ -30,7 +30,7 @@ const fetchUsersInfo = (accessToken, vkIds) => dispatch => {
 
 const fetchNotificationStatus = (accessToken) => dispatch => {
   dispatch({
-    type: vkApiConstants.VK_NOTIFICATION_STATUS_REQUEST,
+    type: vkApiConstants.VK_API_NOTIFICATION_STATUS_REQUEST,
   });
   vkApiRequest(
     'apps.isNotificationsAllowed',
@@ -38,13 +38,13 @@ const fetchNotificationStatus = (accessToken) => dispatch => {
     accessToken,
     response => {
       dispatch({
-        type: vkApiConstants.VK_NOTIFICATION_STATUS_FETCHED,
+        type: vkApiConstants.VK_API_NOTIFICATION_STATUS_FETCHED,
         payload: response['is_allowed'],
       });
     },
     error => {
       dispatch({
-        type: vkApiConstants.VK_NOTIFICATION_STATUS_FAILED,
+        type: vkApiConstants.VK_API_NOTIFICATION_STATUS_FAILED,
         payload: error
       });
     }

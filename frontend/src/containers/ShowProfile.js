@@ -13,14 +13,23 @@ import Icon24Write from '@vkontakte/icons/dist/24/write';
 import DivSpinner from '../components/DivSpinner';
 import Main from '../components/Main';
 
-import { apiActions } from '../actions/api';
-import { locationActions } from '../actions/location';
+import { apiProfileActions, locationActions } from '../actions';
+
+const mapStateToProps = (state) => {
+  const { vkUserInfo } = state.vkAppsReducer;
+  const { profile } = state.apiProfileReducer;
+  const vkAppsFetching = state.vkAppsReducer.fetching;
+  const apiProfileFetching = state.apiProfileReducer.fetching;
+  return {
+    vkUserInfo, profile, vkAppsFetching, apiProfileFetching,
+  };
+};
 
 class ShowProfile extends React.Component {
   componentDidMount() {
-    const { id, signed_user_id } = this.props.userInfo;
+    const { id, signed_user_id } = this.props.vkUserInfo;
     this.props.dispatch(
-      apiActions.getProfile({
+      apiProfileActions.getProfile({
         profile_id: id,
         user_id: id,
         signed_user_id: signed_user_id,
@@ -29,8 +38,8 @@ class ShowProfile extends React.Component {
   }
 
 	render() {
-    const { fetching } = this.props;
-    const { city, photo_200, first_name, last_name } = this.props.userInfo;
+    const { vkAppsFetching, apiProfileFetching } = this.props;
+    const { city, photo_200, first_name, last_name } = this.props.vkUserInfo;
     const { description, experience, education, address } = this.props.profile;
 
 		return (
@@ -40,7 +49,7 @@ class ShowProfile extends React.Component {
             Профиль
           </PanelHeader>
 
-          { fetching ? (
+          { vkAppsFetching || apiProfileFetching ? (
             <DivSpinner />
           ) : (
             <Main>
@@ -50,7 +59,9 @@ class ShowProfile extends React.Component {
                   description={city ? city.title : ""}
                   before={<Avatar src={photo_200} />}
                   asideContent={
-                    <HeaderButton onClick={() => this.props.dispatch(locationActions.changeLocation('edit_profile'))}>
+                    <HeaderButton onClick={() => this.props.dispatch(
+                      locationActions.changeLocation('edit_profile')
+                    )}>
                       <Icon24Write />
                     </HeaderButton>
                   }
@@ -80,15 +91,6 @@ class ShowProfile extends React.Component {
       </View>
     );
 	}
-};
-
-const mapStateToProps = (state) => {
-  const { userInfo } = state.vkReducer;
-  const { fetching } = state.apiReducer;
-  const { profile } = state.apiReducer;
-	return {
-    userInfo, fetching, profile, 
-  };
 }
 
 export default connect(mapStateToProps)(ShowProfile);

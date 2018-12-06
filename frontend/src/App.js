@@ -18,21 +18,22 @@ import Filter from './containers/Filter';
 import Start from './containers/Start';
 import Notifications from './containers/Notifications';
 
-import { vkActions } from './actions/vk';
-import { locationActions } from './actions/location';
+import { vkAppsActions, locationActions } from './actions';
+import ShowVacancy from "./containers/ShowVacancy";
+
+const mapStateToProps = (state) => {
+  const { activeView, activePanel } = state.locationReducer;
+  const { accessToken } = state.vkAppsReducer;
+  return {
+    activeView, accessToken, activePanel
+  };
+};
 
 class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      activeStory: 'root',
-    }
-  }
-
   componentDidMount() {
-    this.props.dispatch(vkActions.init());
-    this.props.dispatch(vkActions.fetchCurrentUserInfo());
-    this.props.dispatch(vkActions.fetchAccessToken());
+    this.props.dispatch(vkAppsActions.init());
+    this.props.dispatch(vkAppsActions.fetchCurrentUserInfo());
+    this.props.dispatch(vkAppsActions.fetchAccessToken());
   }
 
   render() {
@@ -42,25 +43,32 @@ class App extends React.Component {
       <Epic activeStory="root" tabbar={
         <Tabbar>
           <TabbarItem
-            onClick={() => this.props.dispatch(locationActions.changeLocation('search'))}
+            onClick={() => this.props.dispatch(
+              locationActions.changeLocation('search')
+            )}
             selected={this.props.activeView === 'search'}
           >
             <Icon28Search />
           </TabbarItem>
           <TabbarItem
-            onClick={() => this.props.dispatch(locationActions.changeLocation('active_tutor', 'requests'))}
+            onClick={() => this.props.dispatch(
+              locationActions.changeLocation('active_tutor', 'requests')
+            )}
             selected={this.props.activeView === 'active_tutor'}
           >
             <Icon28Document />
           </TabbarItem>
           <TabbarItem
-            onClick={() => this.props.dispatch(locationActions.changeLocation('notifications'))}
+            onClick={() => this.props.dispatch(
+              locationActions.changeLocation('notifications', 'notifications')
+            )}
             selected={this.props.activeView === 'notifications'}
           >
             <Icon28Notification />
           </TabbarItem>
           <TabbarItem
-            onClick={() => this.props.dispatch(locationActions.changeLocation('show_profile'))}
+            onClick={() => this.props.dispatch(
+              locationActions.changeLocation('show_profile'))}
             selected={this.props.activeView === 'show_profile'}
           >
             <Icon28User />
@@ -72,6 +80,7 @@ class App extends React.Component {
           <SearchVacancies id="search" />
           <ShowProfile id="show_profile" />
           <CreateVacancy id="create_vacancy" />
+          <ShowVacancy id="show_vacancy" />
           <EditProfile id="edit_profile" />
           <Contact id="contact" />
           <ActiveTutor id="active_tutor" />
@@ -81,14 +90,6 @@ class App extends React.Component {
       </Epic>
     );
   }
-};
-
-const mapStateToProps = (state) => {
-  const { activeView, activePanel } = state.locationReducer;
-  const { accessToken } = state.vkReducer;
-  return {
-    activeView, accessToken, activePanel
-  };
 }
 
 export default connect(mapStateToProps)(App);
