@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import {
-  View, Panel, PanelHeader, Cell, HeaderButton, Avatar, Div
+  View, Panel, PanelHeader, Cell, HeaderButton, Avatar, Div, PanelHeaderContent
 } from '@vkontakte/vkui';
 
 import Icon24Filter from '@vkontakte/icons/dist/24/filter';
@@ -63,14 +63,16 @@ class SearchVacancies extends React.Component {
         <Panel id="search" theme="white">
           <PanelHeader
             left={
-              <HeaderButton size="xl" onClick={() => this.props.dispatch(
+              <HeaderButton onClick={() => this.props.dispatch(
                 locationActions.changeLocation('filter')
               )}>
                 <Icon24Filter />
               </HeaderButton>
             }
           >
-            Поиск репетиторов
+            <PanelHeaderContent>
+              Поиск репетиторов
+            </PanelHeaderContent>
           </PanelHeader>
           { vkApiFetching || apiVacancyFetching ? (
             <DivSpinner />

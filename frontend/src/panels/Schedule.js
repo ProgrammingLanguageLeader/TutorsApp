@@ -34,7 +34,7 @@ const mapStateToProps = state => {
   };
 };
 
-class ActiveTutor extends React.Component {
+class Schedule extends React.Component {
   componentDidMount() {
     const { id, signed_user_id } = this.props.vkUserInfo;
 
@@ -133,4 +133,4 @@ class ActiveTutor extends React.Component {
 	}
 }
 
-export default connect(mapStateToProps)(ActiveTutor);
+export default connect(mapStateToProps)(Schedule);

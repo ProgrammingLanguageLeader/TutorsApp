@@ -9,8 +9,8 @@ import BackIcon from '../components/BackIcon';
 import FlexDiv from '../components/FlexDiv';
 
 import Icon24Done from '@vkontakte/icons/dist/24/done';
-import { locationActions } from '../actions/locationActions';
-import { filterActions } from '../actions/filterActions';
+
+import { locationActions, filterActions } from '../actions';
 
 
 const initialState = {
@@ -87,7 +87,7 @@ class Filter extends React.Component {
       filterActions.updateFilter(params)
     );
     this.props.dispatch(
-      locationActions.changeLocation('search')
+      locationActions.changeLocation('search_vacancies')
     );
   }
 
