@@ -9,17 +9,17 @@ import Icon28User from '@vkontakte/icons/dist/28/user';
 import Icon28Notification from '@vkontakte/icons/dist/28/notification';
 import Icon28MoneyTransfer from '@vkontakte/icons/dist/28/money_transfer';
 
-import SearchVacancies from './panels/SearchVacancies';
-import ShowProfile from './panels/ShowProfile';
-import CreateVacancy from './panels/CreateVacancy';
-import EditProfile from './panels/EditProfile';
-import Contact from './panels/Contact';
-import Schedule from './panels/Schedule';
-import Filter from './panels/Filter';
-import Start from './panels/Start';
-import Notifications from './panels/Notifications';
-import MoneyTransfer from './panels/MoneyTransfer';
-import ShowVacancy from "./panels/ShowVacancy";
+import SearchVacancies from './views/SearchVacancies';
+import ShowProfile from './views/ShowProfile';
+import CreateVacancy from './views/CreateVacancy';
+import EditProfile from './views/EditProfile';
+import Contact from './views/Contact';
+import Schedule from './views/Schedule';
+import Filter from './views/Filter';
+import Start from './views/Start';
+import Notifications from './views/Notifications';
+import MoneyTransfer from './views/MoneyTransfer';
+import ShowVacancy from "./views/ShowVacancy";
 
 import { vkAppsActions, locationActions } from './actions';
 

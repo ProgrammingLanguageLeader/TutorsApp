@@ -1,11 +1,9 @@
-import axios from 'axios';
+import realAxios from 'axios';
+import mockAxios from '../helpers/apiMock';
 
-export const API_URL = 'http://localhost/api/v1';
+import { API_URL, HEADERS } from "../constants";
 
-const HEADERS = {
-  'Accept': 'application/json',
-  'Content-Type': 'application/json',
-};
+const axios = process.env.REACT_APP_DEBUG ? mockAxios : realAxios;
 
 export const makeApiRequest = async (endpoint, method, options) => {
   const url = `${API_URL}/${endpoint}/`;

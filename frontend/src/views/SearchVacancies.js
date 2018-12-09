@@ -83,18 +83,30 @@ class SearchVacancies extends React.Component {
                   .map(vacancy => {
                     const userInfo = vkUsersInfo.get(vacancy.owner.profile_id);
                     const cityTitle = userInfo.city ? userInfo.city.title : "";
-                    const description = `${cityTitle} ${vacancy.price} рублей/час ${vacancy.subject}`;
                     return (
                       <Cell
                         expandable
+                        multiline
                         onClick={() => this.props.dispatch(
                           locationActions.changeLocation('show_vacancy', 'show_vacancy', {
                             vacancyId: vacancy.id
                           })
                         )}
-                        key={vacancy.id}
-                        description={description}
-                        before={<Avatar src={userInfo.photo_100} />}
+                        key={vacancy.vacancy_id}
+                        description={
+                          <div>
+                            <div>
+                              {vacancy.subject}
+                            </div>
+                            <div>
+                              {cityTitle}
+                            </div>
+                            <div>
+                              {vacancy.price} рублей/час
+                            </div>
+                          </div>
+                        }
+                        before={<Avatar size={64} src={userInfo.photo_200} />}
                       >
                         {`${userInfo.firstName} ${userInfo.lastName}`}
                       </Cell>

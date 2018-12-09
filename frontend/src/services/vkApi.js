@@ -1,7 +1,7 @@
-import mockConnect from '@vkontakte/vkui-connect-mock';
-import realConnect from '@vkontakte/vkui-connect';
+import mockVKConnect from '../helpers/vkMockConnect';
+import realVKConnect from '@vkontakte/vkui-connect';
 
-const connect = (process.env.REACT_APP_DEBUG) ? mockConnect : realConnect;
+const VKConnect = (process.env.REACT_APP_DEBUG) ? mockVKConnect : realVKConnect;
 const API_VERSION = '5.80';
 
 export const vkApiRequest = (
@@ -37,10 +37,10 @@ export const vkApiRequest = (
       }
 
       if (found) {
-        connect.unsubscribe(callback);
+        VKConnect.unsubscribe(callback);
       }
     };
-    connect.subscribe(callback);
+    VKConnect.subscribe(callback);
   }
 
   params['access_token'] = accessToken;
@@ -48,7 +48,7 @@ export const vkApiRequest = (
     params['v'] = API_VERSION;
   }
 
-  connect.send('VKWebAppCallAPIMethod', {
+  VKConnect.send('VKWebAppCallAPIMethod', {
     'method': method,
     'params': params,
     'request_id': requestId,

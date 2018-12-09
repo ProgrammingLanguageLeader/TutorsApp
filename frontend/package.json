@@ -11,21 +11,25 @@
   "author": "In Attemts To Conspire team",
   "license": "MIT",
   "devDependencies": {
+    "axios-mock-adapter": "^1.15.0",
     "cross-env": "^5.2.0",
     "react-hot-loader": "^4.3.11",
     "react-scripts": "^1.1.5",
-    "redux-devtools-extension": "^2.13.5"
+    "redux-devtools-extension": "^2.13.5",
+    "vkui-api-connect-mock": "^1.3.1"
   },
   "dependencies": {
     "@vkontakte/icons": "^1.2.0",
     "@vkontakte/vkui": "^2.15.1",
     "@vkontakte/vkui-connect": "^1.1.3",
-    "@vkontakte/vkui-connect-mock": "^1.0.5",
     "axios": "^0.18.0",
     "core-js": "^2.5.7",
+    "moment": "^2.22.2",
     "prop-types": "^15.6.2",
     "react": "^16.5.0",
+    "react-calendar": "^2.17.5",
     "react-dom": "^16.5.0",
+    "react-moment": "^0.8.4",
     "react-redux": "^5.0.7",
     "redux": "^4.0.0",
     "redux-thunk": "^2.3.0",

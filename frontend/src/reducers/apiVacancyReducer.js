@@ -35,6 +35,7 @@ const apiVacancyReducer = (state = initialState, action) => {
     case apiVacancyConstants.GET_PROFILE_VACANCIES_SUCCESS:
       return state.merge({
         vacancies: action.payload,
+        fetching: false,
         errors: null,
       });
 

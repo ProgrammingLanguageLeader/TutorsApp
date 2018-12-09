@@ -1,41 +1,41 @@
-import mockConnect from '@vkontakte/vkui-connect-mock';
-import realConnect from '@vkontakte/vkui-connect';
+import mockVKConnect from '../helpers/vkMockConnect';
+import realVKConnect from '@vkontakte/vkui-connect';
 
 import { vkAppsConstants } from '../constants';
 
-const connect = (process.env.REACT_APP_DEBUG) ? mockConnect : realConnect;
+const VKConnect = (process.env.REACT_APP_DEBUG) ? mockVKConnect : realVKConnect;
 
 const fetchAccessToken = () => () => {
   const appId = 6700618;
-  connect.send('VKWebAppGetAuthToken', {'app_id': appId});
+  VKConnect.send('VKWebAppGetAuthToken', {'app_id': appId});
 };
 
 const denyNotifications = () => dispatch => {
   dispatch({
     type: vkAppsConstants.VK_DENY_NOTIFICATIONS_REQUEST,
   });
-  connect.send('VKWebAppDenyNotifications', {});
+  VKConnect.send('VKWebAppDenyNotifications', {});
 };
 
 const allowNotifications = () => dispatch => {
   dispatch({
     type: vkAppsConstants.VK_ALLOW_NOTIFICATIONS_REQUEST,
   });
-  connect.send('VKWebAppAllowNotifications', {});
+  VKConnect.send('VKWebAppAllowNotifications', {});
 };
 
 const fetchCurrentUserInfo = () => dispatch => {
   dispatch({
     type: vkAppsConstants.VK_GET_USER_INFO_REQUEST,
   });
-  connect.send("VKWebAppGetUserInfo", {});
+  VKConnect.send("VKWebAppGetUserInfo", {});
 };
 
 const init = () => dispatch => {
   dispatch({
     type: vkAppsConstants.VK_INIT,
   });
-  connect.subscribe(event => {
+  VKConnect.subscribe(event => {
     const vkEvent = event.detail;
     if (!vkEvent) {
       console.error('invalid event', event);
@@ -104,7 +104,7 @@ const init = () => dispatch => {
     }
   });
 
-  connect.send('VKWebAppInit', {});
+  VKConnect.send('VKWebAppInit', {});
 };
 
 export const vkAppsActions = {

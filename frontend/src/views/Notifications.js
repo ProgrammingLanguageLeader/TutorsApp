@@ -86,14 +86,11 @@ class Notifications extends React.Component {
   }
 
   render () {
-    const activePanel = this.props.activePanel || 'notifications';
     const { vkUsersInfo, applications, apiApplicationFetching, vkApiFetching } = this.props;
     const fetching =  apiApplicationFetching || vkApiFetching;
 
-    console.log(this.props);
-
     return (
-      <View id={this.props.id} activePanel={activePanel}>
+      <View id={this.props.id} activePanel="notifications">
         <Panel id="notifications">
           <PanelHeader>
             Уведомления
@@ -141,21 +138,6 @@ class Notifications extends React.Component {
               </Group>
             </Main>
           )}
-        </Panel>
-
-        <Panel id="show_student">
-          <PanelHeader
-            left={
-              <HeaderButton onClick={() => this.props.dispatch(locationActions.goBack())}>
-                <BackIcon />
-              </HeaderButton>
-            }
-          >
-            Уведомления
-          </PanelHeader>
-          <Main>
-            <Div>Coming soon</Div>
-          </Main>
         </Panel>
       </View>
     )
