@@ -6,6 +6,7 @@ from backend.models import Lesson
 from backend.models import StudentApplication
 from backend.models import Notification
 from backend.models import LessonApplication
+from backend.models import PaymentApplication
 
 
 class LessonSerializer(serializers.ModelSerializer):
@@ -80,6 +81,19 @@ class LessonApplicationSerializer(serializers.ModelSerializer):
 class GetLessonApplicationSerializer(serializers.ModelSerializer):
     class Meta:
         model = LessonApplication
+        fields = '__all__'
+        depth = 1
+
+
+class PaymentApplicationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PaymentApplication
+        exclude = ('creation_time',)
+
+
+class GetPaymentApplicationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PaymentApplication
         fields = '__all__'
         depth = 1
 

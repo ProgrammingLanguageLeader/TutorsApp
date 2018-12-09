@@ -38,6 +38,14 @@ from backend.views.lesson_application_views import (
     RejectLessonApplicationView,
 )
 
+from backend.views.payment_application_views import (
+    CreatePaymentApplicationView,
+    GetIncomingPaymentApplicationsView,
+    GetOutgoingPaymentApplicationView,
+    AcceptPaymentApplicationView,
+    RejectPaymentApplicationView,
+)
+
 from backend.views.notification_views import GetNotificationsView
 from backend.views.notification_views import MarkNotificationAsSeenView
 
@@ -195,6 +203,34 @@ lesson_application_urlpatterns = [
     ),
 ]
 
+payment_application_urlpatterns = [
+    path(
+        'create_payment_application/',
+        CreatePaymentApplicationView.as_view(),
+        name='create_payment_application'
+    ),
+    path(
+        'get_incoming_applications/',
+        GetIncomingPaymentApplicationsView.as_view(),
+        name='get_incoming_payment_applications'
+    ),
+    path(
+        'get_outgoing_applications/',
+        GetOutgoingPaymentApplicationView.as_view(),
+        name='get_outgoing_payment_applications'
+    ),
+    path(
+        'accept_payment_application/',
+        AcceptPaymentApplicationView.as_view(),
+        name='accept_payment_application'
+    ),
+    path(
+        'reject_payment_application/',
+        RejectPaymentApplicationView.as_view(),
+        name='reject_payment_application'
+    ),
+]
+
 notification_urlpatterns = [
     path(
         'get_notifications/',
@@ -221,6 +257,7 @@ urlpatterns = [
     path('', include(lesson_urlpatterns)),
     path('', include(student_application_urlpatterns)),
     path('', include(lesson_application_urlpatterns)),
+    path('', include(payment_application_urlpatterns)),
     path('', include(notification_urlpatterns)),
     path('', include(report_urlpatterns)),
 ]

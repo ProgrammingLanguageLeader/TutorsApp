@@ -33,7 +33,7 @@ class CreateLessonApplicationView(APIView):
         Notification.objects.create(
             profile_id=tutor_id,
             lesson_application_id=application.lesson_application_id,
-            event=NotificationEventChoice.STUDENT_APPLICATION_CREATION.value
+            event=NotificationEventChoice.LESSON_APPLICATION_CREATION.value
         )
         return Response(data='OK')
 

@@ -5,6 +5,7 @@ from backend.models import Lesson
 from backend.models import StudentApplication
 from backend.models import Notification
 from backend.models import LessonApplication
+from backend.models import PaymentApplication
 
 
 class EditVacancyPermission(permissions.BasePermission):
@@ -59,6 +60,20 @@ class LessonApplicationAnswerPermission(permissions.BasePermission):
             return False
         tutor_id = application.lesson.tutor_id
         return int(user_id) == int(tutor_id)
+
+
+class PaymentApplicationAnswerPermission(permissions.BasePermission):
+    def has_permission(self, request, view):
+        user_id = request.data.get('user_id') \
+            or request.query_params.get('user_id')
+        application_id = request.data.get('payment_application_id') \
+            or request.query_params.get('payment_application_id')
+        try:
+            application = PaymentApplication.objects.get(pk=application_id)
+        except LessonApplication.DoesNotExist:
+            return False
+        student_id = application.student_id
+        return int(user_id) == int(student_id)
 
 
 class MarkNotificationAsSeenPermission(permissions.BasePermission):

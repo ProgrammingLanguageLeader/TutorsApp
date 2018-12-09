@@ -15,6 +15,9 @@ class NotificationEventChoice(Enum):
     LESSON_APPLICATION_CREATION = 7
     LESSON_APPLICATION_ACCEPT = 8
     LESSON_APPLICATION_REJECT = 9
+    PAYMENT_APPLICATION_CREATION = 10
+    PAYMENT_APPLICATION_ACCEPT = 11
+    PAYMENT_APPLICATION_REJECT = 12
 
 
 class Profile(models.Model):
@@ -174,6 +177,29 @@ class LessonApplication(models.Model):
         ).capitalize()
 
 
+class PaymentApplication(models.Model):
+    payment_application_id = models.AutoField(primary_key=True)
+    creation_time = models.DateTimeField(auto_now_add=True)
+    lesson = models.ForeignKey(
+        Lesson, on_delete=models.CASCADE,
+        related_name='payment_application_lesson'
+    )
+    student = models.ForeignKey(
+        Profile, on_delete=models.CASCADE,
+        related_name='payment_application_student'
+    )
+
+    class Meta:
+        unique_together = (('lesson', 'student'),)
+
+    def __str__(self):
+        return 'created: {} | lesson: {} | student: {}'.format(
+            self.creation_time.strftime('%B %d %Y %H:%M'),
+            self.lesson_id,
+            self.student_id
+        ).capitalize()
+
+
 class Notification(models.Model):
     notification_id = models.AutoField(primary_key=True)
     creation_time = models.DateTimeField(auto_now_add=True)
@@ -195,9 +221,19 @@ class Notification(models.Model):
         LessonApplication, on_delete=models.CASCADE,
         null=True, blank=True
     )
+    payment_application = models.ForeignKey(
+        PaymentApplication, on_delete=models.CASCADE,
+        null=True, blank=True
+    )
     tutor = models.ForeignKey(
         Profile, on_delete=models.CASCADE,
-        null=True, blank=True
+        null=True, blank=True,
+        related_name='notification_tutor'
+    )
+    student = models.ForeignKey(
+        Profile, on_delete=models.CASCADE,
+        null=True, blank=True,
+        related_name='notification_student'
     )
     lesson = models.ForeignKey(
         Lesson, on_delete=models.CASCADE,
