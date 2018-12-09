@@ -13,6 +13,13 @@ class LessonSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class GetLessonSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Lesson
+        fields = '__all__'
+        depth = 1
+
+
 class UpdateLessonSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lesson

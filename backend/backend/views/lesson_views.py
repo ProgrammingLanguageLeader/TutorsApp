@@ -7,6 +7,7 @@ from rest_framework.status import HTTP_400_BAD_REQUEST
 
 from backend.serializers import LessonSerializer
 from backend.serializers import UpdateLessonSerializer
+from backend.serializers import GetLessonSerializer
 from backend.models import Lesson
 from backend.models import Students
 from backend.models import Profile
@@ -96,7 +97,7 @@ class GetLessonsView(APIView):
         lessons = Lesson.objects.filter(
             Q(tutor_id=user_id) | Q(student_id=user_id)
         )
-        lesson_serializer = LessonSerializer(lessons, many=True)
+        lesson_serializer = GetLessonSerializer(lessons, many=True)
         return Response(data=lesson_serializer.data)
 
 
