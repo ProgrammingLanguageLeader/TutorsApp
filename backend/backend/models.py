@@ -130,16 +130,16 @@ class Report(models.Model):
         ).capitalize()
 
 
-class Application(models.Model):
-    application_id = models.AutoField(primary_key=True)
+class StudentApplication(models.Model):
+    student_application_id = models.AutoField(primary_key=True)
     creation_time = models.DateTimeField(auto_now_add=True)
     vacancy = models.ForeignKey(
         Vacancy, on_delete=models.CASCADE,
-        related_name='application_vacancy'
+        related_name='student_application_vacancy'
     )
     student = models.ForeignKey(
         Profile, on_delete=models.CASCADE,
-        related_name='application_student'
+        related_name='student_application_student'
     )
 
     class Meta:
@@ -166,8 +166,8 @@ class Notification(models.Model):
             for event in NotificationEventChoice
         ]
     )
-    application = models.ForeignKey(
-        Application, on_delete=models.CASCADE,
+    student_application = models.ForeignKey(
+        StudentApplication, on_delete=models.CASCADE,
         null=True, blank=True
     )
     tutor = models.ForeignKey(

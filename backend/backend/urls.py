@@ -22,11 +22,11 @@ from backend.views.lesson_views import GetLessonsView
 from backend.views.lesson_views import UpdateLessonView
 from backend.views.lesson_views import DeleteLessonView
 
-from backend.views.application_views import CreateApplicationView
-from backend.views.application_views import GetTutorApplicationsView
-from backend.views.application_views import GetStudentApplicationView
-from backend.views.application_views import AcceptApplicationView
-from backend.views.application_views import RejectApplicationView
+from backend.views.student_application_views import CreateStudentApplicationView
+from backend.views.student_application_views import GetIncomingApplicationsView
+from backend.views.student_application_views import GetOutgoingApplicationView
+from backend.views.student_application_views import AcceptStudentApplicationView
+from backend.views.student_application_views import RejectStudentApplicationView
 
 from backend.views.notification_views import GetNotificationsView
 from backend.views.notification_views import MarkNotificationAsSeenView
@@ -129,31 +129,31 @@ lesson_urlpatterns = [
     ),
 ]
 
-application_urlpatterns = [
+student_application_urlpatterns = [
     path(
-        'create_application/',
-        CreateApplicationView.as_view(),
-        name='create_application'
+        'create_student_application/',
+        CreateStudentApplicationView.as_view(),
+        name='create_lesson_application'
     ),
     path(
-        'get_tutor_applications/',
-        GetTutorApplicationsView.as_view(),
-        name='get_tutor_applications'
+        'get_incoming_applications/',
+        GetIncomingApplicationsView.as_view(),
+        name='get_tutor_lesson_applications'
     ),
     path(
-        'get_student_applications/',
-        GetStudentApplicationView.as_view(),
-        name='get_student_applications'
+        'get_outgoing_applications/',
+        GetOutgoingApplicationView.as_view(),
+        name='get_student_lesson_applications'
     ),
     path(
-        'accept_application/',
-        AcceptApplicationView.as_view(),
-        name='accept_application'
+        'accept_student_application/',
+        AcceptStudentApplicationView.as_view(),
+        name='accept_lesson_application'
     ),
     path(
-        'reject_application/',
-        RejectApplicationView.as_view(),
-        name='reject_application'
+        'reject_student_application/',
+        RejectStudentApplicationView.as_view(),
+        name='reject_lesson_application'
     ),
 ]
 
@@ -181,7 +181,7 @@ urlpatterns = [
     path('', include(vacancy_urlpatterns)),
     path('', include(students_urlpatterns)),
     path('', include(lesson_urlpatterns)),
-    path('', include(application_urlpatterns)),
+    path('', include(student_application_urlpatterns)),
     path('', include(notification_urlpatterns)),
     path('', include(report_urlpatterns)),
 ]

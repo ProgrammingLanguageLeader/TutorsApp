@@ -5,7 +5,7 @@ from rest_framework.status import HTTP_200_OK
 
 from backend.models import Profile
 from backend.models import Vacancy
-from backend.models import Application
+from backend.models import StudentApplication
 from backend.models import Notification
 from backend.models import Students
 from backend.tests.constants import MOCK_USER_ID
@@ -17,7 +17,7 @@ settings.VK_APP_SECRET = MOCK_VK_APP_SECRET
 client = APIClient()
 
 
-class CreateApplicationViewTest(TestCase):
+class CreateStudentApplicationViewTest(TestCase):
     user_id = MOCK_USER_ID
     tutor_id = user_id + 1
     subject = "Math"
@@ -36,7 +36,7 @@ class CreateApplicationViewTest(TestCase):
 
     def test(self):
         response = client.post(
-            "/api/v1/create_application/",
+            "/api/v1/create_student_application/",
             {
                 "signed_user_id": MOCK_SIGNED_USER_ID,
                 "user_id": MOCK_USER_ID,
@@ -45,7 +45,9 @@ class CreateApplicationViewTest(TestCase):
             format="json"
         )
         self.assertEqual(response.status_code, HTTP_200_OK)
-        applications = Application.objects.filter(vacancy_id=self.vacancy_id)
+        applications = StudentApplication.objects.filter(
+            vacancy_id=self.vacancy_id
+        )
         self.assertEqual(len(applications), self.application_number)
         application = applications[0]
         self.assertEqual(application.student_id, self.user_id)
@@ -68,14 +70,14 @@ class GetTutorApplicationsViewTest(TestCase):
         for student_number in range(1, self.application_number + 1):
             student_id = self.user_id + student_number
             Profile.objects.create(pk=student_id)
-            Application.objects.create(
+            StudentApplication.objects.create(
                 vacancy_id=self.vacancy_id,
                 student_id=student_id
             )
 
     def test(self):
         response = client.get(
-            "/api/v1/get_tutor_applications/",
+            "/api/v1/get_incoming_applications/",
             {
                 "signed_user_id": MOCK_SIGNED_USER_ID,
                 "user_id": MOCK_USER_ID
@@ -83,7 +85,7 @@ class GetTutorApplicationsViewTest(TestCase):
             format="json"
         )
         self.assertEqual(response.status_code, HTTP_200_OK)
-        applications = Application.objects.filter(vacancy_id=self.vacancy_id)
+        applications = StudentApplication.objects.filter(vacancy_id=self.vacancy_id)
         self.assertEqual(len(applications), self.application_number)
 
 
@@ -105,14 +107,14 @@ class GetStudentApplicationsViewTest(TestCase):
                 subject=self.subject,
                 price=self.price
             )
-            Application.objects.create(
+            StudentApplication.objects.create(
                 vacancy_id=vacancy_id,
                 student_id=self.user_id
             )
 
     def test(self):
         response = client.get(
-            "/api/v1/get_student_applications/",
+            "/api/v1/get_outgoing_applications/",
             {
                 "signed_user_id": MOCK_SIGNED_USER_ID,
                 "user_id": MOCK_USER_ID
@@ -120,7 +122,9 @@ class GetStudentApplicationsViewTest(TestCase):
             format="json"
         )
         self.assertEqual(response.status_code, HTTP_200_OK)
-        applications = Application.objects.filter(student_id=self.user_id)
+        applications = StudentApplication.objects.filter(
+            student_id=self.user_id
+        )
         self.assertEqual(len(applications), self.tutors_number)
 
 
@@ -129,7 +133,7 @@ class AcceptApplicationViewTest(TestCase):
     student_id = user_id + 1
     subject = "Math"
     price = 1000
-    application_id = 1
+    student_application_id = 1
     vacancy_id = 1
 
     def setUp(self):
@@ -140,23 +144,23 @@ class AcceptApplicationViewTest(TestCase):
             subject=self.subject,
             price=self.price
         )
-        Application.objects.create(
+        StudentApplication.objects.create(
             vacancy=vacancy,
             student=student
         )
 
     def test(self):
         response = client.post(
-            "/api/v1/accept_application/",
+            "/api/v1/accept_student_application/",
             {
                 "signed_user_id": MOCK_SIGNED_USER_ID,
                 "user_id": MOCK_USER_ID,
-                "application_id": self.application_id
+                "student_application_id": self.student_application_id
             },
             format="json"
         )
         self.assertEqual(response.status_code, HTTP_200_OK)
-        applications = Application.objects.filter(
+        applications = StudentApplication.objects.filter(
             vacancy_id=self.vacancy_id
         )
         self.assertEqual(len(applications), 0)
@@ -175,7 +179,7 @@ class RejectApplicationViewTest(TestCase):
     student_id = user_id + 1
     subject = "Math"
     price = 1000
-    application_id = 1
+    student_application_id = 1
     vacancy_id = 1
 
     def setUp(self):
@@ -186,23 +190,23 @@ class RejectApplicationViewTest(TestCase):
             subject=self.subject,
             price=self.price
         )
-        Application.objects.create(
+        StudentApplication.objects.create(
             vacancy=vacancy,
             student=student
         )
 
     def test(self):
         response = client.post(
-            "/api/v1/reject_application/",
+            "/api/v1/reject_student_application/",
             {
                 "signed_user_id": MOCK_SIGNED_USER_ID,
                 "user_id": self.user_id,
-                "application_id": self.application_id
+                "student_application_id": self.student_application_id
             },
             format="json"
         )
         self.assertEqual(response.status_code, HTTP_200_OK)
-        applications = Application.objects.filter(
+        applications = StudentApplication.objects.filter(
             vacancy_id=self.vacancy_id
         )
         self.assertEqual(len(applications), 0)

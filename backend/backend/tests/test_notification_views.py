@@ -5,7 +5,7 @@ from rest_framework.status import HTTP_200_OK
 
 from backend.models import Profile
 from backend.models import Vacancy
-from backend.models import Application
+from backend.models import StudentApplication
 from backend.models import Notification
 from backend.models import NotificationEventChoice
 from backend.tests.constants import MOCK_USER_ID
@@ -34,13 +34,13 @@ class GetNotificationsViewTest(TestCase):
         for student_number in range(1, self.application_number + 1):
             student_id = self.user_id + student_number
             Profile.objects.create(pk=student_id)
-            application = Application.objects.create(
+            student_application = StudentApplication.objects.create(
                 vacancy_id=vacancy.vacancy_id,
                 student_id=student_id
             )
             Notification.objects.create(
                 profile_id=self.user_id,
-                application_id=application.application_id,
+                student_application=student_application,
                 event=NotificationEventChoice.APPLICATION_CREATION.value
             )
 
@@ -78,13 +78,13 @@ class MarkNotificationAsSeenViewTest(TestCase):
         for student_number in range(1, self.application_number + 1):
             student_id = self.user_id + student_number
             Profile.objects.create(pk=student_id)
-            application = Application.objects.create(
+            student_application = StudentApplication.objects.create(
                 vacancy_id=vacancy.vacancy_id,
                 student_id=student_id
             )
             Notification.objects.create(
                 profile_id=self.user_id,
-                application_id=application.application_id,
+                student_application=student_application,
                 event=NotificationEventChoice.APPLICATION_CREATION.value
             )
 

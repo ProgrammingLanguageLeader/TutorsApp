@@ -3,7 +3,7 @@ from rest_framework import serializers
 from backend.models import Profile
 from backend.models import Vacancy
 from backend.models import Lesson
-from backend.models import Application
+from backend.models import StudentApplication
 from backend.models import Notification
 
 
@@ -57,13 +57,21 @@ class UpdateProfileSerializer(serializers.ModelSerializer):
         exclude = ('profile_id', )
 
 
-class ApplicationSerializer(serializers.ModelSerializer):
+class StudentApplicationSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Application
+        model = StudentApplication
         fields = '__all__'
+
+
+class GetStudentApplicationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = StudentApplication
+        fields = '__all__'
+        depth = 1
 
 
 class NotificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Notification
         fields = '__all__'
+        depth = 1

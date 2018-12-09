@@ -2,7 +2,7 @@ from rest_framework import permissions
 
 from backend.models import Vacancy
 from backend.models import Lesson
-from backend.models import Application
+from backend.models import StudentApplication
 from backend.models import Notification
 
 
@@ -50,11 +50,11 @@ class ApplicationAnswerPermission(permissions.BasePermission):
     def has_permission(self, request, view):
         user_id = request.data.get('user_id') \
             or request.query_params.get('user_id')
-        application_id = request.data.get('application_id') \
-            or request.query_params.get('application_id')
+        application_id = request.data.get('student_application_id') \
+            or request.query_params.get('student_application_id')
         try:
-            application = Application.objects.get(pk=application_id)
-        except Application.DoesNotExist:
+            application = StudentApplication.objects.get(pk=application_id)
+        except StudentApplication.DoesNotExist:
             return False
         tutor_id = application.vacancy.owner_id
         return int(user_id) == int(tutor_id)
