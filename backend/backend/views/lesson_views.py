@@ -16,7 +16,6 @@ from backend.models import NotificationEventChoice
 from backend.views.tools import check_authentication
 from backend.views.tools import get_error_message_response
 from backend.permissions import EditLessonPermission
-from backend.permissions import DeleteLessonPermission
 
 
 class CreateLessonView(APIView):
@@ -129,7 +128,7 @@ class UpdateLessonView(APIView):
 
 
 class DeleteLessonView(APIView):
-    permission_classes = (DeleteLessonPermission, )
+    permission_classes = (EditLessonPermission, )
 
     @check_authentication
     def post(self, request):
@@ -139,9 +138,7 @@ class DeleteLessonView(APIView):
             lesson = Lesson.objects.get(pk=lesson_id)
         except Lesson.DoesNotExist:
             return get_error_message_response('lesson_id')
-        notifying_user_id = lesson.tutor_id
-        if int(user_id) == int(lesson.tutor_id):
-            notifying_user_id = lesson.student_id
+        notifying_user_id = lesson.student_id
         lesson.delete()
         Notification.objects.create(
             profile_id=notifying_user_id,

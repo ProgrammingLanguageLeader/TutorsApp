@@ -8,7 +8,7 @@ from backend.models import Students
 from backend.models import StudentApplication
 from backend.models import Notification
 from backend.models import NotificationEventChoice
-from backend.permissions import ApplicationAnswerPermission
+from backend.permissions import StudentApplicationAnswerPermission
 from backend.views.tools import check_authentication
 from backend.views.tools import get_error_message_response
 
@@ -48,12 +48,12 @@ class CreateStudentApplicationView(APIView):
         Notification.objects.create(
             profile_id=tutor_id,
             student_application_id=application.student_application_id,
-            event=NotificationEventChoice.APPLICATION_CREATION.value
+            event=NotificationEventChoice.STUDENT_APPLICATION_CREATION.value
         )
         return Response(data='OK')
 
 
-class GetIncomingApplicationsView(APIView):
+class GetIncomingStudentApplicationsView(APIView):
     @check_authentication
     def get(self, request):
         user_id = self.request.query_params.get('user_id')
@@ -66,7 +66,7 @@ class GetIncomingApplicationsView(APIView):
         return Response(data=application_serializer.data)
 
 
-class GetOutgoingApplicationView(APIView):
+class GetOutgoingStudentApplicationView(APIView):
     @check_authentication
     def get(self, request):
         user_id = self.request.query_params.get('user_id')
@@ -80,7 +80,7 @@ class GetOutgoingApplicationView(APIView):
 
 
 class AcceptStudentApplicationView(APIView):
-    permission_classes = (ApplicationAnswerPermission, )
+    permission_classes = (StudentApplicationAnswerPermission,)
 
     @check_authentication
     def post(self, request):
@@ -98,14 +98,14 @@ class AcceptStudentApplicationView(APIView):
         Notification.objects.create(
             profile_id=student_id,
             tutor_id=tutor_id,
-            event=NotificationEventChoice.STUDENT_ACCEPT.value
+            event=NotificationEventChoice.STUDENT_APPLICATION_ACCEPT.value
         )
         application.delete()
         return Response(data='OK')
 
 
 class RejectStudentApplicationView(APIView):
-    permission_classes = (ApplicationAnswerPermission,)
+    permission_classes = (StudentApplicationAnswerPermission,)
 
     @check_authentication
     def post(self, request):
@@ -119,7 +119,7 @@ class RejectStudentApplicationView(APIView):
         Notification.objects.create(
             profile_id=student_id,
             tutor_id=tutor_id,
-            event=NotificationEventChoice.STUDENT_REJECT.value
+            event=NotificationEventChoice.STUDENT_APPLICATION_REJECT.value
         )
         application.delete()
         return Response(data='OK')

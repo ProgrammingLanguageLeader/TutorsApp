@@ -7,6 +7,7 @@ from django.test import TestCase
 from rest_framework.test import APIClient
 from rest_framework.status import HTTP_200_OK
 from rest_framework.status import HTTP_400_BAD_REQUEST
+from rest_framework.status import HTTP_403_FORBIDDEN
 
 from backend.models import Profile
 from backend.models import Students
@@ -201,6 +202,4 @@ class DeleteLessonViewTest(TestCase):
             },
             format="json"
         )
-        self.assertEqual(response.status_code, HTTP_200_OK)
-        with self.assertRaises(Lesson.DoesNotExist):
-            Lesson.objects.get(pk=self.lesson_id)
+        self.assertEqual(response.status_code, HTTP_403_FORBIDDEN)

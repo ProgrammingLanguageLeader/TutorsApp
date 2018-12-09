@@ -5,13 +5,16 @@ from django.db import models
 
 @unique
 class NotificationEventChoice(Enum):
-    APPLICATION_CREATION = 0
-    STUDENT_ACCEPT = 1
-    STUDENT_REJECT = 6
-    LESSON_CREATION = 2
-    DELETION_FROM_STUDENTS = 3
-    LESSON_CHANGING = 4
-    LESSON_DELETION = 5
+    STUDENT_APPLICATION_CREATION = 0
+    STUDENT_APPLICATION_ACCEPT = 1
+    STUDENT_APPLICATION_REJECT = 2
+    LESSON_CREATION = 3
+    DELETION_FROM_STUDENTS = 4
+    LESSON_CHANGING = 5
+    LESSON_DELETION = 6
+    LESSON_APPLICATION_CREATION = 7
+    LESSON_APPLICATION_ACCEPT = 8
+    LESSON_APPLICATION_REJECT = 9
 
 
 class Profile(models.Model):
@@ -143,12 +146,37 @@ class StudentApplication(models.Model):
     )
 
     class Meta:
-        unique_together = (("vacancy", "student"), )
+        unique_together = (('vacancy', 'student'), )
 
     def __str__(self):
         return 'created: {} | vacancy: {} | student: {}'.format(
             self.creation_time.strftime('%B %d %Y %H:%M'),
             self.vacancy_id,
+            self.student_id
+        ).capitalize()
+
+
+class LessonApplication(models.Model):
+    lesson_application_id = models.AutoField(primary_key=True)
+    creation_time = models.DateTimeField(auto_now_add=True)
+    lesson = models.ForeignKey(
+        Lesson, on_delete=models.CASCADE,
+        related_name='lesson_application_lesson'
+    )
+    student = models.ForeignKey(
+        Profile, on_delete=models.CASCADE,
+        related_name='lesson_application_student'
+    )
+    beginning_time = models.DateTimeField()
+    ending_time = models.DateTimeField()
+
+    class Meta:
+        unique_together = (('lesson', 'student'), )
+
+    def __str__(self):
+        return 'created: {} | lesson: {} | student: {}'.format(
+            self.creation_time.strftime('%B %d %Y %H:%M'),
+            self.lesson_id,
             self.student_id
         ).capitalize()
 
@@ -168,6 +196,10 @@ class Notification(models.Model):
     )
     student_application = models.ForeignKey(
         StudentApplication, on_delete=models.CASCADE,
+        null=True, blank=True
+    )
+    lesson_application = models.ForeignKey(
+        LessonApplication, on_delete=models.CASCADE,
         null=True, blank=True
     )
     tutor = models.ForeignKey(

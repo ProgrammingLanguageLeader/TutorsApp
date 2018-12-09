@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from backend.serializers import NotificationSerializer
+from backend.serializers import GetNotificationSerializer
 from backend.models import Notification
 from backend.views.tools import check_authentication
 from backend.views.tools import get_error_message_response
@@ -41,7 +41,7 @@ class GetNotificationsView(APIView):
         notifications = Notification.objects.filter(
             profile_id=user_id
         ).order_by('-creation_time')[offset:offset + limit]
-        notifications_serializer = NotificationSerializer(
+        notifications_serializer = GetNotificationSerializer(
             notifications, many=True
         )
         return Response(data=notifications_serializer.data)

@@ -41,7 +41,7 @@ class GetNotificationsViewTest(TestCase):
             Notification.objects.create(
                 profile_id=self.user_id,
                 student_application=student_application,
-                event=NotificationEventChoice.APPLICATION_CREATION.value
+                event=NotificationEventChoice.STUDENT_APPLICATION_CREATION.value
             )
 
     def test(self):
@@ -85,7 +85,7 @@ class MarkNotificationAsSeenViewTest(TestCase):
             Notification.objects.create(
                 profile_id=self.user_id,
                 student_application=student_application,
-                event=NotificationEventChoice.APPLICATION_CREATION.value
+                event=NotificationEventChoice.STUDENT_APPLICATION_CREATION.value
             )
 
     def test(self):

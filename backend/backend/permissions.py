@@ -4,6 +4,7 @@ from backend.models import Vacancy
 from backend.models import Lesson
 from backend.models import StudentApplication
 from backend.models import Notification
+from backend.models import LessonApplication
 
 
 class EditVacancyPermission(permissions.BasePermission):
@@ -32,21 +33,7 @@ class EditLessonPermission(permissions.BasePermission):
         return lesson.tutor_id == int(user_id)
 
 
-class DeleteLessonPermission(permissions.BasePermission):
-    def has_permission(self, request, view):
-        user_id = request.data.get('user_id') \
-            or request.query_params.get('user_id')
-        lesson_id = request.data.get('lesson_id') \
-            or request.query_params.get('lesson_id')
-        try:
-            lesson = Lesson.objects.get(pk=lesson_id)
-        except Lesson.DoesNotExist:
-            return False
-        return lesson.tutor_id == int(user_id) \
-            or lesson.student_id == int(user_id)
-
-
-class ApplicationAnswerPermission(permissions.BasePermission):
+class StudentApplicationAnswerPermission(permissions.BasePermission):
     def has_permission(self, request, view):
         user_id = request.data.get('user_id') \
             or request.query_params.get('user_id')
@@ -57,6 +44,20 @@ class ApplicationAnswerPermission(permissions.BasePermission):
         except StudentApplication.DoesNotExist:
             return False
         tutor_id = application.vacancy.owner_id
+        return int(user_id) == int(tutor_id)
+
+
+class LessonApplicationAnswerPermission(permissions.BasePermission):
+    def has_permission(self, request, view):
+        user_id = request.data.get('user_id') \
+            or request.query_params.get('user_id')
+        application_id = request.data.get('lesson_application_id') \
+            or request.query_params.get('lesson_application_id')
+        try:
+            application = LessonApplication.objects.get(pk=application_id)
+        except LessonApplication.DoesNotExist:
+            return False
+        tutor_id = application.lesson.tutor_id
         return int(user_id) == int(tutor_id)
 
 
