@@ -28,7 +28,6 @@ class UpdateProfileView(APIView):
     def post(self, request):
         view_serializer = UpdateProfileSerializer(data=request.data)
         if not view_serializer.is_valid():
-            print(view_serializer.errors)
             return Response(
                 data=view_serializer.errors,
                 status=HTTP_400_BAD_REQUEST

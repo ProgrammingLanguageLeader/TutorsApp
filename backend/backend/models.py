@@ -25,21 +25,13 @@ class Profile(models.Model):
     )
     creation_time = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=True)
-    experience = models.TextField(null=True, blank=True, max_length=4096)
-    education = models.TextField(null=True, blank=True, max_length=4096)
-    address = models.TextField(null=True, blank=True, max_length=128)
-    description = models.TextField(null=True, blank=True, max_length=4096)
-    home_schooling = models.BooleanField(default=False)
-    latitude = models.FloatField(blank=True, null=True)
-    longitude = models.FloatField(blank=True, null=True)
-    distance_learning = models.BooleanField(default=False)
-    ege = models.BooleanField(default=False)
-    oge = models.BooleanField(default=False)
-    foreign_lang_cert = models.BooleanField(default=False)
-    primary_school = models.BooleanField(default=False)
-    secondary_school = models.BooleanField(default=False)
-    olympiads = models.BooleanField(default=False)
-    university = models.BooleanField(default=False)
+    experience = models.TextField(null=True, blank=True, max_length=100)
+    education = models.TextField(null=True, blank=True, max_length=100)
+    city = models.TextField(null=True, blank=True, max_length=50)
+    district = models.TextField(null=True, blank=True, max_length=50)
+    street = models.TextField(null=True, blank=True, max_length=50)
+    metro_station = models.TextField(null=True, blank=True, max_length=50)
+    description = models.TextField(null=True, blank=True, max_length=100)
 
     def __str__(self):
         return 'profile ID: {} | created: {} | active: {}'.format(
@@ -104,6 +96,7 @@ class Lesson(models.Model):
     )
     beginning_time = models.DateTimeField()
     ending_time = models.DateTimeField()
+    price = models.IntegerField()
 
     def __str__(self):
         return 'tutor: {} | student: {} | created: {}'.format(

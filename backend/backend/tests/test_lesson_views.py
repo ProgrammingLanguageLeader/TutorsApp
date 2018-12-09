@@ -26,6 +26,7 @@ class CreateLessonViewTest(TestCase):
     tutor_id = MOCK_USER_ID
     student_id_1 = MOCK_USER_ID + 1
     student_id_2 = MOCK_USER_ID + 2
+    price = 1000
     beginning_time = datetime(
         day=3, month=9, year=2018, hour=14, minute=30,
         tzinfo=timezone.utc
@@ -50,7 +51,8 @@ class CreateLessonViewTest(TestCase):
                 "user_id": self.tutor_id,
                 "student_id": self.student_id_1,
                 "beginning_time": self.beginning_time.isoformat(),
-                "ending_time": self.ending_time.isoformat()
+                "ending_time": self.ending_time.isoformat(),
+                "price": self.price,
             },
             format="json"
         )
@@ -70,7 +72,8 @@ class CreateLessonViewTest(TestCase):
                 "user_id": self.tutor_id,
                 "student_id": self.student_id_2,
                 "beginning_time": self.beginning_time.isoformat(),
-                "ending_time": self.ending_time.isoformat()
+                "ending_time": self.ending_time.isoformat(),
+                "price": self.price,
             },
             format="json"
         )
@@ -90,6 +93,7 @@ class GetLessonsViewTest(TestCase):
     second_lesson_end = second_lesson_start + timedelta(hours=1)
     third_lesson_start = datetime.now(tz=timezone.utc) + timedelta(hours=4)
     third_lesson_end = third_lesson_start + timedelta(hours=1)
+    price = 1000
 
     def setUp(self):
         Profile.objects.create(pk=self.user_id)
@@ -105,19 +109,22 @@ class GetLessonsViewTest(TestCase):
             tutor_id=self.tutor_id,
             student_id=self.user_id,
             beginning_time=self.first_lesson_start,
-            ending_time=self.first_lesson_end
+            ending_time=self.first_lesson_end,
+            price=self.price,
         )
         Lesson.objects.create(
             tutor_id=self.user_id,
             student_id=self.student_id,
             beginning_time=self.second_lesson_start,
-            ending_time=self.second_lesson_end
+            ending_time=self.second_lesson_end,
+            price=self.price,
         )
         Lesson.objects.create(
             tutor_id=self.tutor_id,
             student_id=self.user_id,
             beginning_time=self.third_lesson_start,
-            ending_time=self.third_lesson_end
+            ending_time=self.third_lesson_end,
+            price = self.price,
         )
 
     def test(self):
@@ -145,6 +152,7 @@ class UpdateLessonViewTest(TestCase):
         day=3, month=9, year=2018, hour=16, minute=00,
         tzinfo=timezone.utc
     )
+    price = 1000
 
     def setUp(self):
         Profile.objects.create(pk=self.user_id)
@@ -155,7 +163,8 @@ class UpdateLessonViewTest(TestCase):
             tutor_id=self.user_id,
             student_id=self.student_id,
             beginning_time=datetime.now(tz=timezone.utc),
-            ending_time=datetime.now(tz=timezone.utc)
+            ending_time=datetime.now(tz=timezone.utc),
+            price=self.price,
         )
 
     def test(self):
@@ -166,7 +175,8 @@ class UpdateLessonViewTest(TestCase):
                 "user_id": self.user_id,
                 "lesson_id": self.lesson_id,
                 "beginning_time": self.new_beginning_time.isoformat(),
-                "ending_time": self.new_ending_time.isoformat()
+                "ending_time": self.new_ending_time.isoformat(),
+                "price": self.price,
             },
             format="json"
         )
@@ -179,6 +189,7 @@ class DeleteLessonViewTest(TestCase):
     tutor_id = MOCK_USER_ID + 1
     lesson_start = datetime.now(tz=timezone.utc)
     lesson_end = lesson_start + timedelta(hours=1)
+    price = 1000
 
     def setUp(self):
         Profile.objects.create(pk=self.user_id)
@@ -189,7 +200,8 @@ class DeleteLessonViewTest(TestCase):
             tutor_id=self.tutor_id,
             student_id=self.user_id,
             beginning_time=self.lesson_start,
-            ending_time=self.lesson_end
+            ending_time=self.lesson_end,
+            price=self.price,
         )
 
     def test(self):

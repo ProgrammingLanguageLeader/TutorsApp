@@ -14,12 +14,15 @@ client = APIClient()
 
 
 class CreateProfileViewTest(TestCase):
+    city = "Moscow"
+
     def test_creation(self):
         response = client.post(
             "/api/v1/create_profile/",
             {
                 "signed_user_id": MOCK_SIGNED_USER_ID,
-                "user_id": MOCK_USER_ID
+                "user_id": MOCK_USER_ID,
+                "city": self.city,
             },
             format="json"
         )
@@ -39,8 +42,10 @@ class CreateProfileViewTest(TestCase):
 
 
 class UpdateProfileViewTest(TestCase):
+    city = "Moscow"
+
     def setUp(self):
-        Profile.objects.create(pk=MOCK_USER_ID)
+        Profile.objects.create(pk=MOCK_USER_ID, city=self.city)
 
     def test(self):
         description = "test"
@@ -49,7 +54,8 @@ class UpdateProfileViewTest(TestCase):
             {
                 "signed_user_id": MOCK_SIGNED_USER_ID,
                 "user_id": MOCK_USER_ID,
-                "description": description
+                "city": self.city,
+                "description": description, 
             },
             format="json"
         )
