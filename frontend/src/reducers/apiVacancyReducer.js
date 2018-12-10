@@ -42,6 +42,7 @@ const apiVacancyReducer = (state = initialState, action) => {
     case apiVacancyConstants.GET_VACANCY_SUCCESS:
       return state.merge({
         vacancy: action.payload,
+        fetching: false,
         errors: null,
       });
 

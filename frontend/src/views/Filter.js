@@ -307,13 +307,13 @@ class Filter extends React.Component {
       </View>
     );
   }
-};
+}
 
 const mapStateToProps = state => {
   const { filterReducer } = state;
   return {
     filterReducer, 
   };
-}
+};
 
 export default connect(mapStateToProps)(Filter);

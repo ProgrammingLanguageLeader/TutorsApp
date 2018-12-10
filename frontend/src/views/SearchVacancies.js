@@ -79,10 +79,10 @@ class SearchVacancies extends React.Component {
           ) : (
             <Div>
               { vacancies
-                  .filter(vacancy => vkUsersInfo.get(vacancy.owner.profile_id))
+                  .filter(vacancy => vkUsersInfo[vacancy.owner.profile_id])
                   .map(vacancy => {
-                    const userInfo = vkUsersInfo.get(vacancy.owner.profile_id);
-                    const cityTitle = userInfo.city ? userInfo.city.title : "";
+                    const userInfo = vkUsersInfo[vacancy.owner.profile_id];
+                    const cityTitle = vacancy.owner.city ? vacancy.owner.city : "Город не указан";
                     return (
                       <Cell
                         expandable

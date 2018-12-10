@@ -3,15 +3,17 @@ import { connect } from 'react-redux';
 import {
   View, Panel, PanelHeader, Cell, HeaderButton, Avatar, Group, List, Button
 } from '@vkontakte/vkui';
+import 'moment/locale/ru';
 
 import Icon24Education from '@vkontakte/icons/dist/24/education';
-import Icon24Recent from '@vkontakte/icons/dist/24/recent';
+import Icon24MoneyCircle from '@vkontakte/icons/dist/24/money_circle';
 import Icon24Info from '@vkontakte/icons/dist/24/info';
 
 import DivSpinner from '../components/DivSpinner';
 import BackIcon from '../components/BackIcon';
 
 import { vkApiActions, locationActions, apiVacancyActions, apiApplicationActions } from '../actions';
+import Moment from "react-moment";
 
 const mapStateToProps = state => {
   const { vkUserInfo, accessToken } = state.vkAppsReducer;
@@ -20,9 +22,12 @@ const mapStateToProps = state => {
   const vkApiFetching = state.vkApiReducer.fetching;
   const { vacancy } = state.apiVacancyReducer;
   const { activePanel, params } = state.locationReducer;
+  const { vkUsersInfo } = state.vkApiReducer;
+  const apiVacancyError = state.apiVacancyReducer.errors;
   return {
     vacancy, vkUserInfo, accessToken, apiVacancyFetching, vkApiFetching,
-    apiApplicationFetching, activePanel, params,
+    apiApplicationFetching, activePanel, params, vkUsersInfo,
+    apiVacancyError
   };
 };
 
@@ -59,7 +64,7 @@ class ShowVacancy extends React.Component {
   sendApplication(vacancyId, studentId) {
     const { id, signed_user_id } = this.props.vkUserInfo;
     this.props.dispatch(
-      apiApplicationActions.addApplication({
+      apiApplicationActions.createApplication({
         user_id: id,
         signed_user_id: signed_user_id,
         vacancy_id: vacancyId,
@@ -69,56 +74,124 @@ class ShowVacancy extends React.Component {
   }
 
   render() {
-    const { vkUserInfo, vkApiFetching, apiVacancyFetching, apiApplicationFetching, vacancy } = this.props;
+    const {
+      vkUserInfo, vkUsersInfo, vkApiFetching, apiVacancyFetching, apiApplicationFetching, vacancy
+    } = this.props;
+    const fetching = apiVacancyFetching || vkApiFetching || apiApplicationFetching || apiApplicationFetching;
+    const vacancyOwnerVkInfo = Object.keys(vacancy).length ? vkUsersInfo[vacancy.owner.profile_id] : null;
 
     return (
-      <View id={this.props.id} activePanel={this.props.activePanel}>
+      <View id={this.props.id} activePanel="show_vacancy">
         <Panel id="show_vacancy">
           <PanelHeader
             left={
-              <HeaderButton onClick={() => locationActions.goBack()}>
+              <HeaderButton onClick={() => this.props.dispatch(locationActions.goBack())}>
                 <BackIcon />
               </HeaderButton>
             }
           >
-            Репетитор
+            Вакансия
           </PanelHeader>
-
-          { vkApiFetching || apiVacancyFetching || apiApplicationFetching ? (
-            <DivSpinner />
-          ) : (
-            vkUserInfo && vacancy && (
+          {
+            fetching
+            ? (
+              <DivSpinner />
+            )
+            : vacancyOwnerVkInfo && vacancy && (
               <div>
-                <Group id="tutor" style={{ marginTop: 0 }}>
+                <Group title="Информация о пользователе">
                   <Cell
                     size="l"
-                    description={vkUserInfo.city ? vkUserInfo.city.title : ""}
-                    before={<Avatar src={vkUserInfo.photo_200} size={80} />}
+                    before={<Avatar src={vacancyOwnerVkInfo.photo_200} size={80} />}
                     bottomContent={
                       <Button onClick={() => this.sendApplication(vacancy.id, vkUserInfo.id)}>
-                        Связаться
+                        Стать учеником
                       </Button>
                     }
                   >
-                    {`${vkUserInfo.firstName} ${vkUserInfo.lastName}`}
+                    {`${vacancyOwnerVkInfo.firstName} ${vacancyOwnerVkInfo.lastName}`}
                   </Cell>
+                  {
+                    vacancy.owner.creation_time && (
+                      <Cell multiline description="Дата создания профиля">
+                        <Moment locale="ru" format="D MMMM YYYY">
+                          {vacancy.owner.creation_time}
+                        </Moment>
+                      </Cell>
+                  )}
+                  {
+                    vacancy.owner.experience && (
+                      <Cell multiline description="Опыт преподавания">
+                        {vacancy.owner.experience}
+                      </Cell>
+                    )
+                  }
+                  {
+                    vacancy.owner.education && (
+                      <Cell multiline description="Образование">
+                        {vacancy.owner.education}
+                      </Cell>
+                    )
+                  }
+                  {
+                    vacancy.owner.city && (
+                      <Cell multiline description="Город">
+                        {vacancy.owner.city}
+                      </Cell>
+                    )
+                  }
+                  {
+                    vacancy.owner.district && (
+                      <Cell multiline description="Район">
+                        {vacancy.owner.district}
+                      </Cell>
+                    )
+                  }
+                  {
+                    vacancy.owner.street && (
+                      <Cell multiline description="Улица">
+                        {vacancy.owner.street}
+                      </Cell>
+                    )
+                  }
+                  {
+                    vacancy.owner.metro_station && (
+                      <Cell multiline description="Станция метро">
+                        {vacancy.owner.metro_station}
+                      </Cell>
+                    )
+                  }
+                  {
+                    vacancy.owner.description && (
+                      <Cell multiline description="О себе">
+                        {vacancy.owner.description}
+                      </Cell>
+                    )
+                  }
                 </Group>
-                <Group id="tutor_info">
-                  <List>
-                    <Cell before={<Icon24Recent />}>
-                      {vacancy.subject || "Предмет не задан"}
-                    </Cell>
-                    <Cell before={<Icon24Education />}>
-                      {`${vacancy.price || "Цена не указана"} рублей/час`}
-                    </Cell>
-                    <Cell before={<Icon24Info />}>
-                      {vacancy.extra_info || "Не указано"}
-                    </Cell>
-                  </List>
+                <Group title="Информация о вакансии">
+                  <Cell
+                    multiline
+                    before={<Icon24Education />}
+                  >
+                    {vacancy.subject}
+                  </Cell>
+                  <Cell
+                    multiline
+                    before={<Icon24MoneyCircle/>}
+                  >
+                    {vacancy.price} рублей/час
+                  </Cell>
+                  <Cell
+                    multiline
+                    before={<Icon24Info />}
+                  >
+                    {vacancy.extra_info || "Дополнительная информация не указана"}
+                  </Cell>
                 </Group>
               </div>
             )
-          )}
+          }
         </Panel>
       </View>
     );

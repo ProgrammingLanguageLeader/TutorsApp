@@ -79,7 +79,7 @@ const getVacancy = (options) => {
       .then(
         response => {
           dispatch({
-            type: apiVacancyConstants.GET_VACANCY_REQUEST,
+            type: apiVacancyConstants.GET_VACANCY_SUCCESS,
             payload: response,
           })
         },
