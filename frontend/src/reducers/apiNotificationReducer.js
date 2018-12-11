@@ -25,6 +25,7 @@ const apiNotificationReducer = (state = initialState, action) => {
     case apiNotificationConstants.GET_NOTIFICATIONS_SUCCESS:
       return state.merge({
         notifications: action.payload,
+        fetching: false,
         errors: null,
       });
 

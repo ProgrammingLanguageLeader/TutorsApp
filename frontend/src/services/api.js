@@ -17,7 +17,12 @@ export const makeApiRequest = async (endpoint, method, options) => {
       headers: HEADERS,
       params: options,
     })
-    .then(res => res.data)
+      .then(result => {
+        if (result.status !== 200) {
+          return null;
+        }
+        return result.data;
+      })
   }
   return axios({
     url: url,
@@ -25,5 +30,10 @@ export const makeApiRequest = async (endpoint, method, options) => {
     headers: HEADERS,
     data: options,
   })
-  .then(res => res.data)
-}
+    .then(result => {
+      if (result.status !== 200) {
+        return null;
+      }
+      return result.data;
+    })
+};

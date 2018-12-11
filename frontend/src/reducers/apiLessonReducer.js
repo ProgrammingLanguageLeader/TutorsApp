@@ -29,6 +29,7 @@ const apiLessonReducer = (state = initialState, action) => {
     case apiLessonConstants.GET_LESSONS_SUCCESS:
       return state.merge({
         lessons: action.payload,
+        fetching: false,
         errors: null,
       });
 

@@ -7,20 +7,20 @@ const createProfile = (options) => {
       type: apiProfileConstants.CREATE_PROFILE_REQUEST,
     });
     return makeApiRequest('create_profile', 'post', options)
-    .then(
-      response => {
-        dispatch({
-          type: apiProfileConstants.CREATE_PROFILE_SUCCESS,
-          payload: response,
-        })
-      },
-      errors => {
-        dispatch({
-          type: apiProfileConstants.CREATE_PROFILE_FAILURE,
-          payload: errors,
-        });
-      }
-    )
+      .then(
+        response => {
+          dispatch({
+            type: apiProfileConstants.CREATE_PROFILE_SUCCESS,
+            payload: response,
+          })
+        },
+        errors => {
+          dispatch({
+            type: apiProfileConstants.CREATE_PROFILE_FAILURE,
+            payload: errors,
+          });
+        }
+      )
   };
 };
   
@@ -30,14 +30,16 @@ const updateProfile = (options) => {
       type: apiProfileConstants.UPDATE_PROFILE_REQUEST,
     });
     return makeApiRequest('update_profile', 'post', options)
-    .then(
+      .then(
       response => {
+        console.log('RESPONSE: ', response);
         dispatch({
           type: apiProfileConstants.UPDATE_PROFILE_SUCCESS,
           payload: response,
         })
       },
       errors => {
+        console.log('ERRORS: ', errors);
         dispatch({
           type: apiProfileConstants.UPDATE_PROFILE_FAILURE,
           payload: errors,
@@ -76,20 +78,20 @@ const deactivateProfile = (options) => {
       type: apiProfileConstants.DEACTIVATE_PROFILE_REQUEST,
     });
     return makeApiRequest('deactivate_profile', 'post', options)
-    .then(
-      response => {
-        dispatch({
-          type: apiProfileConstants.DEACTIVATE_PROFILE_SUCCESS,
-          payload: response,
-        })
-      },
-      errors => {
-        dispatch({
-          type: apiProfileConstants.DEACTIVATE_PROFILE_FAILURE,
-          payload: errors,
-        });
-      }
-    )
+      .then(
+        response => {
+          dispatch({
+            type: apiProfileConstants.DEACTIVATE_PROFILE_SUCCESS,
+            payload: response,
+          })
+        },
+        errors => {
+          dispatch({
+            type: apiProfileConstants.DEACTIVATE_PROFILE_FAILURE,
+            payload: errors,
+          });
+        }
+      )
   };
 };
 

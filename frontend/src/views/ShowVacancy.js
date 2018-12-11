@@ -172,21 +172,24 @@ class ShowVacancy extends React.Component {
                 <Group title="Информация о вакансии">
                   <Cell
                     multiline
+                    description="Предмет обучения"
                     before={<Icon24Education />}
                   >
                     {vacancy.subject}
                   </Cell>
                   <Cell
                     multiline
+                    description="Стоимость занятия"
                     before={<Icon24MoneyCircle/>}
                   >
                     {vacancy.price} рублей/час
                   </Cell>
                   <Cell
                     multiline
+                    description="Дополнительная информация"
                     before={<Icon24Info />}
                   >
-                    {vacancy.extra_info || "Дополнительная информация не указана"}
+                    {vacancy.extra_info || "Не указана"}
                   </Cell>
                 </Group>
               </div>

@@ -104,7 +104,7 @@ class Start extends React.Component {
       <View popout={this.state.popout} id={this.props.id} activePanel="home">
         <Panel id="home">
           <PanelHeader noShadow>
-            Tutor
+            Поиск репетиторов
           </PanelHeader>
           <Main>
             <Gallery bullets="dark" style={{ height: 'auto', textAlign: 'center' }}>

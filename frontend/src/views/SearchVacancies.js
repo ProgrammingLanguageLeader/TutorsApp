@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import {
-  View, Panel, PanelHeader, Cell, HeaderButton, Avatar, Div, PanelHeaderContent
+  View, Panel, PanelHeader, Cell, HeaderButton, Avatar, PanelHeaderContent, Group, Footer
 } from '@vkontakte/vkui';
 
 import Icon24Filter from '@vkontakte/icons/dist/24/filter';
@@ -40,15 +40,15 @@ class SearchVacancies extends React.Component {
         ...params,
       })
     )
-    .then(() => {
-      const { accessToken, vacancies } = this.props;
-      const vkIds = vacancies.map(vacancy => {
-        return vacancy.owner.profile_id;
+      .then(() => {
+        const { accessToken, vacancies } = this.props;
+        const vkIds = vacancies.map(vacancy => {
+          return vacancy.owner.profile_id;
+        });
+        this.props.dispatch(
+          vkApiActions.fetchUsersInfo(accessToken, vkIds)
+        );
       });
-      this.props.dispatch(
-        vkApiActions.fetchUsersInfo(accessToken, vkIds)
-      );
-    });
   }
 
   componentDidMount() {
@@ -60,7 +60,7 @@ class SearchVacancies extends React.Component {
 
     return (
       <View id={this.props.id} activePanel="search">
-        <Panel id="search" theme="white">
+        <Panel id="search">
           <PanelHeader
             left={
               <HeaderButton onClick={() => this.props.dispatch(
@@ -77,8 +77,9 @@ class SearchVacancies extends React.Component {
           { vkApiFetching || apiVacancyFetching ? (
             <DivSpinner />
           ) : (
-            <Div>
-              { vacancies
+            <div>
+              <Group title="Список предложений" >
+                { vacancies
                   .filter(vacancy => vkUsersInfo[vacancy.owner.profile_id])
                   .map(vacancy => {
                     const userInfo = vkUsersInfo[vacancy.owner.profile_id];
@@ -112,8 +113,18 @@ class SearchVacancies extends React.Component {
                       </Cell>
                     );
                   })
-              }
-            </Div>
+                }
+              </Group>
+              <Footer>
+                {
+                  vacancies.length === 1
+                  ? `Показано ${vacancies.length} предложение`
+                  : (2 <= vacancies.length) && (vacancies.length <= 4)
+                    ? `Показано ${vacancies.length} предложения`
+                    : `Показано ${vacancies.length} предложений`
+                }
+              </Footer>
+            </div>
           )}
         </Panel>
       </View>

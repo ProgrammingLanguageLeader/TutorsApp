@@ -14,6 +14,7 @@ import DivSpinner from '../components/DivSpinner';
 import Main from '../components/Main';
 
 import { apiProfileActions, locationActions } from '../actions';
+import Moment from "react-moment";
 
 const mapStateToProps = (state) => {
   const { vkUserInfo } = state.vkAppsReducer;
@@ -38,13 +39,11 @@ class ShowProfile extends React.Component {
   }
 
 	render() {
-    const { vkAppsFetching, apiProfileFetching } = this.props;
-    const { city, photo_200, first_name, last_name } = this.props.vkUserInfo;
-    const { description, experience, education, address } = this.props.profile;
+    const { vkUserInfo, vkAppsFetching, apiProfileFetching, profile } = this.props;
 
 		return (
-      <View id={this.props.id} activePanel="tutor_profile">
-        <Panel id="tutor_profile">
+      <View id={this.props.id} activePanel="profile">
+        <Panel id="profile">
           <PanelHeader>
             Профиль
           </PanelHeader>
@@ -52,12 +51,13 @@ class ShowProfile extends React.Component {
           { vkAppsFetching || apiProfileFetching ? (
             <DivSpinner />
           ) : (
-            <Main>
-              <Group id="profile" style={{ marginTop: 0 }}>
+            <div>
+              <Group>
                 <Cell
                   size="l"
-                  description={city ? city.title : ""}
-                  before={<Avatar src={photo_200} />}
+                  multiline
+                  description="Здесь можно посмотреть и отредактировать публичную информацию о Вашем профиле"
+                  before={<Avatar size={80} src={vkUserInfo.photo_200} />}
                   asideContent={
                     <HeaderButton onClick={() => this.props.dispatch(
                       locationActions.changeLocation('edit_profile')
@@ -66,26 +66,69 @@ class ShowProfile extends React.Component {
                     </HeaderButton>
                   }
                 >
-                  {`${first_name} ${last_name}`}
+                  {`${vkUserInfo.first_name} ${vkUserInfo.last_name}`}
                 </Cell>
               </Group>
-              <Group id="profile_info">
-                <List>
-                  <Cell multiline before={<Icon24Recent />}>
-                    {experience || "Стаж не задан"}
-                  </Cell>
-                  <Cell multiline before={<Icon24Education />}>
-                    {education || "Образование не указано"}
-                  </Cell>
-                  <Cell multiline before={<Icon24Home />}>
-                    {address || "Адрес не указан"}
-                  </Cell>
-                  <Cell multiline before={<Icon24Info />}>
-                    {description || "Не указано"}
-                  </Cell>
-                </List>
+              <Group title="Информация о пользователе">
+                {
+                  profile.creation_time && (
+                    <Cell multiline description="Дата создания профиля">
+                      <Moment locale="ru" format="D MMMM YYYY">
+                        {profile.creation_time}
+                      </Moment>
+                    </Cell>
+                  )}
+                {
+                  profile.experience && (
+                    <Cell multiline description="Опыт преподавания">
+                      {profile.experience}
+                    </Cell>
+                  )
+                }
+                {
+                  profile.education && (
+                    <Cell multiline description="Образование">
+                      {profile.education}
+                    </Cell>
+                  )
+                }
+                {
+                  profile.city && (
+                    <Cell multiline description="Город">
+                      {profile.city}
+                    </Cell>
+                  )
+                }
+                {
+                  profile.district && (
+                    <Cell multiline description="Район">
+                      {profile.district}
+                    </Cell>
+                  )
+                }
+                {
+                  profile.street && (
+                    <Cell multiline description="Улица">
+                      {profile.street}
+                    </Cell>
+                  )
+                }
+                {
+                  profile.metro_station && (
+                    <Cell multiline description="Станция метро">
+                      {profile.metro_station}
+                    </Cell>
+                  )
+                }
+                {
+                  profile.description && (
+                    <Cell multiline description="О себе">
+                      {profile.description}
+                    </Cell>
+                  )
+                }
               </Group>
-            </Main>
+            </div>
           )}
         </Panel>
       </View>

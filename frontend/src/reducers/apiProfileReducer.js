@@ -29,6 +29,7 @@ const apiProfileReducer = (state = initialState, action) => {
     case apiProfileConstants.GET_PROFILE_SUCCESS:
       return state.merge({
         profile: action.payload,
+        fetching: false,
         errors: null,
       });
 

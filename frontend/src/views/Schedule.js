@@ -1,15 +1,22 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import {
-  View, Panel, PanelHeader, Cell, Avatar, Group, Div, HeaderButton
+  View, Panel, PanelHeader, Cell, Avatar, Group, Div, HeaderButton, CellButton
 } from '@vkontakte/vkui';
-import Calendar from 'react-calendar';
+
+import Icon24Back from "@vkontakte/icons/dist/24/back";
+import Icon24Add from '@vkontakte/icons/dist/24/add';
+
+import Calendar from 'rc-calendar';
+import moment from 'moment';
+import 'rc-calendar/assets/index.css';
+
 import Moment from 'react-moment';
+import russianLocale from 'rc-calendar/lib/locale/ru_RU';
 
 import DivSpinner from '../components/DivSpinner';
 
 import { apiLessonActions, vkApiActions, locationActions } from '../actions';
-import Icon24Back from "@vkontakte/icons/dist/24/back";
 
 const mapStateToProps = state => {
   const apiLessonFetching = state.apiLessonReducer.fetching;
@@ -30,7 +37,7 @@ class Schedule extends React.Component {
     super(props);
 
     this.state = {
-      date: new Date()
+      date: moment()
     };
 
     this.onCalendarChange = this.onCalendarChange.bind(this);
@@ -41,13 +48,13 @@ class Schedule extends React.Component {
     this.props.dispatch(
       vkApiActions.stopFetching()
     );
+    this.fetchLessons();
   }
 
-  onCalendarChange(data) {
+  onCalendarChange(date) {
     this.setState({
-      data
+      date
     });
-    this.fetchLessons();
   }
 
   fetchLessons() {
@@ -88,47 +95,50 @@ class Schedule extends React.Component {
 						Расписание
 					</PanelHeader>
           <Group title="Календарь">
-            <Div>
+            <Div style={{ textAlign: "center" }}>
               <Calendar
-                locale="RU"
+                style={{ display: "inline-block" }}
                 value={this.state.date}
                 onChange={this.onCalendarChange}
+                locale={russianLocale}
               />
             </Div>
           </Group>
           <Group title="Занятия в выбранный день">
             { fetching
               ? <DivSpinner />
-              : lessons.length > 0
-                ? (
-                  lessons
-                    .filter(lesson => vkUsersInfo.get(lesson.student.profile_id))
-                    .map(lesson => {
-                      const studentVkInfo = vkUsersInfo.get(lesson.student.profile_id);
-                      const { student, lesson_id } = lesson;
-                      return (
-                        <Cell
-                          size="l"
-                          description={student.city ? student.city : ""}
-                          before={<Avatar src={studentVkInfo.photo_200} />}
-                          key={lesson_id}
-                          asideContent={
-                            <div>
-                              <Moment format="HH:mm - " date={lesson.beginning_time}/>
-                              <Moment format="HH:mm" date={lesson.ending_time}/>
-                            </div>
-                          }
-                        >
-                          {studentVkInfo.firstName} {studentVkInfo.lastName}
-                        </Cell>
-                      )
-                    })
-                )
-                : (
-                  <Cell>
-                    Не запланировано
-                  </Cell>
-                )
+              : (
+                <div>
+                  <CellButton before={<Icon24Add />}>
+                    Добавить урок
+                  </CellButton>
+                  {
+                    lessons
+                      .filter(lesson => vkUsersInfo[lesson.student.profile_id])
+                      .map(lesson => {
+                        const studentVkInfo = vkUsersInfo[lesson.student.profile_id];
+                        const { student, lesson_id } = lesson;
+                        return (
+                          <Cell
+                            size="l"
+                            multiline
+                            description={`${lesson.price} рублей за занятие`}
+                            before={<Avatar src={studentVkInfo.photo_200} />}
+                            key={lesson_id}
+                            asideContent={
+                              <div>
+                                <Moment format="HH:mm - " date={lesson.beginning_time}/>
+                                <Moment format="HH:mm" date={lesson.ending_time}/>
+                              </div>
+                            }
+                          >
+                            {studentVkInfo.firstName} {studentVkInfo.lastName}
+                          </Cell>
+                        )
+                      })
+                  }
+                </div>
+              )
             }
           </Group>
         </Panel>
