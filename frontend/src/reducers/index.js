@@ -2,6 +2,7 @@ import { combineReducers } from 'redux';
 
 import apiLessonApplicationReducer from './apiLessonApplicationReducer';
 import apiStudentApplicationReducer from './apiStudentApplicationReducer';
+import apiPaymentApplicationReducer from './apiPaymentApplicationReducer';
 import apiLessonReducer from './apiLessonReducer';
 import apiNotificationReducer from './apiNotificationReducer';
 import apiProfileReducer from './apiProfileReducer';
@@ -17,6 +18,7 @@ import filterReducer from './filterReducer';
 const rootReducer = combineReducers({
   apiLessonApplicationReducer,
   apiStudentApplicationReducer,
+  apiPaymentApplicationReducer,
   apiLessonReducer,
   apiNotificationReducer,
   apiProfileReducer,
