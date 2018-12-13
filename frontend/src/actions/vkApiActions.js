@@ -51,12 +51,6 @@ const fetchNotificationStatus = (accessToken) => dispatch => {
   );
 };
 
-const stopFetching = () => dispatch => {
-  dispatch({
-    type: vkApiConstants.VK_API_STOP_FETCHING,
-  });
-};
-
 export const vkApiActions = {
-  fetchUsersInfo, fetchNotificationStatus, stopFetching,
+  fetchUsersInfo, fetchNotificationStatus,
 };

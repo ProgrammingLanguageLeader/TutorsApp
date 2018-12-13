@@ -6,8 +6,10 @@ import apiNotificationReducer from './apiNotificationReducer';
 import apiProfileReducer from './apiProfileReducer';
 import apiStudentsReducer from './apiStudentsReducer';
 import apiVacancyReducer from './apiVacancyReducer';
-import vkAppsReducer from './vkAppsReducer';
-import vkApiReducer from './vkApiReducer';
+import vkAppsUserReducer from './vkAppsUserReducer';
+import vkAppsTokenReducer from './vkAppsTokenReducer';
+import vkApiUsersReducer from './vkApiUsersReducer';
+import vkApiNotificationsReducer from './vkApiNotificationsReducer';
 import locationReducer from './locationReducer';
 import filterReducer from './filterReducer';
 
@@ -18,8 +20,10 @@ const rootReducer = combineReducers({
   apiProfileReducer,
   apiStudentsReducer,
   apiVacancyReducer,
-  vkAppsReducer,
-  vkApiReducer,
+  vkAppsUserReducer,
+  vkAppsTokenReducer,
+  vkApiUsersReducer,
+  vkApiNotificationsReducer,
   locationReducer,
   filterReducer,
 });

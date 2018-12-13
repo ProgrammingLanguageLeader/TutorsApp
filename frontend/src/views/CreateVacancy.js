@@ -2,34 +2,39 @@ import React from 'react';
 import { connect } from 'react-redux';
 import {
   View, Panel, PanelHeader, HeaderButton, Cell, Button, Input, FormLayout, Radio, List,
-  Checkbox, SelectMimicry, Group, colors, FormLayoutGroup, Alert
+  Checkbox, SelectMimicry, Group, FormLayoutGroup, ScreenSpinner, PopoutWrapper, FormStatus
 } from '@vkontakte/vkui';
 
-import Main from '../components/Main';
-import BackIcon from '../components/BackIcon';
-
+import Icon36Done from "@vkontakte/icons/dist/36/done";
+import Icon36Cancel from "@vkontakte/icons/dist/36/cancel";
 import Icon24Done from '@vkontakte/icons/dist/24/done';
 
-import { locationActions } from '../actions';
-import { apiVacancyActions } from '../actions';
+import BackIcon from '../components/BackIcon';
+import PopoutDiv from "../components/PopoutDiv";
+
+import { subjectsList, educationLevelList } from '../constants';
+import { locationActions, apiVacancyActions } from '../actions';
+
+const mapStateToProps = (state) => {
+  const { activePanel } = state.locationReducer;
+  const { vkUserInfo } = state.vkAppsUserReducer;
+  const apiVacancyErrors = state.apiVacancyReducer.errors;
+  return {
+    vkUserInfo, apiVacancyErrors, activePanel,
+  };
+};
 
 class CreateVacancy extends React.Component {
   constructor(props) {
     super(props);
+    const backendFieldsWithNulls = educationLevelList.reduce((object, level) => {
+      return { ...object, [level.backendField]: null }
+    }, {});
     this.state = {
-      subject: '',
-      studyLevel: '',
-      primary_school: null,
-      secondary_school: null,
-      olympiads: null,
-      ege: null,
-      oge: null,
-      university: null,
+      popout: null,
       home_schooling: null,
       price: null,
-
-      activePanel: 'create_vacancy',
-      popout: null,
+      ...backendFieldsWithNulls
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -49,57 +54,50 @@ class CreateVacancy extends React.Component {
   createVacancy(event) {
     event.preventDefault();
 
+    const { id, signed_user_id } = this.props.vkUserInfo;
+    this.setState({
+      popout: <ScreenSpinner/>
+    });
     this.props.dispatch(
-      apiVacancyActions.createVacancy(this.state)
-    );
-  }
-
-  componentWillReceiveProps(nextProps) {
-    console.log(nextProps.vacancyCreated);
-    if (nextProps.vacancyCreated) {
-      this.setState({
-        popout: (
-          <Alert 
-            actions={[{
-              title: 'Close',
-              autoclose: true,
-              style: 'destructive'
-            }]}
-            onClose={() => this.props.dispatch(
-              locationActions.changeLocation('active_tutor', 'requests')
-            )}
-          >
-            <h2>Сообщение</h2>
-            <p>Вакансия успешно создана</p>
-          </Alert>
-        ),
-        fetching: false,
-      });
-    }
-    else if (nextProps.vacancyCreated !== null) {
-      this.setState({
-        popout: (
-          <Alert 
-            actions={[{
-              title: 'Close',
-              autoclose: true,
-              style: 'destructive'
-            }]}
-            onClose={() => this.setState({ popout: null })}
-          >
-            <h2>Ошибка</h2>
-            <p>Проверьте правильность ввода</p>
-          </Alert>
-        ),
-        fetching: false,
-      });
-    }
+      apiVacancyActions.createVacancy({
+        user_id: id,
+        signed_user_id: signed_user_id,
+        ...this.state
+      })
+    )
+      .then(() => {
+        const { apiVacancyErrors } = this.props;
+        this.setState({
+          popout: !apiVacancyErrors
+            ? (
+              <PopoutWrapper>
+                <PopoutDiv>
+                  <Icon36Done/>
+                </PopoutDiv>
+              </PopoutWrapper>
+            )
+            : (
+              <PopoutWrapper>
+                <PopoutDiv>
+                  <Icon36Cancel/>
+                </PopoutDiv>
+              </PopoutWrapper>
+            )
+        })
+      })
+      .then(setTimeout(() => {
+        this.setState({
+          popout: null
+        })
+      },1500))
   }
 
   render() {
+    const { activePanel, apiVacancyErrors } = this.props;
+
     return (
-      <View popout={this.state.popout} id={this.props.id} activePanel={this.state.activePanel}>
-        <Panel id="create_vacancy" theme="white">
+      <View id={this.props.id} activePanel={activePanel || "create_vacancy"} popout={this.state.popout}>
+        <Panel id="create_vacancy">
           <PanelHeader
             left={
               <HeaderButton onClick={() => this.props.dispatch(locationActions.goBack())}>
@@ -107,26 +105,44 @@ class CreateVacancy extends React.Component {
               </HeaderButton>
             }
           >
-            Cоздание вакансии
+            Создание вакансии
           </PanelHeader>
-          <Main>
+          <Group title="Заполняемые поля">
             <FormLayout>
+              {
+                apiVacancyErrors
+                ? (
+                  <FormStatus title="Некорректные данные" state="error">
+                    Проверьте заполненность всех полех и их содержимое
+                  </FormStatus>
+                )
+                : null
+              }
               <FormLayoutGroup top="Предмет">
-                <SelectMimicry onClick={() => this.setState({ activePanel: 'subject' })}>
+                <SelectMimicry
+                  onClick={() => this.props.dispatch(
+                    locationActions.changeLocation(this.props.id, "select_subject")
+                  )}
+                >
                   {this.state.subject}
                 </SelectMimicry>
               </FormLayoutGroup>
               <FormLayoutGroup top="Уровень обучения">
-                <Checkbox name="primary_school" onChange={this.handleChange}>Начальная школа</Checkbox>
-                <Checkbox name="secondary_school" onChange={this.handleChange}>Средняя школа</Checkbox>
-                <Checkbox name="olympiads" onChange={this.handleChange}>Олимпиады</Checkbox>
-                <Checkbox name="ege" onChange={this.handleChange}>Подготовка к ОГЭ</Checkbox>
-                <Checkbox name="oge" onChange={this.handleChange}>Подготовка к ЕГЭ</Checkbox>
-                <Checkbox name="university" onChange={this.handleChange}>Курс высшего образования</Checkbox>
+                {
+                  educationLevelList.map(level => (
+                    <Checkbox key={level.name} name={level.backendField} onChange={this.handleChange}>
+                      {level.name}
+                    </Checkbox>
+                  ))
+                }
               </FormLayoutGroup>
               <FormLayoutGroup top="Выезд на дом">
-                <Radio value={true} name="home_schooling" onChange={this.handleChange}>Да</Radio>
-                <Radio value={false} name="home_schooling" onChange={this.handleChange}>Нет</Radio>
+                <Radio value="yes" name="home_schooling" onChange={this.handleChange}>
+                  Да
+                </Radio>
+                <Radio value="no" name="home_schooling" onChange={this.handleChange}>
+                  Нет
+                </Radio>
               </FormLayoutGroup>
               <FormLayoutGroup top="Плата за час обучения">
                 <Input name="price" type="number" onChange={this.handleChange} />
@@ -135,61 +151,61 @@ class CreateVacancy extends React.Component {
                 Разместить
               </Button>
             </FormLayout>
-          </Main>
+          </Group>
         </Panel>
 
-        <Panel id="subject">
+        <Panel id="select_subject">
           <PanelHeader
             left={
-              <HeaderButton onClick={() => this.setState({ activePanel: 'create_vacancy' })}>
+              <HeaderButton onClick={() => this.props.dispatch(locationActions.goBack())}>
                 <BackIcon />
               </HeaderButton>
             }
           >
             Предмет
           </PanelHeader>
-          <Main>
-            <Group>
-              <List>
-                <Cell
-                  onClick={() => this.setState({ subject: 'Математика', activePanel: 'create_vacancy' })}
-                  asideContent={this.state.subject === 'Математика' ? <Icon24Done fill={colors.blue_300} /> : null}
-                >
-                  Математика
-                </Cell>
-                <Cell
-                  onClick={() => this.setState({ subject: 'Физика', activePanel: 'create_vacancy' })}
-                  asideContent={this.state.subject === 'Физика' ? <Icon24Done fill={colors.blue_300} /> : null}
-                >
-                  Физика
-                </Cell>
-                <Cell
-                  onClick={() => this.setState({ subject: 'Русский язык', activePanel: 'create_vacancy' })}
-                  asideContent={this.state.subject === 'Русский язык' ? <Icon24Done fill={colors.blue_300} /> : null}
+          <Group title="Список предметов">
+            <List>
+              {
+                subjectsList.map(subject => (
+                  <Cell
+                    key={subject}
+                    onClick={() => {
+                      this.setState({ subject: subject });
+                      this.props.dispatch(locationActions.goBack());
+                    }}
+                    asideContent={
+                      this.state.subject === subject
+                      ? <Icon24Done />
+                      : null
+                    }
                   >
-                  Русский язык
-                </Cell>
-                <Cell
-                  onClick={() => this.setState({ subject: 'Английский язык', activePanel: 'create_vacancy' })}
-                  asideContent={this.state.subject === 'Английский язык' ? <Icon24Done fill={colors.blue_300} /> : null}
-                >
-                  Английский язык
-                </Cell>
-              </List>
-            </Group>
-          </Main>
+                    { subject }
+                  </Cell>
+                ))
+              }
+            </List>
+          </Group>
+          <Group title="Ручной ввод">
+            <Cell
+              multiline
+              description="Если вашего предмета не оказалось в списке, введите его название вручную"
+            >
+              <Input name="subject" type="text" placeholder="Название предмета" onChange={this.handleChange} />
+            </Cell>
+            <Cell>
+              <Button
+                size="xl"
+                onClick={() => this.props.dispatch(locationActions.goBack())}
+              >
+                Принять
+              </Button>
+            </Cell>
+          </Group>
         </Panel>
       </View>
     );
   }
 }
-
-const mapStateToProps = (state) => {
-  const { userInfo } = state.vkReducer;
-  const { vacancyCreated } = state.apiReducer;
-  return {
-    userInfo, vacancyCreated, 
-  };
-};
 
 export default connect(mapStateToProps)(CreateVacancy);

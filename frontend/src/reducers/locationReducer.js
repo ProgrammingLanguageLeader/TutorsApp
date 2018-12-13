@@ -1,5 +1,7 @@
 import { locationConstants } from '../constants/locationConstants';
 
+const HISTORY_MAX_SIZE = 32;
+
 const initialState = {
   activeView: "start",
   activePanel: "",
@@ -19,6 +21,9 @@ const locationReducer = (state = initialState, action) => {
         activePanel: prevActivePanel,
         params: prevParams,
       });
+      if (history.length > HISTORY_MAX_SIZE) {
+        history = history.slice(1, HISTORY_MAX_SIZE + 1);
+      }
       return {
         activeView: action.activeView,
         activePanel: action.activePanel,

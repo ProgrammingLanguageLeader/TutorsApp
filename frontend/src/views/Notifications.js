@@ -14,16 +14,16 @@ import { locationActions, apiApplicationActions, vkApiActions } from '../actions
 
 const mapStateToProps = state => {
   const { activePanel } = state.locationReducer;
-  const { accessToken, vkUserInfo } = state.vkAppsReducer;
-  const { vkUsersInfo } = state.vkApiReducer;
+  const { accessToken, vkUserInfo } = state.vkAppsUserReducer;
+  const { vkUsersInfo } = state.vkApiUsersReducer;
   // TODO: rewrite using new application methods
   // const { applications } = state.apiApplicationReducer;
   const applications = [];
   const apiApplicationFetching = state.apiApplicationReducer.fetching;
-  const vkApiFetching = state.vkApiReducer.fetching;
+  const vkApiUsersFetching = state.vkApiUsersReducer.fetching;
   return {
     activePanel, applications, accessToken, vkUserInfo, vkUsersInfo,
-    apiApplicationFetching, vkApiFetching,
+    apiApplicationFetching, vkApiUsersFetching,
   };
 };
 
@@ -86,8 +86,8 @@ class Notifications extends React.Component {
   }
 
   render () {
-    const { vkUsersInfo, applications, apiApplicationFetching, vkApiFetching } = this.props;
-    const fetching =  apiApplicationFetching || vkApiFetching;
+    const { vkUsersInfo, applications, apiApplicationFetching, vkApiUsersFetching } = this.props;
+    const fetching =  apiApplicationFetching || vkApiUsersFetching;
 
     return (
       <View id={this.props.id} activePanel="notifications">

@@ -3,26 +3,21 @@ import { connect } from 'react-redux';
 import { 
 	View, Panel, PanelHeader, Cell, Avatar, List, HeaderButton, Group
 } from '@vkontakte/vkui';
-
-import Icon24Home from '@vkontakte/icons/dist/24/home';
-import Icon24Education from '@vkontakte/icons/dist/24/education';
-import Icon24Recent from '@vkontakte/icons/dist/24/recent';
-import Icon24Info from '@vkontakte/icons/dist/24/info';
-import Icon24Write from '@vkontakte/icons/dist/24/write';
-
-import DivSpinner from '../components/DivSpinner';
-import Main from '../components/Main';
-
-import { apiProfileActions, locationActions } from '../actions';
 import Moment from "react-moment";
 
+import Icon24Write from '@vkontakte/icons/dist/24/write';
+
+import { apiProfileActions, locationActions } from '../actions';
+import DivSpinner from '../components/DivSpinner';
+
+
 const mapStateToProps = (state) => {
-  const { vkUserInfo } = state.vkAppsReducer;
+  const { vkUserInfo } = state.vkAppsUserReducer;
   const { profile } = state.apiProfileReducer;
-  const vkAppsFetching = state.vkAppsReducer.fetching;
+  const vkAppsUserFetching = state.vkAppsUserReducer.fetching;
   const apiProfileFetching = state.apiProfileReducer.fetching;
   return {
-    vkUserInfo, profile, vkAppsFetching, apiProfileFetching,
+    vkUserInfo, profile, vkAppsUserFetching, apiProfileFetching,
   };
 };
 
@@ -39,7 +34,7 @@ class ShowProfile extends React.Component {
   }
 
 	render() {
-    const { vkUserInfo, vkAppsFetching, apiProfileFetching, profile } = this.props;
+    const { vkUserInfo, vkAppsUserFetching, apiProfileFetching, profile } = this.props;
 
 		return (
       <View id={this.props.id} activePanel="profile">
@@ -48,7 +43,7 @@ class ShowProfile extends React.Component {
             Профиль
           </PanelHeader>
 
-          { vkAppsFetching || apiProfileFetching ? (
+          { vkAppsUserFetching || apiProfileFetching ? (
             <DivSpinner />
           ) : (
             <div>

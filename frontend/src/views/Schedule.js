@@ -20,15 +20,16 @@ import { apiLessonActions, vkApiActions, locationActions } from '../actions';
 
 const mapStateToProps = state => {
   const apiLessonFetching = state.apiLessonReducer.fetching;
-  const vkAppsFetching = state.vkAppsReducer.fetching;
-  const vkApiFetching = state.vkApiReducer.fetching;
+  const vkAppsUserFetching = state.vkAppsUserReducer.fetching;
+  const vkApiUsersFetching = state.vkApiUsersReducer.fetching;
   const { lessons } = state.apiLessonReducer;
-  const { vkUserInfo, accessToken } = state.vkAppsReducer;
-  const { vkUsersInfo } = state.vkApiReducer;
+  const { vkUserInfo } = state.vkAppsUserReducer;
+  const { accessToken } = state.vkAppsTokenReducer;
+  const { vkUsersInfo } = state.vkApiUsersReducer;
   const { activePanel } = state.locationReducer;
   return {
     vkUserInfo, activePanel, vkUsersInfo, lessons,
-    apiLessonFetching, vkAppsFetching, vkApiFetching, accessToken,
+    apiLessonFetching, vkAppsUserFetching: vkAppsUserFetching, vkApiUsersFetching, accessToken,
   };
 };
 
@@ -45,9 +46,6 @@ class Schedule extends React.Component {
   }
 
   componentDidMount() {
-    this.props.dispatch(
-      vkApiActions.stopFetching()
-    );
     this.fetchLessons();
   }
 
@@ -77,8 +75,8 @@ class Schedule extends React.Component {
   }
 
 	render() {
-    const { lessons, vkUsersInfo, apiLessonFetching, vkAppsFetching, vkApiFetching } = this.props;
-    const fetching = apiLessonFetching || vkAppsFetching || vkApiFetching;
+    const { lessons, vkUsersInfo, apiLessonFetching, vkAppsUserFetching, vkApiUsersFetching } = this.props;
+    const fetching = apiLessonFetching || vkAppsUserFetching || vkApiUsersFetching;
 
 		return (
 			<View id={this.props.id} activePanel="schedule">

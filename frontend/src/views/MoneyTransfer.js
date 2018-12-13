@@ -10,7 +10,7 @@ import { locationActions } from '../actions';
 import BackIcon from "../components/BackIcon";
 
 const mapStateToProps = (state) => {
-  return {};
+  return state;
 };
 
 class ShowProfile extends React.Component {

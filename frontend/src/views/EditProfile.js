@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import {
   View, Panel, PanelHeader, Cell, Avatar, Button, Input, FormLayout,
-  Textarea, HeaderButton, Group, PopoutWrapper
+  Textarea, HeaderButton, Group, PopoutWrapper, ScreenSpinner
 } from '@vkontakte/vkui';
 
 import Icon36Done from '@vkontakte/icons/dist/36/done';
@@ -10,17 +10,18 @@ import Icon36Cancel from '@vkontakte/icons/dist/36/cancel';
 
 import BackIcon from '../components/BackIcon';
 import DivSpinner from '../components/DivSpinner';
+import PopoutDiv from '../components/PopoutDiv';
 
 import { apiProfileActions, locationActions  } from '../actions';
 
 const mapStateToProps = (state) => {
-  const { vkUserInfo } = state.vkAppsReducer;
+  const { vkUserInfo } = state.vkAppsUserReducer;
   const { profile } = state.apiProfileReducer;
   const apiProfileFetching = state.apiProfileReducer.fetching;
-  const vkAppsFetching = state.vkAppsReducer.fetching;
+  const vkAppsUserFetching = state.vkAppsUserReducer.fetching;
   const apiProfileErrors = state.apiProfileReducer.errors;
   return {
-    vkUserInfo, profile, apiProfileFetching, vkAppsFetching, apiProfileErrors
+    vkUserInfo, profile, apiProfileFetching, vkAppsUserFetching, apiProfileErrors
   };
 };
 
@@ -73,6 +74,9 @@ class EditProfile extends React.Component {
     event.preventDefault();
 
     const { id, signed_user_id } = this.props.vkUserInfo;
+    this.setState({
+      popout: <ScreenSpinner/>
+    });
     this.props.dispatch(
       apiProfileActions.updateProfile({
         user_id: id,
@@ -80,18 +84,22 @@ class EditProfile extends React.Component {
         ...this.state
       })
     )
-      .then((opt) => {
+      .then(() => {
         const { apiProfileErrors } = this.props;
         this.setState({
           popout: !apiProfileErrors
             ? (
               <PopoutWrapper>
-                <Icon36Done/>
+                <PopoutDiv>
+                  <Icon36Done/>
+                </PopoutDiv>
               </PopoutWrapper>
             )
             : (
               <PopoutWrapper>
-                <Icon36Cancel/>
+                <PopoutDiv>
+                  <Icon36Cancel/>
+                </PopoutDiv>
               </PopoutWrapper>
             )
         })
@@ -104,11 +112,11 @@ class EditProfile extends React.Component {
   }
 
   render() {
-    const { vkUserInfo, apiProfileFetching, vkAppsFetching } = this.props;
+    const { vkUserInfo, apiProfileFetching, vkAppsUserFetching } = this.props;
     const {
       experience, education, city, district, street, metro_station, description
     } = this.state;
-    const fetching = apiProfileFetching || vkAppsFetching;
+    const fetching = apiProfileFetching || vkAppsUserFetching;
 
     return (
       <View id={this.props.id} activePanel="edit_profile" popout={this.state.popout}>

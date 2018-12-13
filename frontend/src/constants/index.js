@@ -9,3 +9,5 @@ export * from './locationConstants';
 export * from './vkAppsConstants';
 export * from './vkApiContants';
 export * from './apiConstants';
+export * from './subjectsList';
+export * from './educationLevelList'

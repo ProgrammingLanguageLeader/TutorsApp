@@ -6,12 +6,20 @@ import {
 } from '@vkontakte/vkui';
 
 import './Start.css';
-
 import introOne from '../assets/intro_one.png'
 import introTwo from '../assets/intro_two.png'
 import introThree from '../assets/intro_three.png'
 
 import { apiProfileActions, locationActions } from '../actions';
+import PopoutDiv from '../components/PopoutDiv';
+
+const mapStateToProps = (state) => {
+  const { vkUserInfo } = state.vkAppsUserReducer;
+  const { profile } = state.apiProfileReducer;
+  return {
+    vkUserInfo, profile,
+  };
+};
 
 const Main = styled.div.attrs({
   className: "fullHeight",
@@ -34,6 +42,14 @@ const IntroImage = styled.img`
   height: auto;
 `;
 
+const StartButton = styled(Button)`
+  margin: 2px;
+  height: 52px;
+  display: flex;
+  flex: 1;
+  justify-content: center;
+`;
+
 class Start extends React.Component {
   constructor(props) {
     super(props);
@@ -51,7 +67,7 @@ class Start extends React.Component {
     }
     const { id, signed_user_id } = this.props.vkUserInfo;
     this.setState({
-      popout: <ScreenSpinner />
+      popout: <PopoutDiv><ScreenSpinner /></PopoutDiv>
     });
     this.props.dispatch(
       apiProfileActions.getProfile({
@@ -60,27 +76,27 @@ class Start extends React.Component {
         signed_user_id: signed_user_id,
       })
     )
-    .then(() => {
-      if (this.props.profile.profile_id) {
-        return Promise.resolve();
-      }
-      return this.props.dispatch(
-        apiProfileActions.createProfile({
-          user_id: id,
-          signed_user_id: signed_user_id,
-        })
-      )
-    })
-    .then(() => {
-      this.setState({
-        popout: null
+      .then(() => {
+        if (this.props.profile.profile_id) {
+          return Promise.resolve();
+        }
+        return this.props.dispatch(
+          apiProfileActions.createProfile({
+            user_id: id,
+            signed_user_id: signed_user_id,
+          })
+        )
+      })
+      .then(() => {
+        this.setState({
+          popout: null
+        });
       });
-    });
   }
 
   goToVacanciesSearch() {
     this.props.dispatch(
-      locationActions.changeLocation('search'),
+      locationActions.changeLocation('search_vacancies'),
     )
   }
 
@@ -130,30 +146,12 @@ class Start extends React.Component {
           </Main>
           <FixedLayout vertical="bottom">
             <Div style={{ display: 'flex' }}>
-              <Button
-                style={{
-                  margin: 2,
-                  height: 52,
-                  display: 'flex',
-                  flex: 1,
-                  justifyContent: 'center'
-                }}
-                onClick={this.goToVacanciesSearch}
-              >
+              <StartButton onClick={this.goToVacanciesSearch}>
                 Найти репититора
-              </Button>
-              <Button
-                style={{
-                  margin: 2,
-                  height: 52,
-                  display: 'flex',
-                  flex: 1,
-                  justifyContent: 'center'
-                }}
-                onClick={this.goToProfile}
-              >
+              </StartButton>
+              <StartButton onClick={this.goToProfile}>
                 Я репетитор
-              </Button>
+              </StartButton>
             </Div>
           </FixedLayout>
         </Panel>
@@ -161,13 +159,5 @@ class Start extends React.Component {
     );
   }
 }
-
-const mapStateToProps = (state) => {
-  const { vkUserInfo } = state.vkAppsReducer;
-  const { profile } = state.apiProfileReducer;
-  return {
-    vkUserInfo, profile,
-  };
-};
 
 export default connect(mapStateToProps)(Start);

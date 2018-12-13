@@ -11,14 +11,15 @@ import DivSpinner from '../components/DivSpinner';
 import { vkApiActions, locationActions, apiVacancyActions } from '../actions';
 
 const mapStateToProps = state => {
-  const { vkUserInfo, accessToken } = state.vkAppsReducer;
+  const { vkUserInfo } = state.vkAppsUserReducer;
+  const { accessToken } = state.vkAppsTokenReducer;
   const apiVacancyFetching = state.apiVacancyReducer.fetching;
-  const vkApiFetching = state.vkApiReducer.fetching;
+  const vkApiUsersFetching = state.vkApiUsersReducer.fetching;
   const filterParams = state.filterReducer;
   const { vacancies } = state.apiVacancyReducer;
-  const { vkUsersInfo } = state.vkApiReducer;
+  const { vkUsersInfo } = state.vkApiUsersReducer;
   return {
-    filterParams, vkUserInfo, accessToken, apiVacancyFetching, vkApiFetching,
+    filterParams, vkUserInfo, accessToken, apiVacancyFetching, vkApiUsersFetching,
     vacancies, vkUsersInfo,
   };
 };
@@ -56,7 +57,7 @@ class SearchVacancies extends React.Component {
   }
 
   render() {	
-    const { vacancies, vkUsersInfo, vkApiFetching, apiVacancyFetching } = this.props;
+    const { vacancies, vkUsersInfo, vkApiUsersFetching, apiVacancyFetching } = this.props;
 
     return (
       <View id={this.props.id} activePanel="search">
@@ -74,7 +75,7 @@ class SearchVacancies extends React.Component {
               Поиск репетиторов
             </PanelHeaderContent>
           </PanelHeader>
-          { vkApiFetching || apiVacancyFetching ? (
+          { vkApiUsersFetching || apiVacancyFetching ? (
             <DivSpinner />
           ) : (
             <div>

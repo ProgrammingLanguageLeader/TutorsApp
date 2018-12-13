@@ -16,16 +16,17 @@ import { vkApiActions, locationActions, apiVacancyActions, apiApplicationActions
 import Moment from "react-moment";
 
 const mapStateToProps = state => {
-  const { vkUserInfo, accessToken } = state.vkAppsReducer;
+  const { vkUserInfo } = state.vkAppsUserReducer;
+  const { accessToken } = state.vkAppsTokenReducer;
   const apiVacancyFetching = state.apiVacancyReducer.fetching;
   const apiApplicationFetching = state.apiApplicationReducer.fetching;
-  const vkApiFetching = state.vkApiReducer.fetching;
+  const vkApiUsersFetching = state.vkApiUsersReducer.fetching;
   const { vacancy } = state.apiVacancyReducer;
   const { activePanel, params } = state.locationReducer;
-  const { vkUsersInfo } = state.vkApiReducer;
+  const { vkUsersInfo } = state.vkApiUsersReducer;
   const apiVacancyError = state.apiVacancyReducer.errors;
   return {
-    vacancy, vkUserInfo, accessToken, apiVacancyFetching, vkApiFetching,
+    vacancy, vkUserInfo, accessToken, apiVacancyFetching, vkApiUsersFetching,
     apiApplicationFetching, activePanel, params, vkUsersInfo,
     apiVacancyError
   };
@@ -75,9 +76,9 @@ class ShowVacancy extends React.Component {
 
   render() {
     const {
-      vkUserInfo, vkUsersInfo, vkApiFetching, apiVacancyFetching, apiApplicationFetching, vacancy
+      vkUserInfo, vkUsersInfo, vkApiUsersFetching, apiVacancyFetching, apiApplicationFetching, vacancy
     } = this.props;
-    const fetching = apiVacancyFetching || vkApiFetching || apiApplicationFetching || apiApplicationFetching;
+    const fetching = apiVacancyFetching || vkApiUsersFetching || apiApplicationFetching || apiApplicationFetching;
     const vacancyOwnerVkInfo = Object.keys(vacancy).length ? vkUsersInfo[vacancy.owner.profile_id] : null;
 
     return (
