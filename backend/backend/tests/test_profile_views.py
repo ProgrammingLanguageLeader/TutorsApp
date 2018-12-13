@@ -55,7 +55,8 @@ class UpdateProfileViewTest(TestCase):
                 "signed_user_id": MOCK_SIGNED_USER_ID,
                 "user_id": MOCK_USER_ID,
                 "city": self.city,
-                "description": description, 
+                "description": description,
+                "creation_time": "something"
             },
             format="json"
         )

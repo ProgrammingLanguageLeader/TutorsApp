@@ -100,9 +100,14 @@ class SearchVacanciesViewTest(TestCase):
         self.subject = "Math"
         self.ege = True
         self.price = 1000
+        self.city = "London"
+        self.another_city = "Paris"
 
     def setUp(self):
-        profile = Profile.objects.create(pk=self.user_id)
+        profile = Profile.objects.create(
+            pk=self.user_id,
+            city=self.city
+        )
         Vacancy.objects.create(
             owner=profile,
             subject=self.subject,
@@ -110,7 +115,7 @@ class SearchVacanciesViewTest(TestCase):
             price=self.price
         )
 
-    def test(self):
+    def test_success(self):
         response = client.get(
             "/api/v1/search_vacancies/",
             {
@@ -118,12 +123,29 @@ class SearchVacanciesViewTest(TestCase):
                 "user_id": str(self.user_id),
                 "subject": self.subject,
                 "ege": self.ege,
-                "price_min": self.price - 1
+                "price_min": self.price - 1,
+                "city": self.city.upper()
             },
             format="json"
         )
         self.assertEqual(response.status_code, HTTP_200_OK)
-        self.assertIsNotNone(response.data[0:1])
+        self.assertEqual(len(response.data), 1)
+
+    def test_not_found(self):
+        response = client.get(
+            "/api/v1/search_vacancies/",
+            {
+                "signed_user_id": MOCK_SIGNED_USER_ID,
+                "user_id": str(self.user_id),
+                "subject": self.subject,
+                "ege": self.ege,
+                "price_min": self.price - 1,
+                "city": self.another_city
+            },
+            format="json"
+        )
+        self.assertEqual(response.status_code, HTTP_200_OK)
+        self.assertEqual(len(response.data), 0)
 
 
 class GetVacancyViewTest(TestCase):

@@ -71,29 +71,49 @@ class SearchVacanciesView(APIView):
         olympiads = params.get('olympiads')
         university = params.get('university')
         distance_learning = params.get('distance_learning')
+        city = params.get('city')
+        district = params.get('district')
+        street = params.get('street')
+        metro_station = params.get('metro_station')
         vacancies = Vacancy.objects.all()
         if subject:
-            vacancies = vacancies.filter(subject__exact=subject)
+            vacancies = vacancies.filter(subject__icontains=subject)
         if price_min:
             vacancies = vacancies.filter(price__gt=price_min)
         if price_max:
             vacancies = vacancies.filter(price__lt=price_max)
         if ege:
-            vacancies = vacancies.filter(ege__exact=True)
-        elif oge:
-            vacancies = vacancies.filter(oge__exact=True)
-        elif foreign_lang_cert:
-            vacancies = vacancies.filter(foreign_lang_cert__exact=True)
-        elif primary_school:
-            vacancies = vacancies.filter(primary_school__exact=True)
-        elif secondary_school:
-            vacancies = vacancies.filter(secondary_school__exact=True)
-        elif olympiads:
-            vacancies = vacancies.filter(olympiads__exact=True)
-        elif university:
-            vacancies = vacancies.filter(university__exact=True)
+            vacancies = vacancies.filter(ege=True)
+        if oge:
+            vacancies = vacancies.filter(oge=True)
+        if foreign_lang_cert:
+            vacancies = vacancies.filter(foreign_lang_cert=True)
+        if primary_school:
+            vacancies = vacancies.filter(primary_school=True)
+        if secondary_school:
+            vacancies = vacancies.filter(secondary_school=True)
+        if olympiads:
+            vacancies = vacancies.filter(olympiads=True)
+        if university:
+            vacancies = vacancies.filter(university=True)
         if distance_learning:
-            vacancies = vacancies.filter(distance_learning__exact=True)
+            vacancies = vacancies.filter(distance_learning=True)
+        if city:
+            vacancies = vacancies.filter(
+                owner__city__icontains=city
+            )
+        if district:
+            vacancies = vacancies.filter(
+                owner__district__icontains=district
+            )
+        if street:
+            vacancies = vacancies.filter(
+                owner__street__icontains=street
+            )
+        if metro_station:
+            vacancies = vacancies.filter(
+                owner__metro_station__icontains=metro_station
+            )
         vacancies = vacancies.order_by(
             '-creation_time'
         )[offset:offset + limit]
