@@ -16,11 +16,9 @@ const mapStateToProps = state => {
   const { accessToken, vkUserInfo } = state.vkAppsUserReducer;
   const { vkUsersInfo } = state.vkApiUsersReducer;
   const applications = [];
-  const apiApplicationFetching = state.apiApplicationReducer.fetching;
   const vkApiUsersFetching = state.vkApiUsersReducer.fetching;
   return {
-    activePanel, applications, accessToken, vkUserInfo, vkUsersInfo,
-    apiApplicationFetching, vkApiUsersFetching,
+    activePanel, applications, accessToken, vkUserInfo, vkUsersInfo, vkApiUsersFetching,
   };
 };
 

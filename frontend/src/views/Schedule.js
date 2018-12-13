@@ -29,7 +29,7 @@ const mapStateToProps = state => {
   const { activePanel } = state.locationReducer;
   return {
     vkUserInfo, activePanel, vkUsersInfo, lessons,
-    apiLessonFetching, vkAppsUserFetching: vkAppsUserFetching, vkApiUsersFetching, accessToken,
+    apiLessonFetching, vkAppsUserFetching, vkApiUsersFetching, accessToken,
   };
 };
 

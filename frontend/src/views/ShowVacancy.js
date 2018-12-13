@@ -19,7 +19,7 @@ const mapStateToProps = state => {
   const { vkUserInfo } = state.vkAppsUserReducer;
   const { accessToken } = state.vkAppsTokenReducer;
   const apiVacancyFetching = state.apiVacancyReducer.fetching;
-  const apiApplicationFetching = state.apiApplicationReducer.fetching;
+  const apiStudentApplicationFetching = state.apiStudentApplicationReducer.fetching;
   const vkApiUsersFetching = state.vkApiUsersReducer.fetching;
   const { vacancy } = state.apiVacancyReducer;
   const { activePanel, params } = state.locationReducer;
@@ -27,7 +27,7 @@ const mapStateToProps = state => {
   const apiVacancyError = state.apiVacancyReducer.errors;
   return {
     vacancy, vkUserInfo, accessToken, apiVacancyFetching, vkApiUsersFetching,
-    apiApplicationFetching, activePanel, params, vkUsersInfo,
+    apiStudentApplicationFetching, activePanel, params, vkUsersInfo,
     apiVacancyError
   };
 };

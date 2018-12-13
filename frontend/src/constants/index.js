@@ -10,4 +10,5 @@ export * from './vkAppsConstants';
 export * from './vkApiContants';
 export * from './apiConstants';
 export * from './subjectsList';
-export * from './educationLevelList'
+export * from './educationLevelList';
+export * from './apiStudentApplicationContants';

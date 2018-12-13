@@ -14,7 +14,6 @@ import SearchVacancies from './views/SearchVacancies';
 import ShowProfile from './views/ShowProfile';
 import CreateVacancy from './views/CreateVacancy';
 import EditProfile from './views/EditProfile';
-import Contact from './views/Contact';
 import Schedule from './views/Schedule';
 import Filter from './views/Filter';
 import Start from './views/Start';
@@ -90,7 +89,7 @@ class App extends React.Component {
           </TabbarItem>
           <TabbarItem
             onClick={() => this.props.dispatch(
-              locationActions.changeLocation('schedule', 'requests')
+              locationActions.changeLocation('schedule', 'schedule')
             )}
             selected={this.props.activeView === 'schedule'}
           >
@@ -98,7 +97,7 @@ class App extends React.Component {
           </TabbarItem>
           <TabbarItem
             onClick={() => this.props.dispatch(
-              locationActions.changeLocation('create_vacancy')
+              locationActions.changeLocation('create_vacancy', 'create_vacancy')
             )}
             selected={this.props.activeView === 'create_vacancy'}
           >
@@ -129,7 +128,6 @@ class App extends React.Component {
           <CreateVacancy id="create_vacancy" />
           <ShowVacancy id="show_vacancy" />
           <EditProfile id="edit_profile" />
-          <Contact id="contact" />
           <Schedule id="schedule" />
           <Filter id="filter" />
           <Notifications id="notifications" />

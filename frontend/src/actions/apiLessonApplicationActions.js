@@ -1,7 +1,7 @@
 import { makeApiRequest } from "../services/api";
 import { apiLessonApplicationConstants } from "../constants";
 
-const createApplication = (options) => {
+const createLessonApplication = (options) => {
   return async dispatch => {
     dispatch({
       type: apiLessonApplicationConstants.CREATE_LESSON_APPLICATION_REQUEST
@@ -24,7 +24,7 @@ const createApplication = (options) => {
   }
 };
 
-const getTutorApplications = (options) => {
+const getIncomingLessonApplications = (options) => {
   return async dispatch => {
     dispatch({
       type: apiLessonApplicationConstants.GET_INCOMING_LESSON_APPLICATIONS_REQUEST
@@ -47,7 +47,7 @@ const getTutorApplications = (options) => {
   }
 };
 
-const getStudentApplications = (options) => {
+const getOutgoingLessonApplications = (options) => {
   return async dispatch => {
     dispatch({
       type: apiLessonApplicationConstants.GET_OUTGOING_LESSON_APPLICATIONS_REQUEST
@@ -70,7 +70,7 @@ const getStudentApplications = (options) => {
   }
 };
 
-const acceptApplication = (options) => {
+const acceptLessonApplication = (options) => {
   return async dispatch => {
     dispatch({
       type: apiLessonApplicationConstants.ACCEPT_LESSON_APPLICATION_REQUEST
@@ -93,7 +93,7 @@ const acceptApplication = (options) => {
   }
 };
 
-const rejectApplication = (options) => {
+const rejectLessonApplication = (options) => {
   return async dispatch => {
     dispatch({
       type: apiLessonApplicationConstants.REJECT_LESSON_APPLICATION_REQUEST
@@ -117,6 +117,9 @@ const rejectApplication = (options) => {
 };
 
 export const apiLessonApplicationActions = {
-  createApplication, getTutorApplications, getStudentApplications,
-  acceptApplication, rejectApplication
+  createApplication: createLessonApplication,
+  getIncomingApplications: getIncomingLessonApplications,
+  getOutgoingApplications: getOutgoingLessonApplications,
+  acceptApplication: acceptLessonApplication,
+  rejectApplication: rejectLessonApplication
 };
