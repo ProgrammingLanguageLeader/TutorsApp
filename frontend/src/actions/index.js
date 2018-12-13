@@ -1,4 +1,4 @@
-export * from './apiApplicationActions';
+export * from './apiLessonApplicationActions';
 export * from './apiLessonActions';
 export * from './apiNotificationActions';
 export * from './apiProfileActions';

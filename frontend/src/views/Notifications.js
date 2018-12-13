@@ -9,7 +9,7 @@ import BackIcon from '../components/BackIcon';
 import FlexDiv from '../components/FlexDiv';
 import DivSpinner from '../components/DivSpinner';
 
-import { locationActions, apiApplicationActions } from '../actions';
+import { locationActions, apiLessonApplicationActions } from '../actions';
 
 const mapStateToProps = state => {
   const { activePanel } = state.locationReducer;
@@ -44,7 +44,7 @@ class Notifications extends React.Component {
   acceptApplication(applicationId) {
     const { id, signed_user_id } = this.props.vkUserInfo;
     this.props.dispatch(
-      apiApplicationActions.acceptApplication({
+      apiLessonApplicationActions.acceptApplication({
         user_id: id,
         signed_user_id: signed_user_id,
         application_id: applicationId,
@@ -56,7 +56,7 @@ class Notifications extends React.Component {
   rejectApplication(applicationId) {
     const { id, signed_user_id } = this.props.vkUserInfo;
     this.props.dispatch(
-      apiApplicationActions.acceptApplication({
+      apiLessonApplicationActions.acceptApplication({
         user_id: id,
         signed_user_id: signed_user_id,
         application_id: applicationId,

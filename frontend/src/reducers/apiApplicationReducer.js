@@ -1,6 +1,6 @@
 import Immutable from 'seamless-immutable';
 
-import { apiApplicationConstants } from '../constants';
+import { apiLessonApplicationConstants } from '../constants';
 
 const initialState = Immutable({
   tutorApplications: [],
@@ -11,42 +11,42 @@ const initialState = Immutable({
 
 const apiApplicationReducer = (state = initialState, action) => {
   switch (action.type) {
-    case apiApplicationConstants.CREATE_APPLICATION_REQUEST:
-    case apiApplicationConstants.GET_TUTOR_APPLICATIONS_REQUEST:
-    case apiApplicationConstants.GET_STUDENT_APPLICATIONS_REQUEST:
-    case apiApplicationConstants.ACCEPT_APPLICATION_REQUEST:
-    case apiApplicationConstants.REJECT_APPLICATION_REQUEST:
+    case apiLessonApplicationConstants.CREATE_APPLICATION_REQUEST:
+    case apiLessonApplicationConstants.GET_TUTOR_APPLICATIONS_REQUEST:
+    case apiLessonApplicationConstants.GET_STUDENT_APPLICATIONS_REQUEST:
+    case apiLessonApplicationConstants.ACCEPT_APPLICATION_REQUEST:
+    case apiLessonApplicationConstants.REJECT_APPLICATION_REQUEST:
       return state.merge({
         fetching: true,
       });
 
-    case apiApplicationConstants.CREATE_APPLICATION_SUCCESS:
-    case apiApplicationConstants.ACCEPT_APPLICATION_SUCCESS:
-    case apiApplicationConstants.REJECT_APPLICATION_SUCCESS:
+    case apiLessonApplicationConstants.CREATE_APPLICATION_SUCCESS:
+    case apiLessonApplicationConstants.ACCEPT_APPLICATION_SUCCESS:
+    case apiLessonApplicationConstants.REJECT_APPLICATION_SUCCESS:
       return state.merge({
         errors: null,
         fetching: false,
       });
 
-    case apiApplicationConstants.GET_TUTOR_APPLICATIONS_SUCCESS:
+    case apiLessonApplicationConstants.GET_TUTOR_APPLICATIONS_SUCCESS:
       return state.merge({
         tutorApplications: action.payload,
         fetching: false,
         errors: null,
       });
 
-    case apiApplicationConstants.GET_STUDENT_APPLICATIONS_SUCCESS:
+    case apiLessonApplicationConstants.GET_STUDENT_APPLICATIONS_SUCCESS:
       return state.merge({
         studentApplications: action.payload,
         fetching: false,
         errors: null,
       });
 
-    case apiApplicationConstants.CREATE_APPLICATION_FAILURE:
-    case apiApplicationConstants.GET_TUTOR_APPLICATIONS_FAILURE:
-    case apiApplicationConstants.GET_STUDENT_APPLICATIONS_FAILURE:
-    case apiApplicationConstants.ACCEPT_APPLICATION_FAILURE:
-    case apiApplicationConstants.REJECT_APPLICATION_FAILURE:
+    case apiLessonApplicationConstants.CREATE_APPLICATION_FAILURE:
+    case apiLessonApplicationConstants.GET_TUTOR_APPLICATIONS_FAILURE:
+    case apiLessonApplicationConstants.GET_STUDENT_APPLICATIONS_FAILURE:
+    case apiLessonApplicationConstants.ACCEPT_APPLICATION_FAILURE:
+    case apiLessonApplicationConstants.REJECT_APPLICATION_FAILURE:
       return state.merge({
         errors: action.payload,
         fetching: false,

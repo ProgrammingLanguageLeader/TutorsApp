@@ -1,4 +1,4 @@
-export * from './apiApplicationConstants';
+export * from './apiLessonApplicationConstants';
 export * from './apiLessonConstants';
 export * from './apiNotificationConstants';
 export * from './apiProfileConstants';

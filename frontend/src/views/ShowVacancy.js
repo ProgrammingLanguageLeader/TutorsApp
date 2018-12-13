@@ -12,7 +12,7 @@ import Icon24Info from '@vkontakte/icons/dist/24/info';
 import DivSpinner from '../components/DivSpinner';
 import BackIcon from '../components/BackIcon';
 
-import { vkApiActions, locationActions, apiVacancyActions, apiApplicationActions } from '../actions';
+import { vkApiActions, locationActions, apiVacancyActions, apiLessonApplicationActions } from '../actions';
 import Moment from "react-moment";
 
 const mapStateToProps = state => {
@@ -65,7 +65,7 @@ class ShowVacancy extends React.Component {
   sendApplication(vacancyId, studentId) {
     const { id, signed_user_id } = this.props.vkUserInfo;
     this.props.dispatch(
-      apiApplicationActions.createApplication({
+      apiLessonApplicationActions.createApplication({
         user_id: id,
         signed_user_id: signed_user_id,
         vacancy_id: vacancyId,
