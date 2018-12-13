@@ -141,6 +141,6 @@ mockAdapter.onGet(`${API_URL}/get_profile/`).reply(200, {
   "description": "Really good tutor"
 });
 
-mockAdapter.onPost(`${API_URL}/update_profile/`).reply(200, {});
+mockAdapter.onPost(`${API_URL}/update_profile/`).reply(400, {});
 
 export default axiosInstance;

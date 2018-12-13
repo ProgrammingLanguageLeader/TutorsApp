@@ -115,14 +115,13 @@ class Schedule extends React.Component {
                       .filter(lesson => vkUsersInfo[lesson.student.profile_id])
                       .map(lesson => {
                         const studentVkInfo = vkUsersInfo[lesson.student.profile_id];
-                        const { student, lesson_id } = lesson;
                         return (
                           <Cell
                             size="l"
                             multiline
                             description={`${lesson.price} рублей за занятие`}
                             before={<Avatar src={studentVkInfo.photo_200} />}
-                            key={lesson_id}
+                            key={lesson.lesson_id}
                             asideContent={
                               <div>
                                 <Moment format="HH:mm - " date={lesson.beginning_time}/>

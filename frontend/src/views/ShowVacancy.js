@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import {
-  View, Panel, PanelHeader, Cell, HeaderButton, Avatar, Group, List, Button
+  View, Panel, PanelHeader, Cell, HeaderButton, Avatar, Group, Button
 } from '@vkontakte/vkui';
 import 'moment/locale/ru';
 

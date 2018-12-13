@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import {
   View, Panel, PanelHeader, Cell, Avatar, Button, Input, FormLayout,
-  Textarea, HeaderButton, Group, PopoutWrapper, ScreenSpinner
+  Textarea, HeaderButton, Group, PopoutWrapper, ScreenSpinner, FormStatus
 } from '@vkontakte/vkui';
 
 import Icon36Done from '@vkontakte/icons/dist/36/done';
@@ -112,7 +112,7 @@ class EditProfile extends React.Component {
   }
 
   render() {
-    const { vkUserInfo, apiProfileFetching, vkAppsUserFetching } = this.props;
+    const { vkUserInfo, apiProfileFetching, vkAppsUserFetching, apiProfileErrors } = this.props;
     const {
       experience, education, city, district, street, metro_station, description
     } = this.state;
@@ -123,7 +123,7 @@ class EditProfile extends React.Component {
         <Panel id="edit_profile">
           <PanelHeader
             left={
-              <HeaderButton key="back" onClick={() => this.props.dispatch(locationActions.goBack())}>
+              <HeaderButton onClick={() => this.props.dispatch(locationActions.goBack())}>
                 <BackIcon />
               </HeaderButton>
             }
@@ -149,6 +149,15 @@ class EditProfile extends React.Component {
                 </Group>
                 <Group title="Информация о пользователе">
                   <FormLayout>
+                    {
+                      apiProfileErrors
+                      ? (
+                        <FormStatus title="Некорректные данные" state="error">
+                          Проверьте заполненные поля
+                        </FormStatus>
+                      )
+                      : null
+                    }
                     <Input
                       name="experience"
                       top="Опыт преподавания"

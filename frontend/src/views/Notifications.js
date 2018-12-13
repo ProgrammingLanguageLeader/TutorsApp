@@ -8,16 +8,13 @@ import {
 import BackIcon from '../components/BackIcon';
 import FlexDiv from '../components/FlexDiv';
 import DivSpinner from '../components/DivSpinner';
-import Main from '../components/Main';
 
-import { locationActions, apiApplicationActions, vkApiActions } from '../actions';
+import { locationActions, apiApplicationActions } from '../actions';
 
 const mapStateToProps = state => {
   const { activePanel } = state.locationReducer;
   const { accessToken, vkUserInfo } = state.vkAppsUserReducer;
   const { vkUsersInfo } = state.vkApiUsersReducer;
-  // TODO: rewrite using new application methods
-  // const { applications } = state.apiApplicationReducer;
   const applications = [];
   const apiApplicationFetching = state.apiApplicationReducer.fetching;
   const vkApiUsersFetching = state.vkApiUsersReducer.fetching;
@@ -38,23 +35,6 @@ class Notifications extends React.Component {
 
   fetchNotifications() {
     // TODO: rewrite using new application methods
-    //
-    // const { id, signed_user_id } = this.props.vkUserInfo;
-    // this.props.dispatch(
-    //   apiApplicationActions.getApplications({
-    //     user_id: id,
-    //     signed_user_id: signed_user_id,
-    //   })
-    // )
-    //   .then(() => {
-    //     const { accessToken, applications } = this.props;
-    //     const studentIds = applications.map(application => {
-    //       return application.student;
-    //     });
-    //     this.props.dispatch(
-    //       vkApiActions.fetchUsersInfo(accessToken, studentIds)
-    //     )
-    //   })
   }
 
   componentDidMount() {
@@ -92,51 +72,55 @@ class Notifications extends React.Component {
     return (
       <View id={this.props.id} activePanel="notifications">
         <Panel id="notifications">
-          <PanelHeader>
+          <PanelHeader
+            left={
+              <HeaderButton onClick={() => this.props.dispatch(locationActions.goBack())}>
+                <BackIcon />
+              </HeaderButton>
+            }
+          >
             Уведомления
           </PanelHeader>
           { fetching ? (
             <DivSpinner />
           ) : (
-            <Main>
-              <Group title="Заявки">
-                { applications.length > 0 && vkUsersInfo.size > 0 ?
-                  applications.map(application => {
-                  const userInfo = vkUsersInfo.get(application.student);
-                  return (
-                    <Cell
-                      expandable
-                      size="l"
-                      description={userInfo.city ? userInfo.city.title : ""}
-                      before={
-                        <Avatar src={userInfo.photo_200} onClick={() => this.props.dispatch(
-                          locationActions.changeLocation('notifications', 'show_student')
-                        )} />}
-                      bottomContent={
-                        <FlexDiv>
-                          <Button size="l" stretched style={{ width: 120 }} onClick={
-                            () => this.acceptApplication(application.id)
-                          }>
-                            Принять
-                          </Button>
-                          <Button size="l" level="outline" stretched style={{ marginLeft: 8 }} onClick={
-                            () => this.rejectApplication(application.id)
-                          }>
-                            Отклонить
-                          </Button>
-                        </FlexDiv>
-                      }>
-                        {`${userInfo.firstName} ${userInfo.lastName}`}
-                      </Cell>
-                    );
-                  }) : (
-                    <Div>
-                      У вас нет активных заявок
-                    </Div>
-                  )
-                }
-              </Group>
-            </Main>
+            <Group title="Заявки">
+              { applications.length > 0 && vkUsersInfo.size > 0 ?
+                applications.map(application => {
+                const userInfo = vkUsersInfo.get(application.student);
+                return (
+                  <Cell
+                    expandable
+                    size="l"
+                    description={userInfo.city ? userInfo.city.title : ""}
+                    before={
+                      <Avatar src={userInfo.photo_200} onClick={() => this.props.dispatch(
+                        locationActions.changeLocation('notifications', 'show_student')
+                      )} />}
+                    bottomContent={
+                      <FlexDiv>
+                        <Button size="l" stretched style={{ width: 120 }} onClick={
+                          () => this.acceptApplication(application.id)
+                        }>
+                          Принять
+                        </Button>
+                        <Button size="l" level="outline" stretched style={{ marginLeft: 8 }} onClick={
+                          () => this.rejectApplication(application.id)
+                        }>
+                          Отклонить
+                        </Button>
+                      </FlexDiv>
+                    }>
+                      {`${userInfo.firstName} ${userInfo.lastName}`}
+                    </Cell>
+                  );
+                }) : (
+                  <Div>
+                    У вас нет активных заявок
+                  </Div>
+                )
+              }
+            </Group>
           )}
         </Panel>
       </View>
