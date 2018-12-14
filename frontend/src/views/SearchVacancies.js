@@ -13,10 +13,10 @@ import { vkApiActions, locationActions, apiVacancyActions } from '../actions';
 const mapStateToProps = state => {
   const { vkUserInfo } = state.vkAppsUserReducer;
   const { accessToken } = state.vkAppsTokenReducer;
-  const apiVacancyFetching = state.apiVacancyReducer.fetching;
+  const apiVacancyFetching = state.apiVacanciesReducer.fetching;
   const vkApiUsersFetching = state.vkApiUsersReducer.fetching;
   const filterParams = state.filterReducer;
-  const { vacancies } = state.apiVacancyReducer;
+  const { vacancies } = state.apiVacanciesReducer;
   const { vkUsersInfo } = state.vkApiUsersReducer;
   return {
     filterParams, vkUserInfo, accessToken, apiVacancyFetching, vkApiUsersFetching,
@@ -114,6 +114,13 @@ class SearchVacancies extends React.Component {
                       </Cell>
                     );
                   })
+                }
+                {
+                  vacancies.length === 0 && (
+                    <Cell multiline>
+                      Предложений не найдено, попробуйте изменить параметры фильтра
+                    </Cell>
+                  )
                 }
               </Group>
               <Footer>

@@ -8,6 +8,7 @@ import apiNotificationReducer from './apiNotificationReducer';
 import apiProfileReducer from './apiProfileReducer';
 import apiStudentsReducer from './apiStudentsReducer';
 import apiVacancyReducer from './apiVacancyReducer';
+import apiVacanciesReducer from './apiVacanciesReducer';
 import vkAppsUserReducer from './vkAppsUserReducer';
 import vkAppsTokenReducer from './vkAppsTokenReducer';
 import vkApiUsersReducer from './vkApiUsersReducer';
@@ -24,6 +25,7 @@ const rootReducer = combineReducers({
   apiProfileReducer,
   apiStudentsReducer,
   apiVacancyReducer,
+  apiVacanciesReducer,
   vkAppsUserReducer,
   vkAppsTokenReducer,
   vkApiUsersReducer,
