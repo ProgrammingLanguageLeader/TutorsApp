@@ -2,18 +2,18 @@ import React from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { 
-  Panel, PanelHeader, View, Button, Div, Gallery, FixedLayout, ScreenSpinner
+  Panel, PanelHeader, View, Gallery, ScreenSpinner
 } from '@vkontakte/vkui';
 
-import './Start.css';
-import introOne from '../assets/intro_one.png'
-import introTwo from '../assets/intro_two.png'
-import introThree from '../assets/intro_three.png'
+import '../assets/css/Start.css';
+import introOne from '../assets/images/intro_one.png'
+import introTwo from '../assets/images/intro_two.png'
+import introThree from '../assets/images/intro_three.png'
 
 import { apiProfileActions, locationActions } from '../actions';
 import PopoutDiv from '../components/PopoutDiv';
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   const { vkUserInfo } = state.vkAppsUserReducer;
   const { profile } = state.apiProfileReducer;
   return {
@@ -21,34 +21,29 @@ const mapStateToProps = (state) => {
   };
 };
 
-const Main = styled.div.attrs({
-  className: "fullHeight",
-})`
-  background-color: #ffffff;
+const mapDispatchToProps = dispatch => {
+  return {
+    changeLocation: options =>
+      dispatch(locationActions.changeLocation(options)),
+    getProfile: options =>
+      dispatch(apiProfileActions.getProfile(options)),
+    createProfile: options =>
+      dispatch(apiProfileActions.createProfile(options)),
+  };
+};
+
+const Main = styled.div`
+  height: 100%;
   display: flex; 
   align-items: center;
   justify-content: center; 
-  padding-bottom: 80px;
-  padding-top: 60px;
 `;
 
-const IntroText = styled.p`
-  padding-bottom: 36px;
-  line-height: 1.5;
-`;
+const GallerySlide = styled.div.attrs({className: 'gallery-slide'})``;
 
-const IntroImage = styled.img`
-  width: 70%;
-  height: auto;
-`;
+const IntroText = styled.div.attrs({className: 'intro-label'})``;
 
-const StartButton = styled(Button)`
-  margin: 2px;
-  height: 52px;
-  display: flex;
-  flex: 1;
-  justify-content: center;
-`;
+const IntroImage = styled.img.attrs({className: 'intro-image'})``;
 
 class Start extends React.Component {
   constructor(props) {
@@ -69,23 +64,19 @@ class Start extends React.Component {
     this.setState({
       popout: <PopoutDiv><ScreenSpinner /></PopoutDiv>
     });
-    this.props.dispatch(
-      apiProfileActions.getProfile({
-        profile_id: id,
-        user_id: id,
-        signed_user_id: signed_user_id,
-      })
-    )
+    this.props.getProfile({
+      profile_id: id,
+      user_id: id,
+      signed_user_id: signed_user_id,
+    })
       .then(() => {
         if (this.props.profile.profile_id) {
           return Promise.resolve();
         }
-        return this.props.dispatch(
-          apiProfileActions.createProfile({
-            user_id: id,
-            signed_user_id: signed_user_id,
-          })
-        )
+        return this.props.createProfile({
+          user_id: id,
+          signed_user_id: signed_user_id,
+        })
       })
       .then(() => {
         this.setState({
@@ -95,69 +86,51 @@ class Start extends React.Component {
   }
 
   goToVacanciesSearch() {
-    this.props.dispatch(
-      locationActions.changeLocation('search_vacancies'),
-    )
+    this.props.changeLocation('search_vacancies');
   }
 
   goToProfile() {
-    const { profile } = this.props;
-    const profileFilled = profile.experience || profile.education || profile.address || profile.description;
-    if (profileFilled) {
-      this.props.dispatch(
-        locationActions.changeLocation('show_profile')
-      )
-    }
-    else {
-      this.props.dispatch(
-        locationActions.changeLocation('edit_profile')
-      );
-    }
+    this.props.changeLocation('show_profile');
   }
 
   render() {
     return (
       <View popout={this.state.popout} id={this.props.id} activePanel="home">
-        <Panel id="home">
-          <PanelHeader noShadow>
+        <Panel id="home" theme="white" style={{ display: 'flex' }}>
+          <PanelHeader>
             Поиск репетиторов
           </PanelHeader>
           <Main>
-            <Gallery bullets="dark" style={{ height: 'auto', textAlign: 'center' }}>
-              <div>
+            <Gallery
+              align="center"
+              autoplay={5000}
+              bullets="dark"
+              style={{ height: '100%', textAlign: 'center' }}
+            >
+              <GallerySlide>
                 <IntroImage src={introOne} />
                 <IntroText>
-                  Мы поможем найти вам <br /> лучшего репетитора
+                  Мы поможем Вам найти лучшего репетитора
                 </IntroText>
-              </div>
-              <div>
+              </GallerySlide>
+              <GallerySlide>
                 <IntroImage src={introTwo} />
                 <IntroText>
-                  Бесплатный подбор репетиторов  <br /> для очных и дистанционных <br /> занятий в любом регионе!
+                  Бесплатный подбор репетиторов для очных и дистанционных занятий в любом регионе
                 </IntroText>
-              </div>
-              <div>
+              </GallerySlide>
+              <GallerySlide>
                 <IntroImage src={introThree} />
                 <IntroText>
-                  Выбери удобный <br /> для себя график
+                  Выбери удобный для себя график
                 </IntroText>
-              </div>
+              </GallerySlide>
             </Gallery>
           </Main>
-          <FixedLayout vertical="bottom">
-            <Div style={{ display: 'flex' }}>
-              <StartButton onClick={this.goToVacanciesSearch}>
-                Найти репититора
-              </StartButton>
-              <StartButton onClick={this.goToProfile}>
-                Я репетитор
-              </StartButton>
-            </Div>
-          </FixedLayout>
         </Panel>
       </View>
     );
   }
 }
 
-export default connect(mapStateToProps)(Start);
+export default connect(mapStateToProps, mapDispatchToProps)(Start);
