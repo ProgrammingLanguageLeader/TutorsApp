@@ -1,17 +1,16 @@
-import { filterConstants } from '../constants/filterConstants';
+import { filterConstants, educationLevelList } from '../constants';
 
+const backendFieldsWithNulls = educationLevelList.reduce((object, level) => {
+  return { ...object, [level.backendField]: null }
+}, {});
 const initialState = {
   subject: null,
   price_min: 0,
   price_max: 10000,
-  primary_school: null,
-  secondary_school: null,
-  olympiads: null,
-  ege: null,
-  oge: null,
-  foreign_lang_cert: null,
-  university: null,
-  distance_learning: null,
+  city: null,
+  district: null,
+  metro_station: null,
+  ...backendFieldsWithNulls,
 };
 
 const filterReducer = (state = initialState, action) => {

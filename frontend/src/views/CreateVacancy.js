@@ -7,13 +7,13 @@ import {
 
 import Icon36Done from "@vkontakte/icons/dist/36/done";
 import Icon36Cancel from "@vkontakte/icons/dist/36/cancel";
-import Icon24Done from '@vkontakte/icons/dist/24/done';
 
 import BackIcon from '../components/BackIcon';
 import PopoutDiv from "../components/PopoutDiv";
 
 import { subjectsList, educationLevelList } from '../constants';
 import { locationActions, apiVacancyActions } from '../actions';
+import SubjectCell from "../components/SubjectCell";
 
 const mapStateToProps = (state) => {
   const { activePanel } = state.locationReducer;
@@ -168,20 +168,15 @@ class CreateVacancy extends React.Component {
             <List>
               {
                 subjectsList.map(subject => (
-                  <Cell
+                  <SubjectCell
+                    subject={subject}
+                    selected={this.state.subject === subject}
                     key={subject}
                     onClick={() => {
-                      this.setState({ subject: subject });
+                      this.setState({subject: subject});
                       this.props.dispatch(locationActions.goBack());
                     }}
-                    asideContent={
-                      this.state.subject === subject
-                      ? <Icon24Done />
-                      : null
-                    }
-                  >
-                    { subject }
-                  </Cell>
+                  />
                 ))
               }
             </List>
