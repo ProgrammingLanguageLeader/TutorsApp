@@ -11,7 +11,7 @@ class NotificationEventChoice(Enum):
     LESSON_CREATION = 3
     DELETION_FROM_STUDENTS = 4
     LESSON_CHANGING = 5
-    LESSON_DELETION = 6
+    LESSON_DEACTIVATION = 6
     LESSON_APPLICATION_CREATION = 7
     LESSON_APPLICATION_ACCEPT = 8
     LESSON_APPLICATION_REJECT = 9
@@ -79,9 +79,10 @@ class Vacancy(models.Model):
     extra_info = models.TextField(null=True, blank=True, max_length=1024)
 
     def __str__(self):
-        return 'created: {} | owner: {}'.format(
+        return 'created: {} | owner: {} | active: {}'.format(
             self.creation_time.strftime('%B %d %Y %H:%M'),
-            self.owner_id
+            self.owner_id,
+            self.is_active
         ).capitalize()
 
 
@@ -100,12 +101,14 @@ class Lesson(models.Model):
     beginning_time = models.DateTimeField()
     ending_time = models.DateTimeField()
     price = models.IntegerField()
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
-        return 'tutor: {} | student: {} | created: {}'.format(
+        return 'tutor: {} | student: {} | created: {} | active: {}'.format(
             self.tutor_id,
             self.student_id,
-            self.creation_time.strftime('%B %d %Y %H:%M')
+            self.creation_time.strftime('%B %d %Y %H:%M'),
+            self.is_active
         )
 
 

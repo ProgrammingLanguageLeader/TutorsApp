@@ -20,6 +20,7 @@ from backend.views.students_views import DeleteStudentView
 from backend.views.lesson_views import CreateLessonView
 from backend.views.lesson_views import GetLessonsView
 from backend.views.lesson_views import UpdateLessonView
+from backend.views.lesson_views import DeactivateLessonView
 from backend.views.lesson_views import DeleteLessonView
 
 from backend.views.student_application_views import (
@@ -139,6 +140,11 @@ lesson_urlpatterns = [
         'update_lesson/',
         UpdateLessonView.as_view(),
         name='update_lesson'
+    ),
+    path(
+        'deactivate_lesson/',
+        DeactivateLessonView.as_view(),
+        name='deactivate_lesson'
     ),
     path(
         'delete_lesson/',

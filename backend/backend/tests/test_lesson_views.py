@@ -12,6 +12,7 @@ from rest_framework.status import HTTP_403_FORBIDDEN
 from backend.models import Profile
 from backend.models import Students
 from backend.models import Lesson
+from backend.models import Notification
 from backend.tests.constants import MOCK_USER_ID
 from backend.tests.constants import MOCK_SIGNED_USER_ID
 from backend.tests.constants import MOCK_VK_APP_SECRET
@@ -183,22 +184,60 @@ class UpdateLessonViewTest(TestCase):
         self.assertEqual(response.status_code, HTTP_200_OK)
 
 
-class DeleteLessonViewTest(TestCase):
+class DeactivateLessonViewTest(TestCase):
     lesson_id = 1
     user_id = MOCK_USER_ID
-    tutor_id = MOCK_USER_ID + 1
+    student_id = MOCK_USER_ID + 1
     lesson_start = datetime.now(tz=timezone.utc)
     lesson_end = lesson_start + timedelta(hours=1)
     price = 1000
 
     def setUp(self):
         Profile.objects.create(pk=self.user_id)
+        Profile.objects.create(pk=self.student_id)
+        tutor_students_table = Students.objects.create(tutor_id=self.user_id)
+        tutor_students_table.students.add(self.student_id)
+        Lesson.objects.create(
+            tutor_id=self.user_id,
+            student_id=self.student_id,
+            beginning_time=self.lesson_start,
+            ending_time=self.lesson_end,
+            price=self.price,
+        )
+
+    def test(self):
+        response = client.post(
+            "/api/v1/deactivate_lesson/",
+            {
+                "signed_user_id": MOCK_SIGNED_USER_ID,
+                "user_id": self.user_id,
+                "lesson_id": self.lesson_id
+            },
+            format="json"
+        )
+        notification = Notification.objects.filter(
+            lesson_id=self.lesson_id
+        )
+        self.assertEqual(response.status_code, HTTP_200_OK)
+        self.assertEqual(len(notification), 1)
+
+
+class DeleteLessonViewTest(TestCase):
+    lesson_id = 1
+    tutor_id = MOCK_USER_ID
+    student_id = MOCK_USER_ID + 1
+    lesson_start = datetime.now(tz=timezone.utc)
+    lesson_end = lesson_start + timedelta(hours=1)
+    price = 1000
+
+    def setUp(self):
+        Profile.objects.create(pk=self.student_id)
         Profile.objects.create(pk=self.tutor_id)
         tutor_students_table = Students.objects.create(tutor_id=self.tutor_id)
-        tutor_students_table.students.add(self.user_id)
+        tutor_students_table.students.add(self.student_id)
         Lesson.objects.create(
             tutor_id=self.tutor_id,
-            student_id=self.user_id,
+            student_id=self.student_id,
             beginning_time=self.lesson_start,
             ending_time=self.lesson_end,
             price=self.price,
@@ -209,7 +248,19 @@ class DeleteLessonViewTest(TestCase):
             "/api/v1/delete_lesson/",
             {
                 "signed_user_id": MOCK_SIGNED_USER_ID,
-                "user_id": self.user_id,
+                "user_id": self.tutor_id,
+                "lesson_id": self.lesson_id
+            },
+            format="json"
+        )
+        self.assertEqual(response.status_code, HTTP_200_OK)
+
+    def test_forbidden(self):
+        response = client.post(
+            "/api/v1/delete_lesson/",
+            {
+                "signed_user_id": MOCK_SIGNED_USER_ID,
+                "user_id": self.student_id,
                 "lesson_id": self.lesson_id
             },
             format="json"

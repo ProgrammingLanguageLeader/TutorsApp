@@ -127,22 +127,36 @@ class UpdateLessonView(APIView):
         return Response(data='OK')
 
 
-class DeleteLessonView(APIView):
+class DeactivateLessonView(APIView):
     permission_classes = (EditLessonPermission, )
 
     @check_authentication
     def post(self, request):
-        user_id = request.data.get('user_id')
         lesson_id = request.data.get('lesson_id')
         try:
             lesson = Lesson.objects.get(pk=lesson_id)
         except Lesson.DoesNotExist:
             return get_error_message_response('lesson_id')
         notifying_user_id = lesson.student_id
-        lesson.delete()
+        lesson.is_active = False
+        lesson.save()
         Notification.objects.create(
             profile_id=notifying_user_id,
             lesson_id=lesson_id,
-            event=NotificationEventChoice.LESSON_DELETION.value
+            event=NotificationEventChoice.LESSON_DEACTIVATION.value
         )
+        return Response(data='OK')
+
+
+class DeleteLessonView(APIView):
+    permission_classes = (EditLessonPermission, )
+
+    @check_authentication
+    def post(self, request):
+        lesson_id = request.data.get('lesson_id')
+        try:
+            lesson = Lesson.objects.get(pk=lesson_id)
+        except Lesson.DoesNotExist:
+            return get_error_message_response('lesson_id')
+        lesson.delete()
         return Response(data='OK')
