@@ -95,7 +95,7 @@ class Schedule extends React.Component {
           <Group title="Календарь">
             <Div style={{ textAlign: "center" }}>
               <Calendar
-                style={{ display: "inline-block" }}
+                style={{ display: "inline-block", width: "100%", height: "auto", maxWidth: 720 }}
                 value={this.state.date}
                 onChange={this.onCalendarChange}
                 locale={russianLocale}
