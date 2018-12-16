@@ -7,7 +7,8 @@ import {
 
 import BackIcon from '../components/BackIcon';
 import DivSpinner from '../components/DivSpinner';
-import StudentApplicationCell from "../components/StudentApplicationCell";
+import StudentApplicationCreationCell from "../components/StudentApplicationCreationCell";
+import StudentApplicationAnswerCell from "../components/StudentApplicationAnswerCell";
 
 import {
   locationActions, apiNotificationActions, vkApiActions, vkAppsActions, apiStudentApplicationActions,
@@ -48,6 +49,7 @@ class Notifications extends React.Component {
     this.fetchNotifications = this.fetchNotifications.bind(this);
     this.acceptStudentApplication = this.acceptStudentApplication.bind(this);
     this.rejectStudentApplication = this.rejectStudentApplication.bind(this);
+    this.markAsSeen = this.markAsSeen.bind(this);
   }
 
   componentDidMount() {
@@ -63,11 +65,24 @@ class Notifications extends React.Component {
       .then(() => {
         const { accessToken, notifications } = this.props;
         const vkIds = notifications.map(notification => {
-          if (notification.student_application)
+          if (notification.student_application) {
             return notification.student_application.student.profile_id;
-          if (notification.lesson_application)
+          }
+          if (notification.lesson_application) {
             return notification.lesson_application.student.profile_id;
-          // TODO: write other cases
+          }
+          if (notification.payment_application) {
+            return notification.payment_application.lesson.tutor.tutor_id;
+          }
+          if (notification.tutor) {
+            return notification.tutor.profile_id;
+          }
+          if (notification.student) {
+            return notification.student.profile_id;
+          }
+          if (notification.lesson) {
+            return notification.lesson.tutor.profile_id;
+          }
         });
         this.props.fetchUsersInfo(accessToken, vkIds);
       })
@@ -89,6 +104,16 @@ class Notifications extends React.Component {
       user_id: id,
       signed_user_id: signed_user_id,
       student_application_id: applicationId,
+    })
+      .then(() => this.fetchNotifications())
+  }
+
+  markAsSeen(notificationId) {
+    const { id, signed_user_id } = this.props.vkUserInfo;
+    this.props.markNotificationAsSeen({
+      user_id: id,
+      signed_user_id: signed_user_id,
+      notification_id: notificationId,
     })
       .then(() => this.fetchNotifications())
   }
@@ -129,7 +154,7 @@ class Notifications extends React.Component {
                           return null;
                         }
                         return (
-                          <StudentApplicationCell
+                          <StudentApplicationCreationCell
                             key={notification.notification_id}
                             studentVkProfile={studentVkProfile}
                             label={label}
@@ -145,10 +170,20 @@ class Notifications extends React.Component {
                       }
 
                       case notificationEventTypes.STUDENT_APPLICATION_ACCEPT:
-                        return null;
-
                       case notificationEventTypes.STUDENT_APPLICATION_REJECT:
-                        return null;
+                        const tutorId = notification.tutor.profile_id;
+                        const tutorVkProfile = vkUsersInfo[tutorId];
+                        if (!tutorVkProfile) {
+                          return null;
+                        }
+                        return (
+                          <StudentApplicationAnswerCell
+                            key={notification.notification_id}
+                            tutorVkProfile={tutorVkProfile}
+                            onMarkAsSeen={() => this.markAsSeen(notification.notification_id)}
+                            label={label}
+                          />
+                        );
 
                       case notificationEventTypes.LESSON_CREATION:
                         return null;

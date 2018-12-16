@@ -1,7 +1,7 @@
 import React from "react";
 import { Div, Cell, Avatar, Button } from "@vkontakte/vkui";
 
-const StudentApplicationCell = ({ studentVkProfile, onClick, onAccept, onReject, label }) => {
+const StudentApplicationCreationCell = ({ studentVkProfile, onClick, onAccept, onReject, label }) => {
   return (
     <Cell>
       <Cell
@@ -27,4 +27,4 @@ const StudentApplicationCell = ({ studentVkProfile, onClick, onAccept, onReject,
   );
 };
 
-export default StudentApplicationCell;
+export default StudentApplicationCreationCell;
