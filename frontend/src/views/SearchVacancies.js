@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import {
-  View, Panel, PanelHeader, Cell, HeaderButton, Avatar, PanelHeaderContent, Group, Footer
+  View, Panel, PanelHeader, Cell, HeaderButton, Avatar, PanelHeaderContent, Group, Footer, List
 } from '@vkontakte/vkui';
 
 import Icon24Filter from '@vkontakte/icons/dist/24/filter';
@@ -80,48 +80,50 @@ class SearchVacancies extends React.Component {
           ) : (
             <div>
               <Group title="Список предложений" >
-                { vacancies
-                  .filter(vacancy => vkUsersInfo[vacancy.owner.profile_id])
-                  .map(vacancy => {
-                    const userInfo = vkUsersInfo[vacancy.owner.profile_id];
-                    const cityTitle = vacancy.owner.city ? vacancy.owner.city : "Город не указан";
-                    return (
-                      <Cell
-                        expandable
-                        multiline
-                        onClick={() => this.props.dispatch(
-                          locationActions.changeLocation('show_vacancy', 'show_vacancy', {
-                            vacancyId: vacancy.id
-                          })
-                        )}
-                        key={vacancy.vacancy_id}
-                        description={
-                          <div>
+                <List>
+                  { vacancies
+                    .filter(vacancy => vkUsersInfo[vacancy.owner.profile_id])
+                    .map(vacancy => {
+                      const userInfo = vkUsersInfo[vacancy.owner.profile_id];
+                      const cityTitle = vacancy.owner.city ? vacancy.owner.city : "Город не указан";
+                      return (
+                        <Cell
+                          expandable
+                          multiline
+                          onClick={() => this.props.dispatch(
+                            locationActions.changeLocation('show_vacancy', 'show_vacancy', {
+                              vacancyId: vacancy.id
+                            })
+                          )}
+                          key={vacancy.vacancy_id}
+                          description={
                             <div>
-                              {vacancy.subject}
+                              <div>
+                                {vacancy.subject}
+                              </div>
+                              <div>
+                                {cityTitle}
+                              </div>
+                              <div>
+                                {vacancy.price} рублей/час
+                              </div>
                             </div>
-                            <div>
-                              {cityTitle}
-                            </div>
-                            <div>
-                              {vacancy.price} рублей/час
-                            </div>
-                          </div>
-                        }
-                        before={<Avatar size={64} src={userInfo.photo_200} />}
-                      >
-                        {`${userInfo.firstName} ${userInfo.lastName}`}
+                          }
+                          before={<Avatar size={64} src={userInfo.photo_200} />}
+                        >
+                          {`${userInfo.firstName} ${userInfo.lastName}`}
+                        </Cell>
+                      );
+                    })
+                  }
+                  {
+                    vacancies.length === 0 && (
+                      <Cell multiline>
+                        Предложений не найдено, попробуйте изменить параметры фильтра
                       </Cell>
-                    );
-                  })
-                }
-                {
-                  vacancies.length === 0 && (
-                    <Cell multiline>
-                      Предложений не найдено, попробуйте изменить параметры фильтра
-                    </Cell>
-                  )
-                }
+                    )
+                  }
+                </List>
               </Group>
               <Footer>
                 {

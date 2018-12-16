@@ -143,4 +143,119 @@ mockAdapter.onGet(`${API_URL}/get_profile/`).reply(200, {
 
 mockAdapter.onPost(`${API_URL}/update_profile/`).reply(400, {});
 
+mockAdapter.onGet(`${API_URL}/get_notifications/`).reply(200, [
+  {
+    "notification_id": 1,
+    "creation_time": "2018-12-13T23:23:26.288102Z",
+    "event": 0,
+    "seen": false,
+    "profile": {
+      "profile_id": 1,
+      "creation_time": "2018-12-13T23:23:26.282792Z",
+      "is_active": true,
+      "experience": null,
+      "education": null,
+      "city": null,
+      "district": null,
+      "street": null,
+      "metro_station": null,
+      "description": null
+    },
+    "student_application": {
+      "student_application_id": 1,
+      "creation_time": "2018-12-13T23:23:26.287899Z",
+      "vacancy": {
+        "vacancy_id": 1,
+        "creation_time": "2018-12-13T23:23:26.283117Z",
+        "is_active": true,
+        "subject": "Math",
+        "ege": false,
+        "oge": false,
+        "foreign_lang_cert": false,
+        "primary_school": false,
+        "secondary_school": false,
+        "olympiads": false,
+        "university": false,
+        "home_schooling": false,
+        "price": 1000,
+        "extra_info": null,
+        "owner": 1
+      },
+      "student": {
+        "profile_id": 144736529,
+        "creation_time": "2018-12-10T18:54:53.645340Z",
+        "is_active": true,
+        "experience": "2 years",
+        "education": "Plekhanov Russian University of Economics",
+        "city": "Moscow",
+        "district": "Zamoskvorechye",
+        "street": "Stremyannyy Pereulok",
+        "metro_station": "Serpukhovskaya",
+        "description": "Really good tutor"
+      }
+    },
+    "lesson_application": null,
+    "payment_application": null,
+    "tutor": null,
+    "student": null,
+    "lesson": null
+  },
+  {
+    "notification_id": 2,
+    "creation_time": "2018-12-13T23:23:26.288102Z",
+    "event": 0,
+    "seen": false,
+    "profile": {
+      "profile_id": 1,
+      "creation_time": "2018-12-13T23:23:26.282792Z",
+      "is_active": true,
+      "experience": null,
+      "education": null,
+      "city": null,
+      "district": null,
+      "street": null,
+      "metro_station": null,
+      "description": null
+    },
+    "student_application": {
+      "student_application_id": 2,
+      "creation_time": "2018-12-13T23:23:26.287899Z",
+      "vacancy": {
+        "vacancy_id": 1,
+        "creation_time": "2018-12-13T23:23:26.283117Z",
+        "is_active": true,
+        "subject": "Math",
+        "ege": false,
+        "oge": false,
+        "foreign_lang_cert": false,
+        "primary_school": false,
+        "secondary_school": false,
+        "olympiads": false,
+        "university": false,
+        "home_schooling": false,
+        "price": 1000,
+        "extra_info": null,
+        "owner": 1
+      },
+      "student": {
+        "profile_id": 144736529,
+        "creation_time": "2018-12-10T18:54:53.645340Z",
+        "is_active": true,
+        "experience": "2 years",
+        "education": "Plekhanov Russian University of Economics",
+        "city": "Moscow",
+        "district": "Zamoskvorechye",
+        "street": "Stremyannyy Pereulok",
+        "metro_station": "Serpukhovskaya",
+        "description": "Really good tutor"
+      }
+    },
+    "lesson_application": null,
+    "payment_application": null,
+    "tutor": null,
+    "student": null,
+    "lesson": null
+  }
+]);
+
 export default axiosInstance;

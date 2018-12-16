@@ -1,4 +1,5 @@
 import React from 'react';
+import { bindActionCreators } from "redux";
 import { connect } from 'react-redux';
 import '@vkontakte/vkui/dist/vkui.css';
 import { Root, Epic, Tabbar, TabbarItem, PopoutWrapper, Div, Button, ScreenSpinner } from '@vkontakte/vkui';
@@ -24,12 +25,22 @@ import ShowVacancy from "./views/ShowVacancy";
 import { vkAppsActions, locationActions } from './actions';
 import PopoutDiv from './components/PopoutDiv';
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   const { activeView, activePanel } = state.locationReducer;
   const { accessToken } = state.vkAppsTokenReducer;
+  const { vkUserInfo } = state.vkAppsUserReducer;
   const vkAppsTokenFetching = state.vkAppsTokenReducer.fetching;
   return {
-    activeView, accessToken, activePanel, vkAppsTokenFetching,
+    activeView, accessToken, activePanel, vkAppsTokenFetching, vkUserInfo
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    init: bindActionCreators(vkAppsActions.init, dispatch),
+    fetchCurrentUserInfo: bindActionCreators(vkAppsActions.fetchCurrentUserInfo, dispatch),
+    fetchAccessToken: bindActionCreators(vkAppsActions.fetchAccessToken, dispatch),
+    changeLocation: bindActionCreators(locationActions.changeLocation, dispatch),
   };
 };
 
@@ -37,21 +48,21 @@ class App extends React.Component {
   constructor(props) {
     super(props);
 
-    this.init = this.init.bind(this);
+    this.initVkApps = this.initVkApps.bind(this);
   }
 
   componentDidMount() {
-    this.init();
+    this.initVkApps();
   }
 
-  init() {
-    this.props.dispatch(vkAppsActions.init());
-    this.props.dispatch(vkAppsActions.fetchCurrentUserInfo());
-    this.props.dispatch(vkAppsActions.fetchAccessToken());
+  initVkApps() {
+    this.props.init();
+    this.props.fetchCurrentUserInfo();
+    this.props.fetchAccessToken();
   }
 
   render() {
-    const { activeView } = this.props;
+    const { activeView, vkUserInfo } = this.props;
     const popout = this.props.vkAppsTokenFetching
       ? <ScreenSpinner/>
       : this.props.accessToken
@@ -62,7 +73,7 @@ class App extends React.Component {
             <Div>
               Пожалуйста, примите запрос на права доступа. Это необходимо для работы приложения
             </Div>
-            <Button onClick={this.init}>
+            <Button onClick={this.initVkApps}>
               Авторизоваться в приложении
             </Button>
           </PopoutDiv>
@@ -73,48 +84,37 @@ class App extends React.Component {
       <Epic activeStory="root" tabbar={
         <Tabbar>
           <TabbarItem
-            onClick={() => this.props.dispatch(
-              locationActions.changeLocation('show_profile'))}
+            onClick={() => this.props.changeLocation('show_profile', '', { profileId: vkUserInfo.id })}
             selected={this.props.activeView === 'show_profile'}
           >
             <Icon28User />
           </TabbarItem>
           <TabbarItem
-            onClick={() => this.props.dispatch(
-              locationActions.changeLocation('search_vacancies')
-            )}
+            onClick={() => this.props.changeLocation('search_vacancies')}
             selected={this.props.activeView === 'search_vacancies'}
           >
             <Icon28Search />
           </TabbarItem>
           <TabbarItem
-            onClick={() => this.props.dispatch(
-              locationActions.changeLocation('schedule', 'schedule')
-            )}
+            onClick={() => this.props.changeLocation('schedule', 'schedule')}
             selected={this.props.activeView === 'schedule'}
           >
             <Icon28Newsfeed />
           </TabbarItem>
           <TabbarItem
-            onClick={() => this.props.dispatch(
-              locationActions.changeLocation('create_vacancy', 'create_vacancy')
-            )}
+            onClick={() => this.props.changeLocation('create_vacancy', 'create_vacancy')}
             selected={this.props.activeView === 'create_vacancy'}
           >
             <Icon28Add />
           </TabbarItem>
           <TabbarItem
-            onClick={() => this.props.dispatch(
-              locationActions.changeLocation('notifications', 'notifications')
-            )}
+            onClick={() => this.props.changeLocation('notifications', 'notifications')}
             selected={this.props.activeView === 'notifications'}
           >
             <Icon28Notification />
           </TabbarItem>
           <TabbarItem
-            onClick={() => this.props.dispatch(
-              locationActions.changeLocation('money_transfer')
-            )}
+            onClick={() => this.props.changeLocation('money_transfer')}
             selected={this.props.activeView === 'money_transfer'}
           >
             <Icon28MoneyTransfer />
@@ -138,4 +138,4 @@ class App extends React.Component {
   }
 }
 
-export default connect(mapStateToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(App);

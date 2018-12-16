@@ -13,3 +13,4 @@ export * from './subjectsList';
 export * from './educationLevelList';
 export * from './apiStudentApplicationContants';
 export * from './apiPaymentApplicationConstants';
+export * from './notificationEventTypes';

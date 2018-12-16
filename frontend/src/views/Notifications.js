@@ -1,129 +1,176 @@
 import React from 'react';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-
 import { 
-  View, Panel, PanelHeader, Group, Avatar, Cell, Button, Div, HeaderButton
+  View, Panel, PanelHeader, Group, Cell, List, HeaderButton
 } from '@vkontakte/vkui';
 
 import BackIcon from '../components/BackIcon';
-import FlexDiv from '../components/FlexDiv';
 import DivSpinner from '../components/DivSpinner';
+import StudentApplicationCell from "../components/StudentApplicationCell";
 
-import { locationActions, apiLessonApplicationActions } from '../actions';
+import {
+  locationActions, apiNotificationActions, vkApiActions, vkAppsActions, apiStudentApplicationActions,
+} from '../actions';
+import { notificationLabels, notificationEventTypes } from "../constants";
 
 const mapStateToProps = state => {
   const { activePanel } = state.locationReducer;
-  const { accessToken, vkUserInfo } = state.vkAppsUserReducer;
+  const { vkUserInfo } = state.vkAppsUserReducer;
+  const { accessToken } = state.vkAppsTokenReducer;
   const { vkUsersInfo } = state.vkApiUsersReducer;
-  const applications = [];
+  const { notifications } = state.apiNotificationReducer;
   const vkApiUsersFetching = state.vkApiUsersReducer.fetching;
+  const apiNotificationFetching = state.apiNotificationReducer.fetching;
   return {
-    activePanel, applications, accessToken, vkUserInfo, vkUsersInfo, vkApiUsersFetching,
+    activePanel, notifications, accessToken, vkUserInfo, vkUsersInfo, vkApiUsersFetching,
+    apiNotificationFetching,
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    goBack: bindActionCreators(locationActions.goBack, dispatch),
+    changeLocation: bindActionCreators(locationActions.changeLocation, dispatch),
+    getNotifications: bindActionCreators(apiNotificationActions.getNotifications, dispatch),
+    markNotificationAsSeen: bindActionCreators(apiNotificationActions.markNotificationAsSeen, dispatch),
+    allowNotifications: bindActionCreators(vkAppsActions.allowNotifications, dispatch),
+    fetchUsersInfo: bindActionCreators(vkApiActions.fetchUsersInfo, dispatch),
+    acceptStudentApplication: bindActionCreators(apiStudentApplicationActions.acceptApplication, dispatch),
+    rejectStudentApplication: bindActionCreators(apiStudentApplicationActions.rejectApplication, dispatch),
   };
 };
 
 class Notifications extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props);
 
-    this.acceptApplication = this.acceptApplication.bind(this);
-    this.rejectApplication = this.rejectApplication.bind(this);
     this.fetchNotifications = this.fetchNotifications.bind(this);
-  }
-
-  fetchNotifications() {
-    // TODO: rewrite using new application methods
+    this.acceptStudentApplication = this.acceptStudentApplication.bind(this);
+    this.rejectStudentApplication = this.rejectStudentApplication.bind(this);
   }
 
   componentDidMount() {
     this.fetchNotifications();
   }
 
-  acceptApplication(applicationId) {
+  fetchNotifications() {
     const { id, signed_user_id } = this.props.vkUserInfo;
-    this.props.dispatch(
-      apiLessonApplicationActions.acceptApplication({
-        user_id: id,
-        signed_user_id: signed_user_id,
-        application_id: applicationId,
+    this.props.getNotifications({
+      user_id: id,
+      signed_user_id: signed_user_id
+    })
+      .then(() => {
+        const { accessToken, notifications } = this.props;
+        const vkIds = notifications.map(notification => {
+          if (notification.student_application)
+            return notification.student_application.student.profile_id;
+          if (notification.lesson_application)
+            return notification.lesson_application.student.profile_id;
+          // TODO: write other cases
+        });
+        this.props.fetchUsersInfo(accessToken, vkIds);
       })
-    )
-      .then(() => this.fetchNotifications());
   }
 
-  rejectApplication(applicationId) {
+  acceptStudentApplication(applicationId) {
     const { id, signed_user_id } = this.props.vkUserInfo;
-    this.props.dispatch(
-      apiLessonApplicationActions.acceptApplication({
-        user_id: id,
-        signed_user_id: signed_user_id,
-        application_id: applicationId,
-      })
-    )
-      .then(() => this.fetchNotifications());
+    this.props.acceptStudentApplication({
+      user_id: id,
+      signed_user_id: signed_user_id,
+      student_application_id: applicationId,
+    })
+      .then(() => this.fetchNotifications())
+  }
+
+  rejectStudentApplication(applicationId) {
+    const { id, signed_user_id } = this.props.vkUserInfo;
+    this.props.rejectStudentApplication({
+      user_id: id,
+      signed_user_id: signed_user_id,
+      student_application_id: applicationId,
+    })
+      .then(() => this.fetchNotifications())
   }
 
   render () {
-    const { vkUsersInfo, applications, apiApplicationFetching, vkApiUsersFetching } = this.props;
-    const fetching =  apiApplicationFetching || vkApiUsersFetching;
+    const { vkUsersInfo, notifications, apiNotificationFetching, vkApiUsersFetching } = this.props;
+    const notificationsFetching =  apiNotificationFetching || vkApiUsersFetching;
 
     return (
       <View id={this.props.id} activePanel="notifications">
         <Panel id="notifications">
           <PanelHeader
             left={
-              <HeaderButton onClick={() => this.props.dispatch(locationActions.goBack())}>
+              <HeaderButton onClick={() => this.props.goBack()}>
                 <BackIcon />
               </HeaderButton>
             }
           >
             Уведомления
           </PanelHeader>
-          { fetching ? (
-            <DivSpinner />
-          ) : (
-            <Group title="Заявки">
-              { applications.length > 0 && vkUsersInfo.size > 0 ?
-                applications.map(application => {
-                const userInfo = vkUsersInfo.get(application.student);
-                return (
-                  <Cell
-                    expandable
-                    size="l"
-                    description={userInfo.city ? userInfo.city.title : ""}
-                    before={
-                      <Avatar src={userInfo.photo_200} onClick={() => this.props.dispatch(
-                        locationActions.changeLocation('notifications', 'show_student')
-                      )} />}
-                    bottomContent={
-                      <FlexDiv>
-                        <Button size="l" stretched style={{ width: 120 }} onClick={
-                          () => this.acceptApplication(application.id)
-                        }>
-                          Принять
-                        </Button>
-                        <Button size="l" level="outline" stretched style={{ marginLeft: 8 }} onClick={
-                          () => this.rejectApplication(application.id)
-                        }>
-                          Отклонить
-                        </Button>
-                      </FlexDiv>
-                    }>
-                      {`${userInfo.firstName} ${userInfo.lastName}`}
-                    </Cell>
-                  );
-                }) : (
-                  <Div>
-                    У вас нет активных заявок
-                  </Div>
+          <Group title="Активные уведомления">
+            <List>
+              {
+                notificationsFetching
+                ? (
+                  <DivSpinner />
+                )
+                : notifications
+                  .map(notification => {
+                    const event = notification.event;
+                    const label = notificationLabels[event];
+                    switch (event) {
+                      case notificationEventTypes.STUDENT_APPLICATION_CREATION: {
+                        const applicationId = notification.student_application.student_application_id;
+                        const studentId = notification.student_application.student.profile_id;
+                        const studentVkProfile = vkUsersInfo[studentId];
+                        if (!studentVkProfile) {
+                          return null;
+                        }
+                        return (
+                          <StudentApplicationCell
+                            key={notification.notification_id}
+                            studentVkProfile={studentVkProfile}
+                            label={label}
+                            onClick={
+                              () => this.props.changeLocation('show_profile', '', {
+                                profileId: studentId
+                              })
+                            }
+                            onAccept={() => this.acceptStudentApplication(applicationId)}
+                            onReject={() => this.rejectStudentApplication(applicationId)}
+                          />
+                        );
+                      }
+
+                      case notificationEventTypes.STUDENT_APPLICATION_ACCEPT:
+                        return null;
+
+                      case notificationEventTypes.STUDENT_APPLICATION_REJECT:
+                        return null;
+
+                      case notificationEventTypes.LESSON_CREATION:
+                        return null;
+
+                      default:
+                        return null;
+                    }
+                  })
+              }
+              {
+                notifications.length === 0 && (
+                  <Cell multiline>
+                    На данный момент уведомления отсутствуют
+                  </Cell>
                 )
               }
-            </Group>
-          )}
+            </List>
+          </Group>
         </Panel>
       </View>
     )
   }
 }
 
-export default connect(mapStateToProps)(Notifications);
+export default connect(mapStateToProps, mapDispatchToProps)(Notifications);
