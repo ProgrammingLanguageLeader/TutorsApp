@@ -8,8 +8,7 @@ import Icon28Newsfeed from '@vkontakte/icons/dist/28/newsfeed';
 import Icon28Search from '@vkontakte/icons/dist/28/search';
 import Icon28User from '@vkontakte/icons/dist/28/user';
 import Icon28Notification from '@vkontakte/icons/dist/28/notification';
-import Icon28MoneyTransfer from '@vkontakte/icons/dist/28/money_transfer';
-import Icon28Add from '@vkontakte/icons/dist/28/add_outline';
+import Icon28Menu from '@vkontakte/icons/dist/28/menu';
 
 import SearchVacancies from './views/SearchVacancies';
 import ShowProfile from './views/ShowProfile';
@@ -21,6 +20,7 @@ import Start from './views/Start';
 import Notifications from './views/Notifications';
 import MoneyTransfer from './views/MoneyTransfer';
 import ShowVacancy from "./views/ShowVacancy";
+import MainMenu from "./views/MainMenu";
 
 import { vkAppsActions, locationActions } from './actions';
 import PopoutDiv from './components/PopoutDiv';
@@ -102,22 +102,16 @@ class App extends React.Component {
             <Icon28Newsfeed />
           </TabbarItem>
           <TabbarItem
-            onClick={() => this.props.changeLocation('create_vacancy', 'create_vacancy')}
-            selected={this.props.activeView === 'create_vacancy'}
-          >
-            <Icon28Add />
-          </TabbarItem>
-          <TabbarItem
             onClick={() => this.props.changeLocation('notifications', 'notifications')}
             selected={this.props.activeView === 'notifications'}
           >
             <Icon28Notification />
           </TabbarItem>
           <TabbarItem
-            onClick={() => this.props.changeLocation('money_transfer')}
-            selected={this.props.activeView === 'money_transfer'}
+            onClick={() => this.props.changeLocation('main_menu')}
+            selected={this.props.activeView === 'main_menu'}
           >
-            <Icon28MoneyTransfer />
+            <Icon28Menu />
           </TabbarItem>
         </Tabbar>
       }>
@@ -132,6 +126,7 @@ class App extends React.Component {
           <Filter id="filter" />
           <Notifications id="notifications" />
           <MoneyTransfer id="money_transfer"/>
+          <MainMenu id="main_menu"/>
         </Root>
       </Epic>
     );

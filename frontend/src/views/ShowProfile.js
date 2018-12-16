@@ -39,7 +39,7 @@ const mapDispatchToProps = dispatch => {
 class ShowProfile extends React.Component {
   componentDidMount() {
     const { id, signed_user_id } = this.props.vkUserInfo;
-    const { profileId } = this.props.params;
+    const profileId = this.props.params.profileId || id;
     this.props.getProfile({
       profile_id: profileId,
       user_id: id,
