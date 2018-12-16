@@ -7,11 +7,17 @@ import {
 
 import BackIcon from '../components/BackIcon';
 import DivSpinner from '../components/DivSpinner';
-import StudentApplicationCreationCell from "../components/StudentApplicationCreationCell";
-import StudentApplicationAnswerCell from "../components/StudentApplicationAnswerCell";
+import ApplicationCreationCell from "../components/ApplicationCreationCell";
+import ApplicationAnswerCell from "../components/ApplicationAnswerCell";
 
 import {
-  locationActions, apiNotificationActions, vkApiActions, vkAppsActions, apiStudentApplicationActions,
+  locationActions,
+  apiNotificationActions,
+  vkApiActions,
+  vkAppsActions,
+  apiStudentApplicationActions,
+  apiLessonActions,
+  apiLessonApplicationActions, apiPaymentApplicationActions,
 } from '../actions';
 import { notificationLabels, notificationEventTypes } from "../constants";
 
@@ -39,6 +45,10 @@ const mapDispatchToProps = dispatch => {
     fetchUsersInfo: bindActionCreators(vkApiActions.fetchUsersInfo, dispatch),
     acceptStudentApplication: bindActionCreators(apiStudentApplicationActions.acceptApplication, dispatch),
     rejectStudentApplication: bindActionCreators(apiStudentApplicationActions.rejectApplication, dispatch),
+    acceptLessonApplication: bindActionCreators(apiLessonApplicationActions.acceptApplication, dispatch),
+    rejectLessonApplication: bindActionCreators(apiLessonApplicationActions.rejectApplication, dispatch),
+    acceptPaymentApplication: bindActionCreators(apiPaymentApplicationActions.acceptApplication, dispatch),
+    rejectPaymentApplication: bindActionCreators(apiPaymentApplicationActions.rejectApplication, dispatch),
   };
 };
 
@@ -49,6 +59,10 @@ class Notifications extends React.Component {
     this.fetchNotifications = this.fetchNotifications.bind(this);
     this.acceptStudentApplication = this.acceptStudentApplication.bind(this);
     this.rejectStudentApplication = this.rejectStudentApplication.bind(this);
+    this.acceptLessonApplication = this.acceptLessonApplication.bind(this);
+    this.rejectLessonApplication = this.rejectLessonApplication.bind(this);
+    this.acceptPaymentApplication = this.acceptPaymentApplication.bind(this);
+    this.rejectPaymentApplication = this.rejectPaymentApplication.bind(this);
     this.markAsSeen = this.markAsSeen.bind(this);
   }
 
@@ -108,6 +122,46 @@ class Notifications extends React.Component {
       .then(() => this.fetchNotifications())
   }
 
+  acceptLessonApplication(applicationId) {
+    const { id, signed_user_id } = this.props.vkUserInfo;
+    this.props.acceptLessonApplication({
+      user_id: id,
+      signed_user_id: signed_user_id,
+      lesson_application_id: applicationId,
+    })
+      .then(() => this.fetchNotifications())
+  }
+
+  rejectLessonApplication(applicationId) {
+    const { id, signed_user_id } = this.props.vkUserInfo;
+    this.props.rejectLessonApplication({
+      user_id: id,
+      signed_user_id: signed_user_id,
+      lesson_application_id: applicationId,
+    })
+      .then(() => this.fetchNotifications())
+  }
+
+  acceptPaymentApplication(applicationId) {
+    const { id, signed_user_id } = this.props.vkUserInfo;
+    this.props.acceptPaymentApplication({
+      user_id: id,
+      signed_user_id: signed_user_id,
+      payment_application_id: applicationId,
+    })
+      .then(() => this.fetchNotifications())
+  }
+
+  rejectPaymentApplication(applicationId) {
+    const { id, signed_user_id } = this.props.vkUserInfo;
+    this.props.rejectPaymentApplication({
+      user_id: id,
+      signed_user_id: signed_user_id,
+      payment_application_id: applicationId,
+    })
+      .then(() => this.fetchNotifications())
+  }
+
   markAsSeen(notificationId) {
     const { id, signed_user_id } = this.props.vkUserInfo;
     this.props.markNotificationAsSeen({
@@ -154,9 +208,9 @@ class Notifications extends React.Component {
                           return null;
                         }
                         return (
-                          <StudentApplicationCreationCell
+                          <ApplicationCreationCell
                             key={notification.notification_id}
-                            studentVkProfile={studentVkProfile}
+                            vkProfile={studentVkProfile}
                             label={label}
                             onClick={
                               () => this.props.changeLocation('show_profile', '', {
@@ -171,24 +225,96 @@ class Notifications extends React.Component {
 
                       case notificationEventTypes.STUDENT_APPLICATION_ACCEPT:
                       case notificationEventTypes.STUDENT_APPLICATION_REJECT:
+                      case notificationEventTypes.PAYMENT_APPLICATION_ACCEPT:
+                      case notificationEventTypes.PAYMENT_APPLICATION_REJECT: {
                         const tutorId = notification.tutor.profile_id;
                         const tutorVkProfile = vkUsersInfo[tutorId];
                         if (!tutorVkProfile) {
                           return null;
                         }
                         return (
-                          <StudentApplicationAnswerCell
+                          <ApplicationAnswerCell
                             key={notification.notification_id}
-                            tutorVkProfile={tutorVkProfile}
+                            vkProfile={tutorVkProfile}
                             onMarkAsSeen={() => this.markAsSeen(notification.notification_id)}
                             label={label}
                           />
                         );
+                      }
 
                       case notificationEventTypes.LESSON_CREATION:
-                        return null;
+                      case notificationEventTypes.LESSON_CHANGING:
+                      case notificationEventTypes.LESSON_DEACTIVATION:
+                      case notificationEventTypes.LESSON_APPLICATION_ACCEPT:
+                      case notificationEventTypes.LESSON_APPLICATION_REJECT: {
+                        const tutorId = notification.tutor.profile_id;
+                        const lessonId = notification.lesson.lesson_id;
+                        const tutorVkProfile = vkUsersInfo[tutorId];
+                        if (!tutorVkProfile) {
+                          return null;
+                        }
+                        return (
+                          <ApplicationAnswerCell
+                            key={notification.notification_id}
+                            expandable
+                            vkProfile={tutorVkProfile}
+                            onMarkAsSeen={() => this.markAsSeen(notification.notification_id)}
+                            onClick={() => this.props.changeLocation('show_lesson', '', {
+                              lessonId: lessonId
+                            })}
+                            label={label}
+                          />
+                        );
+                      }
+
+                      case notificationEventTypes.LESSON_APPLICATION_CREATION: {
+                        const applicationId = notification.lesson_application.lesson_application_id;
+                        const studentId = notification.lesson_application.student.profile_id;
+                        const studentVkProfile = vkUsersInfo[studentId];
+                        if (!studentVkProfile) {
+                          return null;
+                        }
+                        return (
+                          <ApplicationCreationCell
+                            key={notification.notification_id}
+                            vkProfile={studentVkProfile}
+                            label={label}
+                            onClick={
+                              () => this.props.changeLocation('show_lesson_application', '', {
+                                lessonApplicationId: applicationId
+                              })
+                            }
+                            onAccept={() => this.acceptLessonApplication(applicationId)}
+                            onReject={() => this.rejectLessonApplication(applicationId)}
+                          />
+                        );
+                      }
+
+                      case notificationEventTypes.PAYMENT_APPLICATION_CREATION: {
+                        const applicationId = notification.payment_application.payment_application_id;
+                        const tutorId = notification.payment_application.tutor.profile_id;
+                        const tutorVkProfile = vkUsersInfo[tutorId];
+                        if (!tutorVkProfile) {
+                          return null;
+                        }
+                        return (
+                          <ApplicationCreationCell
+                            key={notification.notification_id}
+                            vkProfile={tutorVkProfile}
+                            label={label}
+                            onClick={
+                              () => this.props.changeLocation('show_payment_application', '', {
+                                lessonApplicationId: applicationId
+                              })
+                            }
+                            onAccept={() => this.acceptPaymentApplication(applicationId)}
+                            onReject={() => this.rejectPaymentApplication(applicationId)}
+                          />
+                        );
+                      }
 
                       default:
+                        console.log(`Unhandled type of notification, event = ${event}`);
                         return null;
                     }
                   })

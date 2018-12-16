@@ -1,7 +1,7 @@
 import React from "react";
 import { Div, Cell, Avatar, Button } from "@vkontakte/vkui";
 
-const StudentApplicationCreationCell = ({ studentVkProfile, onClick, onAccept, onReject, label }) => {
+const ApplicationCreationCell = ({ vkProfile, onClick, onAccept, onReject, label }) => {
   return (
     <Cell>
       <Cell
@@ -10,10 +10,10 @@ const StudentApplicationCreationCell = ({ studentVkProfile, onClick, onAccept, o
         onClick={onClick}
         description={label}
         before={
-          <Avatar size={64} src={studentVkProfile.photo_200}/>
+          <Avatar size={64} src={vkProfile.photo_200}/>
         }
       >
-        { studentVkProfile.firstName } { studentVkProfile.lastName }
+        { vkProfile.firstName } { vkProfile.lastName }
       </Cell>
       <Div>
         <Button size="l" onClick={onAccept}>
@@ -27,4 +27,4 @@ const StudentApplicationCreationCell = ({ studentVkProfile, onClick, onAccept, o
   );
 };
 
-export default StudentApplicationCreationCell;
+export default ApplicationCreationCell;

@@ -233,6 +233,60 @@ mockAdapter.onGet(`${API_URL}/get_notifications/`).reply(200, [
     },
     "student": null,
     "lesson": null
+  },
+  {
+    "notification_id": 4,
+    "creation_time": "2018-12-13T23:23:26.288102Z",
+    "event": 3,
+    "seen": false,
+    "student_application": null,
+    "lesson_application": null,
+    "payment_application": null,
+    "tutor": {
+      "profile_id": 144736529,
+      "creation_time": "2018-12-10T18:54:53.645340Z",
+      "is_active": true,
+      "experience": "2 years",
+      "education": "Plekhanov Russian University of Economics",
+      "city": "Moscow",
+      "district": "Zamoskvorechye",
+      "street": "Stremyannyy Pereulok",
+      "metro_station": "Serpukhovskaya",
+      "description": "Really good tutor"
+    },
+    "student": null,
+    "lesson": {
+      "lesson_id": 1,
+      "creation_time": "2018-12-10T18:53:32.393469Z",
+      "modification_time": "2018-12-10T18:53:32.393492Z",
+      "beginning_time": "2018-12-10T15:00:00.000000Z",
+      "ending_time": "2018-12-10T16:00:00.000000Z",
+      "price": 800,
+      "tutor": {
+        "profile_id": 1,
+        "creation_time": "2018-12-10T18:54:53.645340Z",
+        "is_active": true,
+        "experience": null,
+        "education": null,
+        "city": null,
+        "district": null,
+        "street": null,
+        "metro_station": null,
+        "description": null
+      },
+      "student": {
+        "profile_id": 144736529,
+        "creation_time": "2018-12-10T18:54:53.645340Z",
+        "is_active": true,
+        "experience": "2 years",
+        "education": "Plekhanov Russian University of Economics",
+        "city": "Moscow",
+        "district": "Zamoskvorechye",
+        "street": "Stremyannyy Pereulok",
+        "metro_station": "Serpukhovskaya",
+        "description": "Really good tutor"
+      }
+    }
   }
 ]);
 

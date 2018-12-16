@@ -1,25 +1,27 @@
 import React from "react";
 import { Button, Div, Avatar, Cell } from "@vkontakte/vkui";
 
-const StudentApplicationAnswerCell = ({ label, tutorVkProfile, onMarkAsSeen }) => {
+const ApplicationAnswerCell = ({ label, vkProfile, onMarkAsSeen, expandable, onClick }) => {
   return (
-    <div>
+    <Cell>
       <Cell
         multiline
         description={label}
+        expandable={expandable}
         before={
-          <Avatar size={64} src={tutorVkProfile.photo_200}/>
+          <Avatar size={64} src={vkProfile.photo_200}/>
         }
+        onClick={onClick}
       >
-        { tutorVkProfile.firstName } {tutorVkProfile.lastName}
+        { vkProfile.firstName } {vkProfile.lastName}
       </Cell>
       <Div>
         <Button size="l" level="secondary" onClick={onMarkAsSeen}>
           Пометить прочитанным
         </Button>
       </Div>
-    </div>
+    </Cell>
   );
 };
 
-export default StudentApplicationAnswerCell;
+export default ApplicationAnswerCell;
