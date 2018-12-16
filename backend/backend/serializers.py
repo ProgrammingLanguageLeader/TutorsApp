@@ -101,5 +101,5 @@ class GetPaymentApplicationSerializer(serializers.ModelSerializer):
 class GetNotificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Notification
-        fields = '__all__'
+        exclude = ('profile', )
         depth = 2
