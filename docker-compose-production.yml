@@ -7,7 +7,7 @@ services:
     build: ./backend/
     volumes:
       - tutors-backend:/opt/services/tutors-backend/staticfiles
-    command: ["sh", "./entrypoint.sh"]
+    command: ["sh", "./entrypoint-production.sh"]
     ports:
       - 8000:8000
     env_file: .env

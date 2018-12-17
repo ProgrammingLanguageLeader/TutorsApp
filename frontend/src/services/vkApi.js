@@ -1,7 +1,8 @@
 import mockVKConnect from '../helpers/vkMockConnect';
 import realVKConnect from '@vkontakte/vkui-connect';
 
-const VKConnect = (process.env.REACT_APP_DEBUG) ? mockVKConnect : realVKConnect;
+const VKConnect = process.env.REACT_APP_DEBUG ? mockVKConnect : realVKConnect;
+console.log(VKConnect === realVKConnect);
 const API_VERSION = '5.80';
 
 export const vkApiRequest = (

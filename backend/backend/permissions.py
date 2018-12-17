@@ -70,7 +70,7 @@ class PaymentApplicationAnswerPermission(permissions.BasePermission):
             or request.query_params.get('payment_application_id')
         try:
             application = PaymentApplication.objects.get(pk=application_id)
-        except LessonApplication.DoesNotExist:
+        except PaymentApplication.DoesNotExist:
             return False
         student_id = application.student_id
         return int(user_id) == int(student_id)

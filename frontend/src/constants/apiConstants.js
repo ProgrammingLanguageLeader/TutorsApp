@@ -1,4 +1,4 @@
-export const API_URL = 'http://localhost/api/v1';
+export const API_URL = 'https://localhost/api/v1';
 
 export const HEADERS = {
   'Accept': 'application/json',
