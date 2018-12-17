@@ -1,11 +1,14 @@
 {
   "name": "tutor-app",
-  "version": "0.3.6",
+  "version": "0.3.7",
+  "homepage": "https://programminglanguageleader.github.io/TutorsApp/",
   "description": "React application",
   "main": "src/index.js",
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build"
+    "build": "react-scripts build",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "keywords": [],
   "author": "In Attemts To Conspire team",
@@ -14,6 +17,7 @@
     "@vkontakte/vkui-connect-mock": "^1.0.61",
     "axios-mock-adapter": "^1.15.0",
     "cross-env": "^5.2.0",
+    "gh-pages": "^2.0.1",
     "react-hot-loader": "^4.3.11",
     "react-scripts": "^1.1.5",
     "redux-devtools-extension": "^2.13.5"
