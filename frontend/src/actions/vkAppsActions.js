@@ -7,11 +7,12 @@ const VKConnect = (process.env.REACT_APP_DEBUG) ? mockVKConnect : realVKConnect;
 
 const fetchAccessToken = () => dispatch => {
   const appId = 6700618;
+  const scope = "";
 
   dispatch({
     type: vkAppsConstants.VK_GET_ACCESS_TOKEN_REQUEST
   });
-  VKConnect.send('VKWebAppGetAuthToken', {'app_id': appId});
+  VKConnect.send('VKWebAppGetAuthToken', {'app_id': appId, 'scope': scope});
 };
 
 const denyNotifications = () => dispatch => {
