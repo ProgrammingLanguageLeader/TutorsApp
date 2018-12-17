@@ -1,5 +1,5 @@
 import realAxios from 'axios';
-import mockAxios from '../helpers/apiMock';
+import mockAxios from '../helpers/axiosMock';
 
 import { API_URL, HEADERS } from "../constants";
 

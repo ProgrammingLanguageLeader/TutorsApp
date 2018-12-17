@@ -1,8 +1,12 @@
-import mockVKConnect from '../helpers/vkMockConnect';
+import mockVKConnect from '@vkontakte/vkui-connect-mock';
 import realVKConnect from '@vkontakte/vkui-connect';
 
+import { configureVkMockConnect } from "../helpers/vkMockConnect";
+
 const VKConnect = process.env.REACT_APP_DEBUG ? mockVKConnect : realVKConnect;
-console.log(VKConnect === realVKConnect);
+if (process.env.REACT_APP_DEBUG) {
+  configureVkMockConnect();
+}
 const API_VERSION = '5.80';
 
 export const vkApiRequest = (
@@ -12,7 +16,7 @@ export const vkApiRequest = (
     successCallback = undefined,
     errorCallback = undefined
 ) => {
-  const requestId = getNewRequestId();
+  const requestId = process.env.REACT_APP_DEBUG ? "324nnefj" : getNewRequestId();
   if (successCallback !== undefined || errorCallback !== undefined) {
     const callback = event => {
       const vkEvent = event.detail;

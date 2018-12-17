@@ -1,4 +1,4 @@
-import mockVKConnect from '../helpers/vkMockConnect';
+import mockVKConnect from '@vkontakte/vkui-connect-mock';
 import realVKConnect from '@vkontakte/vkui-connect';
 
 import { vkAppsConstants } from '../constants';
