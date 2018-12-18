@@ -15,7 +15,7 @@ from backend.views.tools import get_error_message_response
 class CreatePaymentApplicationView(APIView):
     @check_authentication
     def post(self, request):
-        student_id = request.data.get('user_id')
+        student_id = request.data.get('vk_user_id')
         lesson_id = request.data.get('lesson_id')
         request.data['lesson'] = lesson_id
         request.data['student'] = student_id
@@ -39,9 +39,9 @@ class CreatePaymentApplicationView(APIView):
 class GetIncomingPaymentApplicationsView(APIView):
     @check_authentication
     def get(self, request):
-        user_id = self.request.query_params.get('user_id')
+        vk_user_id = self.request.query_params.get('vk_user_id')
         applications = PaymentApplication.objects.filter(
-            student_id=user_id
+            student_id=vk_user_id
         )
         application_serializer = GetPaymentApplicationSerializer(
             applications, many=True
@@ -52,9 +52,9 @@ class GetIncomingPaymentApplicationsView(APIView):
 class GetOutgoingPaymentApplicationView(APIView):
     @check_authentication
     def get(self, request):
-        user_id = self.request.query_params.get('user_id')
+        vk_user_id = self.request.query_params.get('vk_user_id')
         applications = PaymentApplication.objects.filter(
-            lesson__tutor_id=user_id
+            lesson__tutor_id=vk_user_id
         )
         application_serializer = GetPaymentApplicationSerializer(
             applications, many=True

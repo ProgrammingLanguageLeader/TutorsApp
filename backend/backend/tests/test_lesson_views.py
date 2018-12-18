@@ -50,7 +50,6 @@ class CreateLessonViewTest(TestCase):
             "/api/v1/create_lesson/",
             {
                 "sign": MOCK_SIGN,
-                "user_id": self.tutor_id,
                 "student_id": self.student_id_1,
                 "beginning_time": self.beginning_time.isoformat(),
                 "ending_time": self.ending_time.isoformat(),
@@ -72,7 +71,6 @@ class CreateLessonViewTest(TestCase):
             "/api/v1/create_lesson/",
             {
                 "sign": MOCK_SIGN,
-                "user_id": self.tutor_id,
                 "student_id": self.student_id_2,
                 "beginning_time": self.beginning_time.isoformat(),
                 "ending_time": self.ending_time.isoformat(),
@@ -128,7 +126,7 @@ class GetLessonsViewTest(TestCase):
             student_id=self.user_id,
             beginning_time=self.third_lesson_start,
             ending_time=self.third_lesson_end,
-            price = self.price,
+            price=self.price,
         )
 
     def test(self):
@@ -136,7 +134,6 @@ class GetLessonsViewTest(TestCase):
             "/api/v1/get_lessons/",
             {
                 "sign": MOCK_SIGN,
-                "user_id": self.user_id,
                 **MOCK_VK_EXECUTION_PARAMS,
             },
             format="json"
@@ -177,7 +174,6 @@ class UpdateLessonViewTest(TestCase):
             "/api/v1/update_lesson/",
             {
                 "sign": MOCK_SIGN,
-                "user_id": self.user_id,
                 "lesson_id": self.lesson_id,
                 "beginning_time": self.new_beginning_time.isoformat(),
                 "ending_time": self.new_ending_time.isoformat(),
@@ -215,7 +211,6 @@ class DeactivateLessonViewTest(TestCase):
             "/api/v1/deactivate_lesson/",
             {
                 "sign": MOCK_SIGN,
-                "user_id": self.user_id,
                 "lesson_id": self.lesson_id,
                 **MOCK_VK_EXECUTION_PARAMS
             },
@@ -254,7 +249,6 @@ class DeleteLessonViewTest(TestCase):
             "/api/v1/delete_lesson/",
             {
                 "sign": MOCK_SIGN,
-                "user_id": self.tutor_id,
                 "lesson_id": self.lesson_id,
                 **MOCK_VK_EXECUTION_PARAMS
             },
@@ -267,9 +261,9 @@ class DeleteLessonViewTest(TestCase):
             "/api/v1/delete_lesson/",
             {
                 "sign": MOCK_SIGN,
-                "user_id": self.student_id,
                 "lesson_id": self.lesson_id,
-                **MOCK_VK_EXECUTION_PARAMS
+                **MOCK_VK_EXECUTION_PARAMS,
+                "vk_user_id": self.student_id
             },
             format="json"
         )

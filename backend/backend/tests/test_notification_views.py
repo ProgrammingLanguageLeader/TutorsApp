@@ -50,7 +50,6 @@ class GetNotificationsViewTest(TestCase):
             "/api/v1/get_notifications/",
             {
                 "sign": MOCK_SIGN,
-                "user_id": self.user_id,
                 **MOCK_VK_EXECUTION_PARAMS,
             },
             format="json"
@@ -95,7 +94,6 @@ class MarkNotificationAsSeenViewTest(TestCase):
             "/api/v1/mark_notification_as_seen/",
             {
                 "sign": MOCK_SIGN,
-                "user_id": self.user_id,
                 "notification_id": self.notification_id,
                 **MOCK_VK_EXECUTION_PARAMS
             },

@@ -16,10 +16,10 @@ from backend.views.tools import get_error_message_response
 class CreateLessonApplicationView(APIView):
     @check_authentication
     def post(self, request):
-        user_id = request.data.get('user_id')
+        vk_user_id = request.data.get('vk_user_id')
         lesson_id = request.data.get('lesson_id')
         request.data['lesson'] = lesson_id
-        request.data['student'] = user_id
+        request.data['student'] = vk_user_id
         application_serializer = LessonApplicationSerializer(
             data=request.data
         )
@@ -41,9 +41,9 @@ class CreateLessonApplicationView(APIView):
 class GetIncomingLessonApplicationsView(APIView):
     @check_authentication
     def get(self, request):
-        user_id = self.request.query_params.get('user_id')
+        vk_user_id = self.request.query_params.get('vk_user_id')
         applications = LessonApplication.objects.filter(
-            lesson__tutor_id=user_id
+            lesson__tutor_id=vk_user_id
         )
         application_serializer = GetLessonApplicationSerializer(
             applications, many=True
@@ -54,9 +54,9 @@ class GetIncomingLessonApplicationsView(APIView):
 class GetOutgoingLessonApplicationView(APIView):
     @check_authentication
     def get(self, request):
-        user_id = self.request.query_params.get('user_id')
+        vk_user_id = self.request.query_params.get('vk_user_id')
         applications = LessonApplication.objects.filter(
-            student_id=user_id
+            student_id=vk_user_id
         )
         application_serializer = GetLessonApplicationSerializer(
             applications, many=True

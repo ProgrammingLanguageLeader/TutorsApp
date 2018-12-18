@@ -53,7 +53,7 @@ class CreateLessonView(APIView):
 
     @check_authentication
     def post(self, request):
-        tutor_id = request.data.get('user_id')
+        tutor_id = request.data.get('vk_user_id')
         student_id = request.data.get('student_id')
         beginning_time = parse_datetime(
             request.data.get('beginning_time')
@@ -92,9 +92,9 @@ class CreateLessonView(APIView):
 class GetLessonsView(APIView):
     @check_authentication
     def get(self, request):
-        user_id = self.request.query_params.get('user_id')
+        vk_user_id = self.request.query_params.get('vk_user_id')
         lessons = Lesson.objects.filter(
-            Q(tutor_id=user_id) | Q(student_id=user_id)
+            Q(tutor_id=vk_user_id) | Q(student_id=vk_user_id)
         )
         lesson_serializer = GetLessonSerializer(lessons, many=True)
         return Response(data=lesson_serializer.data)

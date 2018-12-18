@@ -14,7 +14,7 @@ from backend.permissions import EditVacancyPermission
 class CreateVacancyView(APIView):
     @check_authentication
     def post(self, request):
-        request.data['owner'] = request.data.get('user_id')
+        request.data['owner'] = request.data.get('vk_user_id')
         view_serializer = VacancySerializer(data=request.data)
         if not view_serializer.is_valid():
             return Response(
@@ -30,7 +30,7 @@ class UpdateVacancyView(APIView):
 
     @check_authentication
     def post(self, request):
-        request.data['owner'] = request.data.get('user_id')
+        request.data['owner'] = request.data.get('vk_user_id')
         view_serializer = UpdateVacancySerializer(data=request.data)
         if not view_serializer.is_valid():
             return Response(

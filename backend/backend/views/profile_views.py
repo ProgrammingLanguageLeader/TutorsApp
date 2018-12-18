@@ -12,7 +12,7 @@ from backend.views.tools import get_error_message_response
 class CreateProfileView(APIView):
     @check_authentication
     def post(self, request):
-        request.data['profile_id'] = request.data.get('user_id')
+        request.data['profile_id'] = request.data.get('vk_user_id')
         view_serializer = ProfileSerializer(data=request.data)
         if not view_serializer.is_valid():
             return Response(
@@ -34,13 +34,13 @@ class UpdateProfileView(APIView):
             )
         try:
             profile = Profile.objects.get(
-                pk=request.data.get('user_id')
+                pk=request.data.get('vk_user_id')
             )
             for (key, value) in view_serializer.validated_data.items():
                 setattr(profile, key, value)
             profile.save()
         except Profile.DoesNotExist:
-            return get_error_message_response('user_id')
+            return get_error_message_response('vk_user_id')
         return Response(data='OK')
 
 
@@ -53,17 +53,17 @@ class GetProfileView(APIView):
             profile_serializer = ProfileSerializer(profile)
             return Response(data=profile_serializer.data)
         except Profile.DoesNotExist:
-            return get_error_message_response('user_id')
+            return get_error_message_response('vk_user_id')
 
 
 class DeactivateProfileView(APIView):
     @check_authentication
     def post(self, request):
         try:
-            user_id = request.data.get('user_id')
-            profile = Profile.objects.get(pk=user_id)
+            vk_user_id = request.data.get('vk_user_id')
+            profile = Profile.objects.get(pk=vk_user_id)
         except Profile.DoesNotExist:
-            return get_error_message_response('user_id')
+            return get_error_message_response('vk_user_id')
         profile.is_active = False
         profile.save()
         return Response(data='OK')

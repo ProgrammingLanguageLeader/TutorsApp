@@ -45,7 +45,6 @@ class GetStudentsViewTest(TestCase):
             "/api/v1/get_students/",
             {
                 "sign": MOCK_SIGN,
-                "user_id": MOCK_VK_USER_ID,
                 "tutor_id": self.tutor_id,
                 **MOCK_VK_EXECUTION_PARAMS,
             },
@@ -90,12 +89,12 @@ class DeleteStudentViewTest(TestCase):
             "/api/v1/delete_student/",
             {
                 "sign": MOCK_SIGN,
-                "user_id": MOCK_VK_USER_ID,
                 "student_id": self.student_id_3,
                 **MOCK_VK_EXECUTION_PARAMS,
             },
             format="json"
         )
+        print(response.data)
         self.assertEqual(response.status_code, HTTP_200_OK)
         students = Students.objects.get(
             tutor_id=self.tutor_id

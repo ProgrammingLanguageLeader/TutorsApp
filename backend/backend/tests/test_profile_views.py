@@ -22,7 +22,6 @@ class CreateProfileViewTest(TestCase):
             "/api/v1/create_profile/",
             {
                 "sign": MOCK_SIGN,
-                "user_id": MOCK_VK_USER_ID,
                 "city": self.city,
                 **MOCK_VK_EXECUTION_PARAMS
             },
@@ -36,7 +35,6 @@ class CreateProfileViewTest(TestCase):
             "/api/v1/create_profile/",
             {
                 "sign": MOCK_SIGN,
-                "user_id": MOCK_VK_USER_ID + 1,
                 **MOCK_VK_EXECUTION_PARAMS,
                 "vk_user_id": MOCK_VK_USER_ID + 1,
             },
@@ -57,7 +55,6 @@ class UpdateProfileViewTest(TestCase):
             "/api/v1/update_profile/",
             {
                 "sign": MOCK_SIGN,
-                "user_id": MOCK_VK_USER_ID,
                 "city": self.city,
                 "description": description,
                 "creation_time": "something",
@@ -85,7 +82,6 @@ class GetProfileViewTest(TestCase):
             "/api/v1/get_profile/",
             {
                 "sign": MOCK_SIGN,
-                "user_id": MOCK_VK_USER_ID,
                 "profile_id": MOCK_VK_USER_ID,
                 **MOCK_VK_EXECUTION_PARAMS
             },
@@ -107,7 +103,6 @@ class DeactivateProfileTest(TestCase):
             "/api/v1/deactivate_profile/",
             {
                 "sign": MOCK_SIGN,
-                "user_id": MOCK_VK_USER_ID,
                 **MOCK_VK_EXECUTION_PARAMS
             },
             format="json"

@@ -31,7 +31,6 @@ class CreateVacancyViewTest(TestCase):
             "/api/v1/create_vacancy/",
             {
                 "sign": MOCK_SIGN,
-                "user_id": str(self.user_id),
                 "subject": self.subject,
                 "ege": True,
                 "home_schooling": True,
@@ -74,7 +73,6 @@ class UpdateVacancyView(TestCase):
             "/api/v1/update_vacancy/",
             {
                 "sign": MOCK_SIGN,
-                "user_id": str(self.user_id),
                 "vacancy_id": 1,
                 "subject": self.subject,
                 "ege": True,
@@ -123,7 +121,6 @@ class SearchVacanciesViewTest(TestCase):
             "/api/v1/search_vacancies/",
             {
                 "sign": MOCK_SIGN,
-                "user_id": str(self.user_id),
                 "subject": self.subject,
                 "ege": self.ege,
                 "price_min": self.price - 1,
@@ -140,7 +137,6 @@ class SearchVacanciesViewTest(TestCase):
             "/api/v1/search_vacancies/",
             {
                 "sign": MOCK_SIGN,
-                "user_id": str(self.user_id),
                 "subject": self.subject,
                 "ege": self.ege,
                 "price_min": self.price - 1,
@@ -176,7 +172,6 @@ class GetVacancyViewTest(TestCase):
             "/api/v1/get_vacancy/",
             {
                 "sign": MOCK_SIGN,
-                "user_id": MOCK_VK_USER_ID,
                 "vacancy_id": self.vacancy_id,
                 **MOCK_VK_EXECUTION_PARAMS,
             },
@@ -218,7 +213,6 @@ class GetProfileVacanciesViewTest(TestCase):
             "/api/v1/get_profile_vacancies/",
             {
                 "sign": MOCK_SIGN,
-                "user_id": MOCK_VK_USER_ID,
                 "owner_id": self.user_id_1,
                 **MOCK_VK_EXECUTION_PARAMS,
             },
@@ -232,7 +226,6 @@ class GetProfileVacanciesViewTest(TestCase):
             "/api/v1/get_profile_vacancies/",
             {
                 "sign": MOCK_SIGN,
-                "user_id": MOCK_VK_USER_ID,
                 "owner_id": self.user_id_2,
                 **MOCK_VK_EXECUTION_PARAMS,
             },
@@ -246,7 +239,6 @@ class GetProfileVacanciesViewTest(TestCase):
             "/api/v1/get_profile_vacancies/",
             {
                 "sign": MOCK_SIGN,
-                "user_id": MOCK_VK_USER_ID,
                 "owner_id": self.user_id_3,
                 **MOCK_VK_EXECUTION_PARAMS,
             },
@@ -268,7 +260,6 @@ class DeactivateVacancyViewTest(TestCase):
             "/api/v1/deactivate_vacancy/",
             {
                 "sign": MOCK_SIGN,
-                "user_id": MOCK_VK_USER_ID,
                 "vacancy_id": self.vacancy_id,
                 **MOCK_VK_EXECUTION_PARAMS,
             },
@@ -291,7 +282,6 @@ class DeleteVacancyViewTest(TestCase):
             "/api/v1/delete_vacancy/",
             {
                 "sign": MOCK_SIGN,
-                "user_id": MOCK_VK_USER_ID,
                 "vacancy_id": self.vacancy_id,
                 **MOCK_VK_EXECUTION_PARAMS,
             },

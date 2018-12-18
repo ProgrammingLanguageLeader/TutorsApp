@@ -40,7 +40,6 @@ class CreateStudentApplicationViewTest(TestCase):
             "/api/v1/create_student_application/",
             {
                 "sign": MOCK_SIGN,
-                "user_id": MOCK_VK_USER_ID,
                 "vacancy_id": self.vacancy_id,
                 **MOCK_VK_EXECUTION_PARAMS,
             },
@@ -82,7 +81,6 @@ class GetTutorApplicationsViewTest(TestCase):
             "/api/v1/get_incoming_applications/",
             {
                 "sign": MOCK_SIGN,
-                "user_id": MOCK_VK_USER_ID,
                 **MOCK_VK_EXECUTION_PARAMS,
             },
             format="json"
@@ -120,7 +118,6 @@ class GetStudentApplicationsViewTest(TestCase):
             "/api/v1/get_outgoing_applications/",
             {
                 "sign": MOCK_SIGN,
-                "user_id": MOCK_VK_USER_ID,
                 **MOCK_VK_EXECUTION_PARAMS,
             },
             format="json"
@@ -158,7 +155,6 @@ class AcceptApplicationViewTest(TestCase):
             "/api/v1/accept_student_application/",
             {
                 "sign": MOCK_SIGN,
-                "user_id": MOCK_VK_USER_ID,
                 "student_application_id": self.student_application_id,
                 **MOCK_VK_EXECUTION_PARAMS,
             },
@@ -205,7 +201,6 @@ class RejectApplicationViewTest(TestCase):
             "/api/v1/reject_student_application/",
             {
                 "sign": MOCK_SIGN,
-                "user_id": self.user_id,
                 "student_application_id": self.student_application_id,
                 **MOCK_VK_EXECUTION_PARAMS,
             },

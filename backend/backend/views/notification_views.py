@@ -30,7 +30,7 @@ class GetNotificationsView(APIView):
     @check_authentication
     def get(self, request):
         params = self.request.query_params
-        user_id = params.get('user_id')
+        vk_user_id = params.get('vk_user_id')
         offset = self.validate_offset(params.get('offset') or 0)
         if offset is None:
             return get_error_message_response('offset')
@@ -39,7 +39,7 @@ class GetNotificationsView(APIView):
         if limit is None:
             return get_error_message_response('limit')
         notifications = Notification.objects.filter(
-            profile_id=user_id
+            profile_id=vk_user_id
         ).order_by('-creation_time')[offset:offset + limit]
         notifications_serializer = GetNotificationSerializer(
             notifications, many=True

@@ -26,10 +26,10 @@ class CreateStudentApplicationView(APIView):
 
     @check_authentication
     def post(self, request):
-        user_id = request.data.get('user_id')
+        vk_user_id = request.data.get('vk_user_id')
         vacancy_id = request.data.get('vacancy_id')
         request.data['vacancy'] = vacancy_id
-        request.data['student'] = user_id
+        request.data['student'] = vk_user_id
         application_serializer = StudentApplicationSerializer(
             data=request.data
         )
@@ -38,7 +38,7 @@ class CreateStudentApplicationView(APIView):
                 data=application_serializer.errors,
                 status=HTTP_400_BAD_REQUEST
             )
-        if not self.check_repeating_application(vacancy_id, user_id):
+        if not self.check_repeating_application(vacancy_id, vk_user_id):
             return Response(
                 data="You have already become a student",
                 status=HTTP_400_BAD_REQUEST
@@ -56,9 +56,9 @@ class CreateStudentApplicationView(APIView):
 class GetIncomingStudentApplicationsView(APIView):
     @check_authentication
     def get(self, request):
-        user_id = self.request.query_params.get('user_id')
+        vk_user_id = self.request.query_params.get('vk_user_id')
         applications = StudentApplication.objects.filter(
-            vacancy__owner_id=user_id
+            vacancy__owner_id=vk_user_id
         )
         application_serializer = StudentApplicationSerializer(
             applications, many=True
@@ -69,9 +69,9 @@ class GetIncomingStudentApplicationsView(APIView):
 class GetOutgoingStudentApplicationView(APIView):
     @check_authentication
     def get(self, request):
-        user_id = self.request.query_params.get('user_id')
+        vk_user_id = self.request.query_params.get('vk_user_id')
         applications = StudentApplication.objects.filter(
-            student_id=user_id
+            student_id=vk_user_id
         )
         application_serializer = StudentApplicationSerializer(
             applications, many=True
