@@ -5,9 +5,10 @@ from rest_framework.status import HTTP_200_OK
 
 from backend.models import Profile
 from backend.models import Students
-from backend.tests.constants import MOCK_USER_ID
-from backend.tests.constants import MOCK_SIGNED_USER_ID
+from backend.tests.constants import MOCK_VK_USER_ID
+from backend.tests.constants import MOCK_SIGN
 from backend.tests.constants import MOCK_VK_APP_SECRET
+from backend.tests.constants import MOCK_VK_EXECUTION_PARAMS
 
 
 settings.VK_APP_SECRET = MOCK_VK_APP_SECRET
@@ -15,10 +16,10 @@ client = APIClient()
 
 
 class GetStudentsViewTest(TestCase):
-    tutor_id = MOCK_USER_ID
-    student_id_1 = MOCK_USER_ID + 1
-    student_id_2 = MOCK_USER_ID + 2
-    student_id_3 = MOCK_USER_ID + 3
+    tutor_id = MOCK_VK_USER_ID
+    student_id_1 = MOCK_VK_USER_ID + 1
+    student_id_2 = MOCK_VK_USER_ID + 2
+    student_id_3 = MOCK_VK_USER_ID + 3
     student_desc_1 = "test student 1"
     student_desc_2 = "test student 2"
     student_desc_3 = "test student 3"
@@ -43,9 +44,10 @@ class GetStudentsViewTest(TestCase):
         response = client.get(
             "/api/v1/get_students/",
             {
-                "signed_user_id": MOCK_SIGNED_USER_ID,
-                "user_id": MOCK_USER_ID,
-                "tutor_id": self.tutor_id
+                "sign": MOCK_SIGN,
+                "user_id": MOCK_VK_USER_ID,
+                "tutor_id": self.tutor_id,
+                **MOCK_VK_EXECUTION_PARAMS,
             },
             format="json"
         )
@@ -59,10 +61,10 @@ class GetStudentsViewTest(TestCase):
 
 
 class DeleteStudentViewTest(TestCase):
-    tutor_id = MOCK_USER_ID
-    student_id_1 = MOCK_USER_ID + 1
-    student_id_2 = MOCK_USER_ID + 2
-    student_id_3 = MOCK_USER_ID + 3
+    tutor_id = MOCK_VK_USER_ID
+    student_id_1 = MOCK_VK_USER_ID + 1
+    student_id_2 = MOCK_VK_USER_ID + 2
+    student_id_3 = MOCK_VK_USER_ID + 3
     student_desc_1 = "test student 1"
     student_desc_2 = "test student 2"
     student_desc_3 = "test student 3"
@@ -87,9 +89,10 @@ class DeleteStudentViewTest(TestCase):
         response = client.post(
             "/api/v1/delete_student/",
             {
-                "signed_user_id": MOCK_SIGNED_USER_ID,
-                "user_id": MOCK_USER_ID,
-                "student_id": self.student_id_3
+                "sign": MOCK_SIGN,
+                "user_id": MOCK_VK_USER_ID,
+                "student_id": self.student_id_3,
+                **MOCK_VK_EXECUTION_PARAMS,
             },
             format="json"
         )

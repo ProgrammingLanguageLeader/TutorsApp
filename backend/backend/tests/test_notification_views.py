@@ -8,9 +8,10 @@ from backend.models import Vacancy
 from backend.models import StudentApplication
 from backend.models import Notification
 from backend.models import NotificationEventChoice
-from backend.tests.constants import MOCK_USER_ID
-from backend.tests.constants import MOCK_SIGNED_USER_ID
+from backend.tests.constants import MOCK_VK_USER_ID
+from backend.tests.constants import MOCK_SIGN
 from backend.tests.constants import MOCK_VK_APP_SECRET
+from backend.tests.constants import MOCK_VK_EXECUTION_PARAMS
 
 
 settings.VK_APP_SECRET = MOCK_VK_APP_SECRET
@@ -18,7 +19,7 @@ client = APIClient()
 
 
 class GetNotificationsViewTest(TestCase):
-    user_id = MOCK_USER_ID
+    user_id = MOCK_VK_USER_ID
     subject = "Math"
     price = 1000
     application_number = 8
@@ -48,8 +49,9 @@ class GetNotificationsViewTest(TestCase):
         response = client.get(
             "/api/v1/get_notifications/",
             {
-                "signed_user_id": MOCK_SIGNED_USER_ID,
-                "user_id": self.user_id
+                "sign": MOCK_SIGN,
+                "user_id": self.user_id,
+                **MOCK_VK_EXECUTION_PARAMS,
             },
             format="json"
         )
@@ -61,7 +63,7 @@ class GetNotificationsViewTest(TestCase):
 
 
 class MarkNotificationAsSeenViewTest(TestCase):
-    user_id = MOCK_USER_ID
+    user_id = MOCK_VK_USER_ID
     subject = "Math"
     price = 1000
     application_number = 8
@@ -92,9 +94,10 @@ class MarkNotificationAsSeenViewTest(TestCase):
         response = client.post(
             "/api/v1/mark_notification_as_seen/",
             {
-                "signed_user_id": MOCK_SIGNED_USER_ID,
+                "sign": MOCK_SIGN,
                 "user_id": self.user_id,
-                "notification_id": self.notification_id
+                "notification_id": self.notification_id,
+                **MOCK_VK_EXECUTION_PARAMS
             },
             format="json"
         )

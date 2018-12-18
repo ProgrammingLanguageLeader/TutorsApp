@@ -5,8 +5,9 @@ from rest_framework.status import HTTP_200_OK
 
 from backend.models import Profile, Vacancy
 from backend.tests.constants import MOCK_VK_APP_SECRET
-from backend.tests.constants import MOCK_SIGNED_USER_ID
-from backend.tests.constants import MOCK_USER_ID
+from backend.tests.constants import MOCK_SIGN
+from backend.tests.constants import MOCK_VK_USER_ID
+from backend.tests.constants import MOCK_VK_EXECUTION_PARAMS
 
 
 settings.VK_APP_SECRET = MOCK_VK_APP_SECRET
@@ -16,7 +17,7 @@ client = APIClient()
 class CreateVacancyViewTest(TestCase):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.user_id = MOCK_USER_ID
+        self.user_id = MOCK_VK_USER_ID
         self.owner = self.user_id
         self.price = 1000
         self.subject = "Math"
@@ -29,13 +30,14 @@ class CreateVacancyViewTest(TestCase):
         response = client.post(
             "/api/v1/create_vacancy/",
             {
-                "signed_user_id": MOCK_SIGNED_USER_ID,
+                "sign": MOCK_SIGN,
                 "user_id": str(self.user_id),
                 "subject": self.subject,
                 "ege": True,
                 "home_schooling": True,
                 "price": self.price,
-                "extra_info": self.extra_info
+                "extra_info": self.extra_info,
+                **MOCK_VK_EXECUTION_PARAMS,
             },
             format="json"
         )
@@ -53,7 +55,7 @@ class CreateVacancyViewTest(TestCase):
 class UpdateVacancyView(TestCase):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.user_id = MOCK_USER_ID
+        self.user_id = MOCK_VK_USER_ID
         self.owner_id = self.user_id
         self.price = 1000
         self.subject = "Math"
@@ -71,14 +73,15 @@ class UpdateVacancyView(TestCase):
         response = client.post(
             "/api/v1/update_vacancy/",
             {
-                "signed_user_id": MOCK_SIGNED_USER_ID,
+                "sign": MOCK_SIGN,
                 "user_id": str(self.user_id),
                 "vacancy_id": 1,
                 "subject": self.subject,
                 "ege": True,
                 "home_schooling": True,
                 "price": self.price,
-                "extra_info": self.extra_info
+                "extra_info": self.extra_info,
+                **MOCK_VK_EXECUTION_PARAMS,
             },
             format="json"
         )
@@ -96,7 +99,7 @@ class UpdateVacancyView(TestCase):
 class SearchVacanciesViewTest(TestCase):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.user_id = MOCK_USER_ID
+        self.user_id = MOCK_VK_USER_ID
         self.subject = "Math"
         self.ege = True
         self.price = 1000
@@ -119,12 +122,13 @@ class SearchVacanciesViewTest(TestCase):
         response = client.get(
             "/api/v1/search_vacancies/",
             {
-                "signed_user_id": MOCK_SIGNED_USER_ID,
+                "sign": MOCK_SIGN,
                 "user_id": str(self.user_id),
                 "subject": self.subject,
                 "ege": self.ege,
                 "price_min": self.price - 1,
-                "city": self.city.upper()
+                "city": self.city.upper(),
+                **MOCK_VK_EXECUTION_PARAMS,
             },
             format="json"
         )
@@ -135,12 +139,13 @@ class SearchVacanciesViewTest(TestCase):
         response = client.get(
             "/api/v1/search_vacancies/",
             {
-                "signed_user_id": MOCK_SIGNED_USER_ID,
+                "sign": MOCK_SIGN,
                 "user_id": str(self.user_id),
                 "subject": self.subject,
                 "ege": self.ege,
                 "price_min": self.price - 1,
-                "city": self.another_city
+                "city": self.another_city,
+                **MOCK_VK_EXECUTION_PARAMS,
             },
             format="json"
         )
@@ -156,7 +161,7 @@ class GetVacancyViewTest(TestCase):
     extra_info = "Test extra info"
 
     def setUp(self):
-        profile = Profile(pk=MOCK_USER_ID)
+        profile = Profile(pk=MOCK_VK_USER_ID)
         profile.save()
         Vacancy.objects.create(
             owner=profile,
@@ -170,9 +175,10 @@ class GetVacancyViewTest(TestCase):
         response = client.get(
             "/api/v1/get_vacancy/",
             {
-                "signed_user_id": MOCK_SIGNED_USER_ID,
-                "user_id": MOCK_USER_ID,
-                "vacancy_id": self.vacancy_id
+                "sign": MOCK_SIGN,
+                "user_id": MOCK_VK_USER_ID,
+                "vacancy_id": self.vacancy_id,
+                **MOCK_VK_EXECUTION_PARAMS,
             },
             format="json"
         )
@@ -185,9 +191,9 @@ class GetVacancyViewTest(TestCase):
 
 class GetProfileVacanciesViewTest(TestCase):
     price = 1000
-    user_id_1 = MOCK_USER_ID
-    user_id_2 = MOCK_USER_ID + 1
-    user_id_3 = MOCK_USER_ID + 2
+    user_id_1 = MOCK_VK_USER_ID
+    user_id_2 = MOCK_VK_USER_ID + 1
+    user_id_3 = MOCK_VK_USER_ID + 2
     vacancies_number_1 = 10
     vacancies_number_2 = 15
     vacancies_number_3 = 0
@@ -211,9 +217,10 @@ class GetProfileVacanciesViewTest(TestCase):
         response = client.get(
             "/api/v1/get_profile_vacancies/",
             {
-                "signed_user_id": MOCK_SIGNED_USER_ID,
-                "user_id": MOCK_USER_ID,
-                "owner_id": self.user_id_1
+                "sign": MOCK_SIGN,
+                "user_id": MOCK_VK_USER_ID,
+                "owner_id": self.user_id_1,
+                **MOCK_VK_EXECUTION_PARAMS,
             },
             format="json"
         )
@@ -224,9 +231,10 @@ class GetProfileVacanciesViewTest(TestCase):
         response = client.get(
             "/api/v1/get_profile_vacancies/",
             {
-                "signed_user_id": MOCK_SIGNED_USER_ID,
-                "user_id": MOCK_USER_ID,
-                "owner_id": self.user_id_2
+                "sign": MOCK_SIGN,
+                "user_id": MOCK_VK_USER_ID,
+                "owner_id": self.user_id_2,
+                **MOCK_VK_EXECUTION_PARAMS,
             },
             format="json"
         )
@@ -237,9 +245,10 @@ class GetProfileVacanciesViewTest(TestCase):
         response = client.get(
             "/api/v1/get_profile_vacancies/",
             {
-                "signed_user_id": MOCK_SIGNED_USER_ID,
-                "user_id": MOCK_USER_ID,
-                "owner_id": self.user_id_3
+                "sign": MOCK_SIGN,
+                "user_id": MOCK_VK_USER_ID,
+                "owner_id": self.user_id_3,
+                **MOCK_VK_EXECUTION_PARAMS,
             },
             format="json"
         )
@@ -251,16 +260,17 @@ class DeactivateVacancyViewTest(TestCase):
     vacancy_id = 1
 
     def setUp(self):
-        Profile.objects.create(pk=MOCK_USER_ID)
-        Vacancy.objects.create(owner_id=MOCK_USER_ID, price=1000)
+        Profile.objects.create(pk=MOCK_VK_USER_ID)
+        Vacancy.objects.create(owner_id=MOCK_VK_USER_ID, price=1000)
 
     def test(self):
         response = client.post(
             "/api/v1/deactivate_vacancy/",
             {
-                "signed_user_id": MOCK_SIGNED_USER_ID,
-                "user_id": MOCK_USER_ID,
-                "vacancy_id": self.vacancy_id
+                "sign": MOCK_SIGN,
+                "user_id": MOCK_VK_USER_ID,
+                "vacancy_id": self.vacancy_id,
+                **MOCK_VK_EXECUTION_PARAMS,
             },
             format="json"
         )
@@ -273,16 +283,17 @@ class DeleteVacancyViewTest(TestCase):
     vacancy_id = 1
 
     def setUp(self):
-        Profile.objects.create(pk=MOCK_USER_ID)
-        Vacancy.objects.create(owner_id=MOCK_USER_ID, price=1000)
+        Profile.objects.create(pk=MOCK_VK_USER_ID)
+        Vacancy.objects.create(owner_id=MOCK_VK_USER_ID, price=1000)
 
     def test(self):
         response = client.post(
             "/api/v1/delete_vacancy/",
             {
-                "signed_user_id": MOCK_SIGNED_USER_ID,
-                "user_id": MOCK_USER_ID,
-                "vacancy_id": self.vacancy_id
+                "sign": MOCK_SIGN,
+                "user_id": MOCK_VK_USER_ID,
+                "vacancy_id": self.vacancy_id,
+                **MOCK_VK_EXECUTION_PARAMS,
             },
             format="json"
         )

@@ -1,30 +1,37 @@
+from collections import OrderedDict
+
 import base64
 import hashlib
+import hmac
 from django.conf import settings
 
 
 def is_authenticated(request):
-    signed_user_id = request.data.get('signed_user_id') \
-        or request.query_params.get('signed_user_id')
-    user_id = request.data.get('user_id') \
-        or request.query_params.get('user_id')
-
-    if not user_id or not signed_user_id:
-        return False
     vk_app_secret = settings.VK_APP_SECRET
-    vk_app_id = settings.VK_APP_ID
 
-    encoded_string = (
-            str(vk_app_id) +
-            vk_app_secret +
-            str(user_id)
-    ).encode('utf-8')
-    digest = hashlib.sha256(encoded_string).digest()
+    sorted_vk_execution_params = OrderedDict()
+    sign = None
+    request_params = request.query_params \
+        if request.method == 'GET' \
+        else request.data
+    for key, value in request_params.items():
+        if key == 'sign':
+            sign = value
+        elif key.startswith('vk_'):
+            sorted_vk_execution_params[key] = value
+    if not sign:
+        return False
+
+    execution_url_params_string = ''
+    for key, value in sorted_vk_execution_params.items():
+        execution_url_params_string += '{}={}&'.format(key, value)
+    execution_url_params_string = execution_url_params_string[:-1]
+    digest = hmac.new(
+        bytes(vk_app_secret, encoding='utf-8'),
+        msg=bytes(execution_url_params_string, encoding='utf-8'),
+        digestmod=hashlib.sha256
+    ).digest()
     real_signature = base64.b64encode(digest)
-    real_signature = real_signature.replace(b'+', b'-')
-    real_signature = real_signature.replace(b'/', b'_')
-    real_signature = real_signature.rstrip(b'=')
-
-    if real_signature != bytes(signed_user_id, encoding='utf-8'):
+    if real_signature != bytes(sign, encoding='utf-8'):
         return False
     return True

@@ -13,9 +13,10 @@ from backend.models import Profile
 from backend.models import Students
 from backend.models import Lesson
 from backend.models import Notification
-from backend.tests.constants import MOCK_USER_ID
-from backend.tests.constants import MOCK_SIGNED_USER_ID
+from backend.tests.constants import MOCK_VK_USER_ID
+from backend.tests.constants import MOCK_SIGN
 from backend.tests.constants import MOCK_VK_APP_SECRET
+from backend.tests.constants import MOCK_VK_EXECUTION_PARAMS
 
 
 settings.VK_APP_SECRET = MOCK_VK_APP_SECRET
@@ -24,9 +25,9 @@ client = APIClient()
 
 class CreateLessonViewTest(TestCase):
     lesson_id = 1
-    tutor_id = MOCK_USER_ID
-    student_id_1 = MOCK_USER_ID + 1
-    student_id_2 = MOCK_USER_ID + 2
+    tutor_id = MOCK_VK_USER_ID
+    student_id_1 = MOCK_VK_USER_ID + 1
+    student_id_2 = MOCK_VK_USER_ID + 2
     price = 1000
     beginning_time = datetime(
         day=3, month=9, year=2018, hour=14, minute=30,
@@ -48,12 +49,13 @@ class CreateLessonViewTest(TestCase):
         response = client.post(
             "/api/v1/create_lesson/",
             {
-                "signed_user_id": MOCK_SIGNED_USER_ID,
+                "sign": MOCK_SIGN,
                 "user_id": self.tutor_id,
                 "student_id": self.student_id_1,
                 "beginning_time": self.beginning_time.isoformat(),
                 "ending_time": self.ending_time.isoformat(),
                 "price": self.price,
+                **MOCK_VK_EXECUTION_PARAMS
             },
             format="json"
         )
@@ -69,12 +71,13 @@ class CreateLessonViewTest(TestCase):
         response = client.post(
             "/api/v1/create_lesson/",
             {
-                "signed_user_id": MOCK_SIGNED_USER_ID,
+                "sign": MOCK_SIGN,
                 "user_id": self.tutor_id,
                 "student_id": self.student_id_2,
                 "beginning_time": self.beginning_time.isoformat(),
                 "ending_time": self.ending_time.isoformat(),
                 "price": self.price,
+                **MOCK_VK_EXECUTION_PARAMS
             },
             format="json"
         )
@@ -84,9 +87,9 @@ class CreateLessonViewTest(TestCase):
 
 
 class GetLessonsViewTest(TestCase):
-    user_id = MOCK_USER_ID
-    tutor_id = MOCK_USER_ID + 1
-    student_id = MOCK_USER_ID + 2
+    user_id = MOCK_VK_USER_ID
+    tutor_id = MOCK_VK_USER_ID + 1
+    student_id = MOCK_VK_USER_ID + 2
     user_lessons_number = 3
     first_lesson_start = datetime.now(tz=timezone.utc)
     first_lesson_end = first_lesson_start + timedelta(hours=1)
@@ -132,8 +135,9 @@ class GetLessonsViewTest(TestCase):
         response = client.get(
             "/api/v1/get_lessons/",
             {
-                "signed_user_id": MOCK_SIGNED_USER_ID,
-                "user_id": self.user_id
+                "sign": MOCK_SIGN,
+                "user_id": self.user_id,
+                **MOCK_VK_EXECUTION_PARAMS,
             },
             format="json"
         )
@@ -143,7 +147,7 @@ class GetLessonsViewTest(TestCase):
 
 class UpdateLessonViewTest(TestCase):
     lesson_id = 1
-    user_id = MOCK_USER_ID
+    user_id = MOCK_VK_USER_ID
     student_id = user_id + 1
     new_beginning_time = datetime(
         day=3, month=9, year=2018, hour=14, minute=30,
@@ -172,12 +176,13 @@ class UpdateLessonViewTest(TestCase):
         response = client.post(
             "/api/v1/update_lesson/",
             {
-                "signed_user_id": MOCK_SIGNED_USER_ID,
+                "sign": MOCK_SIGN,
                 "user_id": self.user_id,
                 "lesson_id": self.lesson_id,
                 "beginning_time": self.new_beginning_time.isoformat(),
                 "ending_time": self.new_ending_time.isoformat(),
                 "price": self.price,
+                **MOCK_VK_EXECUTION_PARAMS
             },
             format="json"
         )
@@ -186,8 +191,8 @@ class UpdateLessonViewTest(TestCase):
 
 class DeactivateLessonViewTest(TestCase):
     lesson_id = 1
-    user_id = MOCK_USER_ID
-    student_id = MOCK_USER_ID + 1
+    user_id = MOCK_VK_USER_ID
+    student_id = MOCK_VK_USER_ID + 1
     lesson_start = datetime.now(tz=timezone.utc)
     lesson_end = lesson_start + timedelta(hours=1)
     price = 1000
@@ -209,9 +214,10 @@ class DeactivateLessonViewTest(TestCase):
         response = client.post(
             "/api/v1/deactivate_lesson/",
             {
-                "signed_user_id": MOCK_SIGNED_USER_ID,
+                "sign": MOCK_SIGN,
                 "user_id": self.user_id,
-                "lesson_id": self.lesson_id
+                "lesson_id": self.lesson_id,
+                **MOCK_VK_EXECUTION_PARAMS
             },
             format="json"
         )
@@ -224,8 +230,8 @@ class DeactivateLessonViewTest(TestCase):
 
 class DeleteLessonViewTest(TestCase):
     lesson_id = 1
-    tutor_id = MOCK_USER_ID
-    student_id = MOCK_USER_ID + 1
+    tutor_id = MOCK_VK_USER_ID
+    student_id = MOCK_VK_USER_ID + 1
     lesson_start = datetime.now(tz=timezone.utc)
     lesson_end = lesson_start + timedelta(hours=1)
     price = 1000
@@ -247,9 +253,10 @@ class DeleteLessonViewTest(TestCase):
         response = client.post(
             "/api/v1/delete_lesson/",
             {
-                "signed_user_id": MOCK_SIGNED_USER_ID,
+                "sign": MOCK_SIGN,
                 "user_id": self.tutor_id,
-                "lesson_id": self.lesson_id
+                "lesson_id": self.lesson_id,
+                **MOCK_VK_EXECUTION_PARAMS
             },
             format="json"
         )
@@ -259,9 +266,10 @@ class DeleteLessonViewTest(TestCase):
         response = client.post(
             "/api/v1/delete_lesson/",
             {
-                "signed_user_id": MOCK_SIGNED_USER_ID,
+                "sign": MOCK_SIGN,
                 "user_id": self.student_id,
-                "lesson_id": self.lesson_id
+                "lesson_id": self.lesson_id,
+                **MOCK_VK_EXECUTION_PARAMS
             },
             format="json"
         )

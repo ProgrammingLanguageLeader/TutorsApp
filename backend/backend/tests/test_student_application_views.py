@@ -8,9 +8,10 @@ from backend.models import Vacancy
 from backend.models import StudentApplication
 from backend.models import Notification
 from backend.models import Students
-from backend.tests.constants import MOCK_USER_ID
-from backend.tests.constants import MOCK_SIGNED_USER_ID
+from backend.tests.constants import MOCK_VK_USER_ID
+from backend.tests.constants import MOCK_SIGN
 from backend.tests.constants import MOCK_VK_APP_SECRET
+from backend.tests.constants import MOCK_VK_EXECUTION_PARAMS
 
 
 settings.VK_APP_SECRET = MOCK_VK_APP_SECRET
@@ -18,7 +19,7 @@ client = APIClient()
 
 
 class CreateStudentApplicationViewTest(TestCase):
-    user_id = MOCK_USER_ID
+    user_id = MOCK_VK_USER_ID
     tutor_id = user_id + 1
     subject = "Math"
     price = 1000
@@ -38,9 +39,10 @@ class CreateStudentApplicationViewTest(TestCase):
         response = client.post(
             "/api/v1/create_student_application/",
             {
-                "signed_user_id": MOCK_SIGNED_USER_ID,
-                "user_id": MOCK_USER_ID,
-                "vacancy_id": self.vacancy_id
+                "sign": MOCK_SIGN,
+                "user_id": MOCK_VK_USER_ID,
+                "vacancy_id": self.vacancy_id,
+                **MOCK_VK_EXECUTION_PARAMS,
             },
             format="json"
         )
@@ -54,7 +56,7 @@ class CreateStudentApplicationViewTest(TestCase):
 
 
 class GetTutorApplicationsViewTest(TestCase):
-    user_id = MOCK_USER_ID
+    user_id = MOCK_VK_USER_ID
     subject = "Math"
     price = 1000
     vacancy_id = 1
@@ -79,8 +81,9 @@ class GetTutorApplicationsViewTest(TestCase):
         response = client.get(
             "/api/v1/get_incoming_applications/",
             {
-                "signed_user_id": MOCK_SIGNED_USER_ID,
-                "user_id": MOCK_USER_ID
+                "sign": MOCK_SIGN,
+                "user_id": MOCK_VK_USER_ID,
+                **MOCK_VK_EXECUTION_PARAMS,
             },
             format="json"
         )
@@ -90,7 +93,7 @@ class GetTutorApplicationsViewTest(TestCase):
 
 
 class GetStudentApplicationsViewTest(TestCase):
-    user_id = MOCK_USER_ID
+    user_id = MOCK_VK_USER_ID
     subject = "Math"
     price = 1000
     vacancy_id = 1
@@ -116,8 +119,9 @@ class GetStudentApplicationsViewTest(TestCase):
         response = client.get(
             "/api/v1/get_outgoing_applications/",
             {
-                "signed_user_id": MOCK_SIGNED_USER_ID,
-                "user_id": MOCK_USER_ID
+                "sign": MOCK_SIGN,
+                "user_id": MOCK_VK_USER_ID,
+                **MOCK_VK_EXECUTION_PARAMS,
             },
             format="json"
         )
@@ -129,7 +133,7 @@ class GetStudentApplicationsViewTest(TestCase):
 
 
 class AcceptApplicationViewTest(TestCase):
-    user_id = MOCK_USER_ID
+    user_id = MOCK_VK_USER_ID
     student_id = user_id + 1
     subject = "Math"
     price = 1000
@@ -153,9 +157,10 @@ class AcceptApplicationViewTest(TestCase):
         response = client.post(
             "/api/v1/accept_student_application/",
             {
-                "signed_user_id": MOCK_SIGNED_USER_ID,
-                "user_id": MOCK_USER_ID,
-                "student_application_id": self.student_application_id
+                "sign": MOCK_SIGN,
+                "user_id": MOCK_VK_USER_ID,
+                "student_application_id": self.student_application_id,
+                **MOCK_VK_EXECUTION_PARAMS,
             },
             format="json"
         )
@@ -175,7 +180,7 @@ class AcceptApplicationViewTest(TestCase):
 
 
 class RejectApplicationViewTest(TestCase):
-    user_id = MOCK_USER_ID
+    user_id = MOCK_VK_USER_ID
     student_id = user_id + 1
     subject = "Math"
     price = 1000
@@ -199,9 +204,10 @@ class RejectApplicationViewTest(TestCase):
         response = client.post(
             "/api/v1/reject_student_application/",
             {
-                "signed_user_id": MOCK_SIGNED_USER_ID,
+                "sign": MOCK_SIGN,
                 "user_id": self.user_id,
-                "student_application_id": self.student_application_id
+                "student_application_id": self.student_application_id,
+                **MOCK_VK_EXECUTION_PARAMS,
             },
             format="json"
         )
