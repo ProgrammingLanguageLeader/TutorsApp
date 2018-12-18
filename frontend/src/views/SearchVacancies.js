@@ -11,7 +11,6 @@ import DivSpinner from '../components/DivSpinner';
 import { vkApiActions, locationActions, apiVacancyActions } from '../actions';
 
 const mapStateToProps = state => {
-  const { vkUserInfo } = state.vkAppsUserReducer;
   const { accessToken } = state.vkAppsTokenReducer;
   const apiVacancyFetching = state.apiVacanciesReducer.fetching;
   const vkApiUsersFetching = state.vkApiUsersReducer.fetching;
@@ -19,7 +18,7 @@ const mapStateToProps = state => {
   const { vacancies } = state.apiVacanciesReducer;
   const { vkUsersInfo } = state.vkApiUsersReducer;
   return {
-    filterParams, vkUserInfo, accessToken, apiVacancyFetching, vkApiUsersFetching,
+    filterParams, accessToken, apiVacancyFetching, vkApiUsersFetching,
     vacancies, vkUsersInfo,
   };
 };
@@ -32,12 +31,9 @@ class SearchVacancies extends React.Component {
   }
 
   searchVacancies() {
-    const { id, signed_user_id } = this.props.vkUserInfo;
     const params = this.props.filterParams;
     this.props.dispatch(
       apiVacancyActions.searchVacancies({
-        user_id: id,
-        signed_user_id: signed_user_id,
         ...params,
       })
     )

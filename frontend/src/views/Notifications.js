@@ -22,14 +22,13 @@ import { notificationLabels, notificationEventTypes } from "../constants";
 
 const mapStateToProps = state => {
   const { activePanel } = state.locationReducer;
-  const { vkUserInfo } = state.vkAppsUserReducer;
   const { accessToken } = state.vkAppsTokenReducer;
   const { vkUsersInfo } = state.vkApiUsersReducer;
   const { notifications } = state.apiNotificationReducer;
   const vkApiUsersFetching = state.vkApiUsersReducer.fetching;
   const apiNotificationFetching = state.apiNotificationReducer.fetching;
   return {
-    activePanel, notifications, accessToken, vkUserInfo, vkUsersInfo, vkApiUsersFetching,
+    activePanel, notifications, accessToken, vkUsersInfo, vkApiUsersFetching,
     apiNotificationFetching,
   };
 };
@@ -70,11 +69,7 @@ class Notifications extends React.Component {
   }
 
   fetchNotifications() {
-    const { id, signed_user_id } = this.props.vkUserInfo;
-    this.props.getNotifications({
-      user_id: id,
-      signed_user_id: signed_user_id
-    })
+    this.props.getNotifications({})
       .then(() => {
         const { accessToken, notifications } = this.props;
         const vkIds = notifications.map(notification => {
@@ -103,70 +98,49 @@ class Notifications extends React.Component {
   }
 
   acceptStudentApplication(applicationId) {
-    const { id, signed_user_id } = this.props.vkUserInfo;
     this.props.acceptStudentApplication({
-      user_id: id,
-      signed_user_id: signed_user_id,
       student_application_id: applicationId,
     })
       .then(() => this.fetchNotifications())
   }
 
   rejectStudentApplication(applicationId) {
-    const { id, signed_user_id } = this.props.vkUserInfo;
     this.props.rejectStudentApplication({
-      user_id: id,
-      signed_user_id: signed_user_id,
       student_application_id: applicationId,
     })
       .then(() => this.fetchNotifications())
   }
 
   acceptLessonApplication(applicationId) {
-    const { id, signed_user_id } = this.props.vkUserInfo;
     this.props.acceptLessonApplication({
-      user_id: id,
-      signed_user_id: signed_user_id,
       lesson_application_id: applicationId,
     })
       .then(() => this.fetchNotifications())
   }
 
   rejectLessonApplication(applicationId) {
-    const { id, signed_user_id } = this.props.vkUserInfo;
     this.props.rejectLessonApplication({
-      user_id: id,
-      signed_user_id: signed_user_id,
       lesson_application_id: applicationId,
     })
       .then(() => this.fetchNotifications())
   }
 
   acceptPaymentApplication(applicationId) {
-    const { id, signed_user_id } = this.props.vkUserInfo;
     this.props.acceptPaymentApplication({
-      user_id: id,
-      signed_user_id: signed_user_id,
       payment_application_id: applicationId,
     })
       .then(() => this.fetchNotifications())
   }
 
   rejectPaymentApplication(applicationId) {
-    const { id, signed_user_id } = this.props.vkUserInfo;
     this.props.rejectPaymentApplication({
-      user_id: id,
-      signed_user_id: signed_user_id,
       payment_application_id: applicationId,
     })
       .then(() => this.fetchNotifications())
   }
 
   markAsSeen(notificationId) {
-    const { id, signed_user_id } = this.props.vkUserInfo;
     this.props.markNotificationAsSeen({
-      user_id: id,
-      signed_user_id: signed_user_id,
       notification_id: notificationId,
     })
       .then(() => this.fetchNotifications())

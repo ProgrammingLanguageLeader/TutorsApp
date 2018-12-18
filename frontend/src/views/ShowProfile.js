@@ -38,12 +38,10 @@ const mapDispatchToProps = dispatch => {
 
 class ShowProfile extends React.Component {
   componentDidMount() {
-    const { id, signed_user_id } = this.props.vkUserInfo;
+    const { id } = this.props.vkUserInfo;
     const profileId = this.props.params.profileId || id;
     this.props.getProfile({
       profile_id: profileId,
-      user_id: id,
-      signed_user_id: signed_user_id,
     })
       .then(() => {
         const { accessToken } = this.props;

@@ -44,11 +44,9 @@ class EditProfile extends React.Component {
   }
 
   componentDidMount() {
-    const { id, signed_user_id } = this.props.vkUserInfo;
+    const { id } = this.props.vkUserInfo;
     this.props.dispatch(
       apiProfileActions.getProfile({
-        user_id: id,
-        signed_user_id: signed_user_id,
         profile_id: id,
       })
     );
@@ -73,14 +71,11 @@ class EditProfile extends React.Component {
   updateProfile(event) {
     event.preventDefault();
 
-    const { id, signed_user_id } = this.props.vkUserInfo;
     this.setState({
       popout: <ScreenSpinner/>
     });
     this.props.dispatch(
       apiProfileActions.updateProfile({
-        user_id: id,
-        signed_user_id: signed_user_id,
         ...this.state
       })
     )

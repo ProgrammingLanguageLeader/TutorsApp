@@ -46,11 +46,8 @@ class ShowVacancy extends React.Component {
   }
 
   getVacancy(vacancyId) {
-    const { id, signed_user_id } = this.props.vkUserInfo;
     this.props.dispatch(
       apiVacancyActions.getVacancy({
-        user_id: id,
-        signed_user_id: signed_user_id,
         vacancy_id: vacancyId,
       })
     )
@@ -63,11 +60,8 @@ class ShowVacancy extends React.Component {
   }
 
   sendApplication(vacancyId, studentId) {
-    const { id, signed_user_id } = this.props.vkUserInfo;
     this.props.dispatch(
       apiLessonApplicationActions.createApplication({
-        user_id: id,
-        signed_user_id: signed_user_id,
         vacancy_id: vacancyId,
         student_id: studentId,
       })

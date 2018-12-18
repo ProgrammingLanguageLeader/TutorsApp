@@ -17,10 +17,9 @@ import SubjectCell from "../components/SubjectCell";
 
 const mapStateToProps = (state) => {
   const { activePanel } = state.locationReducer;
-  const { vkUserInfo } = state.vkAppsUserReducer;
   const apiVacancyErrors = state.apiVacancyReducer.errors;
   return {
-    vkUserInfo, apiVacancyErrors, activePanel,
+    apiVacancyErrors, activePanel,
   };
 };
 
@@ -54,14 +53,11 @@ class CreateVacancy extends React.Component {
   createVacancy(event) {
     event.preventDefault();
 
-    const { id, signed_user_id } = this.props.vkUserInfo;
     this.setState({
       popout: <ScreenSpinner/>
     });
     this.props.dispatch(
       apiVacancyActions.createVacancy({
-        user_id: id,
-        signed_user_id: signed_user_id,
         ...this.state
       })
     )

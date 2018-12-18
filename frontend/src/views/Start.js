@@ -60,23 +60,18 @@ class Start extends React.Component {
     if (this.props.vkUserInfo.id === prevProps.vkUserInfo.id) {
       return;
     }
-    const { id, signed_user_id } = this.props.vkUserInfo;
+    const { id } = this.props.vkUserInfo;
     this.setState({
       popout: <PopoutDiv><ScreenSpinner /></PopoutDiv>
     });
     this.props.getProfile({
       profile_id: id,
-      user_id: id,
-      signed_user_id: signed_user_id,
     })
       .then(() => {
         if (this.props.profile.profile_id) {
           return Promise.resolve();
         }
-        return this.props.createProfile({
-          user_id: id,
-          signed_user_id: signed_user_id,
-        })
+        return this.props.createProfile({})
       })
       .then(() => {
         this.setState({

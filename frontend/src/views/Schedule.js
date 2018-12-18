@@ -23,13 +23,12 @@ const mapStateToProps = state => {
   const vkAppsUserFetching = state.vkAppsUserReducer.fetching;
   const vkApiUsersFetching = state.vkApiUsersReducer.fetching;
   const { lessons } = state.apiLessonReducer;
-  const { vkUserInfo } = state.vkAppsUserReducer;
   const { accessToken } = state.vkAppsTokenReducer;
   const { vkUsersInfo } = state.vkApiUsersReducer;
   const { activePanel } = state.locationReducer;
   return {
-    vkUserInfo, activePanel, vkUsersInfo, lessons,
-    apiLessonFetching, vkAppsUserFetching, vkApiUsersFetching, accessToken,
+    activePanel, vkUsersInfo, lessons, apiLessonFetching,
+    vkAppsUserFetching, vkApiUsersFetching, accessToken,
   };
 };
 
@@ -56,12 +55,8 @@ class Schedule extends React.Component {
   }
 
   fetchLessons() {
-    const { id, signed_user_id } = this.props.vkUserInfo;
     this.props.dispatch(
-      apiLessonActions.getLessons({
-        user_id: id,
-        signed_user_id: signed_user_id,
-      })
+      apiLessonActions.getLessons({})
     )
       .then(() => {
         const { accessToken, lessons } = this.props;
