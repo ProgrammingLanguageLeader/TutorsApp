@@ -16,7 +16,6 @@ import {
   vkApiActions,
   vkAppsActions,
   apiStudentApplicationActions,
-  apiLessonActions,
   apiLessonApplicationActions, apiPaymentApplicationActions,
 } from '../actions';
 import { notificationLabels, notificationEventTypes } from "../constants";
@@ -97,6 +96,7 @@ class Notifications extends React.Component {
           if (notification.lesson) {
             return notification.lesson.tutor.profile_id;
           }
+          return null;
         });
         this.props.fetchUsersInfo(accessToken, vkIds);
       })
