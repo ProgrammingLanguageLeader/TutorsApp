@@ -15,12 +15,12 @@ class ApiManager {
     if (!ApiManager.instance) {
       let url = new URL(window.location.href);
       let sign = null;
-      let vkExecutionParams = new URLSearchParams();
+      let vkExecutionParams = {};
       for (let param of url.searchParams) {
         if (param[0] === 'sign') {
           sign = param[1];
         } else if (param[0].startsWith('vk_')) {
-          vkExecutionParams.append(param[0], param[1]);
+          vkExecutionParams[param[0]] = param[1];
         }
       }
       ApiManager.instance = new ApiManager(vkExecutionParams, sign);
