@@ -21,7 +21,7 @@ def check_authentication(method):
     def wrapper(view_instance, request):
         if not is_authenticated(request):
             return get_error_message_response(
-                'user_id', 'signed_user_id', status=HTTP_403_FORBIDDEN
+                'sign', status=HTTP_403_FORBIDDEN
             )
         return method(view_instance, request)
     return wrapper

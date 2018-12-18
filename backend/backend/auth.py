@@ -3,6 +3,7 @@ from collections import OrderedDict
 import base64
 import hashlib
 import hmac
+import urllib
 from django.conf import settings
 
 
@@ -22,16 +23,17 @@ def is_authenticated(request):
     if not sign:
         return False
 
-    execution_url_params_string = ''
-    for key, value in sorted_vk_execution_params.items():
-        execution_url_params_string += '{}={}&'.format(key, value)
-    execution_url_params_string = execution_url_params_string[:-1]
+    execution_url_params_string = urllib.parse.urlencode(
+        sorted_vk_execution_params
+    )
     digest = hmac.new(
-        bytes(vk_app_secret, encoding='utf-8'),
+        key=bytes(vk_app_secret, encoding='utf-8'),
         msg=bytes(execution_url_params_string, encoding='utf-8'),
         digestmod=hashlib.sha256
     ).digest()
-    real_signature = base64.b64encode(digest)
-    if real_signature != bytes(sign, encoding='utf-8'):
+    real_signature = base64.urlsafe_b64encode(digest)\
+        .decode('utf-8')\
+        .rstrip('=')
+    if real_signature != sign:
         return False
     return True

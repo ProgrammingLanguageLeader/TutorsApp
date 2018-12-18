@@ -7,7 +7,7 @@ MOCK_VK_EXECUTION_PARAMS = {
     "vk_language": "ru",
     "vk_platform": "desktop_web",
     "vk_user_id": 144736529,
-    "sign": "y/HX/wVN6ImUDRF9pehiR5SFyYfMVuvF75JTjrMncMM=",
+    "sign": "YGaVRcdr6Wadn76e8Sfz0CPp59bqaGDjjfxrHnLlSI4",
 }
 MOCK_VK_USER_ID = 144736529
-MOCK_VK_APP_SECRET = "IbUTB1WaCVtp2aoFLF8A"
+MOCK_VK_APP_SECRET = "8NBCv8GieMIbccdfA6eZ"

@@ -94,7 +94,6 @@ class DeleteStudentViewTest(TestCase):
             },
             format="json"
         )
-        print(response.data)
         self.assertEqual(response.status_code, HTTP_200_OK)
         students = Students.objects.get(
             tutor_id=self.tutor_id
