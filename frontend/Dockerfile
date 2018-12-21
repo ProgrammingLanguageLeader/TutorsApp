@@ -1,4 +1,4 @@
-FROM node:latest
+FROM node:alpine
 
 RUN mkdir -p /opt/services/tutors-frontend
 WORKDIR /opt/services/tutors-frontend

@@ -7,9 +7,9 @@ services:
     build: ./backend/
     volumes:
       - tutors-backend:/opt/services/tutors-backend/staticfiles
-    command: ["sh", "./entrypoint-production.sh"]
-    ports:
-      - 8000:8000
+    command: ["sh", "./entrypoint.prod.sh"]
+    expose: 
+      - "8000"
     env_file: .env
     depends_on:
       - postgresql
@@ -18,19 +18,18 @@ services:
     container_name: tutors-frontend
     build: 
       context: ./frontend/
-      dockerfile: Dockerfile-production
+      dockerfile: Dockerfile.prod
     volumes:
       - tutors-frontend:/opt/services/tutors-frontend/build
 
   tutors-nginx:
     restart: always
-    image: nginx:latest
+    image: nginx:alpine
     ports:
+      - 80:80
       - 443:443
     volumes: 
-      - ./docker/nginx/nginx-production.conf:/etc/nginx/conf.d
-      - ./nginx.crt:/etc/nginx/ssl/nginx.crt
-      - ./nginx.key:/etc/nginx/ssl/nginx.key
+      - ./docker/nginx/nginx.prod.conf:/etc/nginx/conf.d
       - tutors-backend:/var/www/tutors-backend/staticfiles
       - tutors-frontend:/var/www/tutors-frontend/
     depends_on: 
@@ -39,13 +38,13 @@ services:
 
   postgresql:
     restart: always
-    image: postgres:latest
+    image: postgres:alpine
     volumes:
       - postgres-config:/etc/postgresql
       - postgres-log:/var/log/postgresql
       - postgres-db:/var/lib/postgresql
-    ports:
-      - 5432:5432
+    expose: 
+      - "5432"
     env_file: .env
 
 volumes:
