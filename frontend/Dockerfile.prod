@@ -1,4 +1,4 @@
-FROM node:alpine
+FROM node:alpine as builder
 
 RUN mkdir -p /opt/services/tutors-frontend
 WORKDIR /opt/services/tutors-frontend
