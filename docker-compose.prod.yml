@@ -19,8 +19,6 @@ services:
     build: 
       context: ./frontend/
       dockerfile: Dockerfile.prod
-    volumes:
-      - ./frontend/build:/opt/services/tutors-frontend/build
     env_file: .env
 
   tutors-nginx:
@@ -33,7 +31,6 @@ services:
     volumes:
       - ./letsencrypt:/etc/letsencrypt
       - ./backend/staticfiles:/var/www/tutors-backend/staticfiles
-      - ./frontend/build:/var/www/tutors-frontend
     env_file: .env
     depends_on: 
       - tutors-backend
