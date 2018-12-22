@@ -3,8 +3,8 @@ FROM node:alpine
 RUN mkdir -p /opt/services/tutors-frontend
 WORKDIR /opt/services/tutors-frontend
 
-COPY package.json package-lock.json /opt/services/tutors-frontend/
+COPY package.json package-lock.json ./
 RUN npm install --silent
 
-COPY . /opt/services/tutors-frontend/
+COPY . ./
 CMD ["npm", "start"]

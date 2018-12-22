@@ -26,7 +26,6 @@ services:
   tutors-nginx:
     container_name: tutors-nginx
     restart: always
-    image: nginx:alpine
     build: ./docker/nginx/
     ports:
       - 80:80
@@ -34,7 +33,7 @@ services:
     volumes:
       - ./letsencrypt:/etc/letsencrypt
       - tutors-backend:/var/www/tutors-backend/staticfiles
-      - tutors-frontend:/var/www/tutors-frontend/
+      - tutors-frontend:/var/www/tutors-frontend
     env_file: .env
     depends_on: 
       - tutors-backend

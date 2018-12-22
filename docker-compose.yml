@@ -29,7 +29,7 @@ services:
     volumes: 
       - ./docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
       - tutors-backend-dev:/var/www/tutors-backend/staticfiles
-      - tutors-frontend-dev:/var/www/tutors-frontend/
+      - tutors-frontend-dev:/var/www/tutors-frontend
     depends_on: 
       - tutors-backend-dev
       - tutors-frontend-dev
