@@ -1,7 +1,7 @@
 {
   "name": "tutor-app",
   "version": "0.3.7",
-  "homepage": "https://programminglanguageleader.github.io/TutorsApp/",
+  "homepage": "https://tutors-app/vk-apps/",
   "description": "React application",
   "main": "src/index.js",
   "scripts": {
