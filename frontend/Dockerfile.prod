@@ -6,6 +6,5 @@ WORKDIR /opt/services/tutors-frontend
 COPY package.json package-lock.json ./
 RUN npm install --silent
 
-RUN rm -rf build
 COPY . ./
 RUN npm run build
