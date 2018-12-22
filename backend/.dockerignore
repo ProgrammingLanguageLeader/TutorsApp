@@ -6,3 +6,4 @@ venv/
 *.pyc
 backups/
 __pycache__/
+staticfiles/

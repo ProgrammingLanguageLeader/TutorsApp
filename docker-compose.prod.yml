@@ -6,7 +6,7 @@ services:
     container_name: tutors-backend
     build: ./backend/
     volumes:
-      - tutors-backend:/opt/services/tutors-backend/staticfiles
+      - ./backend/staticfiles:/opt/services/tutors-backend/staticfiles
     command: ["sh", "./entrypoint.prod.sh"]
     expose: 
       - "8000"
@@ -20,7 +20,7 @@ services:
       context: ./frontend/
       dockerfile: Dockerfile.prod
     volumes:
-      - tutors-frontend:/opt/services/tutors-frontend/build
+      - ./frontend/build:/opt/services/tutors-frontend/build
     env_file: .env
 
   tutors-nginx:
@@ -32,8 +32,8 @@ services:
       - 443:443
     volumes:
       - ./letsencrypt:/etc/letsencrypt
-      - tutors-backend:/var/www/tutors-backend/staticfiles
-      - tutors-frontend:/var/www/tutors-frontend
+      - ./backend/staticfiles:/var/www/tutors-backend/staticfiles
+      - ./frontend/build:/var/www/tutors-frontend
     env_file: .env
     depends_on: 
       - tutors-backend
@@ -52,8 +52,6 @@ services:
     env_file: .env
 
 volumes:
-  tutors-backend:
-  tutors-frontend:
   postgres-config:
   postgres-log:
   postgres-db:
