@@ -23,6 +23,7 @@ services:
       - tutors-frontend:/opt/services/tutors-frontend/build
 
   tutors-nginx:
+    container_name: tutors-nginx
     restart: always
     image: nginx:alpine
     build: ./docker/nginx/
@@ -38,6 +39,7 @@ services:
       - tutors-frontend
 
   postgresql:
+    container_name: tutors-postgres
     restart: always
     image: postgres:alpine
     volumes:

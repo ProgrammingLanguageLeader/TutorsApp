@@ -15,5 +15,5 @@ RUN apk update \
     && ln -sf /etc/nginx/ssl/tutors-app.ru /etc/nginx/ssl/latest \
     && echo "Done"
 
-COPY default.conf /etc/nginx/conf.d/default.conf
+COPY nginx-prod.conf /etc/nginx/conf.d/default.conf
 COPY certbot.sh /etc/nginx/ssl/
