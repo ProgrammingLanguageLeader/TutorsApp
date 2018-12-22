@@ -25,11 +25,12 @@ services:
   tutors-nginx:
     restart: always
     image: nginx:alpine
+    build: ./docker/nginx/
     ports:
       - 80:80
       - 443:443
-    volumes: 
-      - ./docker/nginx/nginx.prod.conf:/etc/nginx/conf.d
+    volumes:
+      - ./letsencrypt:/etc/letsencrypt
       - tutors-backend:/var/www/tutors-backend/staticfiles
       - tutors-frontend:/var/www/tutors-frontend/
     depends_on: 

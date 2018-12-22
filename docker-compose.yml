@@ -7,8 +7,8 @@ services:
     volumes:
       - tutors-backend-dev:/opt/services/tutors-backend/staticfiles
     command: ["sh", "./entrypoint.sh"]
-    ports:
-      - :8000
+    expose:
+      - "8000"
     env_file: .env
 
   tutors-frontend-dev:
@@ -16,8 +16,8 @@ services:
     build: ./frontend/
     volumes: 
       - tutors-frontend-dev:/opt/services/tutors-frontend/build
-    ports:
-      - :3000
+    expose:
+      - "3000"
     env_file: .env
 
   tutors-nginx-dev:
