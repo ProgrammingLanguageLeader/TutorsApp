@@ -1,12 +1,10 @@
-__all__ = [
-    "base",
-    "database",
-    "intalled_apps",
-    "middleware",
-    "rest_framework",
-    "templates",
-    "logging",
-    "auth_password_validators",
-    "internationalization",
-    "static",
-]
+from .base import *
+from .database import *
+from .installed_apps import *
+from .middleware import *
+from .rest_framework import *
+from .templates import *
+from .logging import *
+from .auth_password_validators import *
+from .internationalization import *
+from .static import *
