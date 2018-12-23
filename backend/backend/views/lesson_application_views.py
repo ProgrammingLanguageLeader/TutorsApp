@@ -9,12 +9,11 @@ from backend.models import LessonApplication
 from backend.models import Notification
 from backend.models import NotificationEventChoice
 from backend.permissions import LessonApplicationAnswerPermission
-from backend.views.tools import check_authentication
-from backend.views.tools import get_error_message_response
+
+from tools.errors import get_error_message_response
 
 
 class CreateLessonApplicationView(APIView):
-    @check_authentication
     def post(self, request):
         vk_user_id = request.data.get('vk_user_id')
         lesson_id = request.data.get('lesson_id')
@@ -39,7 +38,6 @@ class CreateLessonApplicationView(APIView):
 
 
 class GetIncomingLessonApplicationsView(APIView):
-    @check_authentication
     def get(self, request):
         vk_user_id = self.request.query_params.get('vk_user_id')
         applications = LessonApplication.objects.filter(
@@ -52,7 +50,6 @@ class GetIncomingLessonApplicationsView(APIView):
 
 
 class GetOutgoingLessonApplicationView(APIView):
-    @check_authentication
     def get(self, request):
         vk_user_id = self.request.query_params.get('vk_user_id')
         applications = LessonApplication.objects.filter(
@@ -67,7 +64,6 @@ class GetOutgoingLessonApplicationView(APIView):
 class AcceptLessonApplicationView(APIView):
     permission_classes = (LessonApplicationAnswerPermission, )
 
-    @check_authentication
     def post(self, request):
         application_id = request.data.get('lesson_application_id')
         try:
@@ -92,7 +88,6 @@ class AcceptLessonApplicationView(APIView):
 class RejectLessonApplicationView(APIView):
     permission_classes = (LessonApplicationAnswerPermission, )
 
-    @check_authentication
     def post(self, request):
         application_id = request.data.get('lesson_application_id')
         try:

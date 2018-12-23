@@ -13,9 +13,9 @@ from backend.models import Students
 from backend.models import Profile
 from backend.models import Notification
 from backend.models import NotificationEventChoice
-from backend.views.tools import check_authentication
-from backend.views.tools import get_error_message_response
 from backend.permissions import EditLessonPermission
+
+from tools.errors import get_error_message_response
 
 
 class CreateLessonView(APIView):
@@ -51,7 +51,6 @@ class CreateLessonView(APIView):
             return False
         return True
 
-    @check_authentication
     def post(self, request):
         tutor_id = request.data.get('vk_user_id')
         student_id = request.data.get('student_id')
@@ -90,7 +89,6 @@ class CreateLessonView(APIView):
 
 
 class GetLessonsView(APIView):
-    @check_authentication
     def get(self, request):
         vk_user_id = self.request.query_params.get('vk_user_id')
         lessons = Lesson.objects.filter(
@@ -103,7 +101,6 @@ class GetLessonsView(APIView):
 class UpdateLessonView(APIView):
     permission_classes = (EditLessonPermission, )
 
-    @check_authentication
     def post(self, request):
         lesson_id = request.data.get('lesson_id')
         view_serializer = UpdateLessonSerializer(data=request.data)
@@ -130,7 +127,6 @@ class UpdateLessonView(APIView):
 class DeactivateLessonView(APIView):
     permission_classes = (EditLessonPermission, )
 
-    @check_authentication
     def post(self, request):
         lesson_id = request.data.get('lesson_id')
         try:
@@ -151,7 +147,6 @@ class DeactivateLessonView(APIView):
 class DeleteLessonView(APIView):
     permission_classes = (EditLessonPermission, )
 
-    @check_authentication
     def post(self, request):
         lesson_id = request.data.get('lesson_id')
         try:

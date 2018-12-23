@@ -1,7 +1,7 @@
 from django.urls import path, include
 from rest_framework.schemas import get_schema_view
 
-from backend.views.profile_views import CreateProfileView
+from backend.views.profile_views import CreateProfileFromVkAppsView
 from backend.views.profile_views import UpdateProfileView
 from backend.views.profile_views import GetProfileView
 from backend.views.profile_views import DeactivateProfileView
@@ -54,7 +54,7 @@ from backend.views.notification_views import MarkNotificationAsSeenView
 profile_urlpatterns = [
     path(
         'create_profile/',
-        CreateProfileView.as_view(),
+        CreateProfileFromVkAppsView.as_view(),
         name='create_profile'
     ),
     path(

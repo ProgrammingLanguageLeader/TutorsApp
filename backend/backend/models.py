@@ -1,5 +1,6 @@
 from enum import Enum, unique
 
+from django.conf import settings
 from django.db import models
 
 
@@ -20,33 +21,9 @@ class NotificationEventChoice(Enum):
     PAYMENT_APPLICATION_REJECT = 12
 
 
-class Profile(models.Model):
-    profile_id = models.IntegerField(
-        primary_key=True,
-        unique=True,
-        blank=False
-    )
-    creation_time = models.DateTimeField(auto_now_add=True)
-    is_active = models.BooleanField(default=True)
-    experience = models.TextField(null=True, blank=True, max_length=100)
-    education = models.TextField(null=True, blank=True, max_length=100)
-    city = models.TextField(null=True, blank=True, max_length=50)
-    district = models.TextField(null=True, blank=True, max_length=50)
-    street = models.TextField(null=True, blank=True, max_length=50)
-    metro_station = models.TextField(null=True, blank=True, max_length=50)
-    description = models.TextField(null=True, blank=True, max_length=100)
-
-    def __str__(self):
-        return 'profile ID: {} | created: {} | active: {}'.format(
-            self.profile_id,
-            self.creation_time.strftime('%B %d %Y %H:%M'),
-            self.is_active
-        ).capitalize()
-
-
 class Students(models.Model):
     tutor = models.OneToOneField(
-        Profile, on_delete=models.CASCADE,
+        settings., on_delete=models.CASCADE,
         related_name='students_tutor'
     )
     students = models.ManyToManyField(Profile)

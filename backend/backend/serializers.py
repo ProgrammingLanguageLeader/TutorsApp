@@ -50,13 +50,13 @@ class UpdateVacancySerializer(serializers.ModelSerializer):
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
-        fields = '__all__'
+        exclude = ('user', )
 
 
 class UpdateProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
-        exclude = ('profile_id', 'creation_time', )
+        exclude = ('user', 'profile_id', 'creation_time', )
 
 
 class StudentApplicationSerializer(serializers.ModelSerializer):

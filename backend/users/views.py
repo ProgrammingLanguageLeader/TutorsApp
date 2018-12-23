@@ -5,10 +5,8 @@ from rest_framework.status import HTTP_400_BAD_REQUEST
 
 from backend.permissions import CreateProfileFromVkAppsPermission
 from backend.models import Profile
-from backend.serializers import ProfileSerializer
-from backend.serializers import UpdateProfileSerializer
-
-from tools.errors import get_error_message_response
+from users.serializers import UserSerializer
+from users.serializers import UpdateUserSerializer
 
 
 class CreateProfileFromVkAppsView(APIView):
@@ -17,7 +15,7 @@ class CreateProfileFromVkAppsView(APIView):
 
     def post(self, request):
         request.data['vk_id'] = request.data.get('vk_user_id')
-        view_serializer = ProfileSerializer(data=request.data)
+        view_serializer = UserSerializer(data=request.data)
         if not view_serializer.is_valid():
             return Response(
                 data=view_serializer.errors,
@@ -31,7 +29,7 @@ class CreateProfileFromVkAppsView(APIView):
 
 class UpdateProfileView(APIView):
     def post(self, request):
-        view_serializer = UpdateProfileSerializer(data=request.data)
+        view_serializer = UpdateUserSerializer(data=request.data)
         if not view_serializer.is_valid():
             return Response(
                 data=view_serializer.errors,
@@ -54,7 +52,7 @@ class GetProfileView(APIView):
         profile_id = self.request.query_params.get('profile_id')
         try:
             profile = Profile.objects.get(pk=profile_id)
-            profile_serializer = ProfileSerializer(profile)
+            profile_serializer = UserSerializer(profile)
             return Response(data=profile_serializer.data)
         except Profile.DoesNotExist:
             return get_error_message_response('vk_user_id')

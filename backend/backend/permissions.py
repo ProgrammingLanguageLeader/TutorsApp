@@ -1,11 +1,17 @@
 from rest_framework import permissions
 
+from backend.auth_backend import VkAppsAuthBackend
 from backend.models import Vacancy
 from backend.models import Lesson
 from backend.models import StudentApplication
 from backend.models import Notification
 from backend.models import LessonApplication
 from backend.models import PaymentApplication
+
+
+class CreateProfileFromVkAppsPermission(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return VkAppsAuthBackend.check_vk_apps_authentication(request)
 
 
 class EditVacancyPermission(permissions.BasePermission):

@@ -9,8 +9,8 @@ from backend.models import StudentApplication
 from backend.models import Notification
 from backend.models import NotificationEventChoice
 from backend.permissions import StudentApplicationAnswerPermission
-from backend.views.tools import check_authentication
-from backend.views.tools import get_error_message_response
+
+from tools.errors import get_error_message_response
 
 
 class CreateStudentApplicationView(APIView):
@@ -24,7 +24,6 @@ class CreateStudentApplicationView(APIView):
             return True
         return len(students.filter(profile_id=student_id)) == 0
 
-    @check_authentication
     def post(self, request):
         vk_user_id = request.data.get('vk_user_id')
         vacancy_id = request.data.get('vacancy_id')
@@ -54,7 +53,6 @@ class CreateStudentApplicationView(APIView):
 
 
 class GetIncomingStudentApplicationsView(APIView):
-    @check_authentication
     def get(self, request):
         vk_user_id = self.request.query_params.get('vk_user_id')
         applications = StudentApplication.objects.filter(
@@ -67,7 +65,6 @@ class GetIncomingStudentApplicationsView(APIView):
 
 
 class GetOutgoingStudentApplicationView(APIView):
-    @check_authentication
     def get(self, request):
         vk_user_id = self.request.query_params.get('vk_user_id')
         applications = StudentApplication.objects.filter(
@@ -82,7 +79,6 @@ class GetOutgoingStudentApplicationView(APIView):
 class AcceptStudentApplicationView(APIView):
     permission_classes = (StudentApplicationAnswerPermission,)
 
-    @check_authentication
     def post(self, request):
         application_id = request.data.get('student_application_id')
         try:
@@ -107,7 +103,6 @@ class AcceptStudentApplicationView(APIView):
 class RejectStudentApplicationView(APIView):
     permission_classes = (StudentApplicationAnswerPermission,)
 
-    @check_authentication
     def post(self, request):
         application_id = request.data.get('student_application_id')
         try:

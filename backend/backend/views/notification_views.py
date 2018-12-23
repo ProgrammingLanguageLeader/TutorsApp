@@ -3,9 +3,9 @@ from rest_framework.response import Response
 
 from backend.serializers import GetNotificationSerializer
 from backend.models import Notification
-from backend.views.tools import check_authentication
-from backend.views.tools import get_error_message_response
 from backend.permissions import MarkNotificationAsSeenPermission
+
+from tools.errors import get_error_message_response
 
 
 class GetNotificationsView(APIView):
@@ -27,7 +27,6 @@ class GetNotificationsView(APIView):
         except (ValueError, TypeError):
             return None
 
-    @check_authentication
     def get(self, request):
         params = self.request.query_params
         vk_user_id = params.get('vk_user_id')
@@ -50,7 +49,6 @@ class GetNotificationsView(APIView):
 class MarkNotificationAsSeenView(APIView):
     permission_classes = (MarkNotificationAsSeenPermission, )
 
-    @check_authentication
     def post(self, request):
         notification_id = request.data.get('notification_id')
         try:

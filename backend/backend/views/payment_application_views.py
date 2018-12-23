@@ -8,12 +8,11 @@ from backend.models import PaymentApplication
 from backend.models import Notification
 from backend.models import NotificationEventChoice
 from backend.permissions import PaymentApplicationAnswerPermission
-from backend.views.tools import check_authentication
-from backend.views.tools import get_error_message_response
+
+from tools.errors import get_error_message_response
 
 
 class CreatePaymentApplicationView(APIView):
-    @check_authentication
     def post(self, request):
         student_id = request.data.get('vk_user_id')
         lesson_id = request.data.get('lesson_id')
@@ -37,7 +36,6 @@ class CreatePaymentApplicationView(APIView):
 
 
 class GetIncomingPaymentApplicationsView(APIView):
-    @check_authentication
     def get(self, request):
         vk_user_id = self.request.query_params.get('vk_user_id')
         applications = PaymentApplication.objects.filter(
@@ -50,7 +48,6 @@ class GetIncomingPaymentApplicationsView(APIView):
 
 
 class GetOutgoingPaymentApplicationView(APIView):
-    @check_authentication
     def get(self, request):
         vk_user_id = self.request.query_params.get('vk_user_id')
         applications = PaymentApplication.objects.filter(
@@ -65,7 +62,6 @@ class GetOutgoingPaymentApplicationView(APIView):
 class AcceptPaymentApplicationView(APIView):
     permission_classes = (PaymentApplicationAnswerPermission, )
 
-    @check_authentication
     def post(self, request):
         application_id = request.data.get('application_application_id')
         try:
@@ -88,7 +84,6 @@ class AcceptPaymentApplicationView(APIView):
 class RejectPaymentApplicationView(APIView):
     permission_classes = (PaymentApplicationAnswerPermission, )
 
-    @check_authentication
     def post(self, request):
         application_id = request.data.get('application_application_id')
         try:

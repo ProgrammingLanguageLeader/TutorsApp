@@ -2,17 +2,16 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.status import HTTP_400_BAD_REQUEST
 
-from backend.views.tools import check_authentication
-from backend.views.tools import get_error_message_response
 from backend.serializers import VacancySerializer
 from backend.serializers import GetVacancySerializer
 from backend.serializers import UpdateVacancySerializer
 from backend.models import Vacancy
 from backend.permissions import EditVacancyPermission
 
+from tools.errors import get_error_message_response
+
 
 class CreateVacancyView(APIView):
-    @check_authentication
     def post(self, request):
         request.data['owner'] = request.data.get('vk_user_id')
         view_serializer = VacancySerializer(data=request.data)
@@ -28,7 +27,6 @@ class CreateVacancyView(APIView):
 class UpdateVacancyView(APIView):
     permission_classes = (EditVacancyPermission, )
 
-    @check_authentication
     def post(self, request):
         request.data['owner'] = request.data.get('vk_user_id')
         view_serializer = UpdateVacancySerializer(data=request.data)
@@ -48,7 +46,6 @@ class UpdateVacancyView(APIView):
 
 
 class SearchVacanciesView(APIView):
-    @check_authentication
     def get(self, request):
         params = self.request.query_params
         offset = self.validate_offset(params.get('offset') or 0)
@@ -156,7 +153,6 @@ class SearchVacanciesView(APIView):
 
 
 class GetVacancyView(APIView):
-    @check_authentication
     def get(self, request):
         vacancy_id = self.request.query_params.get('vacancy_id')
         try:
@@ -168,7 +164,6 @@ class GetVacancyView(APIView):
 
 
 class GetProfileVacanciesView(APIView):
-    @check_authentication
     def get(self, request):
         owner_id = self.request.query_params.get('owner_id')
         vacancies = Vacancy.objects.filter(
@@ -181,7 +176,6 @@ class GetProfileVacanciesView(APIView):
 class DeactivateVacancyView(APIView):
     permission_classes = (EditVacancyPermission, )
 
-    @check_authentication
     def post(self, request):
         vacancy_id = request.data.get('vacancy_id')
         try:
@@ -196,7 +190,6 @@ class DeactivateVacancyView(APIView):
 class DeleteVacancyView(APIView):
     permission_classes = (EditVacancyPermission, )
 
-    @check_authentication
     def post(self, request):
         vacancy_id = request.data.get('vacancy_id')
         try:
