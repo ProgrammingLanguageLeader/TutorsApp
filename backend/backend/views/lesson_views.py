@@ -1,5 +1,6 @@
 from django.db.models import Q
 from django.utils.dateparse import parse_datetime
+from django.contrib.auth import get_user_model
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -10,7 +11,6 @@ from backend.serializers import UpdateLessonSerializer
 from backend.serializers import GetLessonSerializer
 from backend.models import Lesson
 from backend.models import Students
-from backend.models import Profile
 from backend.models import Notification
 from backend.models import NotificationEventChoice
 from backend.permissions import EditLessonPermission
@@ -19,6 +19,7 @@ from tools.errors import get_error_message_response
 
 
 class CreateLessonView(APIView):
+    UserModel = get_user_model()
     lessons_limit = 100
 
     @staticmethod
@@ -47,7 +48,7 @@ class CreateLessonView(APIView):
             ).students.get(
                 profile_id=student_id
             )
-        except Profile.DoesNotExist:
+        except CreateLessonView.UserModel.DoesNotExist:
             return False
         return True
 

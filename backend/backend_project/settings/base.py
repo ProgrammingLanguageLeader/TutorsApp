@@ -1,7 +1,20 @@
 import os
 
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(
+    os.path.join(
+        os.path.join(
+            os.path.join(
+                os.path.dirname(
+                    os.path.abspath(__file__)
+                ),
+                os.path.pardir
+            ),
+            os.path.pardir
+        ),
+        os.path.pardir
+    )
+)
 DEBUG = bool(os.environ.get('DEBUG'))
 
 SECRET_KEY = os.environ.get('SECRET_KEY')

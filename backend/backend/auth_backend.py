@@ -6,12 +6,13 @@ import hmac
 import urllib
 
 from django.conf import settings
+from django.contrib.auth import get_user_model
 from rest_framework import authentication
-
-from backend.models import Profile
 
 
 class VkAppsAuthBackend(authentication.BaseAuthentication):
+    UserModel = get_user_model()
+
     def authenticate(self, request):
         if not self.check_vk_apps_authentication(request):
             return None
@@ -57,7 +58,7 @@ class VkAppsAuthBackend(authentication.BaseAuthentication):
     @staticmethod
     def get_user(vk_id):
         try:
-            user = Profile.objects.get(vk_id=vk_id).user
-        except Profile.DoesNotExist:
+            user = VkAppsAuthBackend.UserModel.objects.get(vk_id=vk_id).user
+        except VkAppsAuthBackend.UserModel.DoesNotExist:
             return None
         return user

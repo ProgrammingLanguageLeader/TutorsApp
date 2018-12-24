@@ -26,6 +26,7 @@ Django = "*"
 Jinja2 = "*"
 MarkupSafe = "*"
 pyyaml = "*"
+pillow = "*"
 
 [requires]
-python_version = "3"
+python_version = "3.6"

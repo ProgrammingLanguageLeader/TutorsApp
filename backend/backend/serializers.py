@@ -1,6 +1,6 @@
+from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
-from backend.models import Profile
 from backend.models import Vacancy
 from backend.models import Lesson
 from backend.models import StudentApplication
@@ -49,13 +49,13 @@ class UpdateVacancySerializer(serializers.ModelSerializer):
 
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Profile
+        model = get_user_model()
         exclude = ('user', )
 
 
 class UpdateProfileSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Profile
+        model = get_user_model()
         exclude = ('user', 'profile_id', 'creation_time', )
 
 

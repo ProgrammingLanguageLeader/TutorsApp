@@ -4,6 +4,9 @@ from django.conf import settings
 from django.db import models
 
 
+# TODO: write abstract application model
+
+
 @unique
 class NotificationEventChoice(Enum):
     STUDENT_APPLICATION_CREATION = 0
@@ -23,10 +26,10 @@ class NotificationEventChoice(Enum):
 
 class Students(models.Model):
     tutor = models.OneToOneField(
-        settings., on_delete=models.CASCADE,
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
         related_name='students_tutor'
     )
-    students = models.ManyToManyField(Profile)
+    students = models.ManyToManyField(settings.AUTH_USER_MODEL)
 
     def __str__(self):
         return 'tutor: {} | {} students'.format(
@@ -39,7 +42,7 @@ class Vacancy(models.Model):
     vacancy_id = models.AutoField(primary_key=True)
     creation_time = models.DateTimeField(auto_now_add=True)
     owner = models.ForeignKey(
-        Profile, on_delete=models.CASCADE,
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
         related_name='vacancy_owner'
     )
     is_active = models.BooleanField(default=True)
@@ -68,11 +71,11 @@ class Lesson(models.Model):
     creation_time = models.DateTimeField(auto_now_add=True)
     modification_time = models.DateTimeField(auto_now_add=True)
     tutor = models.ForeignKey(
-        Profile, on_delete=models.CASCADE,
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
         related_name='lesson_tutor'
     )
     student = models.ForeignKey(
-        Profile, on_delete=models.CASCADE,
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
         related_name='lesson_student'
     )
     beginning_time = models.DateTimeField()
@@ -93,10 +96,14 @@ class Report(models.Model):
     report_id = models.AutoField(primary_key=True)
     creation_time = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey(
-        Profile, models.CASCADE, related_name='report_author'
+        settings.AUTH_USER_MODEL,
+        models.CASCADE,
+        related_name='report_author'
     )
     recipient = models.ForeignKey(
-        Profile, models.CASCADE, related_name='report_recipient'
+        settings.AUTH_USER_MODEL,
+        models.CASCADE,
+        related_name='report_recipient'
     )
     ball = models.IntegerField(null=False)
     text = models.TextField(null=False, max_length=512)
@@ -117,7 +124,7 @@ class StudentApplication(models.Model):
         related_name='student_application_vacancy'
     )
     student = models.ForeignKey(
-        Profile, on_delete=models.CASCADE,
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
         related_name='student_application_student'
     )
 
@@ -140,7 +147,7 @@ class LessonApplication(models.Model):
         related_name='lesson_application_lesson'
     )
     student = models.ForeignKey(
-        Profile, on_delete=models.CASCADE,
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
         related_name='lesson_application_student'
     )
     beginning_time = models.DateTimeField()
@@ -165,7 +172,7 @@ class PaymentApplication(models.Model):
         related_name='payment_application_lesson'
     )
     student = models.ForeignKey(
-        Profile, on_delete=models.CASCADE,
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
         related_name='payment_application_student'
     )
 
@@ -184,7 +191,7 @@ class Notification(models.Model):
     notification_id = models.AutoField(primary_key=True)
     creation_time = models.DateTimeField(auto_now_add=True)
     profile = models.ForeignKey(
-        Profile, on_delete=models.CASCADE,
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
         related_name='notification_profile'
     )
     event = models.IntegerField(
@@ -206,12 +213,12 @@ class Notification(models.Model):
         null=True, blank=True
     )
     tutor = models.ForeignKey(
-        Profile, on_delete=models.CASCADE,
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
         null=True, blank=True,
         related_name='notification_tutor'
     )
     student = models.ForeignKey(
-        Profile, on_delete=models.CASCADE,
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
         null=True, blank=True,
         related_name='notification_student'
     )
