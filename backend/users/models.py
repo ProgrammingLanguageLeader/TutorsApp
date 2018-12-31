@@ -21,7 +21,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     metro_station = models.TextField(null=True, blank=True, max_length=50)
     bio = models.TextField(null=True, blank=True, max_length=100)
     avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
-    vk_id = models.IntegerField(null=True, blank=True)
 
     objects = UserManager()
 

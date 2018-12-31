@@ -1,70 +1,74 @@
-from django.contrib.auth.models import User
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.status import HTTP_400_BAD_REQUEST
 
-from backend.permissions import CreateProfileFromVkAppsPermission
-from backend.models import Profile
-from users.serializers import UserSerializer
-from users.serializers import UpdateUserSerializer
+from tools.errors import get_error_message_response
+from users.models import User
+from users.serializers import UserSerializer, UpdateUserSerializer
 
 
-class CreateProfileFromVkAppsView(APIView):
-    permission_classes = (CreateProfileFromVkAppsPermission, )
+class RegisterUserView(APIView):
     authentication_classes = None
 
     def post(self, request):
-        request.data['vk_id'] = request.data.get('vk_user_id')
-        view_serializer = UserSerializer(data=request.data)
-        if not view_serializer.is_valid():
+        user_serializer = UserSerializer(data=request.data)
+        if not user_serializer.is_valid():
             return Response(
-                data=view_serializer.errors,
+                data=user_serializer.errors,
                 status=HTTP_400_BAD_REQUEST
             )
-
         User.objects.create()
-        view_serializer.save()
+        user_serializer.save()
         return Response(data='OK')
 
 
-class UpdateProfileView(APIView):
+class UpdateUserView(APIView):
     def post(self, request):
-        view_serializer = UpdateUserSerializer(data=request.data)
-        if not view_serializer.is_valid():
+        user_serializer = UpdateUserSerializer(data=request.data)
+        if not user_serializer.is_valid():
             return Response(
-                data=view_serializer.errors,
+                data=user_serializer.errors,
                 status=HTTP_400_BAD_REQUEST
             )
         try:
-            profile = Profile.objects.get(
-                pk=request.data.get('vk_user_id')
-            )
-            for (key, value) in view_serializer.validated_data.items():
-                setattr(profile, key, value)
-            profile.save()
-        except Profile.DoesNotExist:
-            return get_error_message_response('vk_user_id')
+            user = User.objects.get(pk=request.data.get('id'))
+            for (key, value) in user_serializer.validated_data.items():
+                setattr(user, key, value)
+            user.save()
+        except User.DoesNotExist:
+            return get_error_message_response('id')
         return Response(data='OK')
 
 
-class GetProfileView(APIView):
+class GetUserView(APIView):
     def get(self, request):
-        profile_id = self.request.query_params.get('profile_id')
+        user_id = self.request.query_params.get('id')
         try:
-            profile = Profile.objects.get(pk=profile_id)
-            profile_serializer = UserSerializer(profile)
-            return Response(data=profile_serializer.data)
-        except Profile.DoesNotExist:
-            return get_error_message_response('vk_user_id')
+            user = User.objects.get(pk=user_id)
+            user_serializer = UserSerializer(user)
+            return Response(data=user_serializer.data)
+        except User.DoesNotExist:
+            return get_error_message_response('id')
 
 
-class DeactivateProfileView(APIView):
+class DeactivateUserView(APIView):
     def post(self, request):
         try:
-            vk_user_id = request.data.get('vk_user_id')
-            profile = Profile.objects.get(pk=vk_user_id)
-        except Profile.DoesNotExist:
-            return get_error_message_response('vk_user_id')
-        profile.is_active = False
-        profile.save()
+            user_id = request.data.get('id')
+            user = User.objects.get(pk=user_id)
+        except User.DoesNotExist:
+            return get_error_message_response('id')
+        user.is_active = False
+        user.save()
+        return Response(data='OK')
+
+
+class DeleteUserView(APIView):
+    def post(self, request):
+        try:
+            user_id = request.data.get('id')
+            user = User.objects.get(pk=user_id)
+        except User.DoesNotExist:
+            return get_error_message_response('id')
+        user.delete()
         return Response(data='OK')
