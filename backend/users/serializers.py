@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
-        fields = '__all__'
+        fields = ('date_joined', 'is_active', )
 
 
 class UpdateUserSerializer(serializers.ModelSerializer):

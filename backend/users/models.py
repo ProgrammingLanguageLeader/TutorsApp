@@ -13,18 +13,19 @@ class User(AbstractBaseUser, PermissionsMixin):
     last_name = models.CharField('last name', max_length=30, blank=True)
     date_joined = models.DateTimeField('date joined', auto_now_add=True)
     is_active = models.BooleanField('active', default=True)
-    experience = models.TextField(null=True, blank=True, max_length=100)
-    education = models.TextField(null=True, blank=True, max_length=100)
-    city = models.TextField(null=True, blank=True, max_length=50)
-    district = models.TextField(null=True, blank=True, max_length=50)
-    street = models.TextField(null=True, blank=True, max_length=50)
-    metro_station = models.TextField(null=True, blank=True, max_length=50)
-    bio = models.TextField(null=True, blank=True, max_length=100)
+    experience = models.TextField(blank=True, max_length=100)
+    education = models.TextField(blank=True, max_length=100)
+    city = models.TextField(blank=True, max_length=50)
+    district = models.TextField(blank=True, max_length=50)
+    street = models.TextField(blank=True, max_length=50)
+    metro_station = models.TextField(blank=True, max_length=50)
+    bio = models.TextField(blank=True, max_length=100)
     avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
 
     objects = UserManager()
 
     USERNAME_FIELD = 'username'
+    EMAIL_FIELD = 'email'
     REQUIRED_FIELDS = ('first_name', 'last_name')
 
     class Meta:
