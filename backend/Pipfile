@@ -27,6 +27,8 @@ Jinja2 = "*"
 MarkupSafe = "*"
 pyyaml = "*"
 pillow = "*"
+django-notifications-hq = "*"
+social-auth-app-django = "*"
 
 [requires]
 python_version = "3.6"
