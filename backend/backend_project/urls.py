@@ -2,7 +2,8 @@ from django.contrib import admin
 from django.urls import path, include
 from django.views import generic
 
-from backend.urls import urlpatterns as backend_urls
+# from backend.urls import urlpatterns as backend_urls
+from users.urls import urlpatterns as users_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -13,5 +14,5 @@ urlpatterns = [
             permanent=False
         )
     ),
-    path('api/v1/', include(backend_urls)),
+    path('api/v1/users/', include(users_urls)),
 ]

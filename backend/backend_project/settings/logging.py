@@ -1,3 +1,5 @@
+from backend_project.settings.base import DEBUG
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -20,6 +22,11 @@ LOGGING = {
             'filename': 'tutors-backend.log',
             'formatter': 'verbose'
         },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple'
+        }
     },
     'loggers': {
         'django': {
@@ -33,3 +40,7 @@ LOGGING = {
         },
     }
 }
+
+if DEBUG:
+    for logger in LOGGING['loggers']:
+        LOGGING['loggers'][logger]['handlers'] = ['console']
