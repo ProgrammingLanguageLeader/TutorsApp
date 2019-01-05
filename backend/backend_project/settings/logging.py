@@ -32,11 +32,11 @@ LOGGING = {
         'django': {
             'handlers': ['file'],
             'propagate': True,
-            'level': 'DEBUG',
+            'level': 'INFO',
         },
         'tutors-backend ': {
             'handlers': ['file'],
-            'level': 'DEBUG',
+            'level': 'INFO',
         },
     }
 }

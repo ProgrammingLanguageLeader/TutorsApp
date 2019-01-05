@@ -9,6 +9,7 @@ INSTALLED_APPS = [
     'social_django',
     'backend',
     'users',
+    'vk_apps_users',
     'notifications',
     'corsheaders',
 ]

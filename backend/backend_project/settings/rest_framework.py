@@ -4,6 +4,6 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.SessionAuthentication',
-        'backend.auth_backend.VkAppsAuthBackend',
+        'vk_apps_users.authentication.VkAppsAuthBackend',
     )
 }
