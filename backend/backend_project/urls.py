@@ -3,10 +3,16 @@ from django.contrib import admin
 from django.urls import path, include
 from django.views import generic
 
+from rest_framework.permissions import AllowAny
 from rest_framework.schemas import get_schema_view
 
 from backend_project.settings.base import DEBUG
 from backend_project.settings.static import MEDIA_URL, MEDIA_ROOT
+
+schema_view = get_schema_view(
+    title='Schema',
+    permission_classes=[AllowAny]
+)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -15,9 +21,9 @@ urlpatterns = [
         generic.RedirectView.as_view(
             url='/api/v1/',
             permanent=False
-        )
+        ),
     ),
-    path('api/v1/', get_schema_view()),
+    path('api/v1/', schema_view),
     path('api/v1/users/', include('users.urls')),
     path('api/v1/vk_apps_users/', include('vk_apps_users.urls')),
     path('rest-auth/', include('rest_framework.urls'))
