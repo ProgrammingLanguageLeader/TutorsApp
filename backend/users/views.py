@@ -11,6 +11,6 @@ class UsersViewSet(viewsets.ModelViewSet):
     permission_classes = (AnonCreateOrSaveAndUpdateSelfOnly, )
 
     def get_serializer_class(self):
-        if self.action in 'partial_update':
+        if self.action in ('update', 'partial_update'):
             return UpdateUserSerializer
         return self.serializer_class

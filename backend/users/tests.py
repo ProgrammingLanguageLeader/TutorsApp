@@ -18,13 +18,7 @@ class UserTest(TestCase):
         super().__init__(*args, **kwargs)
 
     def setUp(self):
-        User.objects.create_user(
-            username=self.common_username,
-            email=self.common_email,
-            password=self.password,
-            first_name=self.common_first_name,
-            last_name=self.common_last_name
-        )
+        User.objects.create(,
         User.objects.create_superuser(
             username=self.admin_username,
             email=self.admin_email,

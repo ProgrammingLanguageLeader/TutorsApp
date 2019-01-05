@@ -15,7 +15,8 @@ class AbstractBaseUserSerializer:
         return username
 
 
-class UserSerializer(serializers.ModelSerializer, AbstractBaseUserSerializer):
+class UserSerializer(serializers.ModelSerializer,
+                     AbstractBaseUserSerializer):
     class Meta:
         model = User
         exclude = (
@@ -27,6 +28,7 @@ class UserSerializer(serializers.ModelSerializer, AbstractBaseUserSerializer):
             'last_login',
             'date_joined',
             'is_active',
+            'avatar',
         )
         write_only_fields = (
             'password',
@@ -45,7 +47,8 @@ class UserSerializer(serializers.ModelSerializer, AbstractBaseUserSerializer):
         return rep
 
 
-class UpdateUserSerializer(serializers.ModelSerializer, AbstractBaseUserSerializer):
+class UpdateUserSerializer(serializers.ModelSerializer,
+                           AbstractBaseUserSerializer):
     class Meta:
         model = User
         exclude = (
@@ -53,6 +56,7 @@ class UpdateUserSerializer(serializers.ModelSerializer, AbstractBaseUserSerializ
             'is_superuser',
             'groups',
             'user_permissions',
+            'avatar'
         )
         read_only_fields = (
             'last_login',

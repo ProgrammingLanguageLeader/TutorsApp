@@ -26,11 +26,15 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     USERNAME_FIELD = 'username'
     EMAIL_FIELD = 'email'
-    REQUIRED_FIELDS = ('first_name', 'last_name')
+    REQUIRED_FIELDS = ('first_name', 'last_name', 'email', )
 
     class Meta:
         verbose_name = 'user'
         verbose_name_plural = 'users'
+
+    @property
+    def is_staff(self):
+        return self.is_superuser
 
     def get_full_name(self):
         full_name = '%s %s' % (self.first_name, self.last_name)

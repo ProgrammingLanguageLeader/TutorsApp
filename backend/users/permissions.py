@@ -2,8 +2,7 @@ from rest_framework import permissions
 
 
 class AnonCreateOrSaveAndUpdateSelfOnly(permissions.BasePermission):
-    safe_actions = ('list', 'retrieve',)
-    object_actions = ('update', 'partial_update',)
+    safe_actions = ('list', 'retrieve', )
 
     def has_permission(self, request, view):
         is_authenticated = request.user and request.user.is_authenticated
@@ -14,5 +13,4 @@ class AnonCreateOrSaveAndUpdateSelfOnly(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         if view.action in self.safe_actions:
             return True
-        return view.action in self.object_actions and \
-            obj.id == request.user.id
+        return obj.id == request.user.id
