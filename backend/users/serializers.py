@@ -17,6 +17,10 @@ class AbstractBaseUserSerializer:
 
 class UserSerializer(serializers.ModelSerializer,
                      AbstractBaseUserSerializer):
+    password = serializers.CharField(style={
+        'input_type': 'password'
+    })
+
     class Meta:
         model = User
         exclude = (
@@ -34,17 +38,17 @@ class UserSerializer(serializers.ModelSerializer,
             'password',
         )
 
+    def to_representation(self, instance):
+        rep = super(UserSerializer, self).to_representation(instance)
+        rep.pop('password', None)
+        return rep
+
     def create(self, validated_data):
         user = User.objects.create(**validated_data)
         password = validated_data.get('password')
         user.set_password(password)
         user.save()
         return user
-
-    def to_representation(self, instance):
-        rep = super(UserSerializer, self).to_representation(instance)
-        rep.pop('password', None)
-        return rep
 
 
 class UpdateUserSerializer(serializers.ModelSerializer,
