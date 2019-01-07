@@ -14,12 +14,9 @@ class NotificationsViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = (SelfOnly,)
     serializer_class = NotificationSerializer
 
-    def list(self, request, *args, **kwargs):
-        notifications = Notification.objects.filter(
-            recipient=request.user.id
-        )
-        return Response(
-            NotificationSerializer(notifications, many=True).data
+    def get_queryset(self):
+        return Notification.objects.filter(
+            recipient=self.request.user
         )
 
     @action(detail=True, methods=['patch'], name='Set Unread Notification',
