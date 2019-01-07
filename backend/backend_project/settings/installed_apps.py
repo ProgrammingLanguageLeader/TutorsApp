@@ -12,4 +12,6 @@ INSTALLED_APPS = [
     'vacancies',
     'notifications',
     'corsheaders',
+    'rest_framework_extensions',
+    'rest_framework_filters',
 ]
