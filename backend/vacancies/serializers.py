@@ -18,6 +18,7 @@ class VacancySerializer(serializers.ModelSerializer):
     owner = serializers.HiddenField(
         default=serializers.CurrentUserDefault()
     )
+    price = serializers.IntegerField(min_value=0, max_value=10000)
 
     class Meta:
         model = Vacancy
