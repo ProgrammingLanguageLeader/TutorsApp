@@ -7,9 +7,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'social_django',
-    'backend',
     'users',
     'vk_apps_users',
+    'vacancies',
     'notifications',
     'corsheaders',
 ]
