@@ -28,7 +28,7 @@ class Notification(models.Model):
     target_object_id = models.PositiveIntegerField()
     target = GenericForeignKey('target_content_type', 'target_object_id')
 
-    unread = models.BooleanField(default=False)
+    unread = models.BooleanField(default=True)
 
     def __str__(self):
         return 'sender: {} | recipient: {} | unread: {}'.format(
