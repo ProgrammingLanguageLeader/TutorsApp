@@ -7,12 +7,14 @@ from notifications.permissions import SelfOnly
 from notifications.serializers import NotificationSerializer, \
     SetUnreadNotificationSerializer
 from notifications.models import Notification
+from notifications.filter import NotificationFilter
 
 
 class NotificationsViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Notification.objects.all()
     permission_classes = (SelfOnly,)
     serializer_class = NotificationSerializer
+    filter_class = NotificationFilter
 
     def get_queryset(self):
         return Notification.objects.filter(
