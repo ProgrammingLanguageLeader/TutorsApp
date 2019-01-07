@@ -28,7 +28,7 @@ pyyaml = "*"
 pillow = "*"
 social-auth-app-django = "*"
 drf-extensions = "*"
-django-filter = "*"
+djangorestframework-filters = "*"
 
 [requires]
 python_version = "3.6"
