@@ -10,6 +10,7 @@ INSTALLED_APPS = [
     'users',
     'vk_apps_users',
     'vacancies',
+    'tutors',
     'notifications',
     'corsheaders',
     'rest_framework_extensions',

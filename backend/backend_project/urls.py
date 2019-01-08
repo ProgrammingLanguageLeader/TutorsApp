@@ -20,6 +20,7 @@ api_urls = [
     path('vk_apps_users/', include('vk_apps_users.urls')),
     path('vacancies/', include('vacancies.urls')),
     path('notifications/', include('notifications.urls')),
+    path('tutors/', include('tutors.urls')),
 ]
 
 urlpatterns = [
