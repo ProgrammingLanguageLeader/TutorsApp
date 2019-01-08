@@ -26,3 +26,31 @@ class Tutor(models.Model):
 
 class TutorAdmin(admin.ModelAdmin):
     list_display = ('user', 'students_count', )
+
+
+class StudentRequest(models.Model):
+    student = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='student_request_student'
+    )
+    tutor = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='student_request_tutor'
+    )
+    creation_time = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return 'student: {} | tutor: {}'.format(
+            self.student,
+            self.tutor,
+        ).capitalize()
+
+
+class StudentRequestAdmin(admin.ModelAdmin):
+    list_display = [
+        'student',
+        'tutor',
+        'creation_time',
+    ]
