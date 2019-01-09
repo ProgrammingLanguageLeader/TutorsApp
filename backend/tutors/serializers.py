@@ -39,7 +39,7 @@ class StudentRequestSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 "student must not be equal to tutor"
             )
-        return super().validate(attrs)
+        return attrs
 
 
 class ReadStudentRequestSerializer(StudentRequestSerializer):
