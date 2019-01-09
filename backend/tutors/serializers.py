@@ -32,6 +32,15 @@ class StudentRequestSerializer(serializers.ModelSerializer):
         fields = '__all__'
         read_only_fields = ('creation_time', )
 
+    def validate(self, attrs):
+        student = attrs.get('student')
+        tutor = attrs.get('tutor')
+        if student == tutor:
+            raise serializers.ValidationError(
+                "student must not be equal to tutor"
+            )
+        return super().validate(attrs)
+
 
 class ReadStudentRequestSerializer(StudentRequestSerializer):
     student = UserSerializer()
