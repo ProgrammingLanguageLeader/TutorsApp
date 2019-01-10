@@ -21,6 +21,7 @@ api_urls = [
     path('vacancies/', include('vacancies.urls')),
     path('notifications/', include('notifications.urls')),
     path('tutors/', include('tutors.urls')),
+    path('lessons/', include('lessons.urls')),
 ]
 
 urlpatterns = [

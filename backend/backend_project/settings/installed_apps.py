@@ -11,6 +11,7 @@ INSTALLED_APPS = [
     'vk_apps_users',
     'vacancies',
     'tutors',
+    'lessons',
     'notifications',
     'corsheaders',
     'rest_framework_extensions',
