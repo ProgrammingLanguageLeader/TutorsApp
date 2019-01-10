@@ -6,7 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView, exception_handler
 from rest_framework.response import Response
 from rest_framework.status import HTTP_400_BAD_REQUEST
-from rest_framework import viewsets, mixins, generics
+from rest_framework import viewsets, mixins
 
 from tutors.serializers import TutorSerializer, DeleteStudentSerializer, \
     StudentRequestSerializer, ReadStudentRequestSerializer, \
@@ -17,9 +17,13 @@ from tutors.filters import StudentRequestsFilter
 from users.serializers import UserSerializer
 
 
-class StudentsView(generics.ListAPIView):
+class StudentsViewSet(mixins.ListModelMixin,
+                   mixins.RetrieveModelMixin,
+                   mixins.DestroyModelMixin,
+                   viewsets.GenericViewSet):
     permission_classes = (IsAuthenticated, )
     serializer_class = UserSerializer
+    queryset = Tutor.objects.all()
 
     def get_queryset(self):
         tutor, created = Tutor.objects.get_or_create(
@@ -38,22 +42,6 @@ class StudentsView(generics.ListAPIView):
 
     def get_exception_handler(self):
         return self.custom_exception_handler
-
-
-class DeleteStudentView(APIView):
-    permission_classes = (IsAuthenticated, )
-
-    def patch(self, request):
-        serializer = DeleteStudentSerializer(data=request.data)
-        if not serializer.is_valid():
-            return Response(serializer.errors, HTTP_400_BAD_REQUEST)
-        student_id = serializer.validated_data.get('student')
-        tutor, created = Tutor.objects.get_or_create(
-            user=request.user
-        )
-        tutor.students.remove(student_id)
-        serializer = TutorSerializer(tutor)
-        return Response(serializer.data)
 
 
 class StudentRequestsViewSet(mixins.CreateModelMixin,

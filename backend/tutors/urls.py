@@ -2,14 +2,12 @@ from django.urls import path, include
 
 from rest_framework.routers import DefaultRouter
 
-from tutors.views import StudentsView, DeleteStudentView, \
-    StudentRequestsViewSet
+from tutors.views import StudentsViewSet, StudentRequestsViewSet
 
 router = DefaultRouter()
-router.register(r'', StudentRequestsViewSet)
+router.register(r'student_requests', StudentRequestsViewSet)
+router.register(r'students', StudentsViewSet)
 
 urlpatterns = [
-    path('students/', StudentsView.as_view()),
-    path('delete_student/', DeleteStudentView.as_view()),
-    path('student_requests/', include(router.urls)),
+    path('', include(router.urls)),
 ]
