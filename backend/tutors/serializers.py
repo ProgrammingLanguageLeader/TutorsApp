@@ -20,8 +20,8 @@ class DeleteStudentSerializer(serializers.Serializer):
 
 
 class StudentRequestSerializer(serializers.ModelSerializer):
-    student = serializers.PrimaryKeyRelatedField(
-        queryset=UserSerializer.Meta.model.objects.all()
+    student = serializers.HiddenField(
+        default=serializers.CurrentUserDefault()
     )
     tutor = serializers.PrimaryKeyRelatedField(
         queryset=UserSerializer.Meta.model.objects.all()
@@ -36,12 +36,18 @@ class StudentRequestSerializer(serializers.ModelSerializer):
         student = attrs.get('student')
         tutor = attrs.get('tutor')
         if student == tutor:
-            raise serializers.ValidationError(
-                "student must not be equal to tutor"
-            )
+            raise serializers.ValidationError({
+                'tutor': [
+                    'tutor must not be equal to student'
+                ]
+            })
         return attrs
 
 
 class ReadStudentRequestSerializer(StudentRequestSerializer):
     student = UserSerializer()
     tutor = UserSerializer()
+
+
+class AcceptStudentRequestSerializer(serializers.Serializer):
+    pass
