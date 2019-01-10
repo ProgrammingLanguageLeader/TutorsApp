@@ -17,15 +17,15 @@ from tutors.filters import StudentRequestsFilter
 from users.serializers import UserSerializer
 
 
-class StudentsView(APIView):
+class StudentsView(generics.ListAPIView):
     permission_classes = (IsAuthenticated, )
+    serializer_class = UserSerializer
 
-    def get(self, request):
+    def get_queryset(self):
         tutor, created = Tutor.objects.get_or_create(
-            user=request.user,
+            user=self.request.user,
         )
-        serializer = UserSerializer(tutor.students, many=True)
-        return Response(serializer.data)
+        return tutor.students.all()
 
     @staticmethod
     def custom_exception_handler(exc, context):
