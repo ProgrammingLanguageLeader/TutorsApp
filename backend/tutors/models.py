@@ -3,7 +3,7 @@ from django.conf import settings
 from django.contrib import admin
 
 
-class Tutor(models.Model):
+class TutorStudents(models.Model):
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
@@ -24,7 +24,7 @@ class Tutor(models.Model):
         return str(self.user)
 
 
-class TutorAdmin(admin.ModelAdmin):
+class TutorStudentsAdmin(admin.ModelAdmin):
     list_display = ('user', 'students_count', )
 
 

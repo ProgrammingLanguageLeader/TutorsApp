@@ -7,7 +7,7 @@ from rest_framework import viewsets, mixins
 
 from tutors.serializers import StudentRequestSerializer, \
     ReadStudentRequestSerializer, AcceptStudentRequestSerializer
-from tutors.models import Tutor, StudentRequest
+from tutors.models import TutorStudents, StudentRequest
 from tutors.permissions import IsStudentOrIsTutor, IsTutor
 from tutors.filters import StudentRequestsFilter
 from users.serializers import UserSerializer
@@ -29,10 +29,10 @@ class StudentsViewSet(mixins.ListModelMixin,
     """
     permission_classes = (IsAuthenticated, )
     serializer_class = UserSerializer
-    queryset = Tutor.objects.all()
+    queryset = TutorStudents.objects.all()
 
     def get_queryset(self):
-        tutor, created = Tutor.objects.get_or_create(
+        tutor, created = TutorStudents.objects.get_or_create(
             user=self.request.user,
         )
         return tutor.students.all()
@@ -84,7 +84,7 @@ class StudentRequestsViewSet(mixins.CreateModelMixin,
     def accept(self, request, *args, **kwargs):
         student_request = self.get_object()
         student = student_request.student
-        tutor, created = Tutor.objects.get_or_create(
+        tutor, created = TutorStudents.objects.get_or_create(
             user=student_request.tutor
         )
         tutor.students.add(student)

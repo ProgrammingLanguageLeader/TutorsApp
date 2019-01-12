@@ -2,8 +2,9 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from rest_framework import serializers
 
+from tutors.models import TutorStudents
+
 from lessons.models import Lesson
-from tutors.models import Tutor
 
 
 class LessonSerializer(serializers.ModelSerializer):
@@ -16,7 +17,7 @@ class LessonSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
         tutor = attrs.get('tutor')
         student = attrs.get('student')
-        tutor = Tutor.objects.get(user=tutor)
+        tutor = TutorStudents.objects.get(user=tutor)
         try:
             tutor.students.get(pk=student.id)
         except ObjectDoesNotExist:
