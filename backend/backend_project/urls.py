@@ -5,6 +5,9 @@ from django.views import generic
 
 from rest_framework_swagger.views import get_swagger_view
 
+from rest_framework_simplejwt.views import TokenObtainPairView, \
+    TokenRefreshView
+
 from backend_project.settings import DEBUG, MEDIA_URL, MEDIA_ROOT
 
 api_urlpatterns = [
@@ -14,6 +17,9 @@ api_urlpatterns = [
     path('notifications/', include('notifications.urls')),
     path('tutors/', include('tutors.urls')),
     path('lessons/', include('lessons.urls')),
+
+    path('token/', TokenObtainPairView.as_view()),
+    path('token/obtain/', TokenRefreshView.as_view()),
 ]
 
 swagger_schema_view = get_swagger_view(

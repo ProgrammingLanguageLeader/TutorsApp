@@ -30,6 +30,7 @@ social-auth-app-django = "*"
 drf-extensions = "*"
 djangorestframework-filters = "*"
 django-rest-swagger = "*"
+djangorestframework-simplejwt = "*"
 
 [requires]
 python_version = "3.6"
