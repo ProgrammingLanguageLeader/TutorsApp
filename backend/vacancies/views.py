@@ -8,6 +8,25 @@ from vacancies.permissions import VacancyPermission
 
 
 class VacanciesViewSet(viewsets.ModelViewSet):
+    """
+    create:
+        Creates a vacancy
+
+    retrieve:
+        Returns the given vacancy
+
+    list:
+        Returns a list of vacancies
+
+    update:
+        Updates the given vacancy
+
+    partial_update:
+        Partially updates the given vacancy
+
+    destroy:
+        Deletes the given vacancy
+    """
     queryset = Vacancy.objects.all()
     read_only_actions = ('retrieve', 'list', )
     filter_class = VacancyFilter

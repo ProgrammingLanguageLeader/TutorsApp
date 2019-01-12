@@ -1,7 +1,6 @@
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework.status import HTTP_400_BAD_REQUEST
 
 from notifications.permissions import SelfOnly
 from notifications.serializers import NotificationSerializer, \
@@ -11,9 +10,18 @@ from notifications.filter import NotificationFilter
 
 
 class NotificationsViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    retrieve:
+        Returns the given notification
+
+    list:
+        Returns a list of notifications
+
+    set_unread:
+        Sets unread field of the given notification
+    """
     queryset = Notification.objects.all()
     permission_classes = (SelfOnly,)
-    serializer_class = NotificationSerializer
     filter_class = NotificationFilter
 
     def get_queryset(self):
@@ -21,14 +29,17 @@ class NotificationsViewSet(viewsets.ReadOnlyModelViewSet):
             recipient=self.request.user
         )
 
-    @action(detail=True, methods=['patch'], name='Set Unread Notification',
-            url_path='set_unread', permission_classes=[SelfOnly])
+    def get_serializer_class(self):
+        if self.action == 'set_unread':
+            return SetUnreadNotificationSerializer
+        return NotificationSerializer
+
+    @action(detail=True, methods=['patch'],
+            name='Set Unread Notification',
+            permission_classes=[SelfOnly])
     def set_unread(self, request, pk=None, **kwargs):
         notification = self.get_object()
-        serializer = SetUnreadNotificationSerializer(data=request.data)
-        if serializer.is_valid():
-            notification.unread = serializer.data['unread']
-            notification.save()
-        else:
-            return Response(serializer.errors, HTTP_400_BAD_REQUEST)
-        return Response('OK')
+        notification.unread = request.data.get('unread')
+        notification.save()
+        serializer = NotificationSerializer(notification)
+        return Response(serializer.data)

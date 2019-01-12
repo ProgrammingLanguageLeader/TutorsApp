@@ -8,6 +8,25 @@ from lessons.serializer import LessonSerializer
 
 
 class LessonViewSet(viewsets.ModelViewSet):
+    """
+    create:
+        Creates a lesson
+
+    retrieve:
+        Returns the given lesson
+
+    list:
+        Returns a list of lessons
+
+    update:
+        Updates the given lesson
+
+    partial_update:
+        Partially updates the given lesson
+
+    destroy:
+        Deletes the given lesson
+    """
     queryset = Lesson.objects.all()
     permission_classes = (IsTutorOrIsStudentAndReadOnly, )
     serializer_class = LessonSerializer

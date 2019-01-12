@@ -1,16 +1,12 @@
 from django.db.models import Q
 from rest_framework.decorators import action
 
-from rest_framework.exceptions import NotFound
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.views import APIView, exception_handler
 from rest_framework.response import Response
-from rest_framework.status import HTTP_400_BAD_REQUEST
 from rest_framework import viewsets, mixins
 
-from tutors.serializers import TutorSerializer, DeleteStudentSerializer, \
-    StudentRequestSerializer, ReadStudentRequestSerializer, \
-    AcceptStudentRequestSerializer
+from tutors.serializers import StudentRequestSerializer, \
+    ReadStudentRequestSerializer, AcceptStudentRequestSerializer
 from tutors.models import Tutor, StudentRequest
 from tutors.permissions import IsStudentOrIsTutor, IsTutor
 from tutors.filters import StudentRequestsFilter
@@ -18,9 +14,19 @@ from users.serializers import UserSerializer
 
 
 class StudentsViewSet(mixins.ListModelMixin,
-                   mixins.RetrieveModelMixin,
-                   mixins.DestroyModelMixin,
-                   viewsets.GenericViewSet):
+                      mixins.RetrieveModelMixin,
+                      mixins.DestroyModelMixin,
+                      viewsets.GenericViewSet):
+    """
+    retrieve:
+        Return the given student
+
+    list:
+        Return a list of students
+
+    destroy:
+        Delete the given student
+    """
     permission_classes = (IsAuthenticated, )
     serializer_class = UserSerializer
     queryset = Tutor.objects.all()
@@ -31,24 +37,29 @@ class StudentsViewSet(mixins.ListModelMixin,
         )
         return tutor.students.all()
 
-    @staticmethod
-    def custom_exception_handler(exc, context):
-        if isinstance(exc, Tutor.DoesNotExist):
-            exc = NotFound()
-        response = exception_handler(exc, context)
-        if response is not None:
-            response.data['status_code'] = response.status_code
-        return response
-
-    def get_exception_handler(self):
-        return self.custom_exception_handler
-
 
 class StudentRequestsViewSet(mixins.CreateModelMixin,
                              mixins.DestroyModelMixin,
                              mixins.ListModelMixin,
                              mixins.RetrieveModelMixin,
                              viewsets.GenericViewSet):
+    """
+    create:
+        Creates a student request
+
+    retrieve:
+        Returns the given student request
+
+    list:
+        Returns a list of student requests
+
+    destroy:
+        Deletes the given student request
+
+    accept:
+        Deletes the given request and adds the student from the request
+        to a list of tutor students
+    """
     permission_classes = (IsStudentOrIsTutor,)
     queryset = StudentRequest.objects.all()
     read_only_actions = ('retrieve', 'list',)
