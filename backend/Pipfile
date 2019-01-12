@@ -29,6 +29,7 @@ pillow = "*"
 social-auth-app-django = "*"
 drf-extensions = "*"
 djangorestframework-filters = "*"
+django-rest-swagger = "*"
 
 [requires]
 python_version = "3.6"

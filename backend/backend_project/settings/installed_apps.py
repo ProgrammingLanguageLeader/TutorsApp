@@ -16,4 +16,5 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework_extensions',
     'rest_framework_filters',
+    'rest_framework_swagger',
 ]
