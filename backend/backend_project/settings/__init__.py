@@ -9,3 +9,4 @@ from .auth_password_validators import *
 from .internationalization import *
 from .static import *
 from .social_auth import *
+from .swagger import *
