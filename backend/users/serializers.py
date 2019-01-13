@@ -1,6 +1,7 @@
 import re
 
 from rest_framework import serializers
+from rest_framework_recaptcha.fields import ReCaptchaField
 
 from users.models import User
 
@@ -32,41 +33,27 @@ class UserSerializer(serializers.ModelSerializer,
             'last_login',
             'date_joined',
             'is_active',
-            'avatar',
         )
         write_only_fields = (
             'password',
         )
 
     def to_representation(self, instance):
-        rep = super(UserSerializer, self).to_representation(instance)
+        rep = super().to_representation(instance)
         rep.pop('password', None)
         return rep
 
     def create(self, validated_data):
-        user = User.objects.create(**validated_data)
-        password = validated_data.get('password')
-        user.set_password(password)
-        user.save()
+        user = User.objects.create_user(**validated_data)
         return user
 
+    def update(self, instance, validated_data):
+        instance = super().update(instance, validated_data)
+        password = validated_data.get('password')
+        instance.set_password(password)
+        instance.save()
+        return instance
 
-class UpdateUserSerializer(serializers.ModelSerializer,
-                           AbstractBaseUserSerializer):
-    class Meta:
-        model = User
-        exclude = (
-            'password',
-            'is_superuser',
-            'groups',
-            'user_permissions',
-            'avatar'
-        )
-        read_only_fields = (
-            'last_login',
-            'date_joined',
-            'is_active',
-            'is_superuser',
-            'groups',
-            'user_permissions',
-        )
+
+class CreateUserSerializer(UserSerializer):
+    recaptcha = ReCaptchaField()

@@ -29,3 +29,5 @@ AUTH_USER_MODEL_SERIALIZER = 'users.serializers.UserSerializer'
 CORS_ORIGIN_ALLOW_ALL = True
 ROOT_URLCONF = 'backend_project.urls'
 WSGI_APPLICATION = 'backend_project.wsgi.application'
+
+DRF_RECAPTCHA_SECRET_KEY = os.environ.get('DRF_RECAPTCHA_SECRET_KEY')

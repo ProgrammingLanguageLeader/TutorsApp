@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 
 from users.models import User
-from users.serializers import UserSerializer, UpdateUserSerializer
+from users.serializers import UserSerializer, CreateUserSerializer
 from users.permissions import AnonCreateOrSaveAndUpdateSelfOnly
 
 
@@ -30,6 +30,6 @@ class UsersViewSet(viewsets.ModelViewSet):
     permission_classes = (AnonCreateOrSaveAndUpdateSelfOnly, )
 
     def get_serializer_class(self):
-        if self.action in ('update', 'partial_update'):
-            return UpdateUserSerializer
+        if self.action == 'create':
+            return CreateUserSerializer
         return self.serializer_class
