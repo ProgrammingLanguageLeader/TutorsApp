@@ -2,15 +2,14 @@ from datetime import datetime, timezone, timedelta
 
 from django.urls import reverse
 from django.contrib.auth import get_user_model
+from django.db.models import Q
 
-from rest_framework.test import APITestCase, APIRequestFactory, \
-    force_authenticate
+from rest_framework.test import APITestCase, APIRequestFactory
 from rest_framework import status
 
 from tutors.models import TutorStudents
 
 from lessons.models import Lesson
-from lessons.views import LessonViewSet
 
 
 class LessonTests(APITestCase):
@@ -21,7 +20,7 @@ class LessonTests(APITestCase):
         'username': 'tester',
         'password': 'tester',
     }
-    tutor_kwargs = {
+    teacher_kwargs = {
         'username': 'teacher',
         'password': 'teacher',
     }
@@ -55,9 +54,15 @@ class LessonTests(APITestCase):
     }
 
     def setUp(self):
-        self.tester = self.UserModel.objects.create(**self.tester_kwargs)
-        self.student = self.UserModel.objects.create(**self.student_kwargs)
-        self.teacher = self.UserModel.objects.create(**self.tutor_kwargs)
+        self.tester = self.UserModel.objects.create_user(
+            **self.tester_kwargs
+        )
+        self.student = self.UserModel.objects.create_user(
+            **self.student_kwargs
+        )
+        self.teacher = self.UserModel.objects.create_user(
+            **self.teacher_kwargs
+        )
 
         teacher_tutor_students = TutorStudents.objects.create(
             user=self.teacher
@@ -85,15 +90,43 @@ class LessonTests(APITestCase):
             **self.teacher_tester_lesson_2_kwargs,
         )
 
-    def test_view_set(self):
-        view = LessonViewSet.as_view({
-            'get': 'list'
-        })
+    def test_list(self):
+        self.client.login(**self.teacher_kwargs)
         request = self.request_factory.get(
             reverse('lesson-list')
         )
-        force_authenticate(request, self.teacher)
-        response = view(request)
+        response = self.client.get(request.path)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         results = response.data.get('results')
-        self.assertEqual(len(results), 2)
+        lessons = Lesson.objects.filter(
+            Q(tutor=self.teacher) | Q(student=self.teacher)
+        )
+        self.assertEqual(len(results), len(lessons))
+
+    def test_retrieve(self):
+        self.client.login(**self.tester_kwargs)
+        request = self.request_factory.get(
+            reverse('lesson-detail', kwargs={
+                'pk': self.tester_student_lesson.pk
+            })
+        )
+        response = self.client.get(request.path)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_create(self):
+        self.client.login(**self.tester_kwargs)
+        new_lesson_start = self.teacher_tester_lesson_2_start\
+            + timedelta(hours=10)
+        new_lesson_end = new_lesson_start + self.lesson_duration
+        new_lesson_kwargs = {
+            'price': 1000,
+            'beginning_time': new_lesson_start,
+            'ending_time': new_lesson_end,
+            'tutor': self.tester.id,
+            'student': self.student.id
+        }
+        request = self.request_factory.get(
+            reverse('lesson-list')
+        )
+        response = self.client.post(request.path, new_lesson_kwargs)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
