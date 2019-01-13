@@ -31,6 +31,7 @@ class Lesson(models.Model):
 
 class LessonAdmin(admin.ModelAdmin):
     list_display = (
+        'id',
         'tutor',
         'student',
         'price',
