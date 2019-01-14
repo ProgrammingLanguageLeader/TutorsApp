@@ -32,6 +32,7 @@ djangorestframework-filters = "*"
 django-rest-swagger = "*"
 djangorestframework-simplejwt = "*"
 djangorestframework-recaptcha = "*"
+python-decouple = "*"
 
 [requires]
 python_version = "3.6"

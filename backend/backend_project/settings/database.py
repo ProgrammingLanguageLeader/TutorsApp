@@ -1,5 +1,7 @@
 import os
 
+from decouple import config
+
 from backend_project.settings.base import DEBUG, BASE_DIR
 
 
@@ -11,9 +13,9 @@ if DEBUG:
         }
     }
 else:
-    POSTGRES_USER = os.environ.get('POSTGRES_USER')
-    POSTGRES_PASSWORD = os.environ.get('POSTGRES_PASSWORD')
-    POSTGRES_DB = os.environ.get('POSTGRES_DB')
+    POSTGRES_USER = config('POSTGRES_USER')
+    POSTGRES_PASSWORD = config('POSTGRES_PASSWORD')
+    POSTGRES_DB = config('POSTGRES_DB')
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
