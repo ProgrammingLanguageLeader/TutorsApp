@@ -1,5 +1,8 @@
 import re
 
+from django.contrib.auth import password_validation
+from django.core.exceptions import ValidationError
+
 from rest_framework import serializers
 from rest_framework_recaptcha.fields import ReCaptchaField
 
@@ -53,6 +56,13 @@ class UserSerializer(serializers.ModelSerializer,
         instance.set_password(password)
         instance.save()
         return instance
+
+    def validate_password(self, password):
+        try:
+            password_validation.validate_password(password)
+        except ValidationError as exception:
+            raise serializers.ValidationError(str(exception))
+        return password
 
 
 class CreateUserSerializer(UserSerializer):
