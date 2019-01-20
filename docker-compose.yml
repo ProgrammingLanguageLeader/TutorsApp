@@ -1,39 +1,59 @@
 version: "3"
 
 services:
-  tutors-backend-dev:
-    container_name: tutors-backend-dev
+  tutors-backend:
+    restart: always
+    container_name: tutors-backend
     build: ./backend/
     volumes:
-      - tutors-backend-dev:/opt/services/tutors-backend/staticfiles
-    command: ["sh", "./entrypoint.sh"]
-    expose:
+      - tutors-backend:/opt/services/tutors-backend/staticfiles
+    command: ["sh", "./entrypoint.prod.sh"]
+    expose: 
       - "8000"
     env_file: .env
+    depends_on:
+      - postgresql
 
-  tutors-frontend-dev:
-    container_name: tutors-frontend-dev
-    build: ./frontend/
-    volumes: 
-      - tutors-frontend-dev:/opt/services/tutors-frontend/build
-    expose:
-      - "3000"
+  tutors-frontend:
+    container_name: tutors-frontend
+    build: 
+      context: ./frontend/
+      dockerfile: Dockerfile.prod
+    volumes:
+      - tutors-frontend:/opt/services/tutors-frontend/build
     env_file: .env
 
-  tutors-nginx-dev:
-    container_name: tutors-nginx-dev
-    image: nginx:alpine
+  tutors-nginx:
+    container_name: tutors-nginx
+    restart: always
+    build: ./docker/nginx/
     ports:
       - 80:80
       - 443:443
-    volumes: 
-      - ./docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
-      - tutors-backend-dev:/var/www/tutors-backend/staticfiles
-      - tutors-frontend-dev:/var/www/tutors-frontend
+    volumes:
+      - ./letsencrypt:/etc/letsencrypt
+      - tutors-backend:/var/www/tutors-backend/staticfiles
+      - tutors-frontend:/var/www/tutors-frontend
+    env_file: .env
     depends_on: 
-      - tutors-backend-dev
-      - tutors-frontend-dev
+      - tutors-backend
+      - tutors-frontend
+
+  postgresql:
+    container_name: tutors-postgres
+    restart: always
+    image: postgres:alpine
+    volumes:
+      - postgres-config:/etc/postgresql
+      - postgres-log:/var/log/postgresql
+      - postgres-db:/var/lib/postgresql
+    expose: 
+      - "5432"
+    env_file: .env
 
 volumes:
-  tutors-backend-dev:
-  tutors-frontend-dev:
+  tutors-backend:
+  tutors-frontend:
+  postgres-config:
+  postgres-log:
+  postgres-db:
