@@ -1,46 +1,41 @@
 version: "3"
 
 services:
-  tutors-backend:
+  backend:
+    container_name: backend
     restart: always
-    container_name: tutors-backend
     build: ./backend/
     volumes:
-      - tutors-backend:/opt/services/tutors-backend/staticfiles
-    command: ["sh", "./entrypoint.prod.sh"]
+      - backend-staticfiles:/opt/services/backend/staticfiles
+      - backend-media:/opt/services/backend/media
+    command: ["sh", "./entrypoint.sh"]
     expose: 
       - "8000"
-    env_file: .env
     depends_on:
-      - postgresql
+      - postgres
 
-  tutors-frontend:
-    container_name: tutors-frontend
-    build: 
-      context: ./frontend/
-      dockerfile: Dockerfile.prod
+  vk-apps-frontend:
+    container_name: vk-apps-frontend
+    build: vk-apps-frontend/
     volumes:
-      - tutors-frontend:/opt/services/tutors-frontend/build
-    env_file: .env
+      - vk-apps-frontend-build:/opt/services/vk-apps-frontend/build
 
-  tutors-nginx:
-    container_name: tutors-nginx
+  nginx:
+    container_name: nginx
     restart: always
     build: ./docker/nginx/
     ports:
       - 80:80
-      - 443:443
     volumes:
-      - ./letsencrypt:/etc/letsencrypt
-      - tutors-backend:/var/www/tutors-backend/staticfiles
-      - tutors-frontend:/var/www/tutors-frontend
-    env_file: .env
+      - backend-staticfiles:/var/www/backend/staticfiles
+      - backend-media:/var/www/backend/media
+      - vk-apps-frontend-build:/var/www/vk-apps-frontend
     depends_on: 
-      - tutors-backend
-      - tutors-frontend
+      - backend
+      - vk-apps-frontend
 
-  postgresql:
-    container_name: tutors-postgres
+  postgres:
+    container_name: postgres
     restart: always
     image: postgres:alpine
     volumes:
@@ -52,8 +47,9 @@ services:
     env_file: .env
 
 volumes:
-  tutors-backend:
-  tutors-frontend:
+  backend-staticfiles:
+  backend-media:
+  vk-apps-frontend-build:
   postgres-config:
   postgres-log:
   postgres-db:

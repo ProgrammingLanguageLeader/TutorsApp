@@ -18,6 +18,10 @@ SECRET_KEY = config(
 VK_APP_SECRET = config('VK_APP_SECRET')
 VK_APP_ID = config('VK_APP_ID')
 
+SESSION_COOKIE_SECURE=True
+SESSION_COOKIE_HTTPONLY=True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTOCOL', 'https')
+
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='').split()
 AUTH_USER_MODEL = 'users.User'
 AUTH_USER_MODEL_SERIALIZER = 'users.serializers.UserSerializer'
