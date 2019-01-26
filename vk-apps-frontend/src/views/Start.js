@@ -5,10 +5,10 @@ import {
   Panel, PanelHeader, View, Gallery, ScreenSpinner
 } from '@vkontakte/vkui';
 
-import '../assets/css/Start.css';
-import introOne from '../assets/images/intro_one.png'
-import introTwo from '../assets/images/intro_two.png'
-import introThree from '../assets/images/intro_three.png'
+import '../../assets/css/Start.css';
+import introOne from '../../assets/images/intro_one.png'
+import introTwo from '../../assets/images/intro_two.png'
+import introThree from '../../assets/images/intro_three.png'
 
 import { apiProfileActions, locationActions } from '../actions';
 import PopoutDiv from '../components/PopoutDiv';
