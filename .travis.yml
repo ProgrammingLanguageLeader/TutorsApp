@@ -1,0 +1,24 @@
+matrix:
+  include:
+    - language: python
+      python: 
+        - 3.6
+      before_install:
+        - cd backend/
+      install: 
+        - pipenv install
+      script:
+        - python manage.py test
+
+    - language: node_js
+      node_js:
+        - 10.15
+      before_install:
+        - cd vk-apps-frontend/
+      install:
+        - npm install
+      script:
+        - npm test
+
+notifications:
+  email: false
