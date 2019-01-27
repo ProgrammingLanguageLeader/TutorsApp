@@ -12,6 +12,8 @@ class ApiManager {
     this.sign = sign;
   }
 
+  static cancelRequests = () => {};
+
   static getInstance() {
     if (!ApiManager.instance) {
       let url = new URL(window.location.href);
@@ -36,7 +38,6 @@ class ApiManager {
       ...this.vkExecutionParams,
       sign: this.sign,
     };
-    console.log(optionsWithSign);
 
     if (method.toLowerCase() === 'get') {
       return axios({
@@ -44,6 +45,9 @@ class ApiManager {
         method: method,
         headers: HEADERS,
         params: optionsWithSign,
+        cancelToken: new axios.CancelToken(cancelFunction => {
+          ApiManager.cancelRequests = cancelFunction;
+        })
       })
         .then(result => {
           if (result.status !== 200) {
@@ -57,6 +61,9 @@ class ApiManager {
       method: method,
       headers: HEADERS,
       data: optionsWithSign,
+      cancelToken: new axios.CancelToken(cancelFunction => {
+        ApiManager.cancelRequests = cancelFunction;
+      })
     })
       .then(result => {
         if (result.status !== 200) {
