@@ -1,12 +1,35 @@
 import { makeApiRequest } from 'services/api';
-import { lessonsConstants } from 'constants';
+import { lessonsConstants } from 'constants/api';
+
+const getLessonsList = (options) => {
+  return async dispatch => {
+    dispatch({
+      type: lessonsConstants.GET_LESSONS_LIST_REQUEST,
+    });
+    return makeApiRequest('lessons/', 'get', options)
+      .then(
+        response => {
+          dispatch({
+            type: lessonsConstants.GET_LESSONS_LIST_SUCCESS,
+            payload: response,
+          })
+        },
+        errors => {
+          dispatch({
+            type: lessonsConstants.GET_LESSONS_LIST_FAILURE,
+            payload: errors,
+          });
+        }
+      )
+  };
+};
 
 const createLesson = (options) => {
   return async dispatch => {
     dispatch({
       type: lessonsConstants.CREATE_LESSON_REQUEST,
     });
-    return makeApiRequest('create_lesson', 'post', options)
+    return makeApiRequest('lessons/', 'post', options)
       .then(
         response => {
           dispatch({
@@ -24,22 +47,22 @@ const createLesson = (options) => {
   };
 };
 
-const getLessons = (options) => {
+const getLesson = (id, options) => {
   return async dispatch => {
     dispatch({
-      type: lessonsConstants.GET_LESSONS_REQUEST,
+      type: lessonsConstants.GET_LESSON_REQUEST,
     });
-    return makeApiRequest('get_lessons', 'get', options)
+    return makeApiRequest(`lessons/${id}/`, 'get', options)
       .then(
         response => {
           dispatch({
-            type: lessonsConstants.GET_LESSONS_SUCCESS,
+            type: lessonsConstants.GET_LESSON_SUCCESS,
             payload: response,
           })
         },
         errors => {
           dispatch({
-            type: lessonsConstants.GET_LESSONS_FAILURE,
+            type: lessonsConstants.GET_LESSON_FAILURE,
             payload: errors,
           });
         }
@@ -47,22 +70,22 @@ const getLessons = (options) => {
   };
 };
 
-const updateLesson = (options) => {
+const updateLesson = (id, options) => {
   return async dispatch => {
     dispatch({
-      type: lessonsConstants.UPDATE_LESSONS_REQUEST,
+      type: lessonsConstants.UPDATE_LESSON_REQUEST,
     });
-    return makeApiRequest('update_lesson', 'post', options)
+    return makeApiRequest(`lessons/${id}/`, 'patch', options)
       .then(
         response => {
           dispatch({
-            type: lessonsConstants.UPDATE_LESSONS_SUCCESS,
+            type: lessonsConstants.UPDATE_LESSON_SUCCESS,
             payload: response,
           })
         },
         errors => {
           dispatch({
-            type: lessonsConstants.UPDATE_LESSONS_FAILURE,
+            type: lessonsConstants.UPDATE_LESSON_FAILURE,
             payload: errors,
           });
         }
@@ -70,12 +93,12 @@ const updateLesson = (options) => {
   };
 };
 
-const deleteLesson = (options) => {
+const deleteLesson = (id, options) => {
   return async dispatch => {
     dispatch({
       type: lessonsConstants.DELETE_LESSON_REQUEST,
     });
-    return makeApiRequest('delete_lesson', 'post', options)
+    return makeApiRequest(`lessons/${id}/`, 'delete', options)
       .then(
         response => {
           dispatch({
@@ -94,5 +117,5 @@ const deleteLesson = (options) => {
 };
 
 export const lessonsActions = {
-  createLesson, getLessons, updateLesson, deleteLesson,
+  getLessonsList, createLesson, getLesson, updateLesson, deleteLesson,
 };
