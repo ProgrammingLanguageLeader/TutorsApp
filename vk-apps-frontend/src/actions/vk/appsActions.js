@@ -1,9 +1,10 @@
 import mockVKConnect from '@vkontakte/vkui-connect-mock';
 import realVKConnect from '@vkontakte/vkui-connect';
 
+import { DEBUG } from 'constants';
 import { VK_APP_ID, appsConstants } from 'constants/vk';
 
-const VKConnect = process.env.NODE_ENV === 'development' ? mockVKConnect : realVKConnect;
+const VKConnect = DEBUG ? mockVKConnect : realVKConnect;
 
 const fetchAccessToken = () => dispatch => {
   const scope = "";
@@ -111,5 +112,9 @@ const init = () => dispatch => {
 };
 
 export const appsActions = {
-  fetchAccessToken, fetchCurrentUserInfo, denyNotifications, allowNotifications, init
+  fetchAccessToken,
+  fetchCurrentUserInfo,
+  denyNotifications,
+  allowNotifications,
+  init
 };

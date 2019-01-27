@@ -1,10 +1,10 @@
 import { vkApiRequest } from 'services/vkApi';
-import { vkApiConstants } from 'constants';
+import { apiConstants } from 'constants/vk';
 
 const fetchUsersInfo = (accessToken, vkIds) => dispatch => {
   const fields = ['photo_100', 'photo_200', 'city'];
   dispatch({
-    type: vkApiConstants.VK_API_USERS_GET_REQUEST,
+    type: apiConstants.VK_API_USERS_GET_REQUEST,
   });
   vkApiRequest(
     'users.get', 
@@ -15,13 +15,13 @@ const fetchUsersInfo = (accessToken, vkIds) => dispatch => {
     accessToken, 
     response => {
       dispatch({
-        type: vkApiConstants.VK_API_USERS_GET_FETCHED,
+        type: apiConstants.VK_API_USERS_GET_FETCHED,
         payload: response,
       });
     }, 
     error => {
       dispatch({
-        type: vkApiConstants.VK_API_USERS_GET_FAILED,
+        type: apiConstants.VK_API_USERS_GET_FAILED,
         payload: error
       });
     }
@@ -30,7 +30,7 @@ const fetchUsersInfo = (accessToken, vkIds) => dispatch => {
 
 const fetchNotificationStatus = (accessToken) => dispatch => {
   dispatch({
-    type: vkApiConstants.VK_API_NOTIFICATION_STATUS_REQUEST,
+    type: apiConstants.VK_API_NOTIFICATION_STATUS_REQUEST,
   });
   vkApiRequest(
     'apps.isNotificationsAllowed',
@@ -38,13 +38,13 @@ const fetchNotificationStatus = (accessToken) => dispatch => {
     accessToken,
     response => {
       dispatch({
-        type: vkApiConstants.VK_API_NOTIFICATION_STATUS_FETCHED,
+        type: apiConstants.VK_API_NOTIFICATION_STATUS_FETCHED,
         payload: response['is_allowed'],
       });
     },
     error => {
       dispatch({
-        type: vkApiConstants.VK_API_NOTIFICATION_STATUS_FAILED,
+        type: apiConstants.VK_API_NOTIFICATION_STATUS_FAILED,
         payload: error
       });
     }
@@ -52,5 +52,6 @@ const fetchNotificationStatus = (accessToken) => dispatch => {
 };
 
 export const apiActions = {
-  fetchUsersInfo, fetchNotificationStatus,
+  fetchUsersInfo,
+  fetchNotificationStatus,
 };
