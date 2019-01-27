@@ -1,44 +1,42 @@
 import mockVKConnect from '@vkontakte/vkui-connect-mock';
 import realVKConnect from '@vkontakte/vkui-connect';
 
-import { vkAppsConstants } from '../constants';
+import { VK_APP_ID, appsConstants } from 'constants/vk';
 
-const VKConnect = (process.env.REACT_APP_DEBUG) ? mockVKConnect : realVKConnect;
+const VKConnect = process.env.NODE_ENV === 'development' ? mockVKConnect : realVKConnect;
 
 const fetchAccessToken = () => dispatch => {
-  const appId = 6700618;
   const scope = "";
-
   dispatch({
-    type: vkAppsConstants.VK_GET_ACCESS_TOKEN_REQUEST
+    type: appsConstants.VK_GET_ACCESS_TOKEN_REQUEST
   });
-  VKConnect.send('VKWebAppGetAuthToken', {'app_id': appId, 'scope': scope});
+  VKConnect.send('VKWebAppGetAuthToken', {'app_id': VK_APP_ID, 'scope': scope});
 };
 
 const denyNotifications = () => dispatch => {
   dispatch({
-    type: vkAppsConstants.VK_DENY_NOTIFICATIONS_REQUEST,
+    type: appsConstants.VK_DENY_NOTIFICATIONS_REQUEST,
   });
   VKConnect.send('VKWebAppDenyNotifications', {});
 };
 
 const allowNotifications = () => dispatch => {
   dispatch({
-    type: vkAppsConstants.VK_ALLOW_NOTIFICATIONS_REQUEST,
+    type: appsConstants.VK_ALLOW_NOTIFICATIONS_REQUEST,
   });
   VKConnect.send('VKWebAppAllowNotifications', {});
 };
 
 const fetchCurrentUserInfo = () => dispatch => {
   dispatch({
-    type: vkAppsConstants.VK_GET_USER_INFO_REQUEST,
+    type: appsConstants.VK_GET_USER_INFO_REQUEST,
   });
   VKConnect.send("VKWebAppGetUserInfo", {});
 };
 
 const init = () => dispatch => {
   dispatch({
-    type: vkAppsConstants.VK_INIT,
+    type: appsConstants.VK_INIT,
   });
   VKConnect.subscribe(event => {
     const vkEvent = event.detail;
@@ -53,53 +51,53 @@ const init = () => dispatch => {
     switch (type) {
       case 'VKWebAppAllowNotificationsResult':
         dispatch({
-          type: vkAppsConstants.VK_ALLOW_NOTIFICATIONS_SUCCESS,
+          type: appsConstants.VK_ALLOW_NOTIFICATIONS_SUCCESS,
         });
         break;
 
       case 'VKWebAppAllowNotificationsFailed':
         dispatch({
-          type: vkAppsConstants.VK_ALLOW_NOTIFICATIONS_FAILURE,
+          type: appsConstants.VK_ALLOW_NOTIFICATIONS_FAILURE,
           payload: data,
         });
         break;
 
       case 'VKWebAppDenyNotificationsResult':
         dispatch({
-          type: vkAppsConstants.VK_DENY_NOTIFICATIONS_SUCCESS,
+          type: appsConstants.VK_DENY_NOTIFICATIONS_SUCCESS,
         });
         break;
 
       case 'VKWebAppDinyNotificationsFailed':
         dispatch({
-          type: vkAppsConstants.VK_DENY_NOTIFICATIONS_FAILURE
+          type: appsConstants.VK_DENY_NOTIFICATIONS_FAILURE
         });
         break;
 
       case 'VKWebAppAccessTokenReceived':
         dispatch({
-          type: vkAppsConstants.VK_GET_ACCESS_TOKEN_FETCHED,
+          type: appsConstants.VK_GET_ACCESS_TOKEN_FETCHED,
           payload: data['access_token']
         });
         break;
 
       case 'VKWebAppAccessTokenFailed':
         dispatch({
-          type: vkAppsConstants.VK_GET_ACCESS_TOKEN_FAILED,
+          type: appsConstants.VK_GET_ACCESS_TOKEN_FAILED,
           payload: data,
         });
         break;
 
       case 'VKWebAppGetUserInfoResult':
         dispatch({
-          type: vkAppsConstants.VK_GET_USER_INFO_FETCHED,
+          type: appsConstants.VK_GET_USER_INFO_FETCHED,
           payload: data,
         });
         break;
 
       case 'VKWebAppGetUserInfoFailed':
         dispatch({
-          type: vkAppsConstants.VK_GET_USER_INFO_FAILED,
+          type: appsConstants.VK_GET_USER_INFO_FAILED,
           payload: data,
         });
         break;
@@ -112,6 +110,6 @@ const init = () => dispatch => {
   VKConnect.send('VKWebAppInit', {});
 };
 
-export const vkAppsActions = {
+export const appsActions = {
   fetchAccessToken, fetchCurrentUserInfo, denyNotifications, allowNotifications, init
 };

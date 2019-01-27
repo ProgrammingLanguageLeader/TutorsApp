@@ -1,8 +1,8 @@
-import { vkApiRequest } from "../services/vkApi";
-import { vkApiConstants } from '../constants';
+import { vkApiRequest } from 'services/vkApi';
+import { vkApiConstants } from 'constants';
 
 const fetchUsersInfo = (accessToken, vkIds) => dispatch => {
-  const fields = ["photo_100", "photo_200", "city"];
+  const fields = ['photo_100', 'photo_200', 'city'];
   dispatch({
     type: vkApiConstants.VK_API_USERS_GET_REQUEST,
   });
@@ -51,6 +51,6 @@ const fetchNotificationStatus = (accessToken) => dispatch => {
   );
 };
 
-export const vkApiActions = {
+export const apiActions = {
   fetchUsersInfo, fetchNotificationStatus,
 };
