@@ -1,36 +1,52 @@
 import Immutable from 'seamless-immutable';
 
-import { notificationsConstants } from '../../constants';
+import { notificationsConstants } from 'constants/api';
 
 const initialState = Immutable({
+  notification: {},
   notifications: [],
+  notificationsCount: 0,
+  notificationsNext: null,
+  notificationsPrevious: null,
   fetching: false,
   errors: null,
 });
 
 const notificationsReducer = (state = initialState, action) => {
   switch (action.type) {
-    case notificationsConstants.GET_NOTIFICATIONS_REQUEST:
-    case notificationsConstants.MARK_NOTIFICATION_AS_SEEN_REQUEST:
+    case notificationsConstants.GET_NOTIFICATIONS_LIST_REQUEST:
+    case notificationsConstants.GET_NOTIFICATION_REQUEST:
+    case notificationsConstants.SET_UNREAD_NOTIFICATION_REQUEST:
       return state.merge({
         fetching: true,
       });
 
-    case notificationsConstants.MARK_NOTIFICATION_AS_SEEN_SUCCESS:
+    case notificationsConstants.SET_UNREAD_NOTIFICATION_SUCCESS:
       return state.merge({
         errors: null,
         fetching: false,
       });
 
-    case notificationsConstants.GET_NOTIFICATIONS_SUCCESS:
+    case notificationsConstants.GET_NOTIFICATION_SUCCESS:
       return state.merge({
-        notifications: action.payload,
+        notification: action.payload,
+        errors: null,
+        fetching: false,
+      });
+
+    case notificationsConstants.GET_NOTIFICATIONS_LIST_SUCCESS:
+      return state.merge({
+        notifications: action.payload.results,
+        notificationsCount: action.payload.count,
+        notificationsNext: action.payload.next,
+        notificationsPrevious: action.payload.previous,
         fetching: false,
         errors: null,
       });
 
-    case notificationsConstants.GET_NOTIFICATIONS_FAILURE:
-    case notificationsConstants.MARK_NOTIFICATION_AS_SEEN_FAILURE:
+    case notificationsConstants.GET_NOTIFICATIONS_LIST_FAILURE:
+    case notificationsConstants.GET_NOTIFICATION_FAILURE:
+    case notificationsConstants.SET_UNREAD_NOTIFICATION_FAILURE:
       return state.merge({
         errors: action.payload,
         fetching: false,
