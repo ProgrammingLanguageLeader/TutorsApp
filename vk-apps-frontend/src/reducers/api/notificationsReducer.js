@@ -1,6 +1,6 @@
 import Immutable from 'seamless-immutable';
 
-import { apiNotificationConstants } from '../constants';
+import { notificationsConstants } from '../../constants';
 
 const initialState = Immutable({
   notifications: [],
@@ -8,29 +8,29 @@ const initialState = Immutable({
   errors: null,
 });
 
-const apiNotificationReducer = (state = initialState, action) => {
+const notificationsReducer = (state = initialState, action) => {
   switch (action.type) {
-    case apiNotificationConstants.GET_NOTIFICATIONS_REQUEST:
-    case apiNotificationConstants.MARK_NOTIFICATION_AS_SEEN_REQUEST:
+    case notificationsConstants.GET_NOTIFICATIONS_REQUEST:
+    case notificationsConstants.MARK_NOTIFICATION_AS_SEEN_REQUEST:
       return state.merge({
         fetching: true,
       });
 
-    case apiNotificationConstants.MARK_NOTIFICATION_AS_SEEN_SUCCESS:
+    case notificationsConstants.MARK_NOTIFICATION_AS_SEEN_SUCCESS:
       return state.merge({
         errors: null,
         fetching: false,
       });
 
-    case apiNotificationConstants.GET_NOTIFICATIONS_SUCCESS:
+    case notificationsConstants.GET_NOTIFICATIONS_SUCCESS:
       return state.merge({
         notifications: action.payload,
         fetching: false,
         errors: null,
       });
 
-    case apiNotificationConstants.GET_NOTIFICATIONS_FAILURE:
-    case apiNotificationConstants.MARK_NOTIFICATION_AS_SEEN_FAILURE:
+    case notificationsConstants.GET_NOTIFICATIONS_FAILURE:
+    case notificationsConstants.MARK_NOTIFICATION_AS_SEEN_FAILURE:
       return state.merge({
         errors: action.payload,
         fetching: false,
@@ -41,4 +41,4 @@ const apiNotificationReducer = (state = initialState, action) => {
   }
 };
 
-export default apiNotificationReducer;
+export default notificationsReducer;

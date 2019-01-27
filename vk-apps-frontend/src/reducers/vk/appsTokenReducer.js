@@ -1,6 +1,6 @@
 import Immutable from 'seamless-immutable';
 
-import { vkAppsConstants } from '../constants';
+import { appsConstants } from '../../constants';
 
 const initialState = Immutable({
   accessToken: null,
@@ -8,20 +8,20 @@ const initialState = Immutable({
   fetching: false,
 });
 
-const vkAppsTokenReducer = (state = initialState, action) => {
+const appsTokenReducer = (state = initialState, action) => {
   switch (action.type) {
-    case vkAppsConstants.VK_GET_ACCESS_TOKEN_REQUEST:
+    case appsConstants.VK_GET_ACCESS_TOKEN_REQUEST:
       return state.merge({
         fetching: true,
       });
 
-    case vkAppsConstants.VK_GET_ACCESS_TOKEN_FAILED:
+    case appsConstants.VK_GET_ACCESS_TOKEN_FAILED:
       return state.merge({
         errors: action.payload,
         fetching: false,
       });
 
-    case vkAppsConstants.VK_GET_ACCESS_TOKEN_FETCHED:
+    case appsConstants.VK_GET_ACCESS_TOKEN_FETCHED:
       return state.merge({
         errors: null,
         accessToken: action.payload,
@@ -33,4 +33,4 @@ const vkAppsTokenReducer = (state = initialState, action) => {
   }
 };
 
-export default vkAppsTokenReducer;
+export default appsTokenReducer;

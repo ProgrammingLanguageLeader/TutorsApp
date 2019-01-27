@@ -1,6 +1,6 @@
 import Immutable from 'seamless-immutable';
 
-import { vkApiConstants } from '../constants';
+import { apiConstants } from 'constants/vk';
 
 const initialState = Immutable({
   notificationsStatus: null,
@@ -8,21 +8,21 @@ const initialState = Immutable({
   fetching: false,
 });
 
-const vkApiNotificationsReducer = (state = initialState, action) => {
+const apiNotificationsReducer = (state = initialState, action) => {
   switch (action.type) {
-    case vkApiConstants.VK_API_NOTIFICATION_STATUS_REQUEST:
+    case apiConstants.VK_API_NOTIFICATION_STATUS_REQUEST:
       return state.merge({
         fetching: true,
       });
 
-    case vkApiConstants.VK_API_NOTIFICATION_STATUS_FETCHED:
+    case apiConstants.VK_API_NOTIFICATION_STATUS_FETCHED:
       return state.merge({
         notificationsStatus: action.payload,
         errors: null,
         fetching: false,
       });
 
-    case vkApiConstants.VK_API_NOTIFICATION_STATUS_FAILED:
+    case apiConstants.VK_API_NOTIFICATION_STATUS_FAILED:
       return state.merge({
         errors: action.payload,
         fetching: false,
@@ -33,4 +33,4 @@ const vkApiNotificationsReducer = (state = initialState, action) => {
   }
 };
 
-export default vkApiNotificationsReducer;
+export default apiNotificationsReducer;

@@ -1,4 +1,4 @@
-import { locationConstants } from '../constants/locationConstants';
+import { locationConstants } from 'constants/locationConstants';
 
 const HISTORY_MAX_SIZE = 32;
 

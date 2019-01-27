@@ -1,6 +1,6 @@
 import Immutable from 'seamless-immutable';
 
-import { vkApiConstants } from '../constants';
+import { apiConstants } from 'constants/vk';
 
 const initialState = Immutable({
   vkUsersInfo: {},
@@ -8,14 +8,14 @@ const initialState = Immutable({
   fetching: false,
 });
 
-const vkApiUsersReducer = (state = initialState, action) => {
+const apiUsersReducer = (state = initialState, action) => {
   switch (action.type) {
-    case vkApiConstants.VK_API_USERS_GET_REQUEST:
+    case apiConstants.VK_API_USERS_GET_REQUEST:
       return state.merge({
         fetching: true,
       });
 
-    case vkApiConstants.VK_API_USERS_GET_FETCHED:
+    case apiConstants.VK_API_USERS_GET_FETCHED:
       let vkUsersInfo = {};
       action.payload.forEach(userInfo => {
         vkUsersInfo[userInfo.id] = {
@@ -32,7 +32,7 @@ const vkApiUsersReducer = (state = initialState, action) => {
         fetching: false,
       });
 
-    case vkApiConstants.VK_API_USERS_GET_FAILED:
+    case apiConstants.VK_API_USERS_GET_FAILED:
       return state.merge({
         errors: action.payload,
         fetching: false,
@@ -43,4 +43,4 @@ const vkApiUsersReducer = (state = initialState, action) => {
   }
 };
 
-export default vkApiUsersReducer;
+export default apiUsersReducer;
