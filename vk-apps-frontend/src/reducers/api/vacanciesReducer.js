@@ -3,14 +3,18 @@ import Immutable from 'seamless-immutable';
 import { vacanciesConstants } from 'constants/api';
 
 const initialState = Immutable({
-  vacancies: [],
   vacancy: {},
+  vacancies: [],
+  vacanciesCount: 0,
+  vacanciesNext: null,
+  vacanciesPrevious: null,
   fetching: false,
   errors: null,
 });
 
-const vacancyReducer = (state = initialState, action) => {
+const vacanciesReducer = (state = initialState, action) => {
   switch (action.type) {
+    case vacanciesConstants.SEARCH_VACANCIES_REQUEST:
     case vacanciesConstants.CREATE_VACANCY_REQUEST:
     case vacanciesConstants.UPDATE_VACANCY_REQUEST:
     case vacanciesConstants.GET_VACANCY_REQUEST:
@@ -34,28 +38,21 @@ const vacancyReducer = (state = initialState, action) => {
         errors: null,
       });
 
-    case vacanciesConstants.CREATE_VACANCY_FAILURE:
-    case vacanciesConstants.UPDATE_VACANCY_FAILURE:
-    case vacanciesConstants.GET_VACANCY_FAILURE:
-    case vacanciesConstants.DELETE_VACANCY_FAILURE:
-      return state.merge({
-        errors: action.payload,
-        fetching: false,
-      });
-
-    case vacanciesConstants.SEARCH_VACANCIES_REQUEST:
-      return state.merge({
-        fetching: true,
-      });
-
     case vacanciesConstants.SEARCH_VACANCIES_SUCCESS:
       return state.merge({
         vacancies: action.payload,
+        vacanciesCount: action.payload.count,
+        vacanciesNext: action.payload.next,
+        vacanciesPrevious: action.payload.previous,
         fetching: false,
         errors: null,
       });
 
     case vacanciesConstants.SEARCH_VACANCIES_FAILURE:
+    case vacanciesConstants.CREATE_VACANCY_FAILURE:
+    case vacanciesConstants.GET_VACANCY_FAILURE:
+    case vacanciesConstants.UPDATE_VACANCY_FAILURE:
+    case vacanciesConstants.DELETE_VACANCY_FAILURE:
       return state.merge({
         errors: action.payload,
         fetching: false,
@@ -66,4 +63,4 @@ const vacancyReducer = (state = initialState, action) => {
   }
 };
 
-export default vacancyReducer;
+export default vacanciesReducer;
