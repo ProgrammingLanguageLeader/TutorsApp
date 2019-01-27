@@ -1,58 +1,12 @@
 import { makeApiRequest } from '../services/api';
 import { apiVacancyConstants } from "../constants";
 
-const createVacancy = (options) => {
-  return async dispatch => {
-    dispatch({
-      type: apiVacancyConstants.CREATE_VACANCY_REQUEST
-    });
-    return makeApiRequest('create_vacancy', 'post', options)
-      .then(
-        response => {
-          dispatch({
-            type: apiVacancyConstants.CREATE_VACANCY_SUCCESS,
-            payload: response,
-          })
-        },
-        errors => {
-          dispatch({
-            type: apiVacancyConstants.CREATE_VACANCY_FAILURE,
-            payload: errors,
-          });
-        }
-      )
-  }
-};
-
-const updateVacancy = (options) => {
-  return async dispatch => {
-    dispatch({
-      type: apiVacancyConstants.UPDATE_VACANCY_REQUEST
-    });
-    return makeApiRequest('update_vacancy', 'post', options)
-      .then(
-        response => {
-          dispatch({
-            type: apiVacancyConstants.UPDATE_VACANCY_SUCCESS,
-            payload: response,
-          })
-        },
-        errors => {
-          dispatch({
-            type: apiVacancyConstants.UPDATE_VACANCY_FAILURE,
-            payload: errors,
-          });
-        }
-      )
-  }
-};
-
 const searchVacancies = (options) => {
   return async dispatch => {
     dispatch({
       type: apiVacancyConstants.SEARCH_VACANCIES_REQUEST
     });
-    return makeApiRequest('search_vacancies', 'get', options)
+    return makeApiRequest('vacancies/', 'get', options)
       .then(
         response => {
           dispatch({
@@ -70,12 +24,35 @@ const searchVacancies = (options) => {
   }
 };
 
-const getVacancy = (options) => {
+const createVacancy = (options) => {
+  return async dispatch => {
+    dispatch({
+      type: apiVacancyConstants.CREATE_VACANCY_REQUEST
+    });
+    return makeApiRequest('vacancies/', 'post', options)
+      .then(
+        response => {
+          dispatch({
+            type: apiVacancyConstants.CREATE_VACANCY_SUCCESS,
+            payload: response,
+          })
+        },
+        errors => {
+          dispatch({
+            type: apiVacancyConstants.CREATE_VACANCY_FAILURE,
+            payload: errors,
+          });
+        }
+      )
+  }
+};
+
+const getVacancy = (id, options) => {
   return async dispatch => {
     dispatch({
       type: apiVacancyConstants.GET_VACANCY_REQUEST
     });
-    return makeApiRequest('get_vacancy', 'get', options)
+    return makeApiRequest(`vacancies/${id}/`, 'get', options)
       .then(
         response => {
           dispatch({
@@ -93,22 +70,22 @@ const getVacancy = (options) => {
   }
 };
 
-const getProfileVacancies = (options) => {
+const updateVacancy = (id, options) => {
   return async dispatch => {
     dispatch({
-      type: apiVacancyConstants.GET_PROFILE_VACANCIES_REQUEST
+      type: apiVacancyConstants.UPDATE_VACANCY_REQUEST
     });
-    return makeApiRequest('get_profile_vacancies', 'get', options)
+    return makeApiRequest(`vacancies/${id}/`, 'patch', options)
       .then(
         response => {
           dispatch({
-            type: apiVacancyConstants.GET_PROFILE_VACANCIES_SUCCESS,
+            type: apiVacancyConstants.UPDATE_VACANCY_SUCCESS,
             payload: response,
           })
         },
         errors => {
           dispatch({
-            type: apiVacancyConstants.GET_PROFILE_VACANCIES_FAILURE,
+            type: apiVacancyConstants.UPDATE_VACANCY_FAILURE,
             payload: errors,
           });
         }
@@ -116,35 +93,12 @@ const getProfileVacancies = (options) => {
   }
 };
 
-const deactivateVacancy = (options) => {
-  return async dispatch => {
-    dispatch({
-      type: apiVacancyConstants.DEACTIVATE_VACANCY_REQUEST
-    });
-    return makeApiRequest('deactivate_vacancy', 'post', options)
-      .then(
-        response => {
-          dispatch({
-            type: apiVacancyConstants.DEACTIVATE_VACANCY_SUCCESS,
-            payload: response,
-          })
-        },
-        errors => {
-          dispatch({
-            type: apiVacancyConstants.DEACTIVATE_VACANCY_FAILURE,
-            payload: errors,
-          });
-        }
-      )
-  }
-};
-
-const deleteVacancy = (options) => {
+const deleteVacancy = (id, options) => {
   return async dispatch => {
     dispatch({
       type: apiVacancyConstants.DELETE_VACANCY_REQUEST
     });
-    return makeApiRequest('delete_vacancy', 'post', options)
+    return makeApiRequest(`vacancies/${id}/`, 'delete', options)
       .then(
         response => {
           dispatch({
@@ -163,7 +117,5 @@ const deleteVacancy = (options) => {
 };
 
 export const apiVacancyActions = {
-  createVacancy, updateVacancy, searchVacancies,
-  getVacancy, getProfileVacancies, deactivateVacancy,
-  deleteVacancy,
+  searchVacancies, createVacancy, getVacancy, updateVacancy, deleteVacancy,
 };
