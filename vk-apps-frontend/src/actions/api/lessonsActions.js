@@ -117,5 +117,9 @@ const deleteLesson = (id, options) => {
 };
 
 export const lessonsActions = {
-  getLessonsList, createLesson, getLesson, updateLesson, deleteLesson,
+  getLessonsList,
+  createLesson,
+  getLesson,
+  updateLesson,
+  deleteLesson,
 };
