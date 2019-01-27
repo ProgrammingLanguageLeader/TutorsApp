@@ -1,9 +1,9 @@
 import realAxios from 'axios';
 import mockAxios from '../helpers/axiosMock';
 
-import { API_URL, HEADERS } from "../constants";
+import { API_URL, HEADERS } from '../constants';
 
-const axios = process.env.REACT_APP_DEBUG ? mockAxios : realAxios;
+const axios = process.env.NODE_ENV === 'development' ? mockAxios : realAxios;
 
 class ApiManager {
   constructor(vkExecutionParams, sign) {
@@ -29,7 +29,7 @@ class ApiManager {
   }
 
   async makeRequest(endpoint, method, options) {
-    const url = `${API_URL}/${endpoint}/`;
+    const url = `${API_URL}/${endpoint}`;
     const optionsWithSign = {
       ...options,
       ...this.vkExecutionParams,

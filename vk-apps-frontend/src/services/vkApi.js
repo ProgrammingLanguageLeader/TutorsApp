@@ -1,10 +1,11 @@
 import mockVKConnect from '@vkontakte/vkui-connect-mock';
 import realVKConnect from '@vkontakte/vkui-connect';
 
-import { configureVkMockConnect } from "../helpers/vkMockConnect";
+import { configureVkMockConnect } from '../helpers/vkMockConnect';
 
-const VKConnect = process.env.REACT_APP_DEBUG ? mockVKConnect : realVKConnect;
-if (process.env.REACT_APP_DEBUG) {
+const developmentMode = process.env.NODE_ENV === 'development';
+const VKConnect = developmentMode ? mockVKConnect : realVKConnect;
+if (developmentMode) {
   configureVkMockConnect();
 }
 const API_VERSION = '5.80';
