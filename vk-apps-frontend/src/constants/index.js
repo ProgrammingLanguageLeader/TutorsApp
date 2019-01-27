@@ -4,4 +4,3 @@ export * from './filterConstants';
 export * from './locationConstants';
 export * from './subjectsList';
 export * from './educationLevelList';
-export * from './notificationEventTypes';
