@@ -1,14 +1,14 @@
 import mockVKConnect from '@vkontakte/vkui-connect-mock';
 import realVKConnect from '@vkontakte/vkui-connect';
 
-import { configureVkMockConnect } from '../helpers/vkMockConnect';
+import { DEBUG } from 'constants';
+import { VK_API_VERSION } from 'constants/vk';
+import { configureVkMockConnect } from 'helpers/vkMockConnect';
 
-const developmentMode = process.env.NODE_ENV === 'development';
 const VKConnect = developmentMode ? mockVKConnect : realVKConnect;
-if (developmentMode) {
+if (DEBUG) {
   configureVkMockConnect();
 }
-const API_VERSION = '5.80';
 
 export const vkApiRequest = (
     method,
@@ -17,7 +17,7 @@ export const vkApiRequest = (
     successCallback = undefined,
     errorCallback = undefined
 ) => {
-  const requestId = process.env.REACT_APP_DEBUG ? "324nnefj" : getNewRequestId();
+  const requestId = DEBUG ? "324nnefj" : getNewRequestId();
   if (successCallback !== undefined || errorCallback !== undefined) {
     const callback = event => {
       const vkEvent = event.detail;
@@ -51,7 +51,7 @@ export const vkApiRequest = (
 
   params['access_token'] = accessToken;
   if (params['v'] === undefined) {
-    params['v'] = API_VERSION;
+    params['v'] = VK_API_VERSION;
   }
 
   VKConnect.send('VKWebAppCallAPIMethod', {

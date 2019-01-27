@@ -1,9 +1,10 @@
 import realAxios from 'axios';
-import mockAxios from '../helpers/axiosMock';
 
-import { API_URL, HEADERS } from '../constants';
+import mockAxios from 'helpers/axiosMock';
+import { DEBUG } from 'constants';
+import { API_URL, HEADERS } from 'constants/api';
 
-const axios = process.env.NODE_ENV === 'development' ? mockAxios : realAxios;
+const axios = DEBUG ? mockAxios : realAxios;
 
 class ApiManager {
   constructor(vkExecutionParams, sign) {
