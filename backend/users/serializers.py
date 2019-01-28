@@ -9,18 +9,9 @@ from rest_framework_recaptcha.fields import ReCaptchaField
 from users.models import User
 
 
-class AbstractBaseUserSerializer:
-    regexp = re.compile(r'^[\w.@+-]{3,30}$')
+class UserSerializer(serializers.ModelSerializer):
+    username_regexp = re.compile(r'^[\w.@+-]{3,30}$')
 
-    def validate_username(self, username):
-        regexp_search = self.regexp.search(username)
-        if not regexp_search:
-            raise serializers.ValidationError('This field is not correct')
-        return username
-
-
-class UserSerializer(serializers.ModelSerializer,
-                     AbstractBaseUserSerializer):
     password = serializers.CharField(style={
         'input_type': 'password'
     })
@@ -44,6 +35,7 @@ class UserSerializer(serializers.ModelSerializer,
     def to_representation(self, instance):
         rep = super().to_representation(instance)
         rep.pop('password', None)
+        rep['avatar'] = instance.avatar_url_or_default
         return rep
 
     def create(self, validated_data):
@@ -56,6 +48,12 @@ class UserSerializer(serializers.ModelSerializer,
         instance.set_password(password)
         instance.save()
         return instance
+
+    def validate_username(self, username):
+        regexp_search = self.username_regexp.search(username)
+        if not regexp_search:
+            raise serializers.ValidationError('This field is not correct')
+        return username
 
     def validate_password(self, password):
         try:

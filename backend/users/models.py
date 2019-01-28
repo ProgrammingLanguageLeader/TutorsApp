@@ -1,7 +1,9 @@
+from django.contrib.staticfiles.templatetags.staticfiles import static
 from django.contrib.auth.models import AbstractBaseUser
 from django.db import models
 from django.core.mail import send_mail
 from django.contrib.auth.models import PermissionsMixin
+from django.conf import settings
 
 from users.managers import UserManager
 
@@ -20,7 +22,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     street = models.TextField(blank=True, max_length=50)
     metro_station = models.TextField(blank=True, max_length=50)
     bio = models.TextField(blank=True, max_length=100)
-    avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
+    avatar = models.ImageField(upload_to='avatars/', blank=True)
 
     objects = UserManager()
 
@@ -45,3 +47,9 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def email_user(self, subject, message, from_email=None, **kwargs):
         send_mail(subject, message, from_email, [self.email], **kwargs)
+
+    @property
+    def avatar_url_or_default(self):
+        if self.avatar:
+            return self.avatar.url
+        return static(settings.DEFAULT_USER_AVATAR)
