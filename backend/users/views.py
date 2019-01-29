@@ -1,15 +1,11 @@
-import io
-
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.parsers import MultiPartParser
 from rest_framework.response import Response
 
-from PIL import Image
-
 from users.models import User
 from users.serializers import UserSerializer, CreateUserSerializer, \
-    AvatarUploadSerializer
+    UploadAvatarSerializer, DeleteAvatarSerializer
 from users.permissions import AnonCreateOrSaveAndUpdateSelfOnly, \
     AvatarUploadSelfOnly
 
@@ -35,7 +31,10 @@ class UsersViewSet(viewsets.ModelViewSet):
         Deletes the given user
 
     upload_avatar:
-        Uploads an avatar to the authenticated user
+        Uploads an avatar of the authenticated user
+
+    delete_avatar:
+        Deletes an avatar of the authenticated user
     """
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -45,7 +44,9 @@ class UsersViewSet(viewsets.ModelViewSet):
         if self.action == 'create':
             return CreateUserSerializer
         if self.action == 'upload_avatar':
-            return AvatarUploadSerializer
+            return UploadAvatarSerializer
+        if self.action == 'delete_avatar':
+            return DeleteAvatarSerializer
         return self.serializer_class
 
     def get_permissions(self):
@@ -59,4 +60,10 @@ class UsersViewSet(viewsets.ModelViewSet):
         user = self.get_object()
         avatar = request.data['avatar']
         user.avatar.save(avatar.name, avatar, save=True)
+        return Response(status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=['delete'], name='Delete Avatar')
+    def delete_avatar(self, request, pk=None, **kwargs):
+        user = self.get_object()
+        user.avatar.delete(save=True)
         return Response(status=status.HTTP_200_OK)

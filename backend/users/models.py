@@ -41,7 +41,8 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name_plural = 'users'
 
     def save(self, *args, **kwargs):
-        self.avatar = self.compress_avatar(self.avatar)
+        if self.avatar:
+            self.avatar = self.compress_avatar(self.avatar)
         super().save()
 
     @staticmethod
