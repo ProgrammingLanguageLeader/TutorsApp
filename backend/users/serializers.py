@@ -65,3 +65,9 @@ class UserSerializer(serializers.ModelSerializer):
 
 class CreateUserSerializer(UserSerializer):
     recaptcha = ReCaptchaField()
+
+
+class AvatarUploadSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('avatar', )

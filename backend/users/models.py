@@ -1,5 +1,11 @@
+import sys
+from io import BytesIO
+
+from PIL import Image
+
 from django.contrib.staticfiles.templatetags.staticfiles import static
 from django.contrib.auth.models import AbstractBaseUser
+from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db import models
 from django.core.mail import send_mail
 from django.contrib.auth.models import PermissionsMixin
@@ -33,6 +39,26 @@ class User(AbstractBaseUser, PermissionsMixin):
     class Meta:
         verbose_name = 'user'
         verbose_name_plural = 'users'
+
+    def save(self, *args, **kwargs):
+        self.avatar = self.compress_avatar(self.avatar)
+        super().save()
+
+    @staticmethod
+    def compress_avatar(avatar):
+        avatar_image = Image.open(avatar)
+        avatar_image.thumbnail((200, 200))
+        output = BytesIO()
+        avatar_image.save(output, format='JPEG', quality=100)
+        output.seek(0)
+        return InMemoryUploadedFile(
+            output,
+            'ImageField',
+            '%s.jpg' % avatar.name.split('.')[0],
+            'image/jpeg',
+            sys.getsizeof(output),
+            None
+        )
 
     @property
     def is_staff(self):
