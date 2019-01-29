@@ -1,4 +1,5 @@
 import sys
+import os
 from io import BytesIO
 
 from PIL import Image
@@ -42,7 +43,10 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def save(self, *args, **kwargs):
         if self.avatar:
+            old_file_path = self.avatar.path
             self.avatar = self.compress_avatar(self.avatar)
+            if os.path.isfile(old_file_path):
+                os.remove(old_file_path)
         super().save()
 
     @staticmethod
