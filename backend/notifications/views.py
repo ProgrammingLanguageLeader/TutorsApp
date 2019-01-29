@@ -34,9 +34,7 @@ class NotificationsViewSet(viewsets.ReadOnlyModelViewSet):
             return SetUnreadNotificationSerializer
         return NotificationSerializer
 
-    @action(detail=True, methods=['patch'],
-            name='Set Unread Notification',
-            permission_classes=[SelfOnly])
+    @action(detail=True, methods=['patch'], name='Set Unread Notification')
     def set_unread(self, request, pk=None, **kwargs):
         notification = self.get_object()
         notification.unread = request.data.get('unread')
