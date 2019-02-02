@@ -1,5 +1,5 @@
-import { makeApiRequest } from 'services/api';
-import { notificationsConstants } from 'constants/api';
+import { makeApiRequest } from 'vk-apps-frontend/services/api';
+import { notificationsConstants } from 'vk-apps-frontend/constants/api';
 
 const getNotificationsList = (options) => {
   return async dispatch => {

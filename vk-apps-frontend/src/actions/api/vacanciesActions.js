@@ -1,5 +1,5 @@
-import { makeApiRequest } from 'services/api';
-import { vacanciesConstants } from 'constants';
+import { makeApiRequest } from 'vk-apps-frontend/services/api';
+import { vacanciesConstants } from 'vk-apps-frontend/constants';
 
 const searchVacancies = (options) => {
   return async dispatch => {

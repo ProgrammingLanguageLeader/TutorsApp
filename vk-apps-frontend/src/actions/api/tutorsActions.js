@@ -1,5 +1,5 @@
-import { makeApiRequest } from 'services/api';
-import { tutorsConstants } from 'constants/api';
+import { makeApiRequest } from 'vk-apps-frontend/services/api';
+import { tutorsConstants } from 'vk-apps-frontend/constants/api';
 
 const getStudentRequestsList = (options) => {
   return async dispatch => {

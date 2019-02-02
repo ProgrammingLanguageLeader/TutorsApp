@@ -1,5 +1,5 @@
-import { vkApiRequest } from 'services/vkApi';
-import { apiConstants } from 'constants/vk';
+import { vkApiRequest } from 'vk-apps-frontend/services/vkApi';
+import { apiConstants } from 'vk-apps-frontend/constants/vk';
 
 const fetchUsersInfo = (accessToken, vkIds) => dispatch => {
   const fields = ['photo_100', 'photo_200', 'city'];

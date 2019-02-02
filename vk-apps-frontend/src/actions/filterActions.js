@@ -1,4 +1,4 @@
-import { filterConstants } from '../constants';
+import { filterConstants } from 'vk-apps-frontend/constants';
 
 const updateFilter = (params) => (dispatch) => {
   return dispatch({

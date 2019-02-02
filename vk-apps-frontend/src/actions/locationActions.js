@@ -1,4 +1,4 @@
-import { locationConstants } from '../constants';
+import { locationConstants } from 'vk-apps-frontend/constants';
 
 const changeLocation = (activeView, activePanel = "", params = {}) => (dispatch) => {
   dispatch({

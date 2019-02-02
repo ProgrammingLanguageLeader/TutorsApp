@@ -1,5 +1,5 @@
-import { vkAppsUsersConstants } from 'constants/api';
-import { makeApiRequest } from 'services/api';
+import { vkAppsUsersConstants } from 'vk-apps-frontend/constants/api';
+import { makeApiRequest } from 'vk-apps-frontend/services/api';
 
 const createVkAppsUser = (options) => {
   return async dispatch => {
