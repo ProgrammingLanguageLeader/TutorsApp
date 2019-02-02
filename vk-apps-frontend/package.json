@@ -1,10 +1,10 @@
 {
   "name": "tutors-app",
-  "version": "0.3.8",
+  "version": "0.3.9",
   "homepage": "https://tutors-app/vk-apps/",
   "description": "VK Apps React application",
   "scripts": {
-    "start": "webpack-dev-server --mode=development --config webpack.dev.js --hot --open",
+    "start": "webpack-dev-server --config webpack.dev.js --hot --open --inline",
     "build": "webpack --config webpack.prod.js",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",

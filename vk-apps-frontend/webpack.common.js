@@ -1,4 +1,3 @@
-const webpack = require("webpack");
 const path = require("path");
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 
@@ -47,15 +46,6 @@ module.exports = {
       template: path.resolve(__dirname, "public/index.html"),
       filename: "./index.html",
     }),
-    new webpack.DefinePlugin({
-      "process.env": {
-        "NODE_ENV": JSON.stringify(process.env.NODE_ENV || 'development'),
-        "API_URL": JSON.stringify("http://localhost:8000/api"),
-        // "API_URL": JSON.stringify("https://tutors-app.ru/api"),
-        "ROOT_URL": JSON.stringify("http://localhost:8000"),
-        "VK_APP_ID": JSON.stringify(6700618)
-      }
-    })
   ],
 
   resolve: {
