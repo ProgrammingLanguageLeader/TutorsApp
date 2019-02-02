@@ -1,10 +1,6 @@
-import realAxios from 'axios';
+import axios from 'axios';
 
-import mockAxios from 'vk-apps-frontend/helpers/axiosMock';
-import { DEBUG } from 'vk-apps-frontend/constants';
 import { API_URL, API_REQUEST_HEADERS } from 'vk-apps-frontend/constants/api';
-
-const axios = DEBUG ? mockAxios : realAxios;
 
 class ApiManager {
   constructor(vkExecutionParams, sign) {
