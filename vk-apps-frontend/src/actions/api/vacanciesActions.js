@@ -1,7 +1,7 @@
 import { makeApiRequest } from 'vk-apps-frontend/services/api';
 import { vacanciesConstants } from 'vk-apps-frontend/constants';
 
-const searchVacancies = (options) => {
+const searchVacancies = (options = {}) => {
   return async dispatch => {
     dispatch({
       type: vacanciesConstants.SEARCH_VACANCIES_REQUEST
@@ -24,7 +24,7 @@ const searchVacancies = (options) => {
   }
 };
 
-const createVacancy = (options) => {
+const createVacancy = (options = {}) => {
   return async dispatch => {
     dispatch({
       type: vacanciesConstants.CREATE_VACANCY_REQUEST
@@ -47,7 +47,7 @@ const createVacancy = (options) => {
   }
 };
 
-const getVacancy = (id, options) => {
+const getVacancy = (id, options = {}) => {
   return async dispatch => {
     dispatch({
       type: vacanciesConstants.GET_VACANCY_REQUEST
@@ -70,7 +70,7 @@ const getVacancy = (id, options) => {
   }
 };
 
-const updateVacancy = (id, options) => {
+const updateVacancy = (id, options = {}) => {
   return async dispatch => {
     dispatch({
       type: vacanciesConstants.UPDATE_VACANCY_REQUEST
@@ -93,7 +93,7 @@ const updateVacancy = (id, options) => {
   }
 };
 
-const deleteVacancy = (id, options) => {
+const deleteVacancy = (id, options = {}) => {
   return async dispatch => {
     dispatch({
       type: vacanciesConstants.DELETE_VACANCY_REQUEST

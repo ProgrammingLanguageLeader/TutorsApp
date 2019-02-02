@@ -1,7 +1,7 @@
 import { makeApiRequest } from 'vk-apps-frontend/services/api';
 import { tutorsConstants } from 'vk-apps-frontend/constants/api';
 
-const getStudentRequestsList = (options) => {
+const getStudentRequestsList = (options = {}) => {
   return async dispatch => {
     dispatch({
       type: tutorsConstants.GET_STUDENT_REQUESTS_LIST_REQUEST,
@@ -24,7 +24,7 @@ const getStudentRequestsList = (options) => {
   };
 };
 
-const createStudentRequestsList = (options) => {
+const createStudentRequestsList = (options = {}) => {
   return async dispatch => {
     dispatch({
       type: tutorsConstants.CREATE_STUDENT_REQUEST_REQUEST,
@@ -47,7 +47,7 @@ const createStudentRequestsList = (options) => {
   };
 };
 
-const getStudentRequest = (id, options) => {
+const getStudentRequest = (id, options = {}) => {
   return async dispatch => {
     dispatch({
       type: tutorsConstants.GET_STUDENT_REQUEST_REQUEST,
@@ -70,7 +70,7 @@ const getStudentRequest = (id, options) => {
   };
 };
 
-const deleteStudentRequest = (id, options) => {
+const deleteStudentRequest = (id, options = {}) => {
   return async dispatch => {
     dispatch({
       type: tutorsConstants.DELETE_STUDENT_REQUEST_REQUEST,
@@ -93,7 +93,7 @@ const deleteStudentRequest = (id, options) => {
   };
 };
 
-const acceptStudentRequest = (id, options) => {
+const acceptStudentRequest = (id, options = {}) => {
   return async dispatch => {
     dispatch({
       type: tutorsConstants.ACCEPT_STUDENT_REQUEST_REQUEST,
@@ -116,7 +116,7 @@ const acceptStudentRequest = (id, options) => {
   };
 };
 
-const getStudentsList = (options) => {
+const getStudentsList = (options = {}) => {
   return async dispatch => {
     dispatch({
       type: tutorsConstants.GET_STUDENTS_LIST_REQUEST,
@@ -139,7 +139,7 @@ const getStudentsList = (options) => {
   };
 };
 
-const getStudent = (id, options) => {
+const getStudent = (id, options = {}) => {
   return async dispatch => {
     dispatch({
       type: tutorsConstants.GET_STUDENT_REQUEST,
@@ -162,7 +162,7 @@ const getStudent = (id, options) => {
   };
 };
 
-const deleteStudent = (id, options) => {
+const deleteStudent = (id, options = {}) => {
   return async dispatch => {
     dispatch({
       type: tutorsConstants.DELETE_STUDENT_REQUEST,

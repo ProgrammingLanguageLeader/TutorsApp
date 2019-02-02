@@ -1,7 +1,7 @@
 import { makeApiRequest } from 'vk-apps-frontend/services/api';
 import { usersConstants } from 'vk-apps-frontend/constants/api';
 
-const getUsersList = (options) => {
+const getUsersList = (options = {}) => {
   return async dispatch => {
     dispatch({
       type: usersConstants.GET_USERS_LIST_REQUEST,
@@ -24,7 +24,7 @@ const getUsersList = (options) => {
   };
 };
 
-const getUser = (id, options) => {
+const getUser = (id, options = {}) => {
   return async dispatch => {
     dispatch({
       type: usersConstants.GET_USER_REQUEST,
@@ -47,7 +47,7 @@ const getUser = (id, options) => {
   };
 };
 
-const updateUser = (id, options) => {
+const updateUser = (id, options = {}) => {
   return async dispatch => {
     dispatch({
       type: usersConstants.UPDATE_USER_REQUEST,
@@ -70,7 +70,7 @@ const updateUser = (id, options) => {
   };
 };
 
-const deleteUser = (id, options) => {
+const deleteUser = (id, options = {}) => {
   return async dispatch => {
     dispatch({
       type: usersConstants.DELETE_USER_REQUEST,

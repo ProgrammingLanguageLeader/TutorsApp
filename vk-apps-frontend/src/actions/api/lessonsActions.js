@@ -1,7 +1,7 @@
 import { makeApiRequest } from 'vk-apps-frontend/services/api';
 import { lessonsConstants } from 'vk-apps-frontend/constants/api';
 
-const getLessonsList = (options) => {
+const getLessonsList = (options = {}) => {
   return async dispatch => {
     dispatch({
       type: lessonsConstants.GET_LESSONS_LIST_REQUEST,
@@ -24,7 +24,7 @@ const getLessonsList = (options) => {
   };
 };
 
-const createLesson = (options) => {
+const createLesson = (options = {}) => {
   return async dispatch => {
     dispatch({
       type: lessonsConstants.CREATE_LESSON_REQUEST,
@@ -47,7 +47,7 @@ const createLesson = (options) => {
   };
 };
 
-const getLesson = (id, options) => {
+const getLesson = (id, options = {}) => {
   return async dispatch => {
     dispatch({
       type: lessonsConstants.GET_LESSON_REQUEST,
@@ -70,7 +70,7 @@ const getLesson = (id, options) => {
   };
 };
 
-const updateLesson = (id, options) => {
+const updateLesson = (id, options = {}) => {
   return async dispatch => {
     dispatch({
       type: lessonsConstants.UPDATE_LESSON_REQUEST,
@@ -93,7 +93,7 @@ const updateLesson = (id, options) => {
   };
 };
 
-const deleteLesson = (id, options) => {
+const deleteLesson = (id, options = {}) => {
   return async dispatch => {
     dispatch({
       type: lessonsConstants.DELETE_LESSON_REQUEST,

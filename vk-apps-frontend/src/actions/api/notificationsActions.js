@@ -1,7 +1,7 @@
 import { makeApiRequest } from 'vk-apps-frontend/services/api';
 import { notificationsConstants } from 'vk-apps-frontend/constants/api';
 
-const getNotificationsList = (options) => {
+const getNotificationsList = (options = {}) => {
   return async dispatch => {
     dispatch({
       type: notificationsConstants.GET_NOTIFICATIONS_LIST_REQUEST,
@@ -24,7 +24,7 @@ const getNotificationsList = (options) => {
   };
 };
 
-const getNotification = (id, options) => {
+const getNotification = (id, options = {}) => {
   return async dispatch => {
     dispatch({
       type: notificationsConstants.GET_NOTIFICATION_REQUEST,
@@ -47,7 +47,7 @@ const getNotification = (id, options) => {
   };
 };
 
-const setUnreadNotification = (id, options) => {
+const setUnreadNotification = (id, options = {}) => {
   return async dispatch => {
     dispatch({
       type: notificationsConstants.SET_UNREAD_NOTIFICATION_REQUEST,

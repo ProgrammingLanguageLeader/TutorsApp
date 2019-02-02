@@ -1,7 +1,7 @@
 import { vkAppsUsersConstants } from 'vk-apps-frontend/constants/api';
 import { makeApiRequest } from 'vk-apps-frontend/services/api';
 
-const createVkAppsUser = (options) => {
+const createVkAppsUser = (options = {}) => {
   return async dispatch => {
     dispatch({
       type: vkAppsUsersConstants.CREATE_VK_APPS_USER_REQUEST,
@@ -24,7 +24,7 @@ const createVkAppsUser = (options) => {
   };
 };
 
-const getVkAppsUser = (id, options) => {
+const getVkAppsUser = (id, options = {}) => {
   return async dispatch => {
     dispatch({
       type: vkAppsUsersConstants.GET_VK_APPS_USER_REQUEST,
@@ -47,7 +47,7 @@ const getVkAppsUser = (id, options) => {
   };
 };
 
-const deleteVkAppsUser = (id, options) => {
+const deleteVkAppsUser = (id, options = {}) => {
   return async dispatch => {
     dispatch({
       type: vkAppsUsersConstants.DELETE_VK_APPS_USER_REQUEST,
@@ -70,7 +70,7 @@ const deleteVkAppsUser = (id, options) => {
   };
 };
 
-const connectVkAppsUser = (id, options) => {
+const connectVkAppsUser = (id, options = {}) => {
   return async dispatch => {
     dispatch({
       type: vkAppsUsersConstants.CONNECT_VK_APPS_USER_REQUEST,
