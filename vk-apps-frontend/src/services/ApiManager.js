@@ -1,8 +1,8 @@
 import realAxios from 'axios';
 
-import mockAxios from 'helpers/axiosMock';
-import { DEBUG } from 'constants';
-import { API_URL, HEADERS } from 'constants/api';
+import mockAxios from 'vk-apps-frontend/helpers/axiosMock';
+import { DEBUG } from 'vk-apps-frontend/constants';
+import { API_URL, API_REQUEST_HEADERS } from 'vk-apps-frontend/constants/api';
 
 const axios = DEBUG ? mockAxios : realAxios;
 
@@ -12,7 +12,7 @@ class ApiManager {
     this.sign = sign;
   }
 
-  static cancelRequests = () => {};
+  static cancelRequests() {};
 
   static getInstance() {
     if (!ApiManager.instance) {
@@ -43,7 +43,7 @@ class ApiManager {
       return axios({
         url: url,
         method: method,
-        headers: HEADERS,
+        headers: API_REQUEST_HEADERS,
         params: optionsWithSign,
         cancelToken: new axios.CancelToken(cancelFunction => {
           ApiManager.cancelRequests = cancelFunction;
@@ -59,7 +59,7 @@ class ApiManager {
     return axios({
       url: url,
       method: method,
-      headers: HEADERS,
+      headers: API_REQUEST_HEADERS,
       data: optionsWithSign,
       cancelToken: new axios.CancelToken(cancelFunction => {
         ApiManager.cancelRequests = cancelFunction;

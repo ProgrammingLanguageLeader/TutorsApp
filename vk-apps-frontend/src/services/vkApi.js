@@ -1,11 +1,11 @@
 import mockVKConnect from '@vkontakte/vkui-connect-mock';
 import realVKConnect from '@vkontakte/vkui-connect';
 
-import { DEBUG } from 'constants';
-import { VK_API_VERSION } from 'constants/vk';
-import { configureVkMockConnect } from 'helpers/vkMockConnect';
+import { DEBUG } from 'vk-apps-frontend/constants';
+import { VK_API_VERSION } from 'vk-apps-frontend/constants/vk';
+import { configureVkMockConnect } from 'vk-apps-frontend/helpers/vkMockConnect';
 
-const VKConnect = developmentMode ? mockVKConnect : realVKConnect;
+const VKConnect = DEBUG ? mockVKConnect : realVKConnect;
 if (DEBUG) {
   configureVkMockConnect();
 }
