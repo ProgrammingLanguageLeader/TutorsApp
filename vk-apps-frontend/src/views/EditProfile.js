@@ -1,61 +1,64 @@
 import React from 'react';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import {
   View, Panel, PanelHeader, Cell, Avatar, Button, Input, FormLayout,
-  Textarea, HeaderButton, Group, PopoutWrapper, ScreenSpinner, FormStatus
+  Textarea, HeaderButton, Group, FormStatus
 } from '@vkontakte/vkui';
 
-import Icon36Done from '@vkontakte/icons/dist/36/done';
-import Icon36Cancel from '@vkontakte/icons/dist/36/cancel';
+import BackIcon from 'vk-apps-frontend/components/BackIcon';
+import DivSpinner from 'vk-apps-frontend/components/DivSpinner';
 
-import BackIcon from '../components/BackIcon';
-import DivSpinner from '../components/DivSpinner';
-import PopoutDiv from '../components/PopoutDiv';
+import { ROOT_URL } from 'vk-apps-frontend/constants';
+import { locationActions  } from 'vk-apps-frontend/actions';
+import { usersActions, vkAppsUsersActions } from 'vk-apps-frontend/actions/api';
 
-import { apiProfileActions, locationActions  } from '../actions';
-
-const mapStateToProps = (state) => {
-  const { vkUserInfo } = state.vkAppsUserReducer;
-  const { profile } = state.apiProfileReducer;
-  const apiProfileFetching = state.apiProfileReducer.fetching;
-  const vkAppsUserFetching = state.vkAppsUserReducer.fetching;
-  const apiProfileErrors = state.apiProfileReducer.errors;
+const mapStateToProps = state => {
+  const { vkUserInfo } = state.vkReducer.appsUserReducer;
+  const { user, vkId } = state.apiReducer.vkAppsUsersReducer;
+  const fetching = state.apiReducer.vkAppsUsersReducer.fetching || state.apiReducer.usersReducer.fetching;
+  const { errors } = state.apiReducer.usersReducer;
   return {
-    vkUserInfo, profile, apiProfileFetching, vkAppsUserFetching, apiProfileErrors
+    vkUserInfo, user, fetching, errors, vkId,
   };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    goBack: bindActionCreators(locationActions.goBack, dispatch),
+    changeLocation: bindActionCreators(locationActions.changeLocation, dispatch),
+    getVkAppsUser: bindActionCreators(vkAppsUsersActions.getVkAppsUser, dispatch),
+    updateUser: bindActionCreators(usersActions.updateUser, dispatch),
+  }
 };
 
 class EditProfile extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      popout: null,
+      first_name: '',
+      last_name: '',
       experience: '',
       education: '',
       city: '',
       district: '',
       street: '',
       metro_station: '',
-      description: '',
+      bio: ''
     };
 
     this.handleChange = this.handleChange.bind(this);
-    this.updateProfile = this.updateProfile.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentDidMount() {
     const { id } = this.props.vkUserInfo;
-    this.props.dispatch(
-      apiProfileActions.getProfile({
-        profile_id: id,
-      })
-    );
+    this.props.getVkAppsUser(id);
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({
-      ...nextProps.profile
-    });
+    const { first_name, last_name, experience, education, city, district, street, metro_station, bio } = nextProps.user;
+    this.setState({ first_name, last_name, experience, education, city, district, street, metro_station, bio });
   }
 
   handleChange(event) {
@@ -68,57 +71,33 @@ class EditProfile extends React.Component {
     });
   }
 
-  updateProfile(event) {
+  async handleSubmit(event) {
     event.preventDefault();
 
-    this.setState({
-      popout: <ScreenSpinner/>
-    });
-    this.props.dispatch(
-      apiProfileActions.updateProfile({
+    try {
+      const { id } = this.props.user;
+      await this.props.updateUser(id, {
         ...this.state
-      })
-    )
-      .then(() => {
-        const { apiProfileErrors } = this.props;
-        this.setState({
-          popout: !apiProfileErrors
-            ? (
-              <PopoutWrapper>
-                <PopoutDiv>
-                  <Icon36Done/>
-                </PopoutDiv>
-              </PopoutWrapper>
-            )
-            : (
-              <PopoutWrapper>
-                <PopoutDiv>
-                  <Icon36Cancel/>
-                </PopoutDiv>
-              </PopoutWrapper>
-            )
-        })
-      })
-      .then(setTimeout(() => {
-        this.setState({
-          popout: null
-        })
-      },1500))
+      });
+    }
+    catch (exception) {
+      console.log(exception);
+    }
+
+    const { vkId } = this.props;
+    await this.props.getVkAppsUser(vkId);
   }
 
   render() {
-    const { vkUserInfo, apiProfileFetching, vkAppsUserFetching, apiProfileErrors } = this.props;
-    const {
-      experience, education, city, district, street, metro_station, description
-    } = this.state;
-    const fetching = apiProfileFetching || vkAppsUserFetching;
+    const { user, fetching, errors } = this.props;
+    const { experience, education, city, district, street, metro_station, bio } = this.state;
 
     return (
-      <View id={this.props.id} activePanel="edit_profile" popout={this.state.popout}>
+      <View id={this.props.id} activePanel="edit_profile">
         <Panel id="edit_profile">
           <PanelHeader
             left={
-              <HeaderButton onClick={() => this.props.dispatch(locationActions.goBack())}>
+              <HeaderButton onClick={this.props.goBack}>
                 <BackIcon />
               </HeaderButton>
             }
@@ -137,18 +116,18 @@ class EditProfile extends React.Component {
                     size="l"
                     multiline
                     description="Здесь можно посмотреть и отредактировать публичную информацию о Вашем профиле"
-                    before={<Avatar size={80} src={vkUserInfo.photo_200} />}
+                    before={<Avatar size={80} src={ROOT_URL + user.avatar} />}
                   >
-                    {`${vkUserInfo.first_name} ${vkUserInfo.last_name}`}
+                    {`${user.first_name} ${user.last_name}`}
                   </Cell>
                 </Group>
                 <Group title="Информация о пользователе">
                   <FormLayout>
                     {
-                      apiProfileErrors
+                      errors
                       ? (
                         <FormStatus title="Некорректные данные" state="error">
-                          Проверьте заполненные поля
+                          Проверьте заполненные поля: {JSON.stringify(errors)}
                         </FormStatus>
                       )
                       : null
@@ -196,12 +175,12 @@ class EditProfile extends React.Component {
                     />
 
                     <Textarea
-                      name="description"
+                      name="bio"
                       top="О себе"
-                      value={description ? description : ""}
+                      value={bio ? bio : ""}
                       onChange={this.handleChange}
                     />
-                    <Button size="xl" onClick={this.updateProfile}>
+                    <Button size="xl" onClick={this.handleSubmit}>
                       Сохранить
                     </Button>
                   </FormLayout>
@@ -215,4 +194,4 @@ class EditProfile extends React.Component {
   }
 }
 
-export default connect(mapStateToProps)(EditProfile);
+export default connect(mapStateToProps, mapDispatchToProps)(EditProfile);
