@@ -1,23 +1,22 @@
 import React from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
-import { 
-  Panel, PanelHeader, View, Gallery, ScreenSpinner
-} from '@vkontakte/vkui';
+import { Panel, PanelHeader, View, Gallery, ScreenSpinner } from '@vkontakte/vkui';
 
-import '../../assets/css/Start.css';
-import introOne from '../../assets/images/intro_one.png'
-import introTwo from '../../assets/images/intro_two.png'
-import introThree from '../../assets/images/intro_three.png'
+import 'vk-apps-frontend/assets/css/Start.css';
+import introOne from 'vk-apps-frontend/assets/images/intro_one.png'
+import introTwo from 'vk-apps-frontend/assets/images/intro_two.png'
+import introThree from 'vk-apps-frontend/assets/images/intro_three.png'
 
-import { apiProfileActions, locationActions } from '../actions';
-import PopoutDiv from '../components/PopoutDiv';
+import { locationActions } from 'vk-apps-frontend/actions';
+import { usersActions, vkAppsUsersActions } from 'vk-apps-frontend/actions/api';
+import PopoutDiv from 'vk-apps-frontend/components/PopoutDiv';
 
 const mapStateToProps = state => {
-  const { vkUserInfo } = state.vkAppsUserReducer;
-  const { profile } = state.apiProfileReducer;
+  const { vkUserInfo } = state.vkReducer.appsUserReducer;
+  const { user } = state.apiReducer.usersReducer;
   return {
-    vkUserInfo, profile,
+    vkUserInfo, user,
   };
 };
 
@@ -25,10 +24,10 @@ const mapDispatchToProps = dispatch => {
   return {
     changeLocation: options =>
       dispatch(locationActions.changeLocation(options)),
-    getProfile: options =>
-      dispatch(apiProfileActions.getProfile(options)),
-    createProfile: options =>
-      dispatch(apiProfileActions.createProfile(options)),
+    getUser: (id, options) =>
+      dispatch(usersActions.getUser(id, options)),
+    createVkAppsUser: options =>
+      dispatch(vkAppsUsersActions.createVkAppsUser(options)),
   };
 };
 
@@ -64,14 +63,14 @@ class Start extends React.Component {
     this.setState({
       popout: <PopoutDiv><ScreenSpinner /></PopoutDiv>
     });
-    this.props.getProfile({
-      profile_id: id,
+    this.props.getUser({
+      id: id,
     })
       .then(() => {
-        if (this.props.profile.profile_id) {
+        if (this.props.user.id) {
           return Promise.resolve();
         }
-        return this.props.createProfile({})
+        return this.props.createVkAppsUser({})
       })
       .then(() => {
         this.setState({
