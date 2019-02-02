@@ -3,7 +3,7 @@ import Immutable from 'seamless-immutable';
 import { vacanciesConstants } from 'vk-apps-frontend/constants/api';
 
 const initialState = Immutable({
-  vacancy: {},
+  vacancy: null,
   vacancies: [],
   vacanciesCount: 0,
   vacanciesNext: null,

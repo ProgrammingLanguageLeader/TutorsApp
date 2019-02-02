@@ -4,6 +4,7 @@ import { vkAppsUsersConstants } from 'vk-apps-frontend/constants/api';
 
 const initialState = Immutable({
   user: null,
+  vkId: null,
   fetching: false,
   errors: null,
 });
@@ -18,12 +19,15 @@ const vkAppsUsersReducer = (state = initialState, action) => {
         fetching: true,
       });
 
-    case vkAppsUsersConstants.GET_VK_APPS_USER_SUCCESS:
+    case vkAppsUsersConstants.GET_VK_APPS_USER_SUCCESS: {
+      const {user, vk_id} = action.payload;
       return state.merge({
-        user: action.payload,
+        user: user,
+        vkId: vk_id,
         fetching: false,
         errors: null,
       });
+    }
 
     case vkAppsUsersConstants.CREATE_VK_APPS_USER_SUCCESS:
     case vkAppsUsersConstants.DELETE_VK_APPS_USER_SUCCESS:

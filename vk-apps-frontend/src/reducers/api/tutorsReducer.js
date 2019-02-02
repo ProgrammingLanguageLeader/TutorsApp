@@ -3,13 +3,13 @@ import Immutable from 'seamless-immutable';
 import { tutorsConstants } from 'vk-apps-frontend/constants/api';
 
 const initialState = Immutable({
-  studentRequest: {},
+  studentRequest: null,
   studentRequests: [],
   studentRequestsCount: 0,
   studentRequestsNext: null,
   studentRequestsPrevious: null,
 
-  student: {},
+  student: null,
   students: [],
   studentCount: 0,
   studentNext: null,

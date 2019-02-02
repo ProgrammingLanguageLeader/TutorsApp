@@ -3,7 +3,7 @@ import Immutable from 'seamless-immutable';
 import { notificationsConstants } from 'vk-apps-frontend/constants/api';
 
 const initialState = Immutable({
-  notification: {},
+  notification: null,
   notifications: [],
   notificationsCount: 0,
   notificationsNext: null,

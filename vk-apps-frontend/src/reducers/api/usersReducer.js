@@ -3,7 +3,7 @@ import Immutable from 'seamless-immutable';
 import { usersConstants } from 'vk-apps-frontend/constants/api';
 
 const initialState = Immutable({
-  user: {},
+  user: null,
   users: [],
   usersCount: 0,
   usersNext: null,

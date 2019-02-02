@@ -5,7 +5,7 @@ import notificationsReducer from "./notificationsReducer";
 import tutorsReducer from "./tutorsReducer";
 import usersReducer from "./usersReducer";
 import vacanciesReducer from "./vacanciesReducer";
-import vkAppsReducer from "./vkAppsReducer";
+import vkAppsUsersReducer from "./vkAppsReducer";
 
 const apiReducer = combineReducers({
   lessonsReducer,
@@ -13,7 +13,7 @@ const apiReducer = combineReducers({
   tutorsReducer,
   usersReducer,
   vacanciesReducer,
-  vkAppsReducer,
+  vkAppsUsersReducer,
 });
 
 export default apiReducer;
