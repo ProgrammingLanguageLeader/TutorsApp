@@ -18,8 +18,8 @@ from users.managers import UserManager
 class User(AbstractBaseUser, PermissionsMixin):
     username = models.CharField('username', max_length=30, unique=True)
     email = models.EmailField('email address', blank=True)
-    first_name = models.CharField('first name', max_length=30, blank=True)
-    last_name = models.CharField('last name', max_length=30, blank=True)
+    first_name = models.CharField('first name', max_length=30, blank=False)
+    last_name = models.CharField('last name', max_length=30, blank=False)
     date_joined = models.DateTimeField('date joined', auto_now_add=True)
     is_active = models.BooleanField('active', default=True)
     experience = models.TextField(blank=True, max_length=100)
