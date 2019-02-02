@@ -4,7 +4,7 @@
   "homepage": "https://tutors-app/vk-apps/",
   "description": "VK Apps React application",
   "scripts": {
-    "start": "webpack-dev-server --config webpack.dev.js --hot --open",
+    "start": "webpack-dev-server --mode=development --config webpack.dev.js --hot --open",
     "build": "webpack --config webpack.prod.js",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
