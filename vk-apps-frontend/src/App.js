@@ -1,5 +1,5 @@
 import React from 'react';
-import { bindActionCreators } from "redux";
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import '@vkontakte/vkui/dist/vkui.css';
 import { Root, Epic, Tabbar, TabbarItem, PopoutWrapper, Div, Button, ScreenSpinner } from '@vkontakte/vkui';
@@ -10,26 +10,27 @@ import Icon28User from '@vkontakte/icons/dist/28/user';
 import Icon28Notification from '@vkontakte/icons/dist/28/notification';
 import Icon28Menu from '@vkontakte/icons/dist/28/menu';
 
-import SearchVacancies from './views/SearchVacancies';
-import ShowProfile from './views/ShowProfile';
-import CreateVacancy from './views/CreateVacancy';
-import EditProfile from './views/EditProfile';
-import Schedule from './views/Schedule';
-import Filter from './views/Filter';
-import Start from './views/Start';
-import Notifications from './views/Notifications';
-import MoneyTransfer from './views/MoneyTransfer';
-import ShowVacancy from "./views/ShowVacancy";
-import MainMenu from "./views/MainMenu";
+import SearchVacancies from 'vk-apps-frontend/views/SearchVacancies';
+import ShowProfile from 'vk-apps-frontend/views/ShowProfile';
+import CreateVacancy from 'vk-apps-frontend/views/CreateVacancy';
+import EditProfile from 'vk-apps-frontend/views/EditProfile';
+import Schedule from 'vk-apps-frontend/views/Schedule';
+import Filter from 'vk-apps-frontend/views/Filter';
+import Start from 'vk-apps-frontend/views/Start';
+import Notifications from 'vk-apps-frontend/views/Notifications';
+import MoneyTransfer from 'vk-apps-frontend/views/MoneyTransfer';
+import ShowVacancy from 'vk-apps-frontend/views/ShowVacancy';
+import MainMenu from 'vk-apps-frontend/views/MainMenu';
 
-import { vkAppsActions, locationActions } from './actions';
-import PopoutDiv from './components/PopoutDiv';
+import { locationActions } from 'vk-apps-frontend/actions';
+import { appsActions } from 'vk-apps-frontend/actions/vk';
+import PopoutDiv from 'vk-apps-frontend/components/PopoutDiv';
 
 const mapStateToProps = state => {
   const { activeView, activePanel } = state.locationReducer;
-  const { accessToken } = state.vkAppsTokenReducer;
-  const { vkUserInfo } = state.vkAppsUserReducer;
-  const vkAppsTokenFetching = state.vkAppsTokenReducer.fetching;
+  const { accessToken } = state.vkReducer.appsTokenReducer;
+  const { vkUserInfo } = state.vkReducer.appsUserReducer;
+  const vkAppsTokenFetching = state.vkReducer.appsTokenReducer.fetching;
   return {
     activeView, accessToken, activePanel, vkAppsTokenFetching, vkUserInfo
   };
@@ -37,9 +38,9 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    init: bindActionCreators(vkAppsActions.init, dispatch),
-    fetchCurrentUserInfo: bindActionCreators(vkAppsActions.fetchCurrentUserInfo, dispatch),
-    fetchAccessToken: bindActionCreators(vkAppsActions.fetchAccessToken, dispatch),
+    init: bindActionCreators(appsActions.init, dispatch),
+    fetchCurrentUserInfo: bindActionCreators(appsActions.fetchCurrentUserInfo, dispatch),
+    fetchAccessToken: bindActionCreators(appsActions.fetchAccessToken, dispatch),
     changeLocation: bindActionCreators(locationActions.changeLocation, dispatch),
   };
 };
