@@ -11,7 +11,8 @@ from rest_framework.status import HTTP_400_BAD_REQUEST
 
 from vk_apps_users.permissions import AuthenticatedCreateUserOrSelfOnly, \
     AuthenticatedUsingPasswordAndVKApps
-from vk_apps_users.serializers import VkAppsUserSerializer
+from vk_apps_users.serializers import VkAppsUserSerializer, \
+    GetVkAppsUserSerializer
 from vk_apps_users.models import VkAppsUser
 
 
@@ -35,6 +36,11 @@ class VkAppsUsersViewSet(mixins.CreateModelMixin,
     queryset = VkAppsUser.objects.all()
     serializer_class = VkAppsUserSerializer
     permission_classes = (AuthenticatedCreateUserOrSelfOnly,)
+
+    def get_serializer_class(self):
+        if self.action == 'retrieve':
+            return GetVkAppsUserSerializer
+        return self.serializer_class
 
     @staticmethod
     def generate_random_username(
