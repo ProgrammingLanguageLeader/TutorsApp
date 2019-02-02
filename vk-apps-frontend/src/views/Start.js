@@ -72,8 +72,10 @@ class Start extends React.Component {
   }
 
   render() {
+    const popout = this.props.fetching ? <ScreenSpinner /> : null;
+
     return (
-      <View popout={this.props.fetching} id={this.props.id} activePanel="home">
+      <View popout={popout} id={this.props.id} activePanel="home">
         <Panel id="home" theme="white" style={{ display: 'flex' }}>
           <PanelHeader>
             Поиск репетиторов
