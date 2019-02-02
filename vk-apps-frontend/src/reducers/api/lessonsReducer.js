@@ -1,6 +1,6 @@
 import Immutable from 'seamless-immutable';
 
-import { lessonsConstants } from 'constants/api';
+import { lessonsConstants } from 'vk-apps-frontend/constants/api';
 
 const initialState = Immutable({
   lesson: {},

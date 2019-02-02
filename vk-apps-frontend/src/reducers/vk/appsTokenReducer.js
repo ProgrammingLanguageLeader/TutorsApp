@@ -1,6 +1,6 @@
 import Immutable from 'seamless-immutable';
 
-import { appsConstants } from '../../constants';
+import { appsConstants } from 'vk-apps-frontend/constants/vk';
 
 const initialState = Immutable({
   accessToken: null,

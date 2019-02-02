@@ -1,4 +1,4 @@
-import { filterConstants, educationLevelList } from 'constants';
+import { filterConstants, educationLevelList } from 'vk-apps-frontend/constants';
 
 const backendFieldsWithNulls = educationLevelList.reduce((object, level) => {
   return { ...object, [level.backendField]: null }

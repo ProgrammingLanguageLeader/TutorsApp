@@ -1,6 +1,6 @@
 import Immutable from 'seamless-immutable';
 
-import { notificationsConstants } from 'constants/api';
+import { notificationsConstants } from 'vk-apps-frontend/constants/api';
 
 const initialState = Immutable({
   notification: {},

@@ -1,6 +1,6 @@
 import Immutable from 'seamless-immutable';
 
-import { vacanciesConstants } from 'constants/api';
+import { vacanciesConstants } from 'vk-apps-frontend/constants/api';
 
 const initialState = Immutable({
   vacancy: {},
