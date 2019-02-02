@@ -57,10 +57,8 @@ module.exports = {
   ],
 
   resolve: {
-    modules: [
-      path.resolve('./src'),
-      path.resolve('./assets'),
-      path.resolve('./node_modules')
-    ]
+    alias: {
+      "vk-apps-frontend": path.resolve(__dirname, "src"),
+    }
   }
 };
