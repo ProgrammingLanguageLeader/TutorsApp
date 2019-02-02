@@ -8,22 +8,19 @@ import Moment from "react-moment";
 
 import Icon24Write from '@vkontakte/icons/dist/24/write';
 
-import {apiProfileActions, locationActions, vkApiActions} from '../actions';
-import DivSpinner from '../components/DivSpinner';
-import BackIcon from '../components/BackIcon';
+import { locationActions } from 'vk-apps-frontend/actions';
+import { vkAppsUsersActions } from 'vk-apps-frontend/actions/api';
+import { ROOT_URL } from 'vk-apps-frontend/constants';
+import DivSpinner from 'vk-apps-frontend/components/DivSpinner';
+import BackIcon from 'vk-apps-frontend/components/BackIcon';
 
 const mapStateToProps = state => {
-  const { accessToken } = state.vkAppsTokenReducer;
-  const { vkUserInfo } = state.vkAppsUserReducer;
-  const { vkUsersInfo } = state.vkApiUsersReducer;
-  const { profile } = state.apiProfileReducer;
+  const { vkUserInfo } = state.vkReducer.appsUserReducer;
+  const { user, vkId } = state.apiReducer.vkAppsUsersReducer;
   const { params } = state.locationReducer;
-  const vkAppsUserFetching = state.vkAppsUserReducer.fetching;
-  const vkApiUsersFetching = state.vkApiUsersReducer.fetching;
-  const apiProfileFetching = state.apiProfileReducer.fetching;
+  const vkAppsUsersFetching = state.apiReducer.vkAppsUsersReducer.fetching;
   return {
-    vkUserInfo, vkUsersInfo, profile, vkAppsUserFetching, apiProfileFetching,
-    vkApiUsersFetching, params, accessToken,
+    vkUserInfo, user, params, vkAppsUsersFetching, vkId,
   };
 };
 
@@ -31,30 +28,18 @@ const mapDispatchToProps = dispatch => {
   return {
     goBack: bindActionCreators(locationActions.goBack, dispatch),
     changeLocation: bindActionCreators(locationActions.changeLocation, dispatch),
-    getProfile: bindActionCreators(apiProfileActions.getProfile, dispatch),
-    fetchUsersInfo: bindActionCreators(vkApiActions.fetchUsersInfo, dispatch),
+    getVkAppsUser: bindActionCreators(vkAppsUsersActions.getVkAppsUser, dispatch),
   }
 };
 
 class ShowProfile extends React.Component {
   componentDidMount() {
-    const { id } = this.props.vkUserInfo;
-    const profileId = this.props.params.profileId || id;
-    this.props.getProfile({
-      profile_id: profileId,
-    })
-      .then(() => {
-        const { accessToken } = this.props;
-        this.props.fetchUsersInfo(accessToken, profileId);
-      });
+    const id = this.props.params.profileId || this.props.vkUserInfo;
+    this.props.getVkAppsUser(id);
   }
 
 	render() {
-    const {
-      vkUserInfo, vkUsersInfo, vkAppsUserFetching, apiProfileFetching, vkApiUsersFetching, profile
-    } = this.props;
-    const fetching = vkAppsUserFetching || apiProfileFetching || vkApiUsersFetching;
-    const profileVkInfo = vkUsersInfo[profile.profile_id];
+    const { user, vkId, params, vkAppsUsersFetching } = this.props;
 
 		return (
       <View id={this.props.id} activePanel="profile">
@@ -67,84 +52,81 @@ class ShowProfile extends React.Component {
             Профиль
           </PanelHeader>
 
-          { fetching
+          { vkAppsUsersFetching
             ? (
               <DivSpinner />
             )
-            : profileVkInfo && (
+            : user && (
               <div>
                 <Group>
                   <Cell
                     size="l"
                     multiline
                     description="Здесь можно посмотреть и отредактировать публичную информацию о Вашем профиле"
-                    before={<Avatar size={80} src={profileVkInfo.photo_200} />}
+                    before={<Avatar size={80} src={ROOT_URL + user.avatar} />}
                     asideContent={
-                      (vkUserInfo.id === profile.profile_id) && (
+                      (params.profileId === vkId) && (
                         <HeaderButton onClick={() => this.props.changeLocation('edit_profile')}>
                           <Icon24Write />
                         </HeaderButton>
                       )
                     }
                   >
-                    {`${profileVkInfo.firstName} ${profileVkInfo.lastName}`}
+                    {`${user.first_name} ${user.last_name}`}
                   </Cell>
                 </Group>
                 <Group title="Информация о пользователе">
+                  <Cell multiline description="Дата создания профиля">
+                    <Moment locale="ru" format="D MMMM YYYY">
+                      {user.date_joined || "Не задано"}
+                    </Moment>
+                  </Cell>
                   {
-                    profile.creation_time && (
-                      <Cell multiline description="Дата создания профиля">
-                        <Moment locale="ru" format="D MMMM YYYY">
-                          {profile.creation_time}
-                        </Moment>
-                      </Cell>
-                    )}
-                  {
-                    profile.experience && (
+                    user.experience && (
                       <Cell multiline description="Опыт преподавания">
-                        {profile.experience}
+                        {user.experience}
                       </Cell>
                     )
                   }
                   {
-                    profile.education && (
+                    user.education && (
                       <Cell multiline description="Образование">
-                        {profile.education}
+                        {user.education || "Не задано"}
                       </Cell>
                     )
                   }
                   {
-                    profile.city && (
+                    user.city && (
                       <Cell multiline description="Город">
-                        {profile.city}
+                        {user.city || "Не задано"}
                       </Cell>
                     )
                   }
                   {
-                    profile.district && (
+                    user.district && (
                       <Cell multiline description="Район">
-                        {profile.district}
+                        {user.district}
                       </Cell>
                     )
                   }
                   {
-                    profile.street && (
+                    user.street && (
                       <Cell multiline description="Улица">
-                        {profile.street}
+                        {user.street}
                       </Cell>
                     )
                   }
                   {
-                    profile.metro_station && (
+                    user.metro_station && (
                       <Cell multiline description="Станция метро">
-                        {profile.metro_station}
+                        {user.metro_station}
                       </Cell>
                     )
                   }
                   {
-                    profile.description && (
+                    user.bio && (
                       <Cell multiline description="О себе">
-                        {profile.description}
+                        {user.bio}
                       </Cell>
                     )
                   }
