@@ -9,14 +9,14 @@ import introTwo from 'vk-apps-frontend/assets/images/intro_two.png'
 import introThree from 'vk-apps-frontend/assets/images/intro_three.png'
 
 import { locationActions } from 'vk-apps-frontend/actions';
-import { usersActions, vkAppsUsersActions } from 'vk-apps-frontend/actions/api';
-import PopoutDiv from 'vk-apps-frontend/components/PopoutDiv';
+import { vkAppsUsersActions } from 'vk-apps-frontend/actions/api';
 
 const mapStateToProps = state => {
   const { vkUserInfo } = state.vkReducer.appsUserReducer;
-  const { user } = state.apiReducer.usersReducer;
+  const { user } = state.apiReducer.vkAppsUsersReducer;
+  const fetching = state.apiReducer.vkAppsUsersReducer.fetching || state.vkReducer.appsUserReducer.fetching;
   return {
-    vkUserInfo, user,
+    vkUserInfo, user, fetching,
   };
 };
 
@@ -24,8 +24,8 @@ const mapDispatchToProps = dispatch => {
   return {
     changeLocation: options =>
       dispatch(locationActions.changeLocation(options)),
-    getUser: (id, options) =>
-      dispatch(usersActions.getUser(id, options)),
+    getVkAppsUser: (id, options) =>
+      dispatch(vkAppsUsersActions.getVkAppsUser(id, options)),
     createVkAppsUser: options =>
       dispatch(vkAppsUsersActions.createVkAppsUser(options)),
   };
@@ -47,36 +47,20 @@ const IntroImage = styled.img.attrs({className: 'intro-image'})``;
 class Start extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      popout: null,
-    };
 
     this.goToProfile = this.goToProfile.bind(this);
     this.goToVacanciesSearch = this.goToVacanciesSearch.bind(this);
   }
 
-  componentDidUpdate(prevProps) {
+  async componentDidUpdate(prevProps) {
     if (this.props.vkUserInfo.id === prevProps.vkUserInfo.id) {
       return;
     }
     const { id } = this.props.vkUserInfo;
-    this.setState({
-      popout: <PopoutDiv><ScreenSpinner /></PopoutDiv>
-    });
-    this.props.getUser({
-      id: id,
-    })
-      .then(() => {
-        if (this.props.user.id) {
-          return Promise.resolve();
-        }
-        return this.props.createVkAppsUser({})
-      })
-      .then(() => {
-        this.setState({
-          popout: null
-        });
-      });
+    await this.props.getVkAppsUser(id);
+    if (!this.props.user) {
+      await this.props.createVkAppsUser();
+    }
   }
 
   goToVacanciesSearch() {
@@ -89,7 +73,7 @@ class Start extends React.Component {
 
   render() {
     return (
-      <View popout={this.state.popout} id={this.props.id} activePanel="home">
+      <View popout={this.props.fetching} id={this.props.id} activePanel="home">
         <Panel id="home" theme="white" style={{ display: 'flex' }}>
           <PanelHeader>
             Поиск репетиторов
