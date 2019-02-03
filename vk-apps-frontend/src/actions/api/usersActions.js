@@ -93,9 +93,33 @@ const deleteUser = (id, options = {}) => {
   };
 };
 
+const uploadAvatar = (id, options = {}) => {
+  return async dispatch => {
+    dispatch({
+      type: usersConstants.UPLOAD_AVATAR_REQUEST,
+    });
+    return makeApiRequest(`users/${id}/upload_avatar/`, 'patch', options, true)
+      .then(
+        response => {
+          dispatch({
+            type: usersConstants.UPLOAD_AVATAR_SUCCESS,
+            payload: response,
+          })
+        },
+        errors => {
+          dispatch({
+            type: usersConstants.UPLOAD_AVATAR_FAILURE,
+            payload: errors,
+          });
+        }
+      )
+  };
+};
+
 export const usersActions = {
   getUsersList,
   getUser,
   updateUser,
   deleteUser,
+  uploadAvatar,
 };

@@ -19,6 +19,7 @@ const usersReducer = (state = initialState, action) => {
     case usersConstants.GET_USER_REQUEST:
     case usersConstants.UPDATE_USER_REQUEST:
     case usersConstants.DELETE_USER_REQUEST:
+    case usersConstants.UPLOAD_AVATAR_REQUEST:
       return state.merge({
         fetching: true,
       });
@@ -43,6 +44,7 @@ const usersReducer = (state = initialState, action) => {
     case usersConstants.CREATE_USER_SUCCESS:
     case usersConstants.UPDATE_USER_SUCCESS:
     case usersConstants.DELETE_USER_SUCCESS:
+    case usersConstants.UPLOAD_AVATAR_SUCCESS:
       return state.merge({
         fetching: false,
         errors: null,
@@ -53,6 +55,7 @@ const usersReducer = (state = initialState, action) => {
     case usersConstants.GET_USER_FAILURE:
     case usersConstants.UPDATE_USER_FAILURE:
     case usersConstants.DELETE_USER_FAILURE:
+    case usersConstants.UPLOAD_AVATAR_FAILURE:
       return state.merge({
         errors: action.payload,
         fetching: false,
