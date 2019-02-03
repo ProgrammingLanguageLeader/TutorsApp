@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { API_URL, API_REQUEST_HEADERS } from 'vk-apps-frontend/constants/api';
+import { API_URL } from 'vk-apps-frontend/constants/api';
 
 class ApiManager {
   constructor(vkExecutionParams, sign) {
@@ -27,19 +27,25 @@ class ApiManager {
     return ApiManager.instance;
   }
 
-  async makeRequest(endpoint, method, options) {
+  async makeRequest(endpoint, method, options, useFormData = false) {
     const url = `${API_URL}/${endpoint}`;
-    const optionsWithSign = {
+    let optionsWithSign = {
       ...options,
       ...this.vkExecutionParams,
       sign: this.sign,
     };
+    if (useFormData) {
+      let formData = new FormData();
+      for (let key in optionsWithSign) {
+        formData.append(key, optionsWithSign[key]);
+      }
+      optionsWithSign = formData;
+    }
 
     if (method.toLowerCase() === 'get') {
       return axios({
         url: url,
         method: method,
-        headers: API_REQUEST_HEADERS,
         params: optionsWithSign,
         cancelToken: new axios.CancelToken(cancelFunction => {
           ApiManager.cancelRequests = cancelFunction;
@@ -52,10 +58,10 @@ class ApiManager {
           return result.data;
         })
     }
+
     return axios({
       url: url,
       method: method,
-      headers: API_REQUEST_HEADERS,
       data: optionsWithSign,
       cancelToken: new axios.CancelToken(cancelFunction => {
         ApiManager.cancelRequests = cancelFunction;
