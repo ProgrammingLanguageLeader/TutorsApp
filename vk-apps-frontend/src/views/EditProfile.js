@@ -3,7 +3,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import {
   View, Panel, PanelHeader, Cell, Avatar, Button, Input, FormLayout,
-  Textarea, HeaderButton, Group, FormStatus
+  Textarea, HeaderButton, Group, FormStatus, File, Progress, Div
 } from '@vkontakte/vkui';
 
 import BackIcon from 'vk-apps-frontend/components/BackIcon';
@@ -12,6 +12,8 @@ import DivSpinner from 'vk-apps-frontend/components/DivSpinner';
 import { ROOT_URL } from 'vk-apps-frontend/constants';
 import { locationActions  } from 'vk-apps-frontend/actions';
 import { usersActions, vkAppsUsersActions } from 'vk-apps-frontend/actions/api';
+
+import UploadAvatarForm from 'vk-apps-frontend/forms/UploadAvatarForm';
 
 const mapStateToProps = state => {
   const { vkUserInfo } = state.vkReducer.appsUserReducer;
@@ -120,6 +122,9 @@ class EditProfile extends React.Component {
                   >
                     {`${user.first_name} ${user.last_name}`}
                   </Cell>
+                </Group>
+                <Group title="Изображение профиля">
+                  <UploadAvatarForm />
                 </Group>
                 <Group title="Информация о пользователе">
                   <FormLayout>
