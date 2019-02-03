@@ -34,12 +34,13 @@ const mapDispatchToProps = dispatch => {
 
 class ShowProfile extends React.Component {
   componentDidMount() {
-    const id = this.props.params.profileId || this.props.vkUserInfo;
+    const id = this.props.params.profileId || this.props.vkUserInfo.id;
     this.props.getVkAppsUser(id);
   }
 
 	render() {
-    const { user, vkId, params, vkAppsUsersFetching } = this.props;
+    const { user, vkId, params, vkAppsUsersFetching, vkUserInfo } = this.props;
+    const isProfileEditable = params.profileId === vkId || vkUserInfo.id === vkId;
 
 		return (
       <View id={this.props.id} activePanel="profile">
@@ -65,7 +66,7 @@ class ShowProfile extends React.Component {
                     description="Здесь можно посмотреть и отредактировать публичную информацию о Вашем профиле"
                     before={<Avatar size={80} src={ROOT_URL + user.avatar} />}
                     asideContent={
-                      (params.profileId === vkId) && (
+                      isProfileEditable && (
                         <HeaderButton onClick={() => this.props.changeLocation('edit_profile')}>
                           <Icon24Write />
                         </HeaderButton>
