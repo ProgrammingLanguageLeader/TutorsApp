@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { View, Panel, PanelHeader, Cell, Avatar, HeaderButton, Group, Div } from '@vkontakte/vkui';
@@ -44,6 +45,10 @@ class EditProfile extends React.Component {
   componentDidMount() {
     const { id } = this.props.vkUserInfo;
     this.props.getVkAppsUser(id);
+  }
+
+  componentDidUpdate() {
+    ReactDOM.findDOMNode(this).scrollIntoView();
   }
 
   async handleUploadAvatarFormSubmit(values) {
