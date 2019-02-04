@@ -1,12 +1,11 @@
 import React from 'react';
-import { bindActionCreators } from "redux";
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import {
-  View, Panel, PanelHeader, Cell, HeaderButton, Group, List
-} from '@vkontakte/vkui';
+import { View, Panel, PanelHeader, Cell, HeaderButton, Group, List } from '@vkontakte/vkui';
 
-import { locationActions } from '../actions';
-import BackIcon from '../components/BackIcon';
+import { locationActions } from 'vk-apps-frontend/actions';
+
+import BackIcon from 'vk-apps-frontend/components/BackIcon';
 
 const mapStateToProps = state => {
   return {};
@@ -50,6 +49,9 @@ class MainMenu extends React.Component {
               </Cell>
               <Cell expandable onClick={() => this.props.changeLocation('show_profile_vacancies')}>
                 Просмотреть мои вакансии
+              </Cell>
+              <Cell expandable onClick={() => this.props.changeLocation('create_vacancy')}>
+                Создать вакансию
               </Cell>
             </List>
           </Group>
