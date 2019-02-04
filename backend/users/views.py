@@ -57,13 +57,25 @@ class UsersViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['patch'], name='Upload Avatar',
             parser_classes=(MultiPartParser, ))
     def upload_avatar(self, request, pk=None, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST
+            )
         user = self.get_object()
         avatar = request.data['avatar']
-        user.avatar.save(avatar.name, avatar, save=True)
+        user.avatar.save('', avatar, save=True)
         return Response(status=status.HTTP_200_OK)
 
     @action(detail=True, methods=['delete'], name='Delete Avatar')
     def delete_avatar(self, request, pk=None, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST
+            )
         user = self.get_object()
         user.avatar.delete(save=True)
         return Response(status=status.HTTP_200_OK)
