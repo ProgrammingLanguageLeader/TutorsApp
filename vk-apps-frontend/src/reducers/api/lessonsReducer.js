@@ -10,6 +10,7 @@ const initialState = Immutable({
   lessonsPrevious: null,
   fetching: false,
   errors: null,
+  success: null,
 });
 
 const lessonsReducer = (state = initialState, action) => {
@@ -27,6 +28,7 @@ const lessonsReducer = (state = initialState, action) => {
     case lessonsConstants.UPDATE_LESSON_SUCCESS:
     case lessonsConstants.DELETE_LESSON_SUCCESS:
       return state.merge({
+        success: true,
         errors: null,
         fetching: false,
       });
@@ -54,7 +56,7 @@ const lessonsReducer = (state = initialState, action) => {
     case lessonsConstants.UPDATE_LESSON_FAILURE:
     case lessonsConstants.DELETE_LESSON_FAILURE:
       return state.merge({
-        errors: action.payload,
+        errors: action.payload.response.data,
         fetching: false,
       });
 

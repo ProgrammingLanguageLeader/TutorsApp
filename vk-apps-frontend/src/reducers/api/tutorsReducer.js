@@ -8,12 +8,14 @@ const initialState = Immutable({
   studentRequestsCount: 0,
   studentRequestsNext: null,
   studentRequestsPrevious: null,
+  studentRequestSuccess: null,
 
   student: null,
   students: [],
   studentCount: 0,
   studentNext: null,
   studentPrevious: null,
+  studentSuccess: null,
 
   fetching: false,
   errors: null,
@@ -70,8 +72,15 @@ const tutorsReducer = (state = initialState, action) => {
     case tutorsConstants.CREATE_STUDENT_REQUEST_SUCCESS:
     case tutorsConstants.DELETE_STUDENT_REQUEST_SUCCESS:
     case tutorsConstants.ACCEPT_STUDENT_REQUEST_SUCCESS:
+      return state.merge({
+        studentRequestSuccess: true,
+        fetching: false,
+        errors: null,
+      });
+
     case tutorsConstants.DELETE_STUDENT_SUCCESS:
       return state.merge({
+        studentSuccess: true,
         fetching: false,
         errors: null,
       });

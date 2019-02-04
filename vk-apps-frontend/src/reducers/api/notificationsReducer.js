@@ -10,6 +10,7 @@ const initialState = Immutable({
   notificationsPrevious: null,
   fetching: false,
   errors: null,
+  success: null,
 });
 
 const notificationsReducer = (state = initialState, action) => {
@@ -23,6 +24,7 @@ const notificationsReducer = (state = initialState, action) => {
 
     case notificationsConstants.SET_UNREAD_NOTIFICATION_SUCCESS:
       return state.merge({
+        success: true,
         errors: null,
         fetching: false,
       });

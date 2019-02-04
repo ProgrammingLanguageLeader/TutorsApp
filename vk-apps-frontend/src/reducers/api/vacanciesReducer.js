@@ -10,6 +10,7 @@ const initialState = Immutable({
   vacanciesPrevious: null,
   fetching: false,
   errors: null,
+  success: null,
 });
 
 const vacanciesReducer = (state = initialState, action) => {
@@ -27,6 +28,7 @@ const vacanciesReducer = (state = initialState, action) => {
     case vacanciesConstants.UPDATE_VACANCY_SUCCESS:
     case vacanciesConstants.DELETE_VACANCY_SUCCESS:
       return state.merge({
+        success: true,
         errors: null,
         fetching: false,
       });
@@ -54,7 +56,8 @@ const vacanciesReducer = (state = initialState, action) => {
     case vacanciesConstants.UPDATE_VACANCY_FAILURE:
     case vacanciesConstants.DELETE_VACANCY_FAILURE:
       return state.merge({
-        errors: action.payload,
+        errors: action.payload.response.data,
+        success: null,
         fetching: false,
       });
 
