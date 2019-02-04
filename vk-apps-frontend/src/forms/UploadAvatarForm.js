@@ -1,80 +1,54 @@
 import React from 'react';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
 
-import { Button, Div, File, FormLayout, Spinner } from '@vkontakte/vkui';
+import { Button, Div, File, FormLayout, FormStatus } from '@vkontakte/vkui';
 
 import Icon24Camera from '@vkontakte/icons/dist/24/camera';
 import Icon24Upload from '@vkontakte/icons/dist/24/upload';
 
-import { usersActions, vkAppsUsersActions } from 'vk-apps-frontend/actions/api';
-
-const mapStateToProps = state => {
-  const { vkUserInfo } = state.vkReducer.appsUserReducer;
-  const { user } = state.apiReducer.vkAppsUsersReducer;
-  const { fetching } = state.apiReducer.usersReducer;
-  return {
-    fetching, vkUserInfo, user,
-  };
-};
-
-const mapDispatchToProps = dispatch => {
-  return {
-    uploadAvatar: bindActionCreators(usersActions.uploadAvatar, dispatch),
-    getVkAppsUser: bindActionCreators(vkAppsUsersActions.getVkAppsUser, dispatch),
-  };
-};
+import DivSpinner from 'vk-apps-frontend/components/DivSpinner';
 
 class UploadAvatarForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      avatarFile: null,
-      avatar: null,
+      avatarThumb: null,
     };
-
-    this.handleFileChange = this.handleFileChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleFileChange(event) {
-    const avatarFile = event.target.files[0];
-    this.setState({
-      avatarFile,
-    });
+  async componentDidUpdate(prevProps) {
+    if (prevProps.values.avatar === this.props.values.avatar) {
+      return;
+    }
+    const { avatar } = this.props.values;
     const fileReader = new FileReader();
     fileReader.onload = event => {
       this.setState({
-        avatar: event.target.result,
+        avatarThumb: event.target.result,
       });
     };
-    fileReader.readAsDataURL(avatarFile);
-  }
-
-  async handleSubmit(event) {
-    event.preventDefault();
-
-    const vkId = this.props.vkUserInfo.id;
-    await this.props.getVkAppsUser(vkId);
-
-    const { user } = this.props;
-    if (user) {
-      const { avatarFile } = this.state;
-      await this.props.uploadAvatar(user.id, {
-        avatar: avatarFile,
-      });
-    }
+    fileReader.readAsDataURL(avatar);
   }
 
   render() {
-    const { avatar } = this.state;
-    const { fetching } = this.props;
+    const {
+      errors,
+      isSubmitting,
+      values,
+      handleSubmit,
+      setFieldValue
+    } = this.props;
+    const { avatarThumb } = this.state;
 
     return (
       <FormLayout>
+        { Object.keys(errors).length > 0 && (
+          <FormStatus title="Ошибка" state="error">
+            Проверьте заполненные поля: {JSON.stringify(errors)}
+          </FormStatus>
+        )}
         {
-          fetching ? (
-            <Spinner size="large" style={{ marginTop: 20 }} />
+          isSubmitting ? (
+            <DivSpinner />
           ) : (
             <div>
               <File
@@ -82,21 +56,27 @@ class UploadAvatarForm extends React.Component {
                 top="Аватар"
                 before={<Icon24Camera />}
                 size="l"
-                onChange={this.handleFileChange}
+                onChange={event => {
+                  setFieldValue("avatar", event.currentTarget.files[0]);
+                }}
               >
                 Выбрать из галереи
               </File>
 
-              { avatar && (
-                <Div>
-                  <img width={200} height={200} src={avatar} alt="Выбранное изображение" />
-                </Div>
-              )}
-
-              { avatar && (
-                <Button before={<Icon24Upload />} size="l" onClick={this.handleSubmit}>
-                  Загрузить
-                </Button>
+              { values.avatar && (
+                <div>
+                  <Div>
+                    <div>Выбранное изображение: </div>
+                    <img
+                      width={200}
+                      src={avatarThumb}
+                      alt="Выбранное изображение"
+                    />
+                  </Div>
+                  <Button before={<Icon24Upload />} size="l" onClick={handleSubmit}>
+                    Загрузить
+                  </Button>
+                </div>
               )}
             </div>
           )
@@ -106,4 +86,4 @@ class UploadAvatarForm extends React.Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(UploadAvatarForm);
+export default UploadAvatarForm;
