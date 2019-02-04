@@ -1,27 +1,26 @@
 import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import {
-  View, Panel, PanelHeader, Cell, Avatar, Button, Input, FormLayout,
-  Textarea, HeaderButton, Group, FormStatus, File, Progress, Div
-} from '@vkontakte/vkui';
+import { View, Panel, PanelHeader, Cell, Avatar, HeaderButton, Group, Div } from '@vkontakte/vkui';
+import { Formik } from 'formik';
 
 import BackIcon from 'vk-apps-frontend/components/BackIcon';
-import DivSpinner from 'vk-apps-frontend/components/DivSpinner';
+import SuccessfulFormStatus from 'vk-apps-frontend/components/SuccessfulFormStatus';
 
 import { ROOT_URL } from 'vk-apps-frontend/constants';
-import { locationActions  } from 'vk-apps-frontend/actions';
+import { locationActions } from 'vk-apps-frontend/actions';
 import { usersActions, vkAppsUsersActions } from 'vk-apps-frontend/actions/api';
 
 import UploadAvatarForm from 'vk-apps-frontend/forms/UploadAvatarForm';
+import EditProfileForm from 'vk-apps-frontend/forms/EditProfileForm';
 
 const mapStateToProps = state => {
   const { vkUserInfo } = state.vkReducer.appsUserReducer;
   const { user, vkId } = state.apiReducer.vkAppsUsersReducer;
   const fetching = state.apiReducer.vkAppsUsersReducer.fetching || state.apiReducer.usersReducer.fetching;
-  const { errors } = state.apiReducer.usersReducer;
+  const { errors, success } = state.apiReducer.usersReducer;
   return {
-    vkUserInfo, user, fetching, errors, vkId,
+    vkUserInfo, user, fetching, errors, vkId, success,
   };
 };
 
@@ -31,26 +30,15 @@ const mapDispatchToProps = dispatch => {
     changeLocation: bindActionCreators(locationActions.changeLocation, dispatch),
     getVkAppsUser: bindActionCreators(vkAppsUsersActions.getVkAppsUser, dispatch),
     updateUser: bindActionCreators(usersActions.updateUser, dispatch),
+    uploadAvatar: bindActionCreators(usersActions.uploadAvatar, dispatch),
   }
 };
 
 class EditProfile extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      first_name: '',
-      last_name: '',
-      experience: '',
-      education: '',
-      city: '',
-      district: '',
-      street: '',
-      metro_station: '',
-      bio: ''
-    };
-
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleEditProfileSubmit = this.handleEditProfileSubmit.bind(this);
+    this.handleUploadAvatarFormSubmit = this.handleUploadAvatarFormSubmit.bind(this);
   }
 
   componentDidMount() {
@@ -58,41 +46,48 @@ class EditProfile extends React.Component {
     this.props.getVkAppsUser(id);
   }
 
-  componentWillReceiveProps(nextProps) {
-    const { first_name, last_name, experience, education, city, district, street, metro_station, bio } = nextProps.user;
-    this.setState({ first_name, last_name, experience, education, city, district, street, metro_station, bio });
-  }
-
-  handleChange(event) {
-    const target = event.target;
-    const value = target.type === 'checkbox' ? target.checked : target.value;
-    const name = target.name;
-
-    this.setState({
-      [name]: value
-    });
-  }
-
-  async handleSubmit(event) {
-    event.preventDefault();
-
+  async handleUploadAvatarFormSubmit(values) {
     try {
       const { id } = this.props.user;
-      await this.props.updateUser(id, {
-        ...this.state
+      const { avatar } = values;
+      await this.props.uploadAvatar(id, {
+        avatar,
       });
+      const { vkId } = this.props;
+      await this.props.getVkAppsUser(vkId);
     }
     catch (exception) {
       console.log(exception);
     }
+  }
 
-    const { vkId } = this.props;
-    await this.props.getVkAppsUser(vkId);
+  async handleEditProfileSubmit(values) {
+    try {
+      const { id } = this.props.user;
+      await this.props.updateUser(id, {
+        ...values
+      });
+      const { vkId } = this.props;
+      await this.props.getVkAppsUser(vkId);
+    }
+    catch (exception) {
+      console.log(exception);
+    }
   }
 
   render() {
-    const { user, fetching, errors } = this.props;
-    const { experience, education, city, district, street, metro_station, bio } = this.state;
+    const { user, success } = this.props;
+    const {
+      first_name,
+      last_name,
+      experience,
+      education,
+      city,
+      district,
+      street,
+      metro_station,
+      bio
+    } = user;
 
     return (
       <View id={this.props.id} activePanel="edit_profile">
@@ -106,93 +101,60 @@ class EditProfile extends React.Component {
           >
             Изменение профиля
           </PanelHeader>
-          {
-            fetching
-            ? (
-              <DivSpinner />
-            )
-            : (
-              <div>
-                <Group>
-                  <Cell
-                    size="l"
-                    multiline
-                    description="Здесь можно посмотреть и отредактировать публичную информацию о Вашем профиле"
-                    before={<Avatar size={80} src={ROOT_URL + user.avatar} />}
-                  >
-                    {`${user.first_name} ${user.last_name}`}
-                  </Cell>
-                </Group>
-                <Group title="Изображение профиля">
-                  <UploadAvatarForm />
-                </Group>
-                <Group title="Информация о пользователе">
-                  <FormLayout>
-                    {
-                      errors
-                      ? (
-                        <FormStatus title="Некорректные данные" state="error">
-                          Проверьте заполненные поля: {JSON.stringify(errors)}
-                        </FormStatus>
-                      )
-                      : null
-                    }
-                    <Input
-                      name="experience"
-                      top="Опыт преподавания"
-                      value={experience ? experience : ""}
-                      onChange={this.handleChange}
-                    />
+          <Group>
+            <Cell
+              size="l"
+              multiline
+              description="Здесь можно посмотреть и отредактировать публичную информацию о Вашем профиле"
+              before={<Avatar size={80} src={ROOT_URL + user.avatar} />}
+            >
+              {`${user.first_name} ${user.last_name}`}
+            </Cell>
+          </Group>
 
-                    <Input
-                      name="education"
-                      top="Образование"
-                      value={education ? education : ""}
-                      onChange={this.handleChange}
-                    />
+          { success && (
+            <Group>
+              <Div>
+                <SuccessfulFormStatus title="Успешно" />
+              </Div>
+            </Group>
+          )}
 
-                    <Input
-                      name="city"
-                      top="Город"
-                      value={city ? city : ""}
-                      onChange={this.handleChange}
-                    />
+          <Group title="Изображение профиля">
+            <Formik
+              initialValues={{
+                avatar: null,
+              }}
+              component={UploadAvatarForm}
+              onSubmit={ async (values, actions) => {
+                await this.handleUploadAvatarFormSubmit(values);
+                actions.setSubmitting(false);
+                actions.setErrors(this.props.errors || {})
+              }}
+            />
+          </Group>
 
-                    <Input
-                      name="district"
-                      top="Район"
-                      value={district ? district : ""}
-                      onChange={this.handleChange}
-                    />
-
-                    <Input
-                      name="street"
-                      top="Улица"
-                      value={street ? street : ""}
-                      onChange={this.handleChange}
-                    />
-
-                    <Input
-                      name="metro_station"
-                      top="Станция метро"
-                      value={metro_station ? metro_station : ""}
-                      onChange={this.handleChange}
-                    />
-
-                    <Textarea
-                      name="bio"
-                      top="О себе"
-                      value={bio ? bio : ""}
-                      onChange={this.handleChange}
-                    />
-                    <Button size="xl" onClick={this.handleSubmit}>
-                      Сохранить
-                    </Button>
-                  </FormLayout>
-                </Group>
-              </div>
-            )
-          }
+          <Group title="Информация о пользователе">
+            <Formik
+              initialValues={{
+                first_name,
+                last_name,
+                experience,
+                education,
+                city,
+                district,
+                street,
+                metro_station,
+                bio,
+              }}
+              component={EditProfileForm}
+              onSubmit={ async (values, actions) => {
+                await this.handleEditProfileSubmit(values);
+                actions.setSubmitting(false);
+                actions.setErrors(this.props.errors || {});
+              }}
+            />
+          </Group>
         </Panel>
       </View>
     );
