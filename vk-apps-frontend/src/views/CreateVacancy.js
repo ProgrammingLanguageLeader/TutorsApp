@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Formik } from 'formik';
@@ -9,44 +10,40 @@ import {
   PanelHeader,
   HeaderButton,
   Cell,
-  Group
+  Group,
+  Div
 } from '@vkontakte/vkui';
 
 import BackIcon from 'vk-apps-frontend/components/BackIcon';
+import SuccessfulFormStatus from 'vk-apps-frontend/components/SuccessfulFormStatus';
 
 import CreateVacancyForm from 'vk-apps-frontend/forms/CreateVacancyForm';
 
 import { locationActions } from 'vk-apps-frontend/actions';
-// import { vacanciesActions } from 'vk-apps-frontend/actions/api';
+import { vacanciesActions } from 'vk-apps-frontend/actions/api';
 
 const mapStateToProps = state => {
-  const { errors } = state.apiReducer.vacanciesReducer;
+  const { errors, success } = state.apiReducer.vacanciesReducer;
   return {
-    errors,
+    errors, success,
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
     goBack: bindActionCreators(locationActions.goBack, dispatch),
+    createVacancy: bindActionCreators(vacanciesActions.createVacancy, dispatch),
   };
 };
 
 class CreateVacancy extends React.Component {
   constructor(props) {
     super(props);
-    this.handleChange = this.handleChange.bind(this);
     this.handleCreateVacancyFormSubmit = this.handleCreateVacancyFormSubmit.bind(this);
   }
-  
-  handleChange(event) {
-    const target = event.target;
-    const value = target.type === 'checkbox' ? target.checked : target.value;
-    const name = target.name;
 
-    this.setState({
-      [name]: value
-    });
+  componentDidUpdate() {
+    ReactDOM.findDOMNode(this).scrollIntoView();
   }
 
   async handleCreateVacancyFormSubmit(values) {
@@ -56,7 +53,7 @@ class CreateVacancy extends React.Component {
   }
 
   render() {
-    const { errors } = this.props;
+    const { success } = this.props;
 
     return (
       <View id={this.props.id} activePanel="create_vacancy">
@@ -69,10 +66,24 @@ class CreateVacancy extends React.Component {
             }
           >
             Создание вакансии
-          </PanelHeader>
+          </PanelHeader >
+
+          { success && (
+            <Group>
+              <Div>
+                <SuccessfulFormStatus title="Успешно" />
+              </Div>
+            </Group>
+          )}
+
           <Group title="Заполняемые поля">
             <Formik
               component={CreateVacancyForm}
+              onSubmit={ async (values, action) => {
+                await this.handleCreateVacancyFormSubmit(values);
+                action.setSubmitting(false);
+                action.setErrors(this.props.errors || {});
+              }}
             />
           </Group>
         </Panel>
