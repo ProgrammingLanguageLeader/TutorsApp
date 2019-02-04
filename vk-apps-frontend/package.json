@@ -51,6 +51,7 @@
     "@vkontakte/vkui-connect": "^1.1.3",
     "axios": "^0.18.0",
     "core-js": "^2.5.7",
+    "formik": "^1.4.3",
     "moment": "^2.22.2",
     "rc-calendar": "^9.8.1",
     "react": "^16.7.0",
