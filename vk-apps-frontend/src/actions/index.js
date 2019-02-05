@@ -1,2 +1,2 @@
 export * from './filterActions';
-export * from './locationActions';
+export * from './currentUserActions';

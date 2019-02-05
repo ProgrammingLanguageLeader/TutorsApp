@@ -3,7 +3,7 @@ import Immutable from 'seamless-immutable';
 import { appsConstants } from 'vk-apps-frontend/constants/vk';
 
 const initialState = Immutable({
-  vkUserInfo: {},
+  vkUserInfo: null,
   errors: null,
   fetching: false,
 });

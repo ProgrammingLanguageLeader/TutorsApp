@@ -42,7 +42,7 @@ const vacanciesReducer = (state = initialState, action) => {
 
     case vacanciesConstants.SEARCH_VACANCIES_SUCCESS:
       return state.merge({
-        vacancies: action.payload,
+        vacancies: action.payload.results,
         vacanciesCount: action.payload.count,
         vacanciesNext: action.payload.next,
         vacanciesPrevious: action.payload.previous,
