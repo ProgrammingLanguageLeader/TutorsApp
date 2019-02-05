@@ -18,7 +18,7 @@ import UserEdit from 'vk-apps-frontend/views/UserEdit';
 import Schedule from 'vk-apps-frontend/views/Schedule';
 import Filter from 'vk-apps-frontend/views/Filter';
 import Notifications from 'vk-apps-frontend/views/Notifications';
-import ShowVacancy from 'vk-apps-frontend/views/ShowVacancy';
+import Vacancy from 'vk-apps-frontend/views/Vacancy';
 import MainMenu from 'vk-apps-frontend/views/MainMenu';
 
 import { appsActions } from 'vk-apps-frontend/actions/vk';
@@ -176,7 +176,7 @@ class App extends React.Component {
 
           <Route path="/vacancy/:id" component={
             withTabbar(
-              ShowVacancy,
+              Vacancy,
               <Tabbar userId={user ? user.id : null} selectedItem={"vacancy"} />,
               popout
             )}
