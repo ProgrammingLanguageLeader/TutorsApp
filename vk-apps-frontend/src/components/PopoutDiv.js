@@ -1,5 +1,6 @@
 import styled from 'styled-components';
-import { Div } from '@vkontakte/vkui';
+
+import Div from '@vkontakte/vkui/dist/components/Div/Div';
 
 const PopoutDiv = styled(Div)`
   background-color: rgba(255, 255, 255, 0.8);

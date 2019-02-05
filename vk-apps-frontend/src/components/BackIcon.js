@@ -1,5 +1,7 @@
 import React from 'react';
-import { platform, IOS } from '@vkontakte/vkui';
+
+import { platform, IOS } from '@vkontakte/vkui/dist/lib/platform';
+
 import Icon28ChevronBack from '@vkontakte/icons/dist/28/chevron_back';
 import Icon24Back from '@vkontakte/icons/dist/24/back';
 

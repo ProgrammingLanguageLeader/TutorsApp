@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { FormStatus } from '@vkontakte/vkui';
+import FormStatus from '@vkontakte/vkui/dist/components/FormStatus/FormStatus';
 
 const SuccessfulFormStatus = styled(FormStatus).attrs({
   state: "default"
