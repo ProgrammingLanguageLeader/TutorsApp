@@ -2,6 +2,7 @@ from django.db.models import Q
 
 from rest_framework import viewsets
 
+from lessons.filters import LessonFilter
 from lessons.models import Lesson
 from lessons.permissions import IsTutorOrIsStudentAndReadOnly
 from lessons.serializer import LessonSerializer, CreateLessonSerializer, \
@@ -31,6 +32,7 @@ class LessonViewSet(viewsets.ModelViewSet):
     queryset = Lesson.objects.all()
     permission_classes = (IsTutorOrIsStudentAndReadOnly, )
     serializer_class = LessonSerializer
+    filter_class = LessonFilter
 
     def get_serializer_class(self):
         if self.action == 'create':
