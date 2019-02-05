@@ -5,6 +5,8 @@ from django.utils import timezone
 from rest_framework import serializers
 from rest_framework.fields import CurrentUserDefault
 
+from users.serializers import UserSerializer
+
 from tutors.models import TutorStudents
 
 from lessons.models import Lesson
@@ -61,3 +63,8 @@ class LessonSerializer(serializers.ModelSerializer):
 
 class CreateLessonSerializer(LessonSerializer):
     tutor = serializers.HiddenField(default=CurrentUserDefault())
+
+
+class GetLessonSerializer(LessonSerializer):
+    tutor = UserSerializer()
+    student = UserSerializer()
