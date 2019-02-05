@@ -1,38 +1,47 @@
 import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { HashRouter as Router, Switch, Redirect, Route } from 'react-router-dom';
+
 import '@vkontakte/vkui/dist/vkui.css';
-import { Root, Epic, Tabbar, TabbarItem, PopoutWrapper, Div, Button, ScreenSpinner } from '@vkontakte/vkui';
+import PopoutWrapper from '@vkontakte/vkui/dist/components/PopoutWrapper/PopoutWrapper';
+import Div from '@vkontakte/vkui/dist/components/Div/Div';
+import Button from '@vkontakte/vkui/dist/components/Button/Button';
+import ScreenSpinner from '@vkontakte/vkui/dist/components/ScreenSpinner/ScreenSpinner';
 
-import Icon28Newsfeed from '@vkontakte/icons/dist/28/newsfeed';
-import Icon28Search from '@vkontakte/icons/dist/28/search';
-import Icon28User from '@vkontakte/icons/dist/28/user';
-import Icon28Notification from '@vkontakte/icons/dist/28/notification';
-import Icon28Menu from '@vkontakte/icons/dist/28/menu';
-
-import SearchVacancies from 'vk-apps-frontend/views/SearchVacancies';
-import ShowProfile from 'vk-apps-frontend/views/ShowProfile';
-import CreateVacancy from 'vk-apps-frontend/views/CreateVacancy';
-import EditProfile from 'vk-apps-frontend/views/EditProfile';
+import withTabbar from 'vk-apps-frontend/views/withTabbar';
+import Home from 'vk-apps-frontend/views/Home';
+import User from 'vk-apps-frontend/views/User';
+import Vacancies from 'vk-apps-frontend/views/Vacancies';
+import CreateVacancy from 'vk-apps-frontend/views/VacancyCreate';
+import UserEdit from 'vk-apps-frontend/views/UserEdit';
 import Schedule from 'vk-apps-frontend/views/Schedule';
 import Filter from 'vk-apps-frontend/views/Filter';
-import Start from 'vk-apps-frontend/views/Start';
 import Notifications from 'vk-apps-frontend/views/Notifications';
-import MoneyTransfer from 'vk-apps-frontend/views/MoneyTransfer';
 import ShowVacancy from 'vk-apps-frontend/views/ShowVacancy';
 import MainMenu from 'vk-apps-frontend/views/MainMenu';
 
-import { locationActions } from 'vk-apps-frontend/actions';
 import { appsActions } from 'vk-apps-frontend/actions/vk';
+import { currentUserActions } from 'vk-apps-frontend/actions';
+import { vkAppsUsersActions } from 'vk-apps-frontend/actions/api';
+
 import PopoutDiv from 'vk-apps-frontend/components/PopoutDiv';
+import Tabbar from 'vk-apps-frontend/components/Tabbar';
 
 const mapStateToProps = state => {
-  const { activeView, activePanel } = state.locationReducer;
   const { accessToken } = state.vkReducer.appsTokenReducer;
   const { vkUserInfo } = state.vkReducer.appsUserReducer;
-  const vkAppsTokenFetching = state.vkReducer.appsTokenReducer.fetching;
+  const fetching = state.apiReducer.vkAppsUsersReducer.fetching
+    || state.vkReducer.appsUserReducer.fetching
+    || state.vkReducer.appsTokenReducer.fetching;
+  const { vkAppsUsersReducer } = state.apiReducer;
+  const { currentUserReducer } = state;
   return {
-    activeView, accessToken, activePanel, vkAppsTokenFetching, vkUserInfo
+    accessToken,
+    fetching,
+    vkUserInfo,
+    vkAppsUsersReducer,
+    currentUserReducer,
   };
 };
 
@@ -41,95 +50,111 @@ const mapDispatchToProps = dispatch => {
     init: bindActionCreators(appsActions.init, dispatch),
     fetchCurrentUserInfo: bindActionCreators(appsActions.fetchCurrentUserInfo, dispatch),
     fetchAccessToken: bindActionCreators(appsActions.fetchAccessToken, dispatch),
-    changeLocation: bindActionCreators(locationActions.changeLocation, dispatch),
+    getVkAppsUser: bindActionCreators(vkAppsUsersActions.getVkAppsUser, dispatch),
+    createVkAppsUser: bindActionCreators(vkAppsUsersActions.createVkAppsUser, dispatch),
+    saveCurrentUserData: bindActionCreators(currentUserActions.currentUserSaveData, dispatch),
   };
 };
 
 class App extends React.Component {
   constructor(props) {
     super(props);
-
     this.initVkApps = this.initVkApps.bind(this);
   }
 
-  componentDidMount() {
-    this.initVkApps();
+  async componentDidMount() {
+    await this.initVkApps();
+
+    const { id } = this.props.vkUserInfo;
+    await this.props.getVkAppsUser(id);
+    if (!this.props.vkAppsUsersReducer.user) {
+      await this.props.createVkAppsUser();
+    }
+    else {
+      const { user, vkId } = this.props.vkAppsUsersReducer;
+      this.props.saveCurrentUserData(user, vkId);
+    }
   }
 
-  initVkApps() {
-    this.props.init();
-    this.props.fetchCurrentUserInfo();
-    this.props.fetchAccessToken();
+  async initVkApps() {
+    await this.props.init();
+    await this.props.fetchCurrentUserInfo();
+    await this.props.fetchAccessToken();
   }
 
   render() {
-    const { activeView, vkUserInfo } = this.props;
-    const popout = this.props.vkAppsTokenFetching
+    const popout = this.props.fetching
       ? <ScreenSpinner/>
       : this.props.accessToken
         ? null
         : (
-        <PopoutWrapper>
-          <PopoutDiv>
-            <Div>
-              Пожалуйста, примите запрос на права доступа. Это необходимо для работы приложения
-            </Div>
-            <Button onClick={this.initVkApps}>
-              Авторизоваться в приложении
-            </Button>
-          </PopoutDiv>
-        </PopoutWrapper>
+          <PopoutWrapper>
+            <PopoutDiv>
+              <Div>
+                Пожалуйста, примите запрос на права доступа. Это необходимо для работы приложения
+              </Div>
+              <Button onClick={this.initVkApps}>
+                Авторизоваться в приложении
+              </Button>
+            </PopoutDiv>
+          </PopoutWrapper>
+        );
+    const { user } = this.props.currentUserReducer;
+    const tabbar = (
+      <Tabbar
+        userId={user ? user.id : null}
+        selectedItem={null}
+      />
     );
 
     return (
-      <Epic activeStory="root" tabbar={
-        <Tabbar>
-          <TabbarItem
-            onClick={() => this.props.changeLocation('show_profile', '', { profileId: vkUserInfo.id })}
-            selected={this.props.activeView === 'show_profile'}
-          >
-            <Icon28User />
-          </TabbarItem>
-          <TabbarItem
-            onClick={() => this.props.changeLocation('search_vacancies')}
-            selected={this.props.activeView === 'search_vacancies'}
-          >
-            <Icon28Search />
-          </TabbarItem>
-          <TabbarItem
-            onClick={() => this.props.changeLocation('schedule', 'schedule')}
-            selected={this.props.activeView === 'schedule'}
-          >
-            <Icon28Newsfeed />
-          </TabbarItem>
-          <TabbarItem
-            onClick={() => this.props.changeLocation('notifications', 'notifications')}
-            selected={this.props.activeView === 'notifications'}
-          >
-            <Icon28Notification />
-          </TabbarItem>
-          <TabbarItem
-            onClick={() => this.props.changeLocation('main_menu')}
-            selected={this.props.activeView === 'main_menu'}
-          >
-            <Icon28Menu />
-          </TabbarItem>
-        </Tabbar>
-      }>
-        <Root id="root" activeView={activeView} popout={popout}>
-          <Start id="start" />
-          <SearchVacancies id="search_vacancies" />
-          <ShowProfile id="show_profile" />
-          <CreateVacancy id="create_vacancy" />
-          <ShowVacancy id="show_vacancy" />
-          <EditProfile id="edit_profile" />
-          <Schedule id="schedule" />
-          <Filter id="filter" />
-          <Notifications id="notifications" />
-          <MoneyTransfer id="money_transfer"/>
-          <MainMenu id="main_menu"/>
-        </Root>
-      </Epic>
+      <Router>
+        <Switch>
+          <Route exact path="/">
+            <Redirect to="/home" />
+          </Route>
+
+          <Route path="/home" component={
+            withTabbar(Home, tabbar, popout, "white", true)
+          }/>
+
+          <Route path="/user/:id" component={
+            withTabbar(User, tabbar, popout)
+          }/>
+
+          <Route path="/vacancies" component={
+            withTabbar(Vacancies, tabbar, popout)
+          }/>
+
+          <Route path="/vacancy_create" component={
+            withTabbar(CreateVacancy, tabbar, popout)
+          }/>
+
+          <Route path="/user_edit" component={
+            withTabbar(UserEdit, tabbar, popout)
+          }/>
+
+          <Route path="/schedule" component={
+            withTabbar(Schedule, tabbar, popout)
+          }/>
+
+          <Route path="/filter" component={
+            withTabbar(Filter, tabbar, popout)
+          }/>
+
+          <Route path="/notifications" component={
+            withTabbar(Notifications, tabbar, popout)
+          }/>
+
+          <Route path="/vacancy/:id" component={
+            withTabbar(ShowVacancy, tabbar, popout)
+          }/>
+
+          <Route path="/main_menu" component={
+            withTabbar(MainMenu, tabbar, popout)
+          }/>
+        </Switch>
+      </Router>
     );
   }
 }
