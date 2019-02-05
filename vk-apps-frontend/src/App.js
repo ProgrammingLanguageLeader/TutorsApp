@@ -158,10 +158,10 @@ class App extends React.Component {
             )}
           />
 
-          <Route path="/filter" component={
+          <Route path="/vacancies_filter" component={
             withTabbar(
               Filter,
-              <Tabbar userId={user ? user.id : null} selectedItem={"filter"} />,
+              <Tabbar userId={user ? user.id : null} selectedItem={"vacancies_filter"} />,
               popout
             )}
           />

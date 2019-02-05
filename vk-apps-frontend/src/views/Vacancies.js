@@ -49,17 +49,12 @@ class Vacancies extends React.Component {
               <BackIcon />
             </HeaderButton>
           }
-          right={
-            <HeaderButton>
-              <Icon24Filter/>
-            </HeaderButton>
-          }
         >
           Поиск предложений
         </PanelHeader>
 
         <Group title="Фильтрация">
-          <CellButton before={<Icon24Filter />}>
+          <CellButton before={<Icon24Filter />} onClick={() => this.props.history.push('/vacancies_filter')}>
             Параметры фильтра
           </CellButton>
         </Group>
