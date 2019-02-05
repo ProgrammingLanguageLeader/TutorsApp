@@ -39,8 +39,8 @@ export default ({
       </Link>
     </TabbarItem>
 
-    <TabbarItem selected={selectedItem === 'menu'}>
-      <Link to='/menu'>
+    <TabbarItem selected={selectedItem === 'main_menu'}>
+      <Link to='/main_menu'>
         <Icon28Menu />
       </Link>
     </TabbarItem>
