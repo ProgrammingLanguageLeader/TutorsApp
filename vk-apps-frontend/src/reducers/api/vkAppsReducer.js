@@ -42,7 +42,7 @@ const vkAppsUsersReducer = (state = initialState, action) => {
     case vkAppsUsersConstants.DELETE_VK_APPS_USER_FAILURE:
     case vkAppsUsersConstants.CONNECT_VK_APPS_USER_FAILURE:
       return state.merge({
-        errors: action.payload,
+        errors: action.payload.response.data,
         fetching: false,
       });
 
