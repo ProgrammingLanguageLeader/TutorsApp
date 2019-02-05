@@ -50,7 +50,7 @@ const notificationsReducer = (state = initialState, action) => {
     case notificationsConstants.GET_NOTIFICATION_FAILURE:
     case notificationsConstants.SET_UNREAD_NOTIFICATION_FAILURE:
       return state.merge({
-        errors: action.payload,
+        errors: action.payload.response.data,
         fetching: false,
       });
 
