@@ -1,142 +1,132 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import {
-  View, Panel, PanelHeader, Cell, Avatar, Group, Div, HeaderButton, CellButton
-} from '@vkontakte/vkui';
-
-import Icon24Back from "@vkontakte/icons/dist/24/back";
-import Icon24Add from '@vkontakte/icons/dist/24/add';
-
-import Calendar from 'rc-calendar';
-import moment from 'moment';
-import 'rc-calendar/assets/index.css';
+import { bindActionCreators } from 'redux';
 
 import Moment from 'react-moment';
-import russianLocale from 'rc-calendar/lib/locale/ru_RU';
+import moment from 'moment';
+import { DayPickerSingleDateController } from 'react-dates';
+import 'react-dates/lib/css/_datepicker.css';
+import 'react-dates/initialize';
 
-import DivSpinner from '../components/DivSpinner';
+import PanelHeader from '@vkontakte/vkui/dist/components/PanelHeader/PanelHeader';
+import Cell from '@vkontakte/vkui/dist/components/Cell/Cell';
+import Avatar from '@vkontakte/vkui/dist/components/Avatar/Avatar';
+import Group from '@vkontakte/vkui/dist/components/Group/Group';
+import HeaderButton from '@vkontakte/vkui/dist/components/HeaderButton/HeaderButton';
+import CellButton from '@vkontakte/vkui/dist/components/CellButton/CellButton';
+import List from '@vkontakte/vkui/dist/components/List/List';
 
-import { apiLessonActions, vkApiActions, locationActions } from '../actions';
+import Icon24Add from '@vkontakte/icons/dist/24/add';
+
+import DivSpinner from 'vk-apps-frontend/components/DivSpinner';
+import BackIcon from 'vk-apps-frontend/components/BackIcon';
+
+import { lessonsActions } from 'vk-apps-frontend/actions/api';
+import { ROOT_URL } from 'vk-apps-frontend/constants';
 
 const mapStateToProps = state => {
-  const apiLessonFetching = state.apiLessonReducer.fetching;
-  const vkAppsUserFetching = state.vkAppsUserReducer.fetching;
-  const vkApiUsersFetching = state.vkApiUsersReducer.fetching;
-  const { lessons } = state.apiLessonReducer;
-  const { accessToken } = state.vkAppsTokenReducer;
-  const { vkUsersInfo } = state.vkApiUsersReducer;
-  const { activePanel } = state.locationReducer;
+  const { fetching, lessons } = state.apiReducer.lessonsReducer;
   return {
-    activePanel, vkUsersInfo, lessons, apiLessonFetching,
-    vkAppsUserFetching, vkApiUsersFetching, accessToken,
+    lessons, fetching,
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    createLesson: bindActionCreators(lessonsActions.createLesson, dispatch),
+    getLessonsList: bindActionCreators(lessonsActions.getLessonsList, dispatch),
   };
 };
 
 class Schedule extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = {
-      date: moment()
+      date: moment(),
     };
-
-    this.onCalendarChange = this.onCalendarChange.bind(this);
-    this.fetchLessons = this.fetchLessons.bind(this);
+    this.getLessonsByDay = this.getLessonsByDay.bind(this);
+    this.handleDateChange = this.handleDateChange.bind(this);
   }
 
   componentDidMount() {
-    this.fetchLessons();
+    this.getLessonsByDay();
   }
 
-  onCalendarChange(date) {
-    this.setState({
-      date
+  getLessonsByDay() {
+    const { date } = this.state;
+    const beginning_time__gte = date.startOf('day').format("YYYY-MM-DD HH:mm:ss");
+    const beginning_time__lte = date.endOf('day').format("YYYY-MM-DD HH:mm:ss");
+    this.props.getLessonsList({
+      beginning_time__gte,
+      beginning_time__lte,
     });
   }
 
-  fetchLessons() {
-    this.props.dispatch(
-      apiLessonActions.getLessons({})
-    )
-      .then(() => {
-        const { accessToken, lessons } = this.props;
-        const studentsId = lessons.map(lesson => {
-          return lesson.student_id;
-        });
-        this.props.dispatch(
-          vkApiActions.fetchUsersInfo(accessToken, studentsId)
-        );
-      })
+  async handleDateChange(date) {
+    await this.setState({ date });
+    await this.getLessonsByDay();
   }
 
 	render() {
-    const { lessons, vkUsersInfo, apiLessonFetching, vkAppsUserFetching, vkApiUsersFetching } = this.props;
-    const fetching = apiLessonFetching || vkAppsUserFetching || vkApiUsersFetching;
+    const { fetching, lessons } = this.props;
 
 		return (
-			<View id={this.props.id} activePanel="schedule">
-				<Panel id="schedule">
-					<PanelHeader
-            left={
-              <HeaderButton onClick={() => this.props.dispatch(
-                locationActions.goBack()
-              )}>
-                <Icon24Back />
-              </HeaderButton>
-            }
-          >
-						Расписание
-					</PanelHeader>
-          <Group title="Календарь">
-            <Div style={{ textAlign: "center" }}>
-              <Calendar
-                style={{ display: "inline-block", width: "100%", height: "auto", maxWidth: 720 }}
-                value={this.state.date}
-                onChange={this.onCalendarChange}
-                locale={russianLocale}
-              />
-            </Div>
-          </Group>
-          <Group title="Занятия в выбранный день">
-            { fetching
-              ? <DivSpinner />
-              : (
-                <div>
-                  <CellButton before={<Icon24Add />}>
-                    Добавить урок
-                  </CellButton>
-                  {
-                    lessons
-                      .filter(lesson => vkUsersInfo[lesson.student.profile_id])
-                      .map(lesson => {
-                        const studentVkInfo = vkUsersInfo[lesson.student.profile_id];
-                        return (
-                          <Cell
-                            size="l"
-                            multiline
-                            description={`${lesson.price} рублей за занятие`}
-                            before={<Avatar src={studentVkInfo.photo_200} />}
-                            key={lesson.lesson_id}
-                            asideContent={
-                              <div>
-                                <Moment format="HH:mm - " date={lesson.beginning_time}/>
-                                <Moment format="HH:mm" date={lesson.ending_time}/>
-                              </div>
-                            }
-                          >
-                            {studentVkInfo.firstName} {studentVkInfo.lastName}
-                          </Cell>
-                        )
-                      })
+		  <div>
+        <PanelHeader left={
+          <HeaderButton onClick={this.props.history.goBack}>
+            <BackIcon />
+          </HeaderButton>
+        }>
+          Расписание
+        </PanelHeader>
+
+        <Group title="Календарь" style={{ paddingBottom: "10px" }}>
+          <DayPickerSingleDateController
+            numberOfMonths={1}
+            date={this.state.date}
+            onDateChange={this.handleDateChange}
+            onFocusChange={() => true}
+            hideKeyboardShortcutsPanel={true}
+          />
+        </Group>
+
+        <Group title="Добавление занятия">
+          <CellButton before={<Icon24Add />} onClick={() => this.props.history.push('/lesson_create')}>
+            Добавить урок
+          </CellButton>
+        </Group>
+
+        <Group title="Занятия в выбранный день">
+          { fetching && (
+            <DivSpinner />
+          )}
+          { lessons && (
+            <List>
+              { lessons.map(lesson => (
+                <Cell
+                  size="l"
+                  expandable
+                  multiline
+                  description={
+                    <div>
+                      <Moment format="HH:mm - " date={lesson.beginning_time}/>
+                      <Moment format="HH:mm" date={lesson.ending_time}/>
+                      <div>{lesson.price} рублей за занятие</div>
+                    </div>
                   }
-                </div>
-              )
-            }
-          </Group>
-        </Panel>
-      </View>
+                  before={<Avatar src={ROOT_URL + lesson.student.avatar} size={64} />}
+                  key={lesson.id}
+                  onClick={() => this.props.history.push(`/lesson/${lesson.id}`)}
+                >
+                  {lesson.student.first_name} {lesson.student.last_name}
+                </Cell>
+              ))}
+            </List>
+          )}
+        </Group>
+      </div>
 		);
 	}
 }
 
-export default connect(mapStateToProps)(Schedule);
+export default connect(mapStateToProps, mapDispatchToProps)(Schedule);
