@@ -10,6 +10,8 @@ import HeaderButton from '@vkontakte/vkui/dist/components/HeaderButton/HeaderBut
 import Avatar from '@vkontakte/vkui/dist/components/Avatar/Avatar';
 import Group from '@vkontakte/vkui/dist/components/Group/Group';
 import CellButton from '@vkontakte/vkui/dist/components/CellButton/CellButton';
+import FormStatus from '@vkontakte/vkui/dist/components/FormStatus/FormStatus';
+import Div from '@vkontakte/vkui/dist/components/Div/Div';
 
 import Icon24Education from '@vkontakte/icons/dist/24/education';
 import Icon24MoneyCircle from '@vkontakte/icons/dist/24/money_circle';
@@ -17,6 +19,7 @@ import Icon24Info from '@vkontakte/icons/dist/24/info';
 import Icon24Home from '@vkontakte/icons/dist/24/home';
 import Icon24UserAdd from '@vkontakte/icons/dist/24/user_add';
 
+import SuccessFormStatus from 'vk-apps-frontend/components/SuccessfulFormStatus';
 import DivSpinner from 'vk-apps-frontend/components/DivSpinner';
 import BackIcon from 'vk-apps-frontend/components/BackIcon';
 
@@ -26,12 +29,10 @@ import { ROOT_URL } from 'vk-apps-frontend/constants';
 
 const mapStateToProps = state => {
   const fetching = state.apiReducer.vacanciesReducer.fetching || state.apiReducer.tutorsReducer.fetching;
-  const vacanciesErrors = state.apiReducer.vacanciesReducer.errors;
-  const tutorsErrors = state.apiReducer.tutorsReducer.errors;
   const { vacancy } = state.apiReducer.vacanciesReducer;
-  const { studentRequestSuccess } = state.apiReducer.tutorsReducer;
+  const { errors, studentRequestSuccess } = state.apiReducer.tutorsReducer;
   return {
-    vacancy, fetching, vacanciesErrors, tutorsErrors, studentRequestSuccess,
+    vacancy, fetching, errors, studentRequestSuccess,
   };
 };
 
@@ -43,13 +44,30 @@ const mapDispatchToProps = dispatch => {
 };
 
 class Vacancy extends React.Component {
+  constructor(props) {
+    super(props);
+    this.createStudentRequest = this.createStudentRequest.bind(this);
+  }
+
+
   componentDidMount() {
     const { id } = this.props.match.params;
     this.props.getVacancy(id);
   }
 
+  createStudentRequest(tutorId) {
+    this.props.createStudentRequest({
+      tutor: tutorId,
+    });
+  }
+
   render() {
-    const { fetching, vacancy } = this.props;
+    const {
+      fetching,
+      vacancy,
+      errors,
+      studentRequestSuccess
+    } = this.props;
 
     return (
       <div>
@@ -91,9 +109,19 @@ class Vacancy extends React.Component {
               </Group>
 
               <Group title="Добавление в список учеников">
-                <CellButton before={<Icon24UserAdd />}>
+                <CellButton before={<Icon24UserAdd />} onClick={() => this.createStudentRequest(vacancy.owner.id)}>
                   Отправить заявку
                 </CellButton>
+                { studentRequestSuccess && (
+                  <Div>
+                    <SuccessFormStatus title="Успешно" />
+                  </Div>
+                )}
+                { errors && (
+                  <Div>
+                    <FormStatus state="error" title="Ошибка">{JSON.stringify(errors)}</FormStatus>
+                  </Div>
+                )}
               </Group>
 
               <Group title="Информация о вакансии">
