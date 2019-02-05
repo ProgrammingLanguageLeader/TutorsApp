@@ -100,12 +100,6 @@ class App extends React.Component {
           </PopoutWrapper>
         );
     const { user } = this.props.currentUserReducer;
-    const tabbar = (
-      <Tabbar
-        userId={user ? user.id : null}
-        selectedItem={null}
-      />
-    );
 
     return (
       <Router>
@@ -115,44 +109,86 @@ class App extends React.Component {
           </Route>
 
           <Route path="/home" component={
-            withTabbar(Home, tabbar, popout, "white", true)
-          }/>
+            withTabbar(
+              Home,
+              <Tabbar userId={user ? user.id : null} selectedItem={"home"} />,
+              popout,
+              "white",
+              true
+            )}
+          />
 
           <Route path="/user/:id" component={
-            withTabbar(User, tabbar, popout)
-          }/>
+            withTabbar(
+              User,
+              <Tabbar userId={user ? user.id : null} selectedItem={"user"} />,
+              popout
+            )}
+          />
 
           <Route path="/vacancies" component={
-            withTabbar(Vacancies, tabbar, popout)
-          }/>
+            withTabbar(
+              Vacancies,
+              <Tabbar userId={user ? user.id : null} selectedItem={"vacancies"} />,
+              popout
+            )}
+          />
 
           <Route path="/vacancy_create" component={
-            withTabbar(CreateVacancy, tabbar, popout)
-          }/>
+            withTabbar(
+              CreateVacancy,
+              <Tabbar userId={user ? user.id : null} selectedItem={"vacancy_create"} />,
+              popout
+            )}
+          />
 
           <Route path="/user_edit" component={
-            withTabbar(UserEdit, tabbar, popout)
-          }/>
+            withTabbar(
+              UserEdit,
+              <Tabbar userId={user ? user.id : null} selectedItem={"user_edit"} />,
+              popout
+            )}
+          />
 
           <Route path="/schedule" component={
-            withTabbar(Schedule, tabbar, popout)
-          }/>
+            withTabbar(
+              Schedule,
+              <Tabbar userId={user ? user.id : null} selectedItem={"schedule"} />,
+              popout
+            )}
+          />
 
           <Route path="/filter" component={
-            withTabbar(Filter, tabbar, popout)
-          }/>
+            withTabbar(
+              Filter,
+              <Tabbar userId={user ? user.id : null} selectedItem={"filter"} />,
+              popout
+            )}
+          />
 
           <Route path="/notifications" component={
-            withTabbar(Notifications, tabbar, popout)
-          }/>
+            withTabbar(
+              Notifications,
+              <Tabbar userId={user ? user.id : null} selectedItem={"notifications"} />,
+              popout
+            )}
+          />
 
           <Route path="/vacancy/:id" component={
-            withTabbar(ShowVacancy, tabbar, popout)
-          }/>
+            withTabbar(
+              ShowVacancy,
+              <Tabbar userId={user ? user.id : null} selectedItem={"vacancy"} />,
+              popout
+            )}
+          />
 
           <Route path="/main_menu" component={
-            withTabbar(MainMenu, tabbar, popout)
-          }/>
+            withTabbar(
+              MainMenu,
+              <Tabbar userId={user ? user.id : null} selectedItem={"main_menu"} />,
+              popout
+            )}
+          />
         </Switch>
       </Router>
     );
