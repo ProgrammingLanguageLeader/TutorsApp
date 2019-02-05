@@ -24,7 +24,7 @@ const getStudentRequestsList = (options = {}) => {
   };
 };
 
-const createStudentRequestsList = (options = {}) => {
+const createStudentRequest = (options = {}) => {
   return async dispatch => {
     dispatch({
       type: tutorsConstants.CREATE_STUDENT_REQUEST_REQUEST,
@@ -187,7 +187,7 @@ const deleteStudent = (id, options = {}) => {
 
 export const tutorsActions = {
   getStudentRequestsList,
-  createStudentRequestsList,
+  createStudentRequest,
   getStudentRequest,
   deleteStudentRequest,
   getStudentsList,
