@@ -2,40 +2,43 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { View, Panel, PanelHeader, Cell, Avatar, HeaderButton, Group, Div } from '@vkontakte/vkui';
 import { Formik } from 'formik';
+
+import PanelHeader from '@vkontakte/vkui/dist/components/PanelHeader/PanelHeader';
+import Cell from '@vkontakte/vkui/dist/components/Cell/Cell';
+import Avatar from '@vkontakte/vkui/dist/components/Avatar/Avatar';
+import HeaderButton from '@vkontakte/vkui/dist/components/HeaderButton/HeaderButton';
+import Group from '@vkontakte/vkui/dist/components/Group/Group';
+import Div from '@vkontakte/vkui/dist/components/Div/Div';
 
 import BackIcon from 'vk-apps-frontend/components/BackIcon';
 import SuccessfulFormStatus from 'vk-apps-frontend/components/SuccessfulFormStatus';
 
 import { ROOT_URL } from 'vk-apps-frontend/constants';
-import { locationActions } from 'vk-apps-frontend/actions';
-import { usersActions, vkAppsUsersActions } from 'vk-apps-frontend/actions/api';
+import { usersActions } from 'vk-apps-frontend/actions/api';
 
 import UploadAvatarForm from 'vk-apps-frontend/forms/UploadAvatarForm';
 import EditProfileForm from 'vk-apps-frontend/forms/EditProfileForm';
 
 const mapStateToProps = state => {
+  const { currentUserReducer } = state;
   const { vkUserInfo } = state.vkReducer.appsUserReducer;
-  const { user, vkId } = state.apiReducer.vkAppsUsersReducer;
-  const fetching = state.apiReducer.vkAppsUsersReducer.fetching || state.apiReducer.usersReducer.fetching;
+  const { user, fetching } = state.apiReducer.usersReducer;
   const { errors, success } = state.apiReducer.usersReducer;
   return {
-    vkUserInfo, user, fetching, errors, vkId, success,
+    vkUserInfo, fetching, errors, success, currentUserReducer, user,
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    goBack: bindActionCreators(locationActions.goBack, dispatch),
-    changeLocation: bindActionCreators(locationActions.changeLocation, dispatch),
-    getVkAppsUser: bindActionCreators(vkAppsUsersActions.getVkAppsUser, dispatch),
+    getUser: bindActionCreators(usersActions.getUser, dispatch),
     updateUser: bindActionCreators(usersActions.updateUser, dispatch),
     uploadAvatar: bindActionCreators(usersActions.uploadAvatar, dispatch),
   }
 };
 
-class EditProfile extends React.Component {
+class UserEdit extends React.Component {
   constructor(props) {
     super(props);
     this.handleEditProfileSubmit = this.handleEditProfileSubmit.bind(this);
@@ -43,8 +46,10 @@ class EditProfile extends React.Component {
   }
 
   componentDidMount() {
-    const { id } = this.props.vkUserInfo;
-    this.props.getVkAppsUser(id);
+    if (this.props.currentUserReducer.user) {
+      const { id } = this.props.currentUserReducer.user;
+      this.props.getUser(id);
+    }
   }
 
   componentDidUpdate() {
@@ -53,13 +58,12 @@ class EditProfile extends React.Component {
 
   async handleUploadAvatarFormSubmit(values) {
     try {
-      const { id } = this.props.user;
+      const { id } = this.props.currentUserReducer.user;
       const { avatar } = values;
       await this.props.uploadAvatar(id, {
         avatar,
       });
-      const { vkId } = this.props;
-      await this.props.getVkAppsUser(vkId);
+      await this.props.getUser(id);
     }
     catch (exception) {
       console.log(exception);
@@ -68,12 +72,11 @@ class EditProfile extends React.Component {
 
   async handleEditProfileSubmit(values) {
     try {
-      const { id } = this.props.user;
+      const { id } = this.props.currentUserReducer.user;
       await this.props.updateUser(id, {
         ...values
       });
-      const { vkId } = this.props;
-      await this.props.getVkAppsUser(vkId);
+      await this.props.getUser(id);
     }
     catch (exception) {
       console.log(exception);
@@ -81,31 +84,21 @@ class EditProfile extends React.Component {
   }
 
   render() {
-    const { user, success } = this.props;
-    const {
-      first_name,
-      last_name,
-      experience,
-      education,
-      city,
-      district,
-      street,
-      metro_station,
-      bio
-    } = user;
+    const { user, fetching, success } = this.props;
 
     return (
-      <View id={this.props.id} activePanel="edit_profile">
-        <Panel id="edit_profile">
-          <PanelHeader
-            left={
-              <HeaderButton onClick={this.props.goBack}>
-                <BackIcon />
-              </HeaderButton>
-            }
-          >
-            Изменение профиля
-          </PanelHeader>
+      <div>
+        <PanelHeader
+          left={
+            <HeaderButton onClick={this.props.history.goBack}>
+              <BackIcon />
+            </HeaderButton>
+          }
+        >
+          Изменение профиля
+        </PanelHeader>
+
+        {user && (
           <Group>
             <Cell
               size="l"
@@ -116,15 +109,17 @@ class EditProfile extends React.Component {
               {`${user.first_name} ${user.last_name}`}
             </Cell>
           </Group>
+        )}
 
-          { success && (
-            <Group>
-              <Div>
-                <SuccessfulFormStatus title="Успешно" />
-              </Div>
-            </Group>
-          )}
+        { success && (
+          <Group>
+            <Div>
+              <SuccessfulFormStatus title="Успешно" />
+            </Div>
+          </Group>
+        )}
 
+        {user && (
           <Group title="Изображение профиля">
             <Formik
               initialValues={{
@@ -138,19 +133,21 @@ class EditProfile extends React.Component {
               }}
             />
           </Group>
+        )}
 
+        {user && (
           <Group title="Информация о пользователе">
             <Formik
               initialValues={{
-                first_name,
-                last_name,
-                experience,
-                education,
-                city,
-                district,
-                street,
-                metro_station,
-                bio,
+                first_name: user.first_name,
+                last_name: user.last_name,
+                experience: user.experience,
+                education: user.education,
+                city: user.city,
+                district: user.district,
+                street: user.street,
+                metro_station: user.metro_station,
+                bio: user.bio
               }}
               component={EditProfileForm}
               onSubmit={ async (values, actions) => {
@@ -160,10 +157,10 @@ class EditProfile extends React.Component {
               }}
             />
           </Group>
-        </Panel>
-      </View>
+        )}
+      </div>
     );
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(EditProfile);
+export default connect(mapStateToProps, mapDispatchToProps)(UserEdit);
