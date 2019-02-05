@@ -1,108 +1,103 @@
 import React from 'react';
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { View, Panel, PanelHeader, Cell, HeaderButton, Group, List } from '@vkontakte/vkui';
 
-import { locationActions } from 'vk-apps-frontend/actions';
+import PanelHeader from '@vkontakte/vkui/dist/components/PanelHeader/PanelHeader';
+import Cell from '@vkontakte/vkui/dist/components/Cell/Cell';
+import HeaderButton from '@vkontakte/vkui/dist/components/HeaderButton/HeaderButton';
+import Group from '@vkontakte/vkui/dist/components/Group/Group';
+import List from '@vkontakte/vkui/dist/components/List/List';
 
 import BackIcon from 'vk-apps-frontend/components/BackIcon';
 
 const mapStateToProps = state => {
-  return {};
-};
-
-const mapDispatchToProps = dispatch => {
+  const { user } = state.currentUserReducer;
   return {
-    goBack: bindActionCreators(locationActions.goBack, dispatch),
-    changeLocation: bindActionCreators(locationActions.changeLocation, dispatch),
-  }
+    user,
+  };
 };
 
 class MainMenu extends React.Component {
   render() {
+    const { user } = this.props;
+
     return (
-      <View id={this.props.id} activePanel="menu">
-        <Panel id="menu">
-          <PanelHeader left={
-            <HeaderButton onClick={() => this.props.goBack()}>
-              <BackIcon />
-            </HeaderButton>
-          }>
-            Главное меню
-          </PanelHeader>
+      <div>
+        <PanelHeader left={
+          <HeaderButton onClick={() => this.props.history.goBack()}>
+            <BackIcon />
+          </HeaderButton>
+        }>
+          Главное меню
+        </PanelHeader>
 
-          <Group title="Профиль">
-            <List>
-              <Cell expandable onClick={() => this.props.changeLocation('show_profile')}>
-                Просмотреть профиль
-              </Cell>
-              <Cell expandable onClick={() => this.props.changeLocation('edit_profile')}>
-                Редактировать профиль
-              </Cell>
-            </List>
-          </Group>
+        <Group title="Профиль">
+          <List>
+            <Cell expandable onClick={() => this.props.history.push(`/user/${user ? user.id : 1}`)}>
+              Просмотреть профиль
+            </Cell>
+            <Cell expandable onClick={() => this.props.history.push('/user_edit')}>
+              Редактировать профиль
+            </Cell>
+          </List>
+        </Group>
 
-          <Group title="Вакансии">
-            <List>
-              <Cell expandable onClick={() => this.props.changeLocation('search_vacancies')}>
-                Поиск вакансий
-              </Cell>
-              <Cell expandable onClick={() => this.props.changeLocation('show_profile_vacancies')}>
-                Просмотреть мои вакансии
-              </Cell>
-              <Cell expandable onClick={() => this.props.changeLocation('create_vacancy')}>
-                Создать вакансию
-              </Cell>
-            </List>
-          </Group>
+        <Group title="Вакансии">
+          <List>
+            <Cell expandable onClick={() => this.props.history.push('/vacancies')}>
+              Поиск вакансий
+            </Cell>
+            <Cell expandable onClick={() => this.props.history.push('/profile_vacancies')}>
+              Просмотреть мои вакансии
+            </Cell>
+            <Cell expandable onClick={() => this.props.history.push('/vacancy_create')}>
+              Создать вакансию
+            </Cell>
+          </List>
+        </Group>
 
-          <Group title="Уроки">
-            <List>
-              <Cell expandable onClick={() => this.props.changeLocation('schedule')}>
-                Расписание
-              </Cell>
-              <Cell expandable onClick={() => this.props.changeLocation('create_lesson')}>
-                Создание урока
-              </Cell>
-            </List>
-          </Group>
+        <Group title="Уроки">
+          <List>
+            <Cell expandable onClick={() => this.props.history.push('/schedule')}>
+              Расписание
+            </Cell>
+            <Cell expandable onClick={() => this.props.history.push('/lesson_create')}>
+              Создание урока
+            </Cell>
+          </List>
+        </Group>
 
-          <Group title="Заявки и уведомления">
-            <List>
-              <Cell expandable onClick={() => this.props.changeLocation('incoming_applications')}>
-                Уведомления и входящие заявки
-              </Cell>
-              <Cell expandable onClick={() => this.props.changeLocation('outgoing_applications')}>
-                Исходящие заявки
-              </Cell>
-            </List>
-          </Group>
+        <Group title="Заявки и уведомления">
+          <List>
+            <Cell expandable onClick={() => this.props.history.push('/incoming_applications')}>
+              Уведомления и входящие заявки
+            </Cell>
+            <Cell expandable onClick={() => this.props.history.push('/outgoing_applications')}>
+              Исходящие заявки
+            </Cell>
+          </List>
+        </Group>
 
-          <Group title="Ученики и учителя">
-            <List>
-              <Cell expandable onClick={() => this.props.changeLocation('students')}>
-                Список учеников
-              </Cell>
-              <Cell expandable onClick={() => this.props.changeLocation('tutors')}>
-                Список учителей
-              </Cell>
-            </List>
-          </Group>
+        <Group title="Ученики и учителя">
+          <List>
+            <Cell expandable onClick={() => this.props.history.push('/students')}>
+              Список учеников
+            </Cell>
+            <Cell expandable onClick={() => this.props.history.push('/tutors')}>
+              Список учителей
+            </Cell>
+          </List>
+        </Group>
 
-          <Group title="Платежи">
-            <List>
-              <Cell expandable onClick={() => this.props.changeLocation('create_payment')}>
-                Сделать перевод
-              </Cell>
-              <Cell expandable onClick={() => this.props.changeLocation('create_payment_application')}>
-                Запросить оплату занятия
-              </Cell>
-            </List>
-          </Group>
-        </Panel>
-      </View>
+        <Group title="Платежи">
+          <List>
+            <Cell expandable onClick={() => this.props.history.push('/transfer_make')}>
+              Сделать перевод
+            </Cell>
+          </List>
+        </Group>
+      </div>
     );
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(MainMenu);
+export default connect(mapStateToProps)(MainMenu);
