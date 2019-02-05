@@ -1,30 +1,39 @@
+import Immutable from 'seamless-immutable';
+
 import { filterConstants, educationLevelList } from 'vk-apps-frontend/constants';
 
-const backendFieldsWithNulls = educationLevelList.reduce((object, level) => {
-  return { ...object, [level.backendField]: null }
+const initialEducationLevels = educationLevelList.reduce((object, level) => {
+  return {
+    ...object,
+    [level.backendField]: null
+  }
 }, {});
-const initialState = {
-  subject: null,
-  price_min: 0,
-  price_max: 10000,
-  city: null,
-  district: null,
-  metro_station: null,
-  ...backendFieldsWithNulls,
-};
+
+const initialState = Immutable({
+  subject: '',
+  price__gte: 0,
+  price__lte: 10000,
+  city: '',
+  district: '',
+  metro_station: '',
+  home_schooling: null,
+  ...initialEducationLevels,
+});
 
 const filterReducer = (state = initialState, action) => {
   switch (action.type) {
     case filterConstants.VACANCIES_FILTER_UPDATE: {
       const { params } = action;
-      return {
+      return Immutable.merge({
         ...state,
         ...params,
-      }
+      });
     }
     
     case filterConstants.VACANCIES_FILTER_DELETE: {
-      return initialState;
+      return Immutable.merge({
+        ...initialState,
+      });
     }
 
     default:
