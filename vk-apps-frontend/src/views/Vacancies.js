@@ -22,8 +22,9 @@ import { ROOT_URL } from 'vk-apps-frontend/constants';
 
 const mapStateToProps = state => {
   const { vacancies, fetching } = state.apiReducer.vacanciesReducer;
+  const { filterReducer } = state;
   return {
-    vacancies, fetching,
+    vacancies, fetching, filterReducer,
   };
 };
 
@@ -34,8 +35,11 @@ const mapDispatchToProps = dispatch => {
 };
 
 class Vacancies extends React.Component {
-  async componentDidMount() {
-    await this.props.searchVacancies();
+  componentDidMount() {
+    console.log({...this.props.filterReducer});
+    this.props.searchVacancies({
+      ...this.props.filterReducer
+    });
   }
 
   render() {
@@ -95,7 +99,7 @@ class Vacancies extends React.Component {
                 {
                   vacancies.length === 0 && (
                     <Cell multiline>
-                      Предложений не найдено, попробуйте изменить параметры фильтра
+                      Не найдено ни одного предложения, попробуйте изменить параметры фильтра
                     </Cell>
                   )
                 }
