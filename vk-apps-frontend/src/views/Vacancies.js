@@ -36,7 +36,6 @@ const mapDispatchToProps = dispatch => {
 
 class Vacancies extends React.Component {
   componentDidMount() {
-    console.log({...this.props.filterReducer});
     this.props.searchVacancies({
       ...this.props.filterReducer
     });
