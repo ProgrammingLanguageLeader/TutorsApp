@@ -12,6 +12,11 @@ import Avatar from '@vkontakte/vkui/dist/components/Avatar/Avatar';
 import Button from '@vkontakte/vkui/dist/components/Button/Button';
 import Div from '@vkontakte/vkui/dist/components/Div/Div';
 
+import Icon24View from '@vkontakte/icons/dist/24/view';
+import Icon24Hide from '@vkontakte/icons/dist/24/hide';
+import Icon24Add from '@vkontakte/icons/dist/24/add';
+import Icon24Cancel from '@vkontakte/icons/dist/24/cancel';
+
 import BackIcon from 'vk-apps-frontend/components/BackIcon';
 import DivSpinner from 'vk-apps-frontend/components/DivSpinner';
 
@@ -36,16 +41,28 @@ const mapDispatchToProps = dispatch => {
 class Notifications extends React.Component {
   constructor(props) {
     super(props);
+    this.handleSetUnreadNotification = this.handleSetUnreadNotification.bind(this);
   }
 
   componentDidMount() {
-    this.props.getNotificationsList({
-      unread: true,
+    this.props.getNotificationsList();
+  }
+
+  async handleSetUnreadNotification(id, unread) {
+    await this.props.setUnreadNotification(id, {
+      unread
     });
+    await this.props.getNotificationsList();
   }
 
   render () {
     const { fetching, notifications } = this.props;
+    const unreadNotifications = notifications.filter(
+      notification => notification.unread && notification.target
+    );
+    const readNotifications = notifications.filter(
+      notification => !notification.unread && notification.target
+    );
 
     return (
       <div>
@@ -59,13 +76,12 @@ class Notifications extends React.Component {
           Уведомления
         </PanelHeader>
 
-        <Group title="Непрочитанные">
+        <Group title="Новые уведомления">
           {fetching && (
             <DivSpinner />
           )}
-
           <List>
-            {notifications.map(notification => (
+            {unreadNotifications.map(notification => (
               <Cell
                 multiline
                 key={notification.id}
@@ -79,19 +95,81 @@ class Notifications extends React.Component {
                     </div>
                   </div>
                 }
-                before={
-                  <Avatar size={64} src={ROOT_URL + notification.sender.avatar} />
-                }
               >
-                <div>
-                  {notification.sender.first_name} {notification.sender.last_name}
+                <div style={{ display: "flex" }}>
+                  <Avatar size={64} src={ROOT_URL + notification.sender.avatar} />
+                  <Div>
+                    {notification.sender.first_name} {notification.sender.last_name}
+                  </Div>
                 </div>
-                <div style={{ paddingTop: 8, paddingBottom: 8 }}>
-                  <Button size="l" style={{ marginRight: 8 }}>Принять</Button>
-                  <Button size="l" level="secondary">Отклонить</Button>
+                <div style={{ display: "flex", paddingTop: 8, paddingBottom: 8 }}>
+                  <Button size="m" level="primary" before={<Icon24Add/>} style={{ marginRight: 4 }}>
+                    Принять
+                  </Button>
+                  <Button size="m" level="secondary" before={<Icon24Cancel/>}>
+                    Отклонить
+                  </Button>
+                </div>
+                <div>
+                  <Button size="m" level="outline" before={<Icon24Hide/>} onClick={
+                    () => this.handleSetUnreadNotification(notification.id, false)
+                  }>
+                    Пометить просмотренным
+                  </Button>
                 </div>
               </Cell>
             ))}
+
+            {unreadNotifications.length === 0 && (
+              <Div>Нет уведомлений</Div>
+            )}
+          </List>
+        </Group>
+
+        <Group title="Просмотренные уведомления">
+          <List>
+            {readNotifications.map(notification => (
+              <Cell
+                multiline
+                key={notification.id}
+                description={
+                  <div>
+                    <div>
+                      {notification.target.content_type === 'student_request' && 'Заявка на добавление в список учеников'}
+                    </div>
+                    <div>
+                      <Moment format="LL" date={notification.creation_time} />
+                    </div>
+                  </div>
+                }
+              >
+                <div style={{ display: "flex" }}>
+                  <Avatar size={64} src={ROOT_URL + notification.sender.avatar} />
+                  <Div>
+                    {notification.sender.first_name} {notification.sender.last_name}
+                  </Div>
+                </div>
+                <div style={{ display: "flex", paddingTop: 8, paddingBottom: 8 }}>
+                  <Button size="m" level="primary" before={<Icon24Add/>} style={{ marginRight: 4 }}>
+                    Принять
+                  </Button>
+                  <Button size="m" level="secondary" before={<Icon24Cancel/>}>
+                    Отклонить
+                  </Button>
+                </div>
+                <div>
+                  <Button size="m" level="outline" before={<Icon24View/>} onClick={
+                    () => this.handleSetUnreadNotification(notification.id, true)
+                  }>
+                    Пометить непросмотренным
+                  </Button>
+                </div>
+              </Cell>
+            ))}
+
+            {readNotifications.length === 0 && (
+              <Div>Нет уведомлений</Div>
+            )}
           </List>
         </Group>
       </div>

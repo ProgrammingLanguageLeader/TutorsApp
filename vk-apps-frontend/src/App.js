@@ -23,7 +23,7 @@ import MainMenu from 'vk-apps-frontend/views/MainMenu';
 
 import { appsActions } from 'vk-apps-frontend/actions/vk';
 import { currentUserActions } from 'vk-apps-frontend/actions';
-import { vkAppsUsersActions } from 'vk-apps-frontend/actions/api';
+import { vkAppsUsersActions, notificationsActions } from 'vk-apps-frontend/actions/api';
 
 import PopoutDiv from 'vk-apps-frontend/components/PopoutDiv';
 import Tabbar from 'vk-apps-frontend/components/Tabbar';
@@ -36,12 +36,14 @@ const mapStateToProps = state => {
     || state.vkReducer.appsTokenReducer.fetching;
   const { vkAppsUsersReducer } = state.apiReducer;
   const { currentUserReducer } = state;
+  const { unreadNotificationsCount } = state.apiReducer.notificationsReducer;
   return {
     accessToken,
     fetching,
     vkUserInfo,
     vkAppsUsersReducer,
     currentUserReducer,
+    unreadNotificationsCount,
   };
 };
 
@@ -53,6 +55,7 @@ const mapDispatchToProps = dispatch => {
     getVkAppsUser: bindActionCreators(vkAppsUsersActions.getVkAppsUser, dispatch),
     createVkAppsUser: bindActionCreators(vkAppsUsersActions.createVkAppsUser, dispatch),
     saveCurrentUserData: bindActionCreators(currentUserActions.currentUserSaveData, dispatch),
+    getUnreadNotificationsList: bindActionCreators(notificationsActions.getUnreadNotificationsList, dispatch),
   };
 };
 
@@ -60,6 +63,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.initVkApps = this.initVkApps.bind(this);
+    this.getUnreadNotificationsList = this.getUnreadNotificationsList.bind(this);
   }
 
   async componentDidMount() {
@@ -71,9 +75,18 @@ class App extends React.Component {
       await this.props.createVkAppsUser();
     }
     else {
+      await this.props.getUnreadNotificationsList();
       const { user, vkId } = this.props.vkAppsUsersReducer;
-      this.props.saveCurrentUserData(user, vkId);
+      const { notificationsCount } = this.props;
+      this.props.saveCurrentUserData(user, vkId, notificationsCount);
     }
+    this.getUnreadNotificationsList();
+  }
+
+  getUnreadNotificationsList() {
+    setInterval(() => {
+      this.props.getUnreadNotificationsList();
+    }, 15000);
   }
 
   async initVkApps() {
@@ -100,6 +113,7 @@ class App extends React.Component {
           </PopoutWrapper>
         );
     const { user } = this.props.currentUserReducer;
+    const { unreadNotificationsCount } = this.props;
 
     return (
       <Router>
@@ -111,7 +125,7 @@ class App extends React.Component {
           <Route path="/home" component={
             withTabbar(
               Home,
-              <Tabbar userId={user ? user.id : null} selectedItem={"home"} />,
+              <Tabbar userId={user ? user.id : null} selectedItem={"home"} notificationsCount={unreadNotificationsCount} />,
               popout,
               "white",
               true
@@ -121,7 +135,7 @@ class App extends React.Component {
           <Route path="/user/:id" component={
             withTabbar(
               User,
-              <Tabbar userId={user ? user.id : null} selectedItem={"user"} />,
+              <Tabbar userId={user ? user.id : null} selectedItem={"user"} notificationsCount={unreadNotificationsCount} />,
               popout
             )}
           />
@@ -129,7 +143,7 @@ class App extends React.Component {
           <Route path="/vacancies" component={
             withTabbar(
               Vacancies,
-              <Tabbar userId={user ? user.id : null} selectedItem={"vacancies"} />,
+              <Tabbar userId={user ? user.id : null} selectedItem={"vacancies"} notificationsCount={unreadNotificationsCount} />,
               popout
             )}
           />
@@ -137,7 +151,7 @@ class App extends React.Component {
           <Route path="/vacancy_create" component={
             withTabbar(
               CreateVacancy,
-              <Tabbar userId={user ? user.id : null} selectedItem={"vacancy_create"} />,
+              <Tabbar userId={user ? user.id : null} selectedItem={"vacancy_create"} notificationsCount={unreadNotificationsCount} />,
               popout
             )}
           />
@@ -145,7 +159,7 @@ class App extends React.Component {
           <Route path="/user_edit" component={
             withTabbar(
               UserEdit,
-              <Tabbar userId={user ? user.id : null} selectedItem={"user_edit"} />,
+              <Tabbar userId={user ? user.id : null} selectedItem={"user_edit"} notificationsCount={unreadNotificationsCount} />,
               popout
             )}
           />
@@ -153,7 +167,7 @@ class App extends React.Component {
           <Route path="/schedule" component={
             withTabbar(
               Schedule,
-              <Tabbar userId={user ? user.id : null} selectedItem={"schedule"} />,
+              <Tabbar userId={user ? user.id : null} selectedItem={"schedule"} notificationsCount={unreadNotificationsCount} />,
               popout
             )}
           />
@@ -161,7 +175,7 @@ class App extends React.Component {
           <Route path="/vacancies_filter" component={
             withTabbar(
               Filter,
-              <Tabbar userId={user ? user.id : null} selectedItem={"vacancies_filter"} />,
+              <Tabbar userId={user ? user.id : null} selectedItem={"vacancies_filter"} notificationsCount={unreadNotificationsCount} />,
               popout
             )}
           />
@@ -169,7 +183,7 @@ class App extends React.Component {
           <Route path="/notifications" component={
             withTabbar(
               Notifications,
-              <Tabbar userId={user ? user.id : null} selectedItem={"notifications"} />,
+              <Tabbar userId={user ? user.id : null} selectedItem={"notifications"} notificationsCount={unreadNotificationsCount} />,
               popout
             )}
           />
@@ -177,7 +191,7 @@ class App extends React.Component {
           <Route path="/vacancy/:id" component={
             withTabbar(
               Vacancy,
-              <Tabbar userId={user ? user.id : null} selectedItem={"vacancy"} />,
+              <Tabbar userId={user ? user.id : null} selectedItem={"vacancy"} notificationsCount={unreadNotificationsCount} />,
               popout
             )}
           />
@@ -185,7 +199,7 @@ class App extends React.Component {
           <Route path="/main_menu" component={
             withTabbar(
               MainMenu,
-              <Tabbar userId={user ? user.id : null} selectedItem={"main_menu"} />,
+              <Tabbar userId={user ? user.id : null} selectedItem={"main_menu"} notificationsCount={unreadNotificationsCount} />,
               popout
             )}
           />
