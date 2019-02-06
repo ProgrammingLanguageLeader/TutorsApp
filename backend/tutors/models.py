@@ -1,6 +1,5 @@
 from django.db import models
 from django.conf import settings
-from django.contrib import admin
 
 
 class TutorStudents(models.Model):
@@ -24,10 +23,6 @@ class TutorStudents(models.Model):
         return str(self.user)
 
 
-class TutorStudentsAdmin(admin.ModelAdmin):
-    list_display = ('user', 'students_count', )
-
-
 class StudentRequest(models.Model):
     student = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -46,11 +41,3 @@ class StudentRequest(models.Model):
             self.student,
             self.tutor,
         ).capitalize()
-
-
-class StudentRequestAdmin(admin.ModelAdmin):
-    list_display = [
-        'student',
-        'tutor',
-        'creation_time',
-    ]
