@@ -6,3 +6,7 @@ a {
 .DayPicker {
     margin: auto;
 }
+
+.Cell__before {
+    align-items: flex-start;
+}

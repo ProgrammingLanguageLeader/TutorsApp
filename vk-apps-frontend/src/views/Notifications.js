@@ -1,309 +1,100 @@
 import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { 
-  View, Panel, PanelHeader, Group, Cell, List, HeaderButton
-} from '@vkontakte/vkui';
+import Moment from 'react-moment';
 
-import BackIcon from '../components/BackIcon';
-import DivSpinner from '../components/DivSpinner';
-import ApplicationCreationCell from "../components/ApplicationCreationCell";
-import ApplicationAnswerCell from "../components/ApplicationAnswerCell";
+import PanelHeader from '@vkontakte/vkui/dist/components/PanelHeader/PanelHeader';
+import Group from '@vkontakte/vkui/dist/components/Group/Group';
+import Cell from '@vkontakte/vkui/dist/components/Cell/Cell';
+import List from '@vkontakte/vkui/dist/components/List/List';
+import HeaderButton from '@vkontakte/vkui/dist/components/HeaderButton/HeaderButton';
+import Avatar from '@vkontakte/vkui/dist/components/Avatar/Avatar';
+import Button from '@vkontakte/vkui/dist/components/Button/Button';
+import Div from '@vkontakte/vkui/dist/components/Div/Div';
 
-import {
-  locationActions,
-  apiNotificationActions,
-  vkApiActions,
-  vkAppsActions,
-  apiStudentApplicationActions,
-  apiLessonApplicationActions, apiPaymentApplicationActions,
-} from '../actions';
-import { notificationLabels, notificationEventTypes } from "../constants";
+import BackIcon from 'vk-apps-frontend/components/BackIcon';
+import DivSpinner from 'vk-apps-frontend/components/DivSpinner';
+
+import { notificationsActions } from 'vk-apps-frontend/actions/api';
+
+import { ROOT_URL } from 'vk-apps-frontend/constants';
 
 const mapStateToProps = state => {
-  const { activePanel } = state.locationReducer;
-  const { accessToken } = state.vkAppsTokenReducer;
-  const { vkUsersInfo } = state.vkApiUsersReducer;
-  const { notifications } = state.apiNotificationReducer;
-  const vkApiUsersFetching = state.vkApiUsersReducer.fetching;
-  const apiNotificationFetching = state.apiNotificationReducer.fetching;
+  const { fetching, notifications } = state.apiReducer.notificationsReducer;
   return {
-    activePanel, notifications, accessToken, vkUsersInfo, vkApiUsersFetching,
-    apiNotificationFetching,
+    notifications, fetching
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    goBack: bindActionCreators(locationActions.goBack, dispatch),
-    changeLocation: bindActionCreators(locationActions.changeLocation, dispatch),
-    getNotifications: bindActionCreators(apiNotificationActions.getNotifications, dispatch),
-    markNotificationAsSeen: bindActionCreators(apiNotificationActions.markNotificationAsSeen, dispatch),
-    allowNotifications: bindActionCreators(vkAppsActions.allowNotifications, dispatch),
-    fetchUsersInfo: bindActionCreators(vkApiActions.fetchUsersInfo, dispatch),
-    acceptStudentApplication: bindActionCreators(apiStudentApplicationActions.acceptApplication, dispatch),
-    rejectStudentApplication: bindActionCreators(apiStudentApplicationActions.rejectApplication, dispatch),
-    acceptLessonApplication: bindActionCreators(apiLessonApplicationActions.acceptApplication, dispatch),
-    rejectLessonApplication: bindActionCreators(apiLessonApplicationActions.rejectApplication, dispatch),
-    acceptPaymentApplication: bindActionCreators(apiPaymentApplicationActions.acceptApplication, dispatch),
-    rejectPaymentApplication: bindActionCreators(apiPaymentApplicationActions.rejectApplication, dispatch),
+    getNotificationsList: bindActionCreators(notificationsActions.getNotificationsList, dispatch),
+    setUnreadNotification: bindActionCreators(notificationsActions.setUnreadNotification, dispatch),
   };
 };
 
 class Notifications extends React.Component {
   constructor(props) {
     super(props);
-
-    this.fetchNotifications = this.fetchNotifications.bind(this);
-    this.acceptStudentApplication = this.acceptStudentApplication.bind(this);
-    this.rejectStudentApplication = this.rejectStudentApplication.bind(this);
-    this.acceptLessonApplication = this.acceptLessonApplication.bind(this);
-    this.rejectLessonApplication = this.rejectLessonApplication.bind(this);
-    this.acceptPaymentApplication = this.acceptPaymentApplication.bind(this);
-    this.rejectPaymentApplication = this.rejectPaymentApplication.bind(this);
-    this.markAsSeen = this.markAsSeen.bind(this);
   }
 
   componentDidMount() {
-    this.fetchNotifications();
-  }
-
-  fetchNotifications() {
-    this.props.getNotifications({})
-      .then(() => {
-        const { accessToken, notifications } = this.props;
-        const vkIds = notifications.map(notification => {
-          if (notification.student_application) {
-            return notification.student_application.student.profile_id;
-          }
-          if (notification.lesson_application) {
-            return notification.lesson_application.student.profile_id;
-          }
-          if (notification.payment_application) {
-            return notification.payment_application.lesson.tutor.tutor_id;
-          }
-          if (notification.tutor) {
-            return notification.tutor.profile_id;
-          }
-          if (notification.student) {
-            return notification.student.profile_id;
-          }
-          if (notification.lesson) {
-            return notification.lesson.tutor.profile_id;
-          }
-          return null;
-        });
-        this.props.fetchUsersInfo(accessToken, vkIds);
-      })
-  }
-
-  acceptStudentApplication(applicationId) {
-    this.props.acceptStudentApplication({
-      student_application_id: applicationId,
-    })
-      .then(() => this.fetchNotifications())
-  }
-
-  rejectStudentApplication(applicationId) {
-    this.props.rejectStudentApplication({
-      student_application_id: applicationId,
-    })
-      .then(() => this.fetchNotifications())
-  }
-
-  acceptLessonApplication(applicationId) {
-    this.props.acceptLessonApplication({
-      lesson_application_id: applicationId,
-    })
-      .then(() => this.fetchNotifications())
-  }
-
-  rejectLessonApplication(applicationId) {
-    this.props.rejectLessonApplication({
-      lesson_application_id: applicationId,
-    })
-      .then(() => this.fetchNotifications())
-  }
-
-  acceptPaymentApplication(applicationId) {
-    this.props.acceptPaymentApplication({
-      payment_application_id: applicationId,
-    })
-      .then(() => this.fetchNotifications())
-  }
-
-  rejectPaymentApplication(applicationId) {
-    this.props.rejectPaymentApplication({
-      payment_application_id: applicationId,
-    })
-      .then(() => this.fetchNotifications())
-  }
-
-  markAsSeen(notificationId) {
-    this.props.markNotificationAsSeen({
-      notification_id: notificationId,
-    })
-      .then(() => this.fetchNotifications())
+    this.props.getNotificationsList({
+      unread: true,
+    });
   }
 
   render () {
-    const { vkUsersInfo, notifications, apiNotificationFetching, vkApiUsersFetching } = this.props;
-    const notificationsFetching =  apiNotificationFetching || vkApiUsersFetching;
+    const { fetching, notifications } = this.props;
 
     return (
-      <View id={this.props.id} activePanel="notifications">
-        <Panel id="notifications">
-          <PanelHeader
-            left={
-              <HeaderButton onClick={() => this.props.goBack()}>
-                <BackIcon />
-              </HeaderButton>
-            }
-          >
-            Уведомления
-          </PanelHeader>
-          <Group title="Активные уведомления">
-            <List>
-              {
-                notificationsFetching
-                ? (
-                  <DivSpinner />
-                )
-                : notifications
-                  .map(notification => {
-                    const event = notification.event;
-                    const label = notificationLabels[event];
-                    switch (event) {
-                      case notificationEventTypes.STUDENT_APPLICATION_CREATION: {
-                        const applicationId = notification.student_application.student_application_id;
-                        const studentId = notification.student_application.student.profile_id;
-                        const studentVkProfile = vkUsersInfo[studentId];
-                        if (!studentVkProfile) {
-                          return null;
-                        }
-                        return (
-                          <ApplicationCreationCell
-                            key={notification.notification_id}
-                            vkProfile={studentVkProfile}
-                            label={label}
-                            onClick={
-                              () => this.props.changeLocation('show_profile', '', {
-                                profileId: studentId
-                              })
-                            }
-                            onAccept={() => this.acceptStudentApplication(applicationId)}
-                            onReject={() => this.rejectStudentApplication(applicationId)}
-                          />
-                        );
-                      }
+      <div>
+        <PanelHeader
+          left={
+            <HeaderButton onClick={this.props.history.goBack}>
+              <BackIcon />
+            </HeaderButton>
+          }
+        >
+          Уведомления
+        </PanelHeader>
 
-                      case notificationEventTypes.STUDENT_APPLICATION_ACCEPT:
-                      case notificationEventTypes.STUDENT_APPLICATION_REJECT:
-                      case notificationEventTypes.PAYMENT_APPLICATION_ACCEPT:
-                      case notificationEventTypes.PAYMENT_APPLICATION_REJECT: {
-                        const tutorId = notification.tutor.profile_id;
-                        const tutorVkProfile = vkUsersInfo[tutorId];
-                        if (!tutorVkProfile) {
-                          return null;
-                        }
-                        return (
-                          <ApplicationAnswerCell
-                            key={notification.notification_id}
-                            vkProfile={tutorVkProfile}
-                            onMarkAsSeen={() => this.markAsSeen(notification.notification_id)}
-                            label={label}
-                          />
-                        );
-                      }
+        <Group title="Непрочитанные">
+          {fetching && (
+            <DivSpinner />
+          )}
 
-                      case notificationEventTypes.LESSON_CREATION:
-                      case notificationEventTypes.LESSON_CHANGING:
-                      case notificationEventTypes.LESSON_DEACTIVATION:
-                      case notificationEventTypes.LESSON_APPLICATION_ACCEPT:
-                      case notificationEventTypes.LESSON_APPLICATION_REJECT: {
-                        const tutorId = notification.tutor.profile_id;
-                        const lessonId = notification.lesson.lesson_id;
-                        const tutorVkProfile = vkUsersInfo[tutorId];
-                        if (!tutorVkProfile) {
-                          return null;
-                        }
-                        return (
-                          <ApplicationAnswerCell
-                            key={notification.notification_id}
-                            expandable
-                            vkProfile={tutorVkProfile}
-                            onMarkAsSeen={() => this.markAsSeen(notification.notification_id)}
-                            onClick={() => this.props.changeLocation('show_lesson', '', {
-                              lessonId: lessonId
-                            })}
-                            label={label}
-                          />
-                        );
-                      }
-
-                      case notificationEventTypes.LESSON_APPLICATION_CREATION: {
-                        const applicationId = notification.lesson_application.lesson_application_id;
-                        const studentId = notification.lesson_application.student.profile_id;
-                        const studentVkProfile = vkUsersInfo[studentId];
-                        if (!studentVkProfile) {
-                          return null;
-                        }
-                        return (
-                          <ApplicationCreationCell
-                            key={notification.notification_id}
-                            vkProfile={studentVkProfile}
-                            label={label}
-                            onClick={
-                              () => this.props.changeLocation('show_lesson_application', '', {
-                                lessonApplicationId: applicationId
-                              })
-                            }
-                            onAccept={() => this.acceptLessonApplication(applicationId)}
-                            onReject={() => this.rejectLessonApplication(applicationId)}
-                          />
-                        );
-                      }
-
-                      case notificationEventTypes.PAYMENT_APPLICATION_CREATION: {
-                        const applicationId = notification.payment_application.payment_application_id;
-                        const tutorId = notification.payment_application.tutor.profile_id;
-                        const tutorVkProfile = vkUsersInfo[tutorId];
-                        if (!tutorVkProfile) {
-                          return null;
-                        }
-                        return (
-                          <ApplicationCreationCell
-                            key={notification.notification_id}
-                            vkProfile={tutorVkProfile}
-                            label={label}
-                            onClick={
-                              () => this.props.changeLocation('show_payment_application', '', {
-                                lessonApplicationId: applicationId
-                              })
-                            }
-                            onAccept={() => this.acceptPaymentApplication(applicationId)}
-                            onReject={() => this.rejectPaymentApplication(applicationId)}
-                          />
-                        );
-                      }
-
-                      default:
-                        console.log(`Unhandled type of notification, event = ${event}`);
-                        return null;
-                    }
-                  })
-              }
-              {
-                notifications.length === 0 && (
-                  <Cell multiline>
-                    На данный момент уведомления отсутствуют
-                  </Cell>
-                )
-              }
-            </List>
-          </Group>
-        </Panel>
-      </View>
+          <List>
+            {notifications.map(notification => (
+              <Cell
+                multiline
+                key={notification.id}
+                description={
+                  <div>
+                    <div>
+                      {notification.target.content_type === 'student_request' && 'Заявка на добавление в список учеников'}
+                    </div>
+                    <div>
+                      <Moment format="LL" date={notification.creation_time} />
+                    </div>
+                  </div>
+                }
+                before={
+                  <Avatar size={64} src={ROOT_URL + notification.sender.avatar} />
+                }
+              >
+                <div>
+                  {notification.sender.first_name} {notification.sender.last_name}
+                </div>
+                <div style={{ paddingTop: 8, paddingBottom: 8 }}>
+                  <Button size="l" style={{ marginRight: 8 }}>Принять</Button>
+                  <Button size="l" level="secondary">Отклонить</Button>
+                </div>
+              </Cell>
+            ))}
+          </List>
+        </Group>
+      </div>
     )
   }
 }
