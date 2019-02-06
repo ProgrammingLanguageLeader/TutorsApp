@@ -24,6 +24,54 @@ const getNotificationsList = (options = {}) => {
   };
 };
 
+const getReadNotificationsList = (options = {}) => {
+  return async dispatch => {
+    dispatch({
+      type: notificationsConstants.GET_READ_NOTIFICATIONS_LIST_REQUEST,
+    });
+    options.unread = false;
+    return makeApiRequest('notifications/', 'get', options)
+      .then(
+        response => {
+          dispatch({
+            type: notificationsConstants.GET_READ_NOTIFICATIONS_LIST_SUCCESS,
+            payload: response,
+          })
+        },
+        errors => {
+          dispatch({
+            type: notificationsConstants.GET_READ_NOTIFICATIONS_LIST_FAILURE,
+            payload: errors,
+          });
+        }
+      )
+  };
+};
+
+const getUnreadNotificationsList = (options = {}) => {
+  return async dispatch => {
+    dispatch({
+      type: notificationsConstants.GET_UNREAD_NOTIFICATIONS_LIST_REQUEST,
+    });
+    options.unread = true;
+    return makeApiRequest('notifications/', 'get', options)
+      .then(
+        response => {
+          dispatch({
+            type: notificationsConstants.GET_UNREAD_NOTIFICATIONS_LIST_SUCCESS,
+            payload: response,
+          })
+        },
+        errors => {
+          dispatch({
+            type: notificationsConstants.GET_UNREAD_NOTIFICATIONS_LIST_FAILURE,
+            payload: errors,
+          });
+        }
+      )
+  };
+};
+
 const getNotification = (id, options = {}) => {
   return async dispatch => {
     dispatch({
@@ -72,6 +120,8 @@ const setUnreadNotification = (id, options = {}) => {
 
 export const notificationsActions = {
   getNotificationsList,
+  getUnreadNotificationsList,
+  getReadNotificationsList,
   getNotification,
   setUnreadNotification,
 };
