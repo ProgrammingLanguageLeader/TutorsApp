@@ -189,6 +189,7 @@ export const tutorsActions = {
   getStudentRequestsList,
   createStudentRequest,
   getStudentRequest,
+  acceptStudentRequest,
   deleteStudentRequest,
   getStudentsList,
   getStudent,
