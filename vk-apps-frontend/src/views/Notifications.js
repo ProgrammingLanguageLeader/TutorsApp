@@ -20,7 +20,7 @@ import Icon24Cancel from '@vkontakte/icons/dist/24/cancel';
 import BackIcon from 'vk-apps-frontend/components/BackIcon';
 import DivSpinner from 'vk-apps-frontend/components/DivSpinner';
 
-import { notificationsActions } from 'vk-apps-frontend/actions/api';
+import { notificationsActions, tutorsActions } from 'vk-apps-frontend/actions/api';
 
 import { ROOT_URL } from 'vk-apps-frontend/constants';
 
@@ -35,6 +35,8 @@ const mapDispatchToProps = dispatch => {
   return {
     getNotificationsList: bindActionCreators(notificationsActions.getNotificationsList, dispatch),
     setUnreadNotification: bindActionCreators(notificationsActions.setUnreadNotification, dispatch),
+    acceptStudentRequest: bindActionCreators(tutorsActions.acceptStudentRequest, dispatch),
+    deleteStudentRequest: bindActionCreators(tutorsActions.deleteStudentRequest, dispatch),
   };
 };
 
@@ -84,6 +86,7 @@ class Notifications extends React.Component {
             {unreadNotifications.map(notification => (
               <Cell
                 multiline
+                expandable
                 key={notification.id}
                 description={
                   <div>
@@ -95,6 +98,7 @@ class Notifications extends React.Component {
                     </div>
                   </div>
                 }
+                onClick={() => this.props.history.push(`/${notification.target.content_type}/${notification.target.id}`)}
               >
                 <div style={{ display: "flex" }}>
                   <Avatar size={64} src={ROOT_URL + notification.sender.avatar} />
@@ -103,14 +107,6 @@ class Notifications extends React.Component {
                   </Div>
                 </div>
                 <div style={{ display: "flex", paddingTop: 8, paddingBottom: 8 }}>
-                  <Button size="m" level="primary" before={<Icon24Add/>} style={{ marginRight: 4 }}>
-                    Принять
-                  </Button>
-                  <Button size="m" level="secondary" before={<Icon24Cancel/>}>
-                    Отклонить
-                  </Button>
-                </div>
-                <div>
                   <Button size="m" level="outline" before={<Icon24Hide/>} onClick={
                     () => this.handleSetUnreadNotification(notification.id, false)
                   }>
@@ -131,6 +127,7 @@ class Notifications extends React.Component {
             {readNotifications.map(notification => (
               <Cell
                 multiline
+                expandable
                 key={notification.id}
                 description={
                   <div>
@@ -142,6 +139,7 @@ class Notifications extends React.Component {
                     </div>
                   </div>
                 }
+                onClick={() => this.props.history.push(`/${notification.target.content_type}/${notification.target.id}`)}
               >
                 <div style={{ display: "flex" }}>
                   <Avatar size={64} src={ROOT_URL + notification.sender.avatar} />
@@ -150,14 +148,6 @@ class Notifications extends React.Component {
                   </Div>
                 </div>
                 <div style={{ display: "flex", paddingTop: 8, paddingBottom: 8 }}>
-                  <Button size="m" level="primary" before={<Icon24Add/>} style={{ marginRight: 4 }}>
-                    Принять
-                  </Button>
-                  <Button size="m" level="secondary" before={<Icon24Cancel/>}>
-                    Отклонить
-                  </Button>
-                </div>
-                <div>
                   <Button size="m" level="outline" before={<Icon24View/>} onClick={
                     () => this.handleSetUnreadNotification(notification.id, true)
                   }>
