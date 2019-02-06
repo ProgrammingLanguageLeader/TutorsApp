@@ -1,6 +1,8 @@
 from rest_framework import serializers
 
 from tutors.models import StudentRequest, TutorStudents
+
+from users.models import User
 from users.serializers import UserSerializer
 
 
@@ -9,7 +11,7 @@ class StudentRequestSerializer(serializers.ModelSerializer):
         default=serializers.CurrentUserDefault()
     )
     tutor = serializers.PrimaryKeyRelatedField(
-        queryset=UserSerializer.Meta.model.objects.all()
+        queryset=User.objects.all()
     )
 
     class Meta:
@@ -26,7 +28,7 @@ class StudentRequestSerializer(serializers.ModelSerializer):
                     'tutor must not be equal to student'
                 ]
             })
-        tutor, created = TutorStudents.objects.get_or_create(pk=tutor)
+        tutor, created = TutorStudents.objects.get_or_create(user=tutor)
         if student in tutor.students.all():
             raise serializers.ValidationError({
                 'student': [
