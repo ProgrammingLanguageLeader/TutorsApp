@@ -68,13 +68,11 @@ class Notifications extends React.Component {
 
     return (
       <div>
-        <PanelHeader
-          left={
-            <HeaderButton onClick={this.props.history.goBack}>
-              <BackIcon />
-            </HeaderButton>
-          }
-        >
+        <PanelHeader left={
+          <HeaderButton onClick={this.props.history.goBack}>
+            <BackIcon />
+          </HeaderButton>
+        }>
           Уведомления
         </PanelHeader>
 
@@ -98,9 +96,11 @@ class Notifications extends React.Component {
                     </div>
                   </div>
                 }
-                onClick={() => this.props.history.push(`/${notification.target.content_type}/${notification.target.id}`)}
               >
-                <div style={{ display: "flex" }}>
+                <div
+                  style={{ display: "flex" }}
+                  onClick={() => this.props.history.push(`/${notification.target.content_type}/${notification.target.id}`)}
+                >
                   <Avatar size={64} src={ROOT_URL + notification.sender.avatar} />
                   <Div>
                     {notification.sender.first_name} {notification.sender.last_name}
@@ -139,9 +139,11 @@ class Notifications extends React.Component {
                     </div>
                   </div>
                 }
-                onClick={() => this.props.history.push(`/${notification.target.content_type}/${notification.target.id}`)}
               >
-                <div style={{ display: "flex" }}>
+                <div
+                  style={{ display: "flex" }}
+                  onClick={() => this.props.history.push(`/${notification.target.content_type}/${notification.target.id}`)}
+                >
                   <Avatar size={64} src={ROOT_URL + notification.sender.avatar} />
                   <Div>
                     {notification.sender.first_name} {notification.sender.last_name}
