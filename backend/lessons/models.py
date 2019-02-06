@@ -1,5 +1,4 @@
 from django.db import models
-from django.contrib import admin
 from django.conf import settings
 
 
@@ -27,14 +26,3 @@ class Lesson(models.Model):
             self.tutor_id,
             self.student_id,
         )
-
-
-class LessonAdmin(admin.ModelAdmin):
-    list_display = (
-        'id',
-        'tutor',
-        'student',
-        'price',
-        'beginning_time',
-        'ending_time',
-    )
