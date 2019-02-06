@@ -16,16 +16,22 @@ from notifications.models import Notification
 
 class TargetObjectRelatedField(serializers.RelatedField):
     def to_representation(self, value):
+        serializer_data = None
         if isinstance(value, Vacancy):
             serializer = VacancySerializer(value)
-            return serializer.data
+            serializer_data = serializer.data
+            serializer_data['content_type'] = 'vacancy'
         if isinstance(value, StudentRequest):
             serializer = StudentRequestSerializer(value)
-            return serializer.data
+            serializer_data = serializer.data
+            serializer_data['content_type'] = 'student_request'
         if isinstance(value, Lesson):
             serializer = LessonSerializer(value)
-            return serializer.data
-        raise Exception('Unexpected type of tagged object')
+            serializer_data = serializer.data
+            serializer_data['content_type'] = 'lesson'
+        if not serializer_data:
+            raise Exception('Unexpected type of tagged object')
+        return serializer_data
 
 
 class NotificationSerializer(serializers.ModelSerializer):
