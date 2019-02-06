@@ -36,6 +36,9 @@ class StudentRequest(models.Model):
     )
     creation_time = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        unique_together = ('student', 'tutor')
+
     def __str__(self):
         return 'student: {} | tutor: {}'.format(
             self.student,
