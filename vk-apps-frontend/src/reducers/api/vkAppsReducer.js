@@ -20,7 +20,7 @@ const vkAppsUsersReducer = (state = initialState, action) => {
       });
 
     case vkAppsUsersConstants.GET_VK_APPS_USER_SUCCESS: {
-      const {user, vk_id} = action.payload;
+      const { user, vk_id } = action.payload;
       return state.merge({
         user: user,
         vkId: vk_id,
@@ -30,6 +30,14 @@ const vkAppsUsersReducer = (state = initialState, action) => {
     }
 
     case vkAppsUsersConstants.CREATE_VK_APPS_USER_SUCCESS:
+      const { user, vk_id } = action.payload;
+      return state.merge({
+        user: user,
+        vkId: vk_id,
+        fetching: false,
+        errors: null,
+      });
+
     case vkAppsUsersConstants.DELETE_VK_APPS_USER_SUCCESS:
     case vkAppsUsersConstants.CONNECT_VK_APPS_USER_SUCCESS:
       return state.merge({

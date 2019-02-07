@@ -24,7 +24,7 @@ import StudentRequest from 'vk-apps-frontend/views/StudentRequest';
 
 import { appsActions } from 'vk-apps-frontend/actions/vk';
 import { currentUserActions } from 'vk-apps-frontend/actions';
-import { vkAppsUsersActions, notificationsActions } from 'vk-apps-frontend/actions/api';
+import { vkAppsUsersActions, notificationsActions, usersActions } from 'vk-apps-frontend/actions/api';
 
 import PopoutDiv from 'vk-apps-frontend/components/PopoutDiv';
 import Tabbar from 'vk-apps-frontend/components/Tabbar';
@@ -55,6 +55,7 @@ const mapDispatchToProps = dispatch => {
     fetchAccessToken: bindActionCreators(appsActions.fetchAccessToken, dispatch),
     getVkAppsUser: bindActionCreators(vkAppsUsersActions.getVkAppsUser, dispatch),
     createVkAppsUser: bindActionCreators(vkAppsUsersActions.createVkAppsUser, dispatch),
+    updateUser: bindActionCreators(usersActions.updateUser, dispatch),
     saveCurrentUserData: bindActionCreators(currentUserActions.currentUserSaveData, dispatch),
     getUnreadNotificationsList: bindActionCreators(notificationsActions.getUnreadNotificationsList, dispatch),
   };
@@ -65,6 +66,22 @@ class App extends React.Component {
     super(props);
     this.initVkApps = this.initVkApps.bind(this);
     this.getUnreadNotificationsList = this.getUnreadNotificationsList.bind(this);
+    this.createUser = this.createUser.bind(this);
+  }
+
+  async createUser() {
+    await this.props.createVkAppsUser();
+    const {
+      first_name,
+      last_name,
+      city
+    } = this.props.vkUserInfo;
+    const { id } = this.props.vkAppsUsersReducer.user;
+    await this.props.updateUser(id, {
+      first_name,
+      last_name,
+      city: city ? city.title : null,
+    });
   }
 
   async componentDidMount() {
@@ -73,14 +90,12 @@ class App extends React.Component {
     const { id } = this.props.vkUserInfo;
     await this.props.getVkAppsUser(id);
     if (!this.props.vkAppsUsersReducer.user) {
-      await this.props.createVkAppsUser();
+      await this.createUser();
     }
-    else {
-      await this.props.getUnreadNotificationsList();
-      const { user, vkId } = this.props.vkAppsUsersReducer;
-      const { notificationsCount } = this.props;
-      this.props.saveCurrentUserData(user, vkId, notificationsCount);
-    }
+    const { user, vkId } = this.props.vkAppsUsersReducer;
+    this.props.saveCurrentUserData(user, vkId);
+
+    await this.props.getUnreadNotificationsList();
     this.getUnreadNotificationsList();
   }
 
