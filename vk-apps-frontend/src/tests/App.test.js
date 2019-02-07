@@ -1,10 +1,22 @@
+import { shallow, configure } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
+
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
 
 import App from 'vk-apps-frontend/App';
+import store from 'vk-apps-frontend/store/store';
 
-it('renders without crashing', () => {
-  const div = document.createElement('div');
-  ReactDOM.render(<App />, div);
-  ReactDOM.unmountComponentAtNode(div);
+configure({
+  adapter: new Adapter()
+});
+
+describe('>>> APP testing', () => {
+  it('renders without crashing', () => {
+    shallow(
+      <Provider store={store}>
+        <App />
+      </Provider>
+    );
+  });
 });
