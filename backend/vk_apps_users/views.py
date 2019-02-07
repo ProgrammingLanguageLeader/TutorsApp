@@ -74,7 +74,7 @@ class VkAppsUsersViewSet(mixins.CreateModelMixin,
             user.delete()
             return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
         vk_apps_user = VkAppsUser.objects.create(user=user, vk_id=vk_id)
-        return Response(VkAppsUserSerializer(vk_apps_user).data)
+        return Response(GetVkAppsUserSerializer(vk_apps_user).data)
 
     @action(detail=False, methods=['post'],
             permission_classes=[AuthenticatedUsingPasswordAndVKApps],
