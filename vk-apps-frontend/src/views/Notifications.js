@@ -14,8 +14,6 @@ import Div from '@vkontakte/vkui/dist/components/Div/Div';
 
 import Icon24View from '@vkontakte/icons/dist/24/view';
 import Icon24Hide from '@vkontakte/icons/dist/24/hide';
-import Icon24Add from '@vkontakte/icons/dist/24/add';
-import Icon24Cancel from '@vkontakte/icons/dist/24/cancel';
 
 import BackIcon from 'vk-apps-frontend/components/BackIcon';
 import DivSpinner from 'vk-apps-frontend/components/DivSpinner';

@@ -126,7 +126,11 @@ class App extends React.Component {
           <Route path="/home" component={
             withTabbar(
               Home,
-              <Tabbar userId={user ? user.id : null} selectedItem={"home"} notificationsCount={unreadNotificationsCount} />,
+              <Tabbar
+                userId={user ? user.id : null}
+                selectedItem={"home"}
+                notificationsCount={unreadNotificationsCount}
+              />,
               popout,
               "white",
               true
@@ -136,7 +140,11 @@ class App extends React.Component {
           <Route path="/user/:id" component={
             withTabbar(
               User,
-              <Tabbar userId={user ? user.id : null} selectedItem={"user"} notificationsCount={unreadNotificationsCount} />,
+              <Tabbar
+                userId={user ? user.id : null}
+                selectedItem={"user"}
+                notificationsCount={unreadNotificationsCount}
+              />,
               popout
             )}
           />
@@ -144,7 +152,11 @@ class App extends React.Component {
           <Route path="/vacancies" component={
             withTabbar(
               Vacancies,
-              <Tabbar userId={user ? user.id : null} selectedItem={"vacancies"} notificationsCount={unreadNotificationsCount} />,
+              <Tabbar
+                userId={user ? user.id : null}
+                selectedItem={"vacancies"}
+                notificationsCount={unreadNotificationsCount}
+              />,
               popout
             )}
           />
@@ -152,7 +164,11 @@ class App extends React.Component {
           <Route path="/vacancy_create" component={
             withTabbar(
               CreateVacancy,
-              <Tabbar userId={user ? user.id : null} selectedItem={"vacancy_create"} notificationsCount={unreadNotificationsCount} />,
+              <Tabbar
+                userId={user ? user.id : null}
+                selectedItem={"vacancy_create"}
+                notificationsCount={unreadNotificationsCount}
+              />,
               popout
             )}
           />
@@ -160,7 +176,11 @@ class App extends React.Component {
           <Route path="/user_edit" component={
             withTabbar(
               UserEdit,
-              <Tabbar userId={user ? user.id : null} selectedItem={"user_edit"} notificationsCount={unreadNotificationsCount} />,
+              <Tabbar
+                userId={user ? user.id : null}
+                selectedItem={"user_edit"}
+                notificationsCount={unreadNotificationsCount}
+              />,
               popout
             )}
           />
@@ -168,7 +188,11 @@ class App extends React.Component {
           <Route path="/schedule" component={
             withTabbar(
               Schedule,
-              <Tabbar userId={user ? user.id : null} selectedItem={"schedule"} notificationsCount={unreadNotificationsCount} />,
+              <Tabbar
+                userId={user ? user.id : null}
+                selectedItem={"schedule"}
+                notificationsCount={unreadNotificationsCount}
+              />,
               popout
             )}
           />
@@ -176,7 +200,11 @@ class App extends React.Component {
           <Route path="/vacancies_filter" component={
             withTabbar(
               Filter,
-              <Tabbar userId={user ? user.id : null} selectedItem={"vacancies_filter"} notificationsCount={unreadNotificationsCount} />,
+              <Tabbar
+                userId={user ? user.id : null}
+                selectedItem={"vacancies_filter"}
+                notificationsCount={unreadNotificationsCount}
+              />,
               popout
             )}
           />
@@ -184,7 +212,11 @@ class App extends React.Component {
           <Route path="/notifications" component={
             withTabbar(
               Notifications,
-              <Tabbar userId={user ? user.id : null} selectedItem={"notifications"} notificationsCount={unreadNotificationsCount} />,
+              <Tabbar
+                userId={user ? user.id : null}
+                selectedItem={"notifications"}
+                notificationsCount={unreadNotificationsCount}
+              />,
               popout
             )}
           />
@@ -192,7 +224,11 @@ class App extends React.Component {
           <Route path="/vacancy/:id" component={
             withTabbar(
               Vacancy,
-              <Tabbar userId={user ? user.id : null} selectedItem={"vacancy"} notificationsCount={unreadNotificationsCount} />,
+              <Tabbar
+                userId={user ? user.id : null}
+                selectedItem={"vacancy"}
+                notificationsCount={unreadNotificationsCount}
+              />,
               popout
             )}
           />
@@ -200,7 +236,11 @@ class App extends React.Component {
           <Route path="/main_menu" component={
             withTabbar(
               MainMenu,
-              <Tabbar userId={user ? user.id : null} selectedItem={"main_menu"} notificationsCount={unreadNotificationsCount} />,
+              <Tabbar
+                userId={user ? user.id : null}
+                selectedItem={"main_menu"}
+                notificationsCount={unreadNotificationsCount}
+              />,
               popout
             )}
           />
@@ -208,7 +248,11 @@ class App extends React.Component {
           <Route path="/student_request/:id" component={
             withTabbar(
               StudentRequest,
-              <Tabbar userId={user ? user.id : null} selectedItem={"student_request"} notificationsCount={unreadNotificationsCount} />,
+              <Tabbar
+                userId={user ? user.id : null}
+                selectedItem={"student_request"}
+                notificationsCount={unreadNotificationsCount}
+              />,
               popout
             )
           } />
