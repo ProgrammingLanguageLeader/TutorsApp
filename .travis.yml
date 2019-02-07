@@ -6,8 +6,10 @@ matrix:
       before_install:
         - cd backend/
       install: 
+        - pip install pipenv
         - pipenv install
       script:
+        - pipenv shell
         - python manage.py test
 
     - language: node_js
