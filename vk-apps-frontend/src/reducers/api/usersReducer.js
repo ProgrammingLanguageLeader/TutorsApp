@@ -58,8 +58,15 @@ const usersReducer = (state = initialState, action) => {
     case usersConstants.UPDATE_USER_FAILURE:
     case usersConstants.DELETE_USER_FAILURE:
     case usersConstants.UPLOAD_AVATAR_FAILURE:
+      if (action.payload.response) {
+        return state.merge({
+          errors: action.payload.response.data,
+          success: null,
+          fetching: false,
+        });
+      }
       return state.merge({
-        errors: action.payload.response.data,
+        errors: ['Network error'],
         success: null,
         fetching: false,
       });
