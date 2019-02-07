@@ -1,3 +1,4 @@
+from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.dispatch import receiver
 
@@ -21,3 +22,17 @@ def send_notification_on_student_request_creation(
         target=instance,
         verb='create'
     )
+
+
+@receiver(models.signals.pre_delete, sender=StudentRequest)
+def delete_notification_on_student_request_deletion(
+    sender,
+    instance,
+    **kwargs
+):
+    notifications = Notification.objects.filter(
+        target_object_id=instance.id,
+        target_content_type=ContentType.objects.get_for_model(instance)
+    )
+    for notification in notifications:
+        notification.delete()
