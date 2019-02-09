@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Moment from 'react-moment';
-import 'moment/locale/ru';
 
 import PanelHeader from '@vkontakte/vkui/dist/components/PanelHeader/PanelHeader';
 import Cell from '@vkontakte/vkui/dist/components/Cell/Cell';
@@ -31,8 +30,13 @@ const mapStateToProps = state => {
   const fetching = state.apiReducer.vacanciesReducer.fetching || state.apiReducer.tutorsReducer.fetching;
   const { vacancy } = state.apiReducer.vacanciesReducer;
   const { errors, studentRequestSuccess } = state.apiReducer.tutorsReducer;
+  const { currentUserReducer } = state;
   return {
-    vacancy, fetching, errors, studentRequestSuccess,
+    vacancy,
+    fetching,
+    errors,
+    studentRequestSuccess,
+    currentUserReducer,
   };
 };
 
@@ -51,8 +55,10 @@ class Vacancy extends React.Component {
 
 
   componentDidMount() {
-    const { id } = this.props.match.params;
-    this.props.getVacancy(id);
+    if (this.props.currentUserReducer.user) {
+      const { id } = this.props.match.params;
+      this.props.getVacancy(id);
+    }
   }
 
   createStudentRequest(tutorId) {
@@ -71,93 +77,90 @@ class Vacancy extends React.Component {
 
     return (
       <div>
-        <PanelHeader
-          left={
-            <HeaderButton onClick={this.props.history.goBack}>
-              <BackIcon />
-            </HeaderButton>
-          }
-        >
+        <PanelHeader left={
+          <HeaderButton onClick={this.props.history.goBack}>
+            <BackIcon />
+          </HeaderButton>
+        }>
           Предложение
         </PanelHeader>
-        {
-          fetching
-          ? (
-            <DivSpinner />
-          )
-          : vacancy && (
-            <div>
-              <Group title="Учитель">
-                <Cell
-                  expandable
-                  size="l"
-                  description={
-                    <div>
-                      Пользуется сервисом с
-                      <div>
-                        <Moment format="LL" date={vacancy.owner.date_joined} />
-                      </div>
-                    </div>
-                  }
-                  before={<Avatar src={ROOT_URL + vacancy.owner.avatar} size={64} />}
-                  onClick={() => this.props.history.push(`/user/${vacancy.owner.id}`)}
-                >
+
+        {fetching && (
+          <DivSpinner />
+        )}
+
+        {vacancy && (
+          <div>
+            <Group title="Учитель">
+              <Cell
+                expandable
+                size="l"
+                description={
                   <div>
-                    {`${vacancy.owner.first_name} ${vacancy.owner.last_name}`}
+                    Пользуется сервисом с
+                    <div>
+                      <Moment format="LL" date={vacancy.owner.date_joined} />
+                    </div>
                   </div>
-                </Cell>
-              </Group>
+                }
+                before={<Avatar src={ROOT_URL + vacancy.owner.avatar} size={64} />}
+                onClick={() => this.props.history.push(`/user/${vacancy.owner.id}`)}
+              >
+                <div>
+                  {`${vacancy.owner.first_name} ${vacancy.owner.last_name}`}
+                </div>
+              </Cell>
+            </Group>
 
-              <Group title="Добавление в список учеников">
-                <CellButton before={<Icon24UserAdd />} onClick={() => this.createStudentRequest(vacancy.owner.id)}>
-                  Отправить заявку
-                </CellButton>
-                { studentRequestSuccess && (
-                  <Div>
-                    <SuccessFormStatus title="Успешно" />
-                  </Div>
-                )}
-                { errors && (
-                  <Div>
-                    <FormStatus state="error" title="Ошибка">{JSON.stringify(errors)}</FormStatus>
-                  </Div>
-                )}
-              </Group>
+            <Group title="Добавление в список учеников">
+              <CellButton before={<Icon24UserAdd />} onClick={() => this.createStudentRequest(vacancy.owner.id)}>
+                Отправить заявку
+              </CellButton>
+              { studentRequestSuccess && (
+                <Div>
+                  <SuccessFormStatus title="Успешно" />
+                </Div>
+              )}
+              { errors && (
+                <Div>
+                  <FormStatus state="error" title="Ошибка">{JSON.stringify(errors)}</FormStatus>
+                </Div>
+              )}
+            </Group>
 
-              <Group title="Информация о вакансии">
+            <Group title="Информация о вакансии">
+              <Cell
+                multiline
+                description="Предмет обучения"
+                before={<Icon24Education />}
+              >
+                {vacancy.subject}
+              </Cell>
+
+              <Cell
+                multiline
+                description="Стоимость занятия"
+                before={<Icon24MoneyCircle/>}
+              >
+                {vacancy.price} рублей/час
+              </Cell>
+
+              <Cell description="Выезд на дом" before={<Icon24Home />}>
+                {vacancy.home_schooling ? "Да" : "Нет"}
+              </Cell>
+
+              {vacancy.extra_info && (
                 <Cell
                   multiline
-                  description="Предмет обучения"
-                  before={<Icon24Education />}
+                  description="Дополнительная информация"
+                  before={<Icon24Info />}
                 >
-                  {vacancy.subject}
+                  {vacancy.extra_info || "Не указана"}
                 </Cell>
-
-                <Cell
-                  multiline
-                  description="Стоимость занятия"
-                  before={<Icon24MoneyCircle/>}
-                >
-                  {vacancy.price} рублей/час
-                </Cell>
-
-                <Cell description="Выезд на дом" before={<Icon24Home />}>
-                  {vacancy.home_schooling ? "Да" : "Нет"}
-                </Cell>
-
-                {vacancy.extra_info && (
-                  <Cell
-                    multiline
-                    description="Дополнительная информация"
-                    before={<Icon24Info />}
-                  >
-                    {vacancy.extra_info || "Не указана"}
-                  </Cell>
-                )}
-              </Group>
-            </div>
-          )
-        }
+              )}
+            </Group>
+          </div>
+        )}
       </div>
     );
   }

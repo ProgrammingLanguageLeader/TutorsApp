@@ -19,12 +19,12 @@ import BackIcon from 'vk-apps-frontend/components/BackIcon';
 
 const mapStateToProps = state => {
   const { user } = state.apiReducer.usersReducer;
-  const vkAppsUsersFetching = state.apiReducer.vkAppsUsersReducer.fetching;
+  const { fetching } = state.apiReducer.vkAppsUsersReducer;
   const { currentUserReducer } = state;
   return {
     user,
     currentUserReducer,
-    vkAppsUsersFetching,
+    fetching,
   };
 };
 
@@ -36,13 +36,15 @@ const mapDispatchToProps = dispatch => {
 
 class User extends React.Component {
   componentDidMount() {
-    const { id } = this.props.match.params;
-    this.props.getUser(id);
+    if (this.props.currentUserReducer.user) {
+      const { id } = this.props.match.params;
+      this.props.getUser(id);
+    }
   }
 
 	render() {
     const { id } = this.props.match.params;
-    const { user, vkAppsUsersFetching, currentUserReducer } = this.props;
+    const { user, fetching, currentUserReducer } = this.props;
     const isProfileEditable = currentUserReducer.user && Number(id) === Number(currentUserReducer.user.id);
 
 		return (
@@ -55,91 +57,90 @@ class User extends React.Component {
           Профиль
         </PanelHeader>
 
-        { vkAppsUsersFetching
-          ? (
-            <DivSpinner />
-          )
-          : user && (
-            <div>
-              <Group>
-                <Cell
-                  size="l"
-                  multiline
-                  description="Здесь можно посмотреть и отредактировать публичную информацию о Вашем профиле"
-                  before={<Avatar size={80} src={ROOT_URL + user.avatar} />}
-                  asideContent={
-                    isProfileEditable && (
-                      <HeaderButton>
-                        <Link to="/user_edit">
-                          <Icon24Write />
-                        </Link>
-                      </HeaderButton>
-                    )
-                  }
-                >
-                  {`${user.first_name} ${user.last_name}`}
-                </Cell>
-              </Group>
+        {fetching && (
+          <DivSpinner />
+        )}
 
-              <Group title="Информация о пользователе">
-                <Cell multiline description="Дата создания профиля">
-                  <Moment locale="ru" format="D MMMM YYYY">
-                    {user.date_joined || "Не задано"}
-                  </Moment>
-                </Cell>
-                {
-                  user.experience && (
-                    <Cell multiline description="Опыт преподавания">
-                      {user.experience}
-                    </Cell>
+        {user && (
+          <div>
+            <Group>
+              <Cell
+                size="l"
+                multiline
+                description="Здесь можно посмотреть и отредактировать публичную информацию о Вашем профиле"
+                before={<Avatar size={80} src={ROOT_URL + user.avatar} />}
+                asideContent={
+                  isProfileEditable && (
+                    <HeaderButton>
+                      <Link to="/user_edit">
+                        <Icon24Write />
+                      </Link>
+                    </HeaderButton>
                   )
                 }
-                {
-                  user.education && (
-                    <Cell multiline description="Образование">
-                      {user.education || "Не задано"}
-                    </Cell>
-                  )
-                }
-                {
-                  user.city && (
-                    <Cell multiline description="Город">
-                      {user.city || "Не задано"}
-                    </Cell>
-                  )
-                }
-                {
-                  user.district && (
-                    <Cell multiline description="Район">
-                      {user.district}
-                    </Cell>
-                  )
-                }
-                {
-                  user.street && (
-                    <Cell multiline description="Улица">
-                      {user.street}
-                    </Cell>
-                  )
-                }
-                {
-                  user.metro_station && (
-                    <Cell multiline description="Станция метро">
-                      {user.metro_station}
-                    </Cell>
-                  )
-                }
-                {
-                  user.bio && (
-                    <Cell multiline description="О себе">
-                      {user.bio}
-                    </Cell>
-                  )
-                }
-              </Group>
-            </div>
-          )
-        }
+              >
+                {`${user.first_name} ${user.last_name}`}
+              </Cell>
+            </Group>
+
+            <Group title="Информация о пользователе">
+              <Cell multiline description="Дата создания профиля">
+                <Moment locale="ru" format="D MMMM YYYY">
+                  {user.date_joined || "Не задано"}
+                </Moment>
+              </Cell>
+              {
+                user.experience && (
+                  <Cell multiline description="Опыт преподавания">
+                    {user.experience}
+                  </Cell>
+                )
+              }
+              {
+                user.education && (
+                  <Cell multiline description="Образование">
+                    {user.education || "Не задано"}
+                  </Cell>
+                )
+              }
+              {
+                user.city && (
+                  <Cell multiline description="Город">
+                    {user.city || "Не задано"}
+                  </Cell>
+                )
+              }
+              {
+                user.district && (
+                  <Cell multiline description="Район">
+                    {user.district}
+                  </Cell>
+                )
+              }
+              {
+                user.street && (
+                  <Cell multiline description="Улица">
+                    {user.street}
+                  </Cell>
+                )
+              }
+              {
+                user.metro_station && (
+                  <Cell multiline description="Станция метро">
+                    {user.metro_station}
+                  </Cell>
+                )
+              }
+              {
+                user.bio && (
+                  <Cell multiline description="О себе">
+                    {user.bio}
+                  </Cell>
+                )
+              }
+            </Group>
+          </div>
+        )}
       </div>
     );
   }

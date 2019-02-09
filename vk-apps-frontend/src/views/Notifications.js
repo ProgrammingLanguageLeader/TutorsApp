@@ -24,8 +24,11 @@ import { ROOT_URL } from 'vk-apps-frontend/constants';
 
 const mapStateToProps = state => {
   const { fetching, notifications } = state.apiReducer.notificationsReducer;
+  const { currentUserReducer } = state;
   return {
-    notifications, fetching
+    notifications,
+    fetching,
+    currentUserReducer,
   };
 };
 
@@ -45,7 +48,9 @@ class Notifications extends React.Component {
   }
 
   componentDidMount() {
-    this.props.getNotificationsList();
+    if (this.props.currentUserReducer.user) {
+      this.props.getNotificationsList();
+    }
   }
 
   async handleSetUnreadNotification(id, unread) {

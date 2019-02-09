@@ -22,8 +22,11 @@ import { ROOT_URL } from 'vk-apps-frontend/constants';
 
 const mapStateToProps = state => {
   const { studentRequest, fetching } = state.apiReducer.tutorsReducer;
+  const { currentUserReducer } = state;
   return {
-    studentRequest, fetching,
+    studentRequest,
+    fetching,
+    currentUserReducer,
   };
 };
 
@@ -43,8 +46,10 @@ class StudentRequest extends React.Component {
   }
 
   componentDidMount() {
-    const { id } = this.props.match.params;
-    this.props.getStudentRequest(id);
+    if (this.props.currentUserReducer.user) {
+      const { id } = this.props.match.params;
+      this.props.getStudentRequest(id);
+    }
   }
 
   async handleAcceptButtonClick() {

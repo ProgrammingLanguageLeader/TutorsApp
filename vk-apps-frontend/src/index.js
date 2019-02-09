@@ -5,6 +5,8 @@ import { Provider } from 'react-redux';
 import App from 'vk-apps-frontend/App';
 import store from 'vk-apps-frontend/store/store';
 
+import 'moment/locale/ru';
+
 import 'vk-apps-frontend/assets/css/index.css';
 
 ReactDOM.render(

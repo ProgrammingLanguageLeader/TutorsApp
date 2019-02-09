@@ -19,7 +19,8 @@ import { vacanciesActions } from 'vk-apps-frontend/actions/api';
 const mapStateToProps = state => {
   const { errors, success } = state.apiReducer.vacanciesReducer;
   return {
-    errors, success,
+    errors,
+    success,
   };
 };
 
@@ -50,17 +51,15 @@ class VacancyCreate extends React.Component {
 
     return (
       <div>
-        <PanelHeader
-          left={
-            <HeaderButton onClick={this.props.history.goBack}>
-              <BackIcon />
-            </HeaderButton>
-          }
-        >
+        <PanelHeader left={
+          <HeaderButton onClick={this.props.history.goBack}>
+            <BackIcon />
+          </HeaderButton>
+        }>
           Создание вакансии
         </PanelHeader >
 
-        { success && (
+        {success && (
           <Group>
             <Div>
               <SuccessfulFormStatus title="Успешно" />

@@ -22,9 +22,12 @@ import { ROOT_URL } from 'vk-apps-frontend/constants';
 
 const mapStateToProps = state => {
   const { vacancies, fetching } = state.apiReducer.vacanciesReducer;
-  const { filterReducer } = state;
+  const { filterReducer, currentUserReducer } = state;
   return {
-    vacancies, fetching, filterReducer,
+    vacancies,
+    fetching,
+    filterReducer,
+    currentUserReducer
   };
 };
 
@@ -36,9 +39,11 @@ const mapDispatchToProps = dispatch => {
 
 class Vacancies extends React.Component {
   componentDidMount() {
-    this.props.searchVacancies({
-      ...this.props.filterReducer
-    });
+    if (this.props.currentUserReducer.user) {
+      this.props.searchVacancies({
+        ...this.props.filterReducer
+      });
+    }
   }
 
   render() {
@@ -46,13 +51,11 @@ class Vacancies extends React.Component {
 
     return (
       <div>
-        <PanelHeader
-          left={
-            <HeaderButton onClick={() => this.props.history.goBack()}>
-              <BackIcon />
-            </HeaderButton>
-          }
-        >
+        <PanelHeader left={
+          <HeaderButton onClick={() => this.props.history.goBack()}>
+            <BackIcon />
+          </HeaderButton>
+        }>
           Поиск предложений
         </PanelHeader>
 
@@ -62,11 +65,11 @@ class Vacancies extends React.Component {
           </CellButton>
         </Group>
 
-        { fetching && (
+        {fetching && (
           <DivSpinner />
         )}
 
-        { vacancies && (
+        {vacancies && (
           <div>
             <Group title="Список предложений">
               <List>

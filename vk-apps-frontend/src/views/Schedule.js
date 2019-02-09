@@ -26,8 +26,11 @@ import { ROOT_URL } from 'vk-apps-frontend/constants';
 
 const mapStateToProps = state => {
   const { fetching, lessons } = state.apiReducer.lessonsReducer;
+  const { currentUserReducer } = state;
   return {
-    lessons, fetching,
+    lessons,
+    fetching,
+    currentUserReducer,
   };
 };
 
@@ -49,7 +52,9 @@ class Schedule extends React.Component {
   }
 
   componentDidMount() {
-    this.getLessonsByDay();
+    if (this.props.currentUserReducer.user) {
+      this.getLessonsByDay();
+    }
   }
 
   getLessonsByDay() {

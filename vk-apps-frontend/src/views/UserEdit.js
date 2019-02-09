@@ -12,6 +12,7 @@ import Group from '@vkontakte/vkui/dist/components/Group/Group';
 import Div from '@vkontakte/vkui/dist/components/Div/Div';
 
 import BackIcon from 'vk-apps-frontend/components/BackIcon';
+import DivSpinner from 'vk-apps-frontend/components/DivSpinner';
 import SuccessfulFormStatus from 'vk-apps-frontend/components/SuccessfulFormStatus';
 
 import { ROOT_URL } from 'vk-apps-frontend/constants';
@@ -23,10 +24,19 @@ import EditProfileForm from 'vk-apps-frontend/forms/EditProfileForm';
 const mapStateToProps = state => {
   const { currentUserReducer } = state;
   const { vkUserInfo } = state.vkReducer.appsUserReducer;
-  const { user, fetching } = state.apiReducer.usersReducer;
-  const { errors, success } = state.apiReducer.usersReducer;
+  const {
+    user,
+    fetching,
+    errors,
+    success,
+  } = state.apiReducer.usersReducer;
   return {
-    vkUserInfo, fetching, errors, success, currentUserReducer, user,
+    vkUserInfo,
+    fetching,
+    errors,
+    success,
+    currentUserReducer,
+    user,
   };
 };
 
@@ -88,15 +98,17 @@ class UserEdit extends React.Component {
 
     return (
       <div>
-        <PanelHeader
-          left={
-            <HeaderButton onClick={this.props.history.goBack}>
-              <BackIcon />
-            </HeaderButton>
-          }
-        >
+        <PanelHeader left={
+          <HeaderButton onClick={this.props.history.goBack}>
+            <BackIcon />
+          </HeaderButton>
+        }>
           Изменение профиля
         </PanelHeader>
+
+        {fetching && (
+          <DivSpinner />
+        )}
 
         {user && (
           <Group>
@@ -111,7 +123,7 @@ class UserEdit extends React.Component {
           </Group>
         )}
 
-        { success && (
+        {success && (
           <Group>
             <Div>
               <SuccessfulFormStatus title="Успешно" />
