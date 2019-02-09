@@ -3,15 +3,21 @@ from django.contrib import admin
 from lessons.models import Lesson
 
 
+@admin.register(Lesson)
 class LessonAdmin(admin.ModelAdmin):
     list_display = (
-        'id',
         'tutor',
         'student',
         'price',
+        'duration',
         'beginning_time',
         'ending_time',
+        'creation_time',
+        'modification_time',
     )
-
-
-admin.site.register(Lesson, LessonAdmin)
+    list_filter = (
+        'tutor',
+        'student',
+        'price',
+        'duration',
+    )

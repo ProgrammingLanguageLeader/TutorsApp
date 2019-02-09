@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.utils import timezone
 
 
 class Lesson(models.Model):
@@ -13,16 +14,20 @@ class Lesson(models.Model):
         on_delete=models.CASCADE,
         related_name='lesson_student'
     )
-
     price = models.IntegerField()
     beginning_time = models.DateTimeField()
-    ending_time = models.DateTimeField()
-
+    ending_time = models.DateTimeField(editable=False)
+    duration = models.DurationField()
     creation_time = models.DateTimeField(auto_now_add=True)
-    modification_time = models.DateTimeField(auto_now_add=True)
+    modification_time = models.DateTimeField(editable=False)
 
-    def __str__(self):
-        return 'tutor: {} | student: {}'.format(
-            self.tutor_id,
-            self.student_id,
-        )
+    class Meta:
+        verbose_name = 'Lesson'
+        verbose_name_plural = 'Lessons'
+        ordering = ('-id', )
+
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
+        self.modification_time = timezone.now()
+        self.ending_time = self.beginning_time + self.duration
+        super().save(force_insert, force_update, using, update_fields)
