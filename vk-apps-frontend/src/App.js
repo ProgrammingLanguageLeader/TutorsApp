@@ -10,7 +10,6 @@ import Div from '@vkontakte/vkui/dist/components/Div/Div';
 import Button from '@vkontakte/vkui/dist/components/Button/Button';
 import ScreenSpinner from '@vkontakte/vkui/dist/components/ScreenSpinner/ScreenSpinner';
 
-import withTabbar from 'vk-apps-frontend/views/withTabbar';
 import Home from 'vk-apps-frontend/views/Home';
 import User from 'vk-apps-frontend/views/User';
 import Vacancies from 'vk-apps-frontend/views/Vacancies';
@@ -27,6 +26,7 @@ import { appsActions } from 'vk-apps-frontend/actions/vk';
 import { currentUserActions } from 'vk-apps-frontend/actions';
 import { vkAppsUsersActions, notificationsActions, usersActions } from 'vk-apps-frontend/actions/api';
 
+import withTabbar from 'vk-apps-frontend/components/withTabbar';
 import PopoutDiv from 'vk-apps-frontend/components/PopoutDiv';
 import Tabbar from 'vk-apps-frontend/components/Tabbar';
 
