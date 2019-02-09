@@ -10,7 +10,7 @@ import Div from '@vkontakte/vkui/dist/components/Div/Div';
 import Button from '@vkontakte/vkui/dist/components/Button/Button';
 import ScreenSpinner from '@vkontakte/vkui/dist/components/ScreenSpinner/ScreenSpinner';
 
-import withTabbar from 'vk-apps-frontend/views/withTabbar';
+import withTabbar from 'vk-apps-frontend/components/withTabbar';
 import Home from 'vk-apps-frontend/views/Home';
 import User from 'vk-apps-frontend/views/User';
 import Vacancies from 'vk-apps-frontend/views/Vacancies';
@@ -20,7 +20,7 @@ import Schedule from 'vk-apps-frontend/views/Schedule';
 import Filter from 'vk-apps-frontend/views/Filter';
 import Notifications from 'vk-apps-frontend/views/Notifications';
 import Vacancy from 'vk-apps-frontend/views/Vacancy';
-import MainMenu from 'vk-apps-frontend/views/MainMenu';
+import MainMenu from 'vk-apps -frontend/views/MainMenu';
 import StudentRequest from 'vk-apps-frontend/views/StudentRequest';
 
 import { appsActions } from 'vk-apps-frontend/actions/vk';
