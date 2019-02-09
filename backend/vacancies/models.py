@@ -22,9 +22,7 @@ class Vacancy(models.Model):
     price = models.IntegerField(blank=False)
     extra_info = models.TextField(blank=True, max_length=256)
 
-    def __str__(self):
-        return 'created: {} | owner: {} | active: {}'.format(
-            self.creation_time.strftime('%B %d %Y %H:%M'),
-            self.owner_id,
-            self.is_active
-        ).capitalize()
+    class Meta:
+        verbose_name = 'Vacancy'
+        verbose_name_plural = 'Vacancies'
+        ordering = ('-id', )
