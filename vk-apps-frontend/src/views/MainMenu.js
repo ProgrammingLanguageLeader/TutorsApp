@@ -46,7 +46,7 @@ class MainMenu extends React.Component {
             <Cell expandable onClick={() => this.props.history.push('/vacancies')}>
               Поиск вакансий
             </Cell>
-            <Cell expandable onClick={() => this.props.history.push('/profile_vacancies')}>
+            <Cell expandable onClick={() => this.props.history.push('/user_vacancies')}>
               Просмотреть мои вакансии
             </Cell>
             <Cell expandable onClick={() => this.props.history.push('/vacancy_create')}>
@@ -63,22 +63,6 @@ class MainMenu extends React.Component {
             <Cell expandable onClick={() => this.props.history.push('/lesson_create')}>
               Создание урока
             </Cell>
-          </List>
-        </Group>
-
-        <Group title="Заявки и уведомления">
-          <List>
-            <Cell expandable onClick={() => this.props.history.push('/incoming_applications')}>
-              Уведомления и входящие заявки
-            </Cell>
-            <Cell expandable onClick={() => this.props.history.push('/outgoing_applications')}>
-              Исходящие заявки
-            </Cell>
-          </List>
-        </Group>
-
-        <Group title="Ученики и учителя">
-          <List>
             <Cell expandable onClick={() => this.props.history.push('/students')}>
               Список учеников
             </Cell>
@@ -90,8 +74,19 @@ class MainMenu extends React.Component {
 
         <Group title="Платежи">
           <List>
-            <Cell expandable onClick={() => this.props.history.push('/transfer_make')}>
+            <Cell expandable onClick={() => this.props.history.push('/money_transfer')}>
               Сделать перевод
+            </Cell>
+          </List>
+        </Group>
+
+        <Group title="Заявки и уведомления">
+          <List>
+            <Cell expandable onClick={() => this.props.history.push('/notifications')}>
+              Уведомления
+            </Cell>
+            <Cell expandable onClick={() => this.props.history.push('/outgoing_student_requests')}>
+              Исходящие заявки
             </Cell>
           </List>
         </Group>
