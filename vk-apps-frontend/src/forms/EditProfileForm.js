@@ -1,6 +1,10 @@
 import React from 'react';
 
-import { Button, FormLayout, FormStatus, Input, Textarea } from '@vkontakte/vkui';
+import Button from '@vkontakte/vkui/dist/components/Button/Button';
+import FormLayout from '@vkontakte/vkui/dist/components/FormLayout/FormLayout';
+import FormStatus from '@vkontakte/vkui/dist/components/FormStatus/FormStatus';
+import Input from '@vkontakte/vkui/dist/components/Input/Input';
+import Textarea from '@vkontakte/vkui/dist/components/Textarea/Textarea';
 
 import DivSpinner from 'vk-apps-frontend/components/DivSpinner';
 import SuccessfulFormStatus from 'vk-apps-frontend/components/SuccessfulFormStatus';

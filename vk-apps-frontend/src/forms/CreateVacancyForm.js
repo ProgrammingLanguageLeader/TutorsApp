@@ -1,16 +1,13 @@
 import React from 'react';
 
-import {
-  Button,
-  Checkbox,
-  Cell,
-  FormLayout,
-  FormLayoutGroup,
-  Input,
-  Radio,
-  Select,
-  FormStatus
-} from '@vkontakte/vkui';
+import Button from '@vkontakte/vkui/dist/components/Button/Button';
+import Checkbox from '@vkontakte/vkui/dist/components/Checkbox/Checkbox';
+import FormLayout from '@vkontakte/vkui/dist/components/FormLayout/FormLayout';
+import FormLayoutGroup from '@vkontakte/vkui/dist/components/FormLayoutGroup/FormLayoutGroup';
+import Input from '@vkontakte/vkui/dist/components/Input/Input';
+import Radio from '@vkontakte/vkui/dist/components/Radio/Radio';
+import Select from '@vkontakte/vkui/dist/components/Select/Select';
+import FormStatus from '@vkontakte/vkui/dist/components/FormStatus/FormStatus';
 
 import { educationLevelList, subjectsList } from 'vk-apps-frontend/constants';
 

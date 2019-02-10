@@ -1,6 +1,10 @@
 import React from 'react';
 
-import { Button, Div, File, FormLayout, FormStatus } from '@vkontakte/vkui';
+import Button from '@vkontakte/vkui/dist/components/Button/Button';
+import Div from '@vkontakte/vkui/dist/components/Div/Div';
+import File from '@vkontakte/vkui/dist/components/File/File';
+import FormLayout from '@vkontakte/vkui/dist/components/FormLayout/FormLayout';
+import FormStatus from '@vkontakte/vkui/dist/components/FormStatus/FormStatus';
 
 import Icon24Camera from '@vkontakte/icons/dist/24/camera';
 import Icon24Upload from '@vkontakte/icons/dist/24/upload';
