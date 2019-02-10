@@ -79,7 +79,7 @@ class User extends React.Component {
                   )
                 }
               >
-                {`${user.first_name} ${user.last_name}`}
+                {user.first_name} {user.last_name}
               </Cell>
             </Group>
 

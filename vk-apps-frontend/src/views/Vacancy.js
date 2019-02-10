@@ -107,7 +107,7 @@ class Vacancy extends React.Component {
                 onClick={() => this.props.history.push(`/user/${vacancy.owner.id}`)}
               >
                 <div>
-                  {`${vacancy.owner.first_name} ${vacancy.owner.last_name}`}
+                  {vacancy.owner.first_name} {vacancy.owner.last_name}
                 </div>
               </Cell>
             </Group>

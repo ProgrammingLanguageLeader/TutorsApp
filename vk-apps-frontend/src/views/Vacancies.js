@@ -93,7 +93,7 @@ class Vacancies extends React.Component {
                           <Avatar size={64} src={ROOT_URL + vacancy.owner.avatar} />
                         }
                       >
-                        {`${vacancy.owner.first_name} ${vacancy.owner.last_name}`}
+                        {vacancy.owner.first_name} {vacancy.owner.last_name}
                       </Cell>
                     </Link>
                   ))

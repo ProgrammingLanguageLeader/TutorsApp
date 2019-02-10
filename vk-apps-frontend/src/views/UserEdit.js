@@ -118,7 +118,7 @@ class UserEdit extends React.Component {
               description="Здесь можно посмотреть и отредактировать публичную информацию о Вашем профиле"
               before={<Avatar size={80} src={ROOT_URL + user.avatar} />}
             >
-              {`${user.first_name} ${user.last_name}`}
+              {user.first_name} {user.last_name}
             </Cell>
           </Group>
         )}
