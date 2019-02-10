@@ -20,6 +20,8 @@ class VkAppsAuthBackend(authentication.BaseAuthentication):
         else:
             vk_id = request.data.get('vk_user_id')
         user = self.get_user(vk_id)
+        if not user:
+            return None
         return user, None
 
     @staticmethod
