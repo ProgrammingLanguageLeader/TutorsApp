@@ -73,7 +73,7 @@ class Schedule extends React.Component {
   }
 
 	render() {
-    const { fetching, lessons } = this.props;
+    const { fetching, lessons, currentUserReducer } = this.props;
 
 		return (
 		  <div>
@@ -107,25 +107,28 @@ class Schedule extends React.Component {
           )}
           { lessons && (
             <List>
-              { lessons.map(lesson => (
-                <Cell
-                  size="l"
-                  expandable
-                  multiline
-                  description={
-                    <div>
-                      <Moment format="HH:mm - " date={lesson.beginning_time}/>
-                      <Moment format="HH:mm" date={lesson.ending_time}/>
-                      <div>{lesson.price} рублей за занятие</div>
-                    </div>
-                  }
-                  before={<Avatar src={ROOT_URL + lesson.student.avatar} size={64} />}
-                  key={lesson.id}
-                  onClick={() => this.props.history.push(`/lesson/${lesson.id}`)}
-                >
-                  {lesson.student.first_name} {lesson.student.last_name}
-                </Cell>
-              ))}
+              { lessons.map(lesson => {
+                const visibleUser = (currentUserReducer.user.id === lesson.tutor.id) ? lesson.student : lesson.tutor;
+                return (
+                  <Cell
+                    size="l"
+                    expandable
+                    multiline
+                    description={
+                      <div>
+                        <Moment format="HH:mm - " date={lesson.beginning_time}/>
+                        <Moment format="HH:mm" date={lesson.ending_time}/>
+                        <div>{lesson.price} рублей за занятие</div>
+                      </div>
+                    }
+                    before={<Avatar src={ROOT_URL + visibleUser.avatar} size={64}/>}
+                    key={lesson.id}
+                    onClick={() => this.props.history.push(`/lesson/${lesson.id}`)}
+                  >
+                    {visibleUser.first_name} {visibleUser.last_name}
+                  </Cell>
+                );
+              })}
             </List>
           )}
         </Group>
