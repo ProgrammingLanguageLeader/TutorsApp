@@ -21,6 +21,7 @@ import Notifications from 'vk-apps-frontend/views/Notifications';
 import Vacancy from 'vk-apps-frontend/views/Vacancy';
 import MainMenu from 'vk-apps-frontend/views/MainMenu';
 import StudentRequest from 'vk-apps-frontend/views/StudentRequest';
+import Lesson from 'vk-apps-frontend/views/Lesson';
 
 import { appsActions } from 'vk-apps-frontend/actions/vk';
 import { currentUserActions } from 'vk-apps-frontend/actions';
@@ -294,6 +295,18 @@ class App extends React.Component {
               <Tabbar
                 userId={user ? user.id : null}
                 selectedItem={"student_request"}
+                notificationsCount={unreadNotificationsCount}
+              />,
+              popout
+            )
+          } />
+
+          <Route path="/lesson/:id" component={
+            withTabbar(
+              Lesson,
+              <Tabbar
+                userId={user ? user.id : null}
+                selectedItem={"lesson"}
                 notificationsCount={unreadNotificationsCount}
               />,
               popout
