@@ -103,6 +103,20 @@ const init = () => dispatch => {
         });
         break;
 
+      case 'VKWebAppOpenPayFormResult':
+        dispatch({
+          type: appsConstants.VK_PAY_SUCCESS,
+          payload: data,
+        });
+        break;
+
+      case 'VKWebAppOpenPayFormFailed':
+        dispatch({
+          type: appsConstants.VK_PAY_FAILURE,
+          payload: data,
+        });
+        break;
+
       default:
         break;
     }
@@ -111,10 +125,25 @@ const init = () => dispatch => {
   VKConnect.send('VKWebAppInit', {});
 };
 
+const openPayForm = (action, params) => dispatch => {
+  dispatch({
+    type: appsConstants.VK_PAY_REQUEST
+  });
+  VKConnect.send(
+    "VKWebAppOpenPayForm",
+    {
+      "app_id": VK_APP_ID,
+      "action": action,
+      "params": params
+    }
+  );
+};
+
 export const appsActions = {
   fetchAccessToken,
   fetchCurrentUserInfo,
   denyNotifications,
   allowNotifications,
-  init
+  init,
+  openPayForm,
 };
