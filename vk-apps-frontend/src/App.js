@@ -22,6 +22,7 @@ import Vacancy from 'vk-apps-frontend/views/Vacancy';
 import MainMenu from 'vk-apps-frontend/views/MainMenu';
 import StudentRequest from 'vk-apps-frontend/views/StudentRequest';
 import Lesson from 'vk-apps-frontend/views/Lesson';
+import MoneyTransfer from 'vk-apps-frontend/views/MoneyTransfer';
 
 import { appsActions } from 'vk-apps-frontend/actions/vk';
 import { currentUserActions } from 'vk-apps-frontend/actions';
@@ -29,7 +30,6 @@ import { vkAppsUsersActions, notificationsActions, usersActions } from 'vk-apps-
 
 import withTabbar from 'vk-apps-frontend/components/withTabbar';
 import PopoutDiv from 'vk-apps-frontend/components/PopoutDiv';
-import Tabbar from 'vk-apps-frontend/components/Tabbar';
 
 const mapStateToProps = state => {
   const { accessToken } = state.vkReducer.appsTokenReducer;
@@ -178,127 +178,176 @@ class App extends React.Component {
             <Redirect to="/home" />
           </Route>
 
-          <Route path="/home" component={
-            withTabbar(
-              Home,
-              user ? user.id : null,
-              unreadNotificationsCount,
-              "home",
-              popout,
-              "white",
-              true
-            )}
+          <Route
+            path="/home"
+            component={
+              withTabbar(
+                Home,
+                user ? user.id : null,
+                unreadNotificationsCount,
+                "home",
+                popout,
+                "white",
+                true
+              )
+            }
           />
 
-          <Route path="/user/:id" component={
-            withTabbar(
-              User,
-              user ? user.id : null,
-              unreadNotificationsCount,
-              "user",
-              popout
-            )}
+          <Route
+            path="/user/:id"
+            component={
+              withTabbar(
+                User,
+                user ? user.id : null,
+                unreadNotificationsCount,
+                "user",
+                popout
+              )
+            }
           />
 
-          <Route path="/vacancies" component={
-            withTabbar(
-              Vacancies,
-              user ? user.id : null,
-              unreadNotificationsCount,
-              "vacancies",
-              popout
-            )}
+          <Route
+            path="/vacancies"
+            component={
+              withTabbar(
+                Vacancies,
+                user ? user.id : null,
+                unreadNotificationsCount,
+                "vacancies",
+                popout
+              )
+            }
           />
 
-          <Route path="/vacancy_create" component={
-            withTabbar(
-              CreateVacancy,
-              user ? user.id : null,
-              unreadNotificationsCount,
-              "vacancy_create",
-              popout
-            )}
+          <Route
+            path="/vacancy_create"
+            component={
+              withTabbar(
+                CreateVacancy,
+                user ? user.id : null,
+                unreadNotificationsCount,
+                "vacancy_create",
+                popout
+              )
+            }
           />
 
-          <Route path="/user_edit" component={
-            withTabbar(
-              UserEdit,
-              user ? user.id : null,
-              unreadNotificationsCount,
-              "user_edit",
-              popout
-            )}
+          <Route
+            path="/user_edit"
+            component={
+              withTabbar(
+                UserEdit,
+                user ? user.id : null,
+                unreadNotificationsCount,
+                "user_edit",
+                popout
+              )
+            }
           />
 
-          <Route path="/schedule" component={
-            withTabbar(
-              Schedule,
-              user ? user.id : null,
-              unreadNotificationsCount,
-              "schedule",
-              popout
-            )}
+          <Route
+            path="/schedule"
+            component={
+              withTabbar(
+                Schedule,
+                user ? user.id : null,
+                unreadNotificationsCount,
+                "schedule",
+                popout
+              )
+            }
           />
 
-          <Route path="/vacancies_filter" component={
-            withTabbar(
-              Filter,
-              user ? user.id : null,
-              unreadNotificationsCount,
-              "vacancies_filter",
-              popout
-            )}
+          <Route
+            path="/vacancies_filter"
+            component={
+              withTabbar(
+                Filter,
+                user ? user.id : null,
+                unreadNotificationsCount,
+                "vacancies_filter",
+                popout
+              )
+            }
           />
 
-          <Route path="/notifications" component={
-            withTabbar(
-              Notifications,
-              user ? user.id : null,
-              unreadNotificationsCount,
-              "notifications",
-              popout
-            )}
+          <Route
+            path="/notifications"
+            component={
+              withTabbar(
+                Notifications,
+                user ? user.id : null,
+                unreadNotificationsCount,
+                "notifications",
+                popout
+              )
+            }
           />
 
-          <Route path="/vacancy/:id" component={
-            withTabbar(
-              Vacancy,
-              user ? user.id : null,
-              unreadNotificationsCount,
-              "vacancy",
-              popout
-            )}
+          <Route
+            path="/vacancy/:id"
+            component={
+              withTabbar(
+                Vacancy,
+                user ? user.id : null,
+                unreadNotificationsCount,
+                "vacancy",
+                popout
+              )
+            }
           />
 
-          <Route path="/main_menu" component={
-            withTabbar(
-              MainMenu,
-              user ? user.id : null,
-              unreadNotificationsCount,
-              "main_menu",
-              popout
-            )}
+          <Route
+            path="/main_menu"
+            component={
+              withTabbar(
+                MainMenu,
+                user ? user.id : null,
+                unreadNotificationsCount,
+                "main_menu",
+                popout
+              )
+            }
           />
 
-          <Route path="/student_request/:id" component={
-            withTabbar(
-              StudentRequest,
-              user ? user.id : null,
-              unreadNotificationsCount,
-              "student_request",
-              popout
-            )
-          } />
+          <Route
+            path="/student_request/:id"
+            component={
+              withTabbar(
+                StudentRequest,
+                user ? user.id : null,
+                unreadNotificationsCount,
+                "student_request",
+                popout
+              )
+            }
+          />
 
-          <Route path="/lesson/:id" component={
-            withTabbar(
-              Lesson,
-              user ? user.id : null,
-              unreadNotificationsCount,
-              "lesson",
-              popout
-            )
-          } />
+          <Route
+            path="/lesson/:id"
+            component={
+              withTabbar(
+                Lesson,
+                user ? user.id : null,
+                unreadNotificationsCount,
+                "lesson",
+                popout
+              )
+            }
+          />
+
+          <Route
+            path="/money_transfer"
+            component={
+              withTabbar(
+                MoneyTransfer,
+                user ? user.id : null,
+                unreadNotificationsCount,
+                "money_transfer",
+                popout
+              )
+            }
+          />
         </Switch>
       </Router>
     );
