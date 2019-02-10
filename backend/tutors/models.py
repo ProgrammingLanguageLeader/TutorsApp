@@ -19,6 +19,10 @@ class TutorStudents(models.Model):
 
     students_count.short_description = 'Students count'
 
+    class Meta:
+        verbose_name = 'Tutor\'s Students'
+        verbose_name_plural = 'Tutors\' Students'
+
     def __str__(self):
         return str(self.user)
 
@@ -37,10 +41,6 @@ class StudentRequest(models.Model):
     creation_time = models.DateTimeField(auto_now_add=True)
 
     class Meta:
+        verbose_name = 'Student Request'
+        verbose_name_plural = 'Student Requests'
         unique_together = ('student', 'tutor')
-
-    def __str__(self):
-        return 'student: {} | tutor: {}'.format(
-            self.student,
-            self.tutor,
-        ).capitalize()

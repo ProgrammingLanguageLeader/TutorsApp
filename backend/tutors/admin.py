@@ -3,6 +3,7 @@ from django.contrib import admin
 from tutors.models import TutorStudents, StudentRequest
 
 
+@admin.register(TutorStudents)
 class TutorStudentsAdmin(admin.ModelAdmin):
     list_display = (
         'user',
@@ -10,13 +11,10 @@ class TutorStudentsAdmin(admin.ModelAdmin):
     )
 
 
+@admin.register(StudentRequest)
 class StudentRequestAdmin(admin.ModelAdmin):
     list_display = (
         'student',
         'tutor',
         'creation_time',
     )
-
-
-admin.site.register(TutorStudents, TutorStudentsAdmin)
-admin.site.register(StudentRequest, StudentRequestAdmin)
