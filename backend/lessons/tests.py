@@ -39,17 +39,17 @@ class LessonTests(APITestCase):
 
     teacher_tester_lesson_1_kwargs = {
         'beginning_time': teacher_tester_lesson_1_start,
-        'ending_time': teacher_tester_lesson_1_start + lesson_duration,
+        'duration': lesson_duration,
         'price': lesson_price
     }
     teacher_tester_lesson_2_kwargs = {
         'beginning_time': teacher_tester_lesson_2_start,
-        'ending_time': teacher_tester_lesson_2_start + lesson_duration,
+        'duration': lesson_duration,
         'price': lesson_price
     }
     tester_student_lesson_kwargs = {
         'beginning_time': tester_student_lesson_start,
-        'ending_time': tester_student_lesson_start + lesson_duration,
+        'duration': lesson_duration,
         'price': lesson_price
     }
 
@@ -117,11 +117,10 @@ class LessonTests(APITestCase):
         self.client.login(**self.tester_kwargs)
         new_lesson_start = self.teacher_tester_lesson_2_start\
             + timedelta(hours=10)
-        new_lesson_end = new_lesson_start + self.lesson_duration
         new_lesson_kwargs = {
             'price': 1000,
             'beginning_time': new_lesson_start,
-            'ending_time': new_lesson_end,
+            'duration': self.lesson_duration,
             'tutor': self.tester.id,
             'student': self.student.id
         }
