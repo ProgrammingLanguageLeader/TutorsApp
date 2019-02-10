@@ -13,7 +13,7 @@ import Icon28Menu from '@vkontakte/icons/dist/28/menu';
 export default ({
   userId,
   selectedItem,
-  notificationsCount = 0
+  unreadNotificationsCount = 0
 }) => (
   <Tabbar>
     <TabbarItem selected={selectedItem === 'user'}>
@@ -34,7 +34,10 @@ export default ({
       </Link>
     </TabbarItem>
 
-    <TabbarItem selected={selectedItem === 'notifications'} label={notificationsCount ? notificationsCount : null}>
+    <TabbarItem
+      selected={selectedItem === 'notifications'}
+      label={unreadNotificationsCount ? unreadNotificationsCount : null}
+    >
       <Link to='/notifications'>
         <Icon28Notification/>
       </Link>

@@ -5,9 +5,13 @@ import Root from '@vkontakte/vkui/dist/components/Root/Root';
 import View from '@vkontakte/vkui/dist/components/View/View';
 import Panel from '@vkontakte/vkui/dist/components/Panel/Panel';
 
+import Tabbar from 'vk-apps-frontend/components/Tabbar';
+
 const withTabbar = (
   WrappedComponent,
-  tabbar,
+  currentUserId,
+  unreadNotificationsCount,
+  selectedItem,
   popout,
   panelTheme = "gray",
   panelFlex = false
@@ -15,7 +19,13 @@ const withTabbar = (
   class ComponentWithTabbar extends React.Component {
     render() {
       return (
-        <Epic activeStory="root" tabbar={tabbar} >
+        <Epic activeStory="root" tabbar={
+          <Tabbar
+            userId={currentUserId}
+            selectedItem={selectedItem}
+            notificationsCount={unreadNotificationsCount}
+          />
+        }>
           <Root id="root" activeView="view" popout={popout}>
             <View id="view" activePanel="panel">
               <Panel theme={panelTheme} id="panel" style={{
