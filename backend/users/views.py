@@ -1,4 +1,4 @@
-from rest_framework import viewsets, status
+from rest_framework import viewsets, mixins, status
 from rest_framework.decorators import action
 from rest_framework.parsers import MultiPartParser
 from rest_framework.response import Response
@@ -10,7 +10,11 @@ from users.permissions import AnonCreateOrSaveAndUpdateSelfOnly, \
     AvatarUploadSelfOnly
 
 
-class UsersViewSet(viewsets.ModelViewSet):
+class UsersViewSet(mixins.CreateModelMixin,
+                   mixins.RetrieveModelMixin,
+                   mixins.ListModelMixin,
+                   mixins.UpdateModelMixin,
+                   viewsets.GenericViewSet):
     """
     create:
         Creates a user
@@ -26,9 +30,6 @@ class UsersViewSet(viewsets.ModelViewSet):
 
     partial_update:
         Partially updates the given user
-
-    destroy:
-        Deletes the given user
 
     upload_avatar:
         Uploads an avatar of the authenticated user
