@@ -30,9 +30,7 @@ class Notification(models.Model):
 
     unread = models.BooleanField(default=True)
 
-    def __str__(self):
-        return 'sender: {} | recipient: {} | unread: {}'.format(
-            self.sender,
-            self.recipient,
-            self.unread
-        ).capitalize()
+    class Meta:
+        verbose_name = 'Notification'
+        verbose_name_plural = 'Notifications'
+        ordering = ('-id', )
