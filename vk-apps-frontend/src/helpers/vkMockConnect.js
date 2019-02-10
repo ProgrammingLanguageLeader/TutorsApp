@@ -41,4 +41,22 @@ export const configureVkMockConnect = () => {
       ]
     }
   };
+
+  response.VKWebAppOpenPayForm.data = {
+    type: 'VKWebAppOpenPayFormResult',
+    data: {
+      status: true,
+      transaction_id: 322,
+      amount: 322,
+      extra: ""
+    }
+  };
+
+  response.VKWebAppOpenPayForm.errorData = {
+    type: 'VKWebAppOpenPayFormFailed',
+    data: {
+      error_type: "",
+      error_data: {},
+    }
+  }
 };
