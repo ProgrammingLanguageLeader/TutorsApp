@@ -37,6 +37,8 @@ import { vkAppsUsersActions, notificationsActions, usersActions } from 'vk-apps-
 import withTabbar from 'vk-apps-frontend/components/withTabbar';
 import PopoutDiv from 'vk-apps-frontend/components/PopoutDiv';
 
+import doesClientSupportsVkConnect from 'vk-apps-frontend/helpers/vkConnectSupport';
+
 const mapStateToProps = state => {
   const { accessToken } = state.vkReducer.appsTokenReducer;
   const { vkUserInfo } = state.vkReducer.appsUserReducer;
@@ -140,6 +142,9 @@ class App extends React.Component {
   }
 
   async initVkApps() {
+    if (!doesClientSupportsVkConnect()) {
+      return;
+    }
     await this.props.init();
     await this.props.fetchCurrentUserInfo();
     await this.props.fetchAccessToken();
