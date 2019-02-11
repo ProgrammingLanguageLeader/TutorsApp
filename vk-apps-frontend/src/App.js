@@ -27,6 +27,7 @@ import LessonEdit from 'vk-apps-frontend/views/LessonEdit';
 import UserVacancies from 'vk-apps-frontend/views/UserVacancies';
 import VacancyEdit from 'vk-apps-frontend/views/VacancyEdit';
 import OutgoingStudentRequests from 'vk-apps-frontend/views/OutgoingStudentRequests';
+import Tutors from 'vk-apps-frontend/views/Tutors';
 
 import { appsActions } from 'vk-apps-frontend/actions/vk';
 import { currentUserActions } from 'vk-apps-frontend/actions';
@@ -413,6 +414,19 @@ class App extends React.Component {
                 user ? user.id : null,
                 unreadNotificationsCount,
                 "outgoing_student_requests",
+                popout
+              )
+            }
+          />
+
+          <Route
+            path="/tutors"
+            component={
+              withTabbar(
+                Tutors,
+                user ? user.id : null,
+                unreadNotificationsCount,
+                "tutors",
                 popout
               )
             }
