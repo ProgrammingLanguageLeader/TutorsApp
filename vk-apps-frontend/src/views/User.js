@@ -9,6 +9,7 @@ import Cell from '@vkontakte/vkui/dist/components/Cell/Cell';
 import Avatar from '@vkontakte/vkui/dist/components/Avatar/Avatar';
 import HeaderButton from '@vkontakte/vkui/dist/components/HeaderButton/HeaderButton';
 import Group from '@vkontakte/vkui/dist/components/Group/Group';
+import CellButton from '@vkontakte/vkui/dist/components/CellButton/CellButton';
 
 import Icon24Write from '@vkontakte/icons/dist/24/write';
 
@@ -65,23 +66,24 @@ class User extends React.Component {
           <div>
             <Group>
               <Cell
-                size="l"
                 multiline
-                description="Здесь можно посмотреть и отредактировать публичную информацию о Вашем профиле"
+                description="Просмотр информации о пользователе"
                 before={<Avatar size={80} src={ROOT_URL + user.avatar} />}
-                asideContent={
-                  isProfileEditable && (
-                    <HeaderButton>
-                      <Link to="/user_edit">
-                        <Icon24Write />
-                      </Link>
-                    </HeaderButton>
-                  )
-                }
               >
                 {user.first_name} {user.last_name}
               </Cell>
             </Group>
+
+            {isProfileEditable && (
+              <Group>
+                <CellButton
+                  before={<Icon24Write/>}
+                  onClick={() => this.props.history.push('/user_edit')}
+                >
+                  Редактировать
+                </CellButton>
+              </Group>
+            )}
 
             <Group title="Информация о пользователе">
               <Cell multiline description="Дата создания профиля">

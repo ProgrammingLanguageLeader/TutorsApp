@@ -117,9 +117,8 @@ class UserEdit extends React.Component {
         {user && (
           <Group>
             <Cell
-              size="l"
               multiline
-              description="Здесь можно посмотреть и отредактировать публичную информацию о Вашем профиле"
+              description="Редактирование информации пользователя"
               before={<Avatar size={80} src={ROOT_URL + user.avatar} />}
             >
               {user.first_name} {user.last_name}
