@@ -23,6 +23,7 @@ import StudentRequest from 'vk-apps-frontend/views/StudentRequest';
 import Lesson from 'vk-apps-frontend/views/Lesson';
 import MoneyTransfer from 'vk-apps-frontend/views/MoneyTransfer';
 import LessonCreate from 'vk-apps-frontend/views/LessonCreate';
+import LessonEdit from 'vk-apps-frontend/views/LessonEdit';
 
 import { appsActions } from 'vk-apps-frontend/actions/vk';
 import { currentUserActions } from 'vk-apps-frontend/actions';
@@ -357,6 +358,19 @@ class App extends React.Component {
                 user ? user.id : null,
                 unreadNotificationsCount,
                 "lesson_create",
+                popout
+              )
+            }
+          />
+
+          <Route
+            path="/lesson_edit/:id"
+            component={
+              withTabbar(
+                LessonEdit,
+                user ? user.id : null,
+                unreadNotificationsCount,
+                "lesson_edit",
                 popout
               )
             }
