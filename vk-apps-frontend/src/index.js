@@ -6,6 +6,8 @@ import App from 'vk-apps-frontend/App';
 import store from 'vk-apps-frontend/store/store';
 
 import 'moment/locale/ru';
+import '@vkontakte/vkui/dist/vkui.css';
+import 'react-datetime/css/react-datetime.css'
 
 import 'vk-apps-frontend/assets/css/index.css';
 

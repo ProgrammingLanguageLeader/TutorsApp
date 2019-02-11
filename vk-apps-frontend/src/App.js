@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { HashRouter as Router, Switch, Redirect, Route } from 'react-router-dom';
 import axios from 'axios';
 
-import '@vkontakte/vkui/dist/vkui.css';
 import PopoutWrapper from '@vkontakte/vkui/dist/components/PopoutWrapper/PopoutWrapper';
 import Div from '@vkontakte/vkui/dist/components/Div/Div';
 import Button from '@vkontakte/vkui/dist/components/Button/Button';
@@ -23,6 +22,7 @@ import MainMenu from 'vk-apps-frontend/views/MainMenu';
 import StudentRequest from 'vk-apps-frontend/views/StudentRequest';
 import Lesson from 'vk-apps-frontend/views/Lesson';
 import MoneyTransfer from 'vk-apps-frontend/views/MoneyTransfer';
+import LessonCreate from 'vk-apps-frontend/views/LessonCreate';
 
 import { appsActions } from 'vk-apps-frontend/actions/vk';
 import { currentUserActions } from 'vk-apps-frontend/actions';
@@ -142,6 +142,7 @@ class App extends React.Component {
   render() {
     const { user } = this.props.currentUserReducer;
     const { unreadNotificationsCount } = this.props;
+    console.log(unreadNotificationsCount);
     const popout =
       this.props.fetching && (
         <ScreenSpinner/>
@@ -344,6 +345,19 @@ class App extends React.Component {
                 user ? user.id : null,
                 unreadNotificationsCount,
                 "money_transfer",
+                popout
+              )
+            }
+          />
+
+          <Route
+            path="/lesson_create"
+            component={
+              withTabbar(
+                LessonCreate,
+                user ? user.id : null,
+                unreadNotificationsCount,
+                "lesson_create",
                 popout
               )
             }

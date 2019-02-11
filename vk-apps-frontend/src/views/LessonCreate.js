@@ -1,0 +1,80 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { Formik } from 'formik';
+import moment from 'moment';
+
+import PanelHeader from '@vkontakte/vkui/dist/components/PanelHeader/PanelHeader';
+import HeaderButton from '@vkontakte/vkui/dist/components/HeaderButton/HeaderButton';
+import Group from '@vkontakte/vkui/dist/components/Group/Group';
+
+import DivSpinner from 'vk-apps-frontend/components/DivSpinner';
+import BackIcon from 'vk-apps-frontend/components/BackIcon';
+
+import { lessonsActions } from 'vk-apps-frontend/actions/api';
+
+import LessonForm from 'vk-apps-frontend/forms/LessonForm';
+
+const mapStateToProps = state => {
+  const { fetching, success, errors } = state.apiReducer.lessonsReducer;
+  return {
+    fetching,
+    success,
+    errors,
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    createLesson: bindActionCreators(lessonsActions.createLesson, dispatch),
+  };
+};
+
+// TODO: pass students to the form
+
+class LessonCreate extends React.Component {
+  componentDidUpdate() {
+    ReactDOM.findDOMNode(this).scrollIntoView();
+  }
+
+  render() {
+    const { fetching, success } = this.props;
+
+    return (
+      <div>
+        <PanelHeader left={
+          <HeaderButton onClick={this.props.history.goBack}>
+            <BackIcon />
+          </HeaderButton>
+        }>
+          Создание урока
+        </PanelHeader>
+
+        {fetching && (
+          <DivSpinner />
+        )}
+
+        <Group title="Форма создания">
+          <Formik
+            initialValues={{
+              beginning_time: moment(),
+              duration: moment.duration(60, 'minutes'),
+              price: 500,
+            }}
+            render={
+              formikProps => <LessonForm {...formikProps} isSuccessful={success} students={[]} />
+            }
+            onSubmit={async (values, action) => {
+              await this.props.createLesson(values);
+              action.setSubmitting(false);
+              action.setErrors(this.props.errors || {});
+            }}
+          />
+        </Group>
+      </div>
+    );
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(LessonCreate);
