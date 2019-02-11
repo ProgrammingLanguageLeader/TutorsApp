@@ -42,7 +42,7 @@ class StudentRequest extends React.Component {
   constructor(props) {
     super(props);
     this.handleAcceptButtonClick = this.handleAcceptButtonClick.bind(this);
-    this.handleDeclineButtonClick = this.handleDeclineButtonClick.bind(this);
+    this.handleDeclineOrDeleteButtonClick = this.handleDeclineOrDeleteButtonClick.bind(this);
   }
 
   componentDidMount() {
@@ -58,14 +58,20 @@ class StudentRequest extends React.Component {
     this.props.history.goBack();
   }
 
-  async handleDeclineButtonClick() {
+  async handleDeclineOrDeleteButtonClick() {
     const { id } = this.props.match.params;
     await this.props.deleteStudentRequest(id);
     this.props.history.goBack();
   }
 
   render() {
-    const { studentRequest, fetching } = this.props;
+    const {
+      studentRequest,
+      fetching,
+      currentUserReducer,
+    } = this.props;
+    const isTutor = currentUserReducer.user && studentRequest && currentUserReducer.user.id === studentRequest.tutor.id;
+    const showingUser = studentRequest ? (isTutor ? studentRequest.student : studentRequest.tutor) : {};
 
     return (
       <div>
@@ -83,67 +89,89 @@ class StudentRequest extends React.Component {
 
         {studentRequest && (
           <div>
-            <Group title="Информация об ученике">
-              <Cell before={<Avatar size={64} src={ROOT_URL + studentRequest.student.avatar} />}>
-                {studentRequest.student.first_name} {studentRequest.student.last_name}
+            <Group title={isTutor ? "Информация об ученике" : "Информация об учителе"}>
+              <Cell before={<Avatar size={64} src={ROOT_URL + showingUser.avatar} />}>
+                {showingUser.first_name} {showingUser.last_name}
               </Cell>
 
               <Cell multiline description="Дата создания профиля">
                 <Moment locale="ru" format="D MMMM YYYY">
-                  {studentRequest.student.date_joined}
+                  {showingUser.date_joined}
                 </Moment>
               </Cell>
 
-              {studentRequest.student.city && (
+              {showingUser.education && (
+                <Cell description="Образование">
+                  {showingUser.education}
+                </Cell>
+              )}
+
+              {showingUser.city && (
                 <Cell description="Город">
-                  {studentRequest.student.city}
+                  {showingUser.city}
                 </Cell>
               )}
 
-              {studentRequest.student.district && (
+              {showingUser.district && (
                 <Cell description="Район">
-                  {studentRequest.student.district}
+                  {showingUser.district}
                 </Cell>
               )}
 
-              {studentRequest.student.street && (
+              {showingUser.street && (
                 <Cell description="Улица">
-                  {studentRequest.student.street}
+                  {showingUser.street}
                 </Cell>
               )}
 
-              {studentRequest.student.metro_station && (
+              {showingUser.metro_station && (
                 <Cell description="Станция метро">
-                  {studentRequest.student.metro_station}
+                  {showingUser.metro_station}
                 </Cell>
               )}
 
-              {studentRequest.student.bio && (
+              {showingUser.bio && (
                 <Cell multiline description="О себе">
-                  {studentRequest.student.bio}
+                  {showingUser.bio}
                 </Cell>
               )}
             </Group>
 
             <Group title="Управление заявкой">
               <div style={{ display: "flex", padding: 8 }}>
-                <Button
-                  size="m"
-                  level="primary"
-                  before={<Icon24Add/>}
-                  style={{ marginRight: 4 }}
-                  onClick={this.handleAcceptButtonClick}
-                >
-                  Принять
-                </Button>
-                <Button
-                  size="m"
-                  level="secondary"
-                  before={<Icon24Cancel/>}
-                  onClick={this.handleDeclineButtonClick}
-                >
-                  Отклонить
-                </Button>
+                { isTutor && (
+                  <div>
+                    <Button
+                      size="m"
+                      level="primary"
+                      before={<Icon24Add/>}
+                      style={{ marginRight: 4 }}
+                      onClick={this.handleAcceptButtonClick}
+                    >
+                      Принять
+                    </Button>
+                    <Button
+                      size="m"
+                      level="secondary"
+                      before={<Icon24Cancel/>}
+                      onClick={this.handleDeclineOrDeleteButtonClick}
+                    >
+                      Отклонить
+                    </Button>
+                  </div>
+                )}
+                { !isTutor && (
+                  <div>
+                    <Button
+                      size="m"
+                      level="secondary"
+                      before={<Icon24Cancel/>}
+                      onClick={this.handleDeclineOrDeleteButtonClick}
+                    >
+                      Удалить
+                    </Button>
+                  </div>
+                )}
               </div>
             </Group>
           </div>
