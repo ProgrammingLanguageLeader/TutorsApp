@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Moment from 'react-moment';
+import moment from 'moment';
 
 import PanelHeader from '@vkontakte/vkui/dist/components/PanelHeader/PanelHeader';
 import Cell from '@vkontakte/vkui/dist/components/Cell/Cell';
@@ -18,6 +19,8 @@ import BackIcon from 'vk-apps-frontend/components/BackIcon';
 import { lessonsActions } from 'vk-apps-frontend/actions/api';
 
 import { ROOT_URL } from 'vk-apps-frontend/constants';
+
+import durationHumanizer from 'vk-apps-frontend/helpers/durationHumanizer';
 
 const mapStateToProps = state => {
   const { lesson, fetching } = state.apiReducer.lessonsReducer;
@@ -115,9 +118,7 @@ class Lesson extends React.Component {
               </Cell>
 
               <Cell multiline description="Длительность">
-                <Moment locale="ru" format="HH:mm" parse="HH:mm:ss">
-                  {lesson.duration}
-                </Moment>
+                {durationHumanizer(moment.duration(lesson.duration))}
               </Cell>
 
               <Cell multiline description="Стоимость">

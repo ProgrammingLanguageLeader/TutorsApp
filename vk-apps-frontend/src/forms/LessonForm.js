@@ -1,7 +1,6 @@
 import React from 'react';
 import Datetime from 'react-datetime';
 import moment from 'moment';
-import humanizedDuration from 'humanize-duration';
 
 import Div from '@vkontakte/vkui/dist/components/Div/Div';
 import Button from '@vkontakte/vkui/dist/components/Button/Button';
@@ -16,9 +15,7 @@ import DivSpinner from 'vk-apps-frontend/components/DivSpinner';
 import TimePicker from 'vk-apps-frontend/components/TimePicker';
 import SuccessfulFormStatus from 'vk-apps-frontend/components/SuccessfulFormStatus';
 
-const durationHumanizer = humanizedDuration.humanizer({
-  language: 'ru',
-});
+import durationHumanizer from 'vk-apps-frontend/helpers/durationHumanizer';
 
 class LessonForm extends React.Component {
   render() {
