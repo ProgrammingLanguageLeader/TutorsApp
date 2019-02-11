@@ -6,6 +6,7 @@ import FormStatus from '@vkontakte/vkui/dist/components/FormStatus/FormStatus';
 import FormLayoutGroup from '@vkontakte/vkui/dist/components/FormLayoutGroup/FormLayoutGroup';
 import Select from '@vkontakte/vkui/dist/components/Select/Select';
 import Input from '@vkontakte/vkui/dist/components/Input/Input';
+import Div from '@vkontakte/vkui/dist/components/Div/Div';
 
 import DivSpinner from 'vk-apps-frontend/components/DivSpinner';
 import SuccessfulFormStatus from 'vk-apps-frontend/components/SuccessfulFormStatus';
@@ -32,7 +33,9 @@ const MoneyTransferForm = ({
       <DivSpinner />
     )}
     { isSuccessful && (
-      <SuccessfulFormStatus title="Успешно" />
+      <Div>
+        <SuccessfulFormStatus title="Успешно" />
+      </Div>
     )}
 
     <FormLayoutGroup top="Выберите получателя из списка учителей">
