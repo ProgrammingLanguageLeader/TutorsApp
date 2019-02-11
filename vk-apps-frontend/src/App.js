@@ -7,7 +7,6 @@ import axios from 'axios';
 import PopoutWrapper from '@vkontakte/vkui/dist/components/PopoutWrapper/PopoutWrapper';
 import Div from '@vkontakte/vkui/dist/components/Div/Div';
 import Button from '@vkontakte/vkui/dist/components/Button/Button';
-import ScreenSpinner from '@vkontakte/vkui/dist/components/ScreenSpinner/ScreenSpinner';
 
 import Home from 'vk-apps-frontend/views/Home';
 import User from 'vk-apps-frontend/views/User';
@@ -35,9 +34,8 @@ import { currentUserActions } from 'vk-apps-frontend/actions';
 import { vkAppsUsersActions, notificationsActions, usersActions } from 'vk-apps-frontend/actions/api';
 
 import withTabbar from 'vk-apps-frontend/components/withTabbar';
+import DivSpinner from 'vk-apps-frontend/components/DivSpinner';
 import PopoutDiv from 'vk-apps-frontend/components/PopoutDiv';
-
-import doesClientSupportsVkConnect from 'vk-apps-frontend/helpers/vkConnectSupport';
 
 const mapStateToProps = state => {
   const { accessToken } = state.vkReducer.appsTokenReducer;
@@ -82,6 +80,25 @@ class App extends React.Component {
     this.updateUserFromVK = this.updateUserFromVK.bind(this);
   }
 
+  componentDidMount() {
+    this.initVkApps();
+  }
+
+  async componentDidUpdate(prevProps) {
+    if (this.props.vkUserInfo !== prevProps.vkUserInfo) {
+      const { id } = this.props.vkUserInfo;
+      await this.props.getVkAppsUser(id);
+      if (!this.props.vkAppsUsersReducer.user) {
+        await this.createUser();
+      }
+      const { user, vkId } = this.props.vkAppsUsersReducer;
+      this.props.saveCurrentUserData(user, vkId);
+
+      await this.props.getUnreadNotificationsList();
+      this.getUnreadNotificationsListWithInterval();
+    }
+  }
+
   async createUser() {
     await this.props.createVkAppsUser();
     const { id } = this.props.vkAppsUsersReducer.user;
@@ -120,34 +137,16 @@ class App extends React.Component {
     });
   }
 
-  async componentDidMount() {
-    await this.initVkApps();
-
-    const { id } = this.props.vkUserInfo;
-    await this.props.getVkAppsUser(id);
-    if (!this.props.vkAppsUsersReducer.user) {
-      await this.createUser();
-    }
-    const { user, vkId } = this.props.vkAppsUsersReducer;
-    this.props.saveCurrentUserData(user, vkId);
-
-    await this.props.getUnreadNotificationsList();
-    this.getUnreadNotificationsListWithInterval();
-  }
-
   getUnreadNotificationsListWithInterval() {
     setInterval(() => {
       this.props.getUnreadNotificationsList();
     }, 15000);
   }
 
-  async initVkApps() {
-    if (!doesClientSupportsVkConnect()) {
-      return;
-    }
-    await this.props.init();
-    await this.props.fetchCurrentUserInfo();
-    await this.props.fetchAccessToken();
+  initVkApps() {
+    this.props.init();
+    this.props.fetchCurrentUserInfo();
+    this.props.fetchAccessToken();
   }
 
   render() {
@@ -155,7 +154,17 @@ class App extends React.Component {
     const { unreadNotificationsCount } = this.props;
     const popout =
       this.props.fetching && (
-        <ScreenSpinner/>
+        <PopoutWrapper>
+          <PopoutDiv>
+            <Div>
+              Инициализация сервиса.
+            </Div>
+            <Div>
+              Соединение с клиентским приложением VK...
+            </Div>
+            <DivSpinner />
+          </PopoutDiv>
+        </PopoutWrapper>
       )
       || !this.props.accessToken && (
         <PopoutWrapper>
