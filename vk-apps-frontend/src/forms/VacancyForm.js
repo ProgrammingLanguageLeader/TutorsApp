@@ -20,12 +20,21 @@ class VacancyForm extends React.Component {
     };
   }
 
+  componentDidMount() {
+    this.setState({
+      selectSubject: '',
+      inputSubject: this.props.values.subject || '',
+    });
+  }
+
   render() {
     const {
+      values,
       errors,
       handleChange,
       handleSubmit,
-      setFieldValue
+      setFieldValue,
+      submitLabel,
     } = this.props;
     const { selectSubject, inputSubject } = this.state;
 
@@ -76,27 +85,32 @@ class VacancyForm extends React.Component {
 
         <FormLayoutGroup top="Уровень обучения">
           { educationLevelList.map(level => (
-            <Checkbox key={level.name} name={level.backendField} onChange={handleChange}>
+            <Checkbox
+              key={level.name}
+              name={level.backendField}
+              onChange={handleChange}
+              checked={values[level.backendField]}
+            >
               {level.name}
             </Checkbox>
           ))}
         </FormLayoutGroup>
 
         <FormLayoutGroup top="Выезд на дом">
-          <Radio value="yes" name="home_schooling" onChange={handleChange}>
+          <Radio value="yes" name="home_schooling" onChange={handleChange} checked={values.home_schooling}>
             Да
           </Radio>
-          <Radio value="no" name="home_schooling" onChange={handleChange}>
+          <Radio value="no" name="home_schooling" onChange={handleChange} checked={!values.home_schooling}>
             Нет
           </Radio>
         </FormLayoutGroup>
 
         <FormLayoutGroup top="Плата за час обучения">
-          <Input name="price" type="number" onChange={handleChange} />
+          <Input name="price" type="number" onChange={handleChange} value={String(values.price || '')} />
         </FormLayoutGroup>
 
         <Button size="xl" onClick={handleSubmit}>
-          Разместить
+          {submitLabel || "Отправить"}
         </Button>
       </FormLayout>
     );

@@ -16,8 +16,11 @@ import VacancyForm from 'vk-apps-frontend/forms/VacancyForm';
 import { vacanciesActions } from 'vk-apps-frontend/actions/api';
 
 const mapStateToProps = state => {
-  const { errors, success } = state.apiReducer.vacanciesReducer;
+  const { vacancy, errors, success } = state.apiReducer.vacanciesReducer;
+  const { currentUserReducer } = state;
   return {
+    currentUserReducer,
+    vacancy,
     errors,
     success,
   };
@@ -25,15 +28,23 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    createVacancy: bindActionCreators(vacanciesActions.createVacancy, dispatch),
+    getVacancy: bindActionCreators(vacanciesActions.getVacancy, dispatch),
+    updateVacancy: bindActionCreators(vacanciesActions.updateVacancy, dispatch),
   };
 };
 
-class VacancyCreate extends React.Component {
+class VacancyEdit extends React.Component {
   constructor(props) {
     super(props);
-    this.handleCreateVacancyFormSubmit = this.handleCreateVacancyFormSubmit.bind(this);
     this.startDiv = React.createRef();
+  }
+
+
+  componentDidMount() {
+    if (this.props.currentUserReducer.user) {
+      const { id } = this.props.match.params;
+      this.props.getVacancy(id);
+    }
   }
 
   componentDidUpdate() {
@@ -42,14 +53,8 @@ class VacancyCreate extends React.Component {
     });
   }
 
-  async handleCreateVacancyFormSubmit(values) {
-    await this.props.createVacancy({
-      ...values
-    });
-  }
-
   render() {
-    const { success } = this.props;
+    const { vacancy, success } = this.props;
 
     return (
       <div>
@@ -58,7 +63,7 @@ class VacancyCreate extends React.Component {
             <BackIcon />
           </HeaderButton>
         }>
-          Создание предложения
+          Редактирование предложения
         </PanelHeader >
 
         <div ref={this.startDiv} />
@@ -73,11 +78,15 @@ class VacancyCreate extends React.Component {
 
         <Group title="Заполняемые поля">
           <Formik
+            initialValues={{
+              ...vacancy,
+            }}
             render={formikProps =>
-              <VacancyForm { ...formikProps } submitLabel="Создать" />
+              <VacancyForm { ...formikProps } submitLabel="Редактировать" />
             }
             onSubmit={ async (values, action) => {
-              await this.handleCreateVacancyFormSubmit(values);
+              const { id } = this.props.vacancy;
+              await this.props.updateVacancy(id, values);
               action.setSubmitting(false);
               action.setErrors(this.props.errors || {});
             }}
@@ -88,4 +97,4 @@ class VacancyCreate extends React.Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(VacancyCreate);
+export default connect(mapStateToProps, mapDispatchToProps)(VacancyEdit);
