@@ -46,7 +46,9 @@ class LessonForm extends React.Component {
         )}
 
         { isSuccessful && (
-          <SuccessfulFormStatus title="Успешно" />
+          <Div>
+            <SuccessfulFormStatus title="Успешно" />
+          </Div>
         )}
 
         <FormLayoutGroup top="Выбор ученика">

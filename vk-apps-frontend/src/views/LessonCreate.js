@@ -12,34 +12,43 @@ import Group from '@vkontakte/vkui/dist/components/Group/Group';
 import DivSpinner from 'vk-apps-frontend/components/DivSpinner';
 import BackIcon from 'vk-apps-frontend/components/BackIcon';
 
-import { lessonsActions } from 'vk-apps-frontend/actions/api';
+import { lessonsActions, tutorsActions } from 'vk-apps-frontend/actions/api';
 
 import LessonForm from 'vk-apps-frontend/forms/LessonForm';
 
 const mapStateToProps = state => {
   const { fetching, success, errors } = state.apiReducer.lessonsReducer;
+  const { currentUserReducer } = state;
+  const { students } = state.apiReducer.tutorsReducer;
   return {
     fetching,
     success,
     errors,
+    students,
+    currentUserReducer,
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
+    getStudentsList: bindActionCreators(tutorsActions.getStudentsList, dispatch),
     createLesson: bindActionCreators(lessonsActions.createLesson, dispatch),
   };
 };
 
-// TODO: pass students to the form
-
 class LessonCreate extends React.Component {
+  componentDidMount() {
+    if (this.props.currentUserReducer.user) {
+      this.props.getStudentsList();
+    }
+  }
+
   componentDidUpdate() {
     ReactDOM.findDOMNode(this).scrollIntoView();
   }
 
   render() {
-    const { fetching, success } = this.props;
+    const { fetching, success, students } = this.props;
 
     return (
       <div>
@@ -63,7 +72,13 @@ class LessonCreate extends React.Component {
               price: 500,
             }}
             render={
-              formikProps => <LessonForm {...formikProps} isSuccessful={success} students={[]} />
+              formikProps => (
+                <LessonForm
+                  {...formikProps}
+                  isSuccessful={success}
+                  students={students || []}
+                />
+              )
             }
             onSubmit={async (values, action) => {
               await this.props.createLesson(values);
