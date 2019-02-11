@@ -20,8 +20,7 @@ import { lessonsActions } from 'vk-apps-frontend/actions/api';
 import { ROOT_URL } from 'vk-apps-frontend/constants';
 
 const mapStateToProps = state => {
-  const { fetching } = state.apiReducer.lessonsReducer;
-  const { lesson } = state.apiReducer.lessonsReducer;
+  const { lesson, fetching } = state.apiReducer.lessonsReducer;
   const { currentUserReducer } = state;
   return {
     lesson,

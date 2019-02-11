@@ -16,7 +16,9 @@ const mapStateToProps = state => {
   const { tutors } = state.apiReducer.tutorsReducer;
   const { success, errors } = state.vkReducer.appsPayReducer;
   return {
-    tutors, success, errors,
+    tutors,
+    success,
+    errors,
   };
 };
 
@@ -42,9 +44,7 @@ class MoneyTransfer extends React.Component {
 
         <Group title="Форма перевода">
           <Formik
-            initialValues={{
-              amount: 0,
-            }}
+            initialValues={{}}
             render={formikProps =>
               <MoneyTransferForm {...formikProps} isSuccessful={success} tutors={tutors || []} />
             }
