@@ -17,6 +17,12 @@ const initialState = Immutable({
   studentPrevious: null,
   studentSuccess: null,
 
+  tutors: [],
+  tutorsCount: 0,
+  tutorsNext: null,
+  tutorsPrevious: null,
+  tutorsSuccess: null,
+  
   fetching: false,
   errors: null,
 });
@@ -31,6 +37,7 @@ const tutorsReducer = (state = initialState, action) => {
     case tutorsConstants.GET_STUDENTS_LIST_REQUEST:
     case tutorsConstants.GET_STUDENT_REQUEST:
     case tutorsConstants.DELETE_STUDENT_REQUEST:
+    case tutorsConstants.GET_TUTORS_LIST_REQUEST:
       return state.merge({
         fetching: true,
       });
@@ -84,6 +91,16 @@ const tutorsReducer = (state = initialState, action) => {
         fetching: false,
         errors: null,
       });
+      
+    case tutorsConstants.GET_TUTORS_LIST_SUCCESS:
+      return state.merge({
+        tutors: action.payload.results,
+        tutorsCount: action.payload.count,
+        tutorsNext: action.payload.next,
+        tutorsPrevious: action.payload.previous,
+        fetching: false,
+        errors: null,
+      });
 
     case tutorsConstants.GET_STUDENT_REQUESTS_LIST_FAILURE:
     case tutorsConstants.CREATE_STUDENT_REQUEST_FAILURE:
@@ -93,6 +110,7 @@ const tutorsReducer = (state = initialState, action) => {
     case tutorsConstants.GET_STUDENTS_LIST_FAILURE:
     case tutorsConstants.GET_STUDENT_FAILURE:
     case tutorsConstants.DELETE_STUDENT_FAILURE:
+    case tutorsConstants.GET_TUTORS_LIST_FAILURE:
       if (action.payload.response) {
         return state.merge({
           errors: action.payload.response.data,

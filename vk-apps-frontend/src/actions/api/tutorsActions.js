@@ -185,6 +185,29 @@ const deleteStudent = (id, options = {}) => {
   };
 };
 
+const getTutorsList = (options = {}) => {
+  return async dispatch => {
+    dispatch({
+      type: tutorsConstants.GET_TUTORS_LIST_REQUEST,
+    });
+    return makeApiRequest('tutors/tutors/', 'get', options)
+      .then(
+        response => {
+          dispatch({
+            type: tutorsConstants.GET_TUTORS_LIST_SUCCESS,
+            payload: response,
+          })
+        },
+        errors => {
+          dispatch({
+            type: tutorsConstants.GET_TUTORS_LIST_FAILURE,
+            payload: errors,
+          });
+        }
+      )
+  };
+};
+
 export const tutorsActions = {
   getStudentRequestsList,
   createStudentRequest,
@@ -194,4 +217,5 @@ export const tutorsActions = {
   getStudentsList,
   getStudent,
   deleteStudent,
+  getTutorsList,
 };
