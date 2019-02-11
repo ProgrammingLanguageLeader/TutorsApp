@@ -5,8 +5,7 @@ from rest_framework import viewsets
 from lessons.filters import LessonFilter
 from lessons.models import Lesson
 from lessons.permissions import IsTutorOrIsStudentAndReadOnly
-from lessons.serializer import LessonSerializer, CreateLessonSerializer, \
-    GetLessonSerializer
+from lessons.serializer import LessonSerializer, GetLessonSerializer
 
 
 class LessonViewSet(viewsets.ModelViewSet):
@@ -35,8 +34,6 @@ class LessonViewSet(viewsets.ModelViewSet):
     filter_class = LessonFilter
 
     def get_serializer_class(self):
-        if self.action == 'create':
-            return CreateLessonSerializer
         if self.action in ('retrieve', 'list'):
             return GetLessonSerializer
         return self.serializer_class

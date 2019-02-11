@@ -12,6 +12,7 @@ from lessons.models import Lesson
 
 
 class LessonSerializer(serializers.ModelSerializer):
+    tutor = serializers.HiddenField(default=CurrentUserDefault())
     price = serializers.IntegerField(min_value=0, max_value=10000)
 
     class Meta:
@@ -20,7 +21,7 @@ class LessonSerializer(serializers.ModelSerializer):
         read_only_fields = ('creation_time', 'modification_time', )
 
     def validate(self, attrs):
-        tutor = attrs.get('tutor')
+        tutor = self.context['request'].user
         student = attrs.get('student')
         try:
             tutor_students = TutorStudents.objects.get(user=tutor)
@@ -50,10 +51,6 @@ class LessonSerializer(serializers.ModelSerializer):
                 'lesson timing has collisions with other lessons'
             )
         return attrs
-
-
-class CreateLessonSerializer(LessonSerializer):
-    tutor = serializers.HiddenField(default=CurrentUserDefault())
 
 
 class GetLessonSerializer(LessonSerializer):
