@@ -11,24 +11,34 @@ import BackIcon from 'vk-apps-frontend/components/BackIcon';
 import MoneyTransferForm from 'vk-apps-frontend/forms/MoneyTransferForm';
 
 import { appsActions } from 'vk-apps-frontend/actions/vk';
+import { tutorsActions } from 'vk-apps-frontend/actions/api';
 
 const mapStateToProps = state => {
   const { tutors } = state.apiReducer.tutorsReducer;
+  const { currentUserReducer } = state;
   const { success, errors } = state.vkReducer.appsPayReducer;
   return {
     tutors,
     success,
     errors,
+    currentUserReducer,
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
+    getTutorsList: bindActionCreators(tutorsActions.getTutorsList, dispatch),
     openPayForm: bindActionCreators(appsActions.openPayForm, dispatch),
   };
 };
 
 class MoneyTransfer extends React.Component {
+  componentDidMount() {
+    if (this.props.currentUserReducer.user) {
+      this.props.getTutorsList();
+    }
+  }
+
   render() {
     const { tutors, success } = this.props;
 
