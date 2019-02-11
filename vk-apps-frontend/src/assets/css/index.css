@@ -3,10 +3,14 @@ a {
     text-decoration: none;
 }
 
-.DayPicker {
-    margin: auto;
-}
-
 .Cell__before {
     align-items: flex-start;
+}
+
+.rdtPicker {
+    border: 1px solid var(--field_border);
+    border-radius: 10px;
+    width: auto;
+    max-width: 640px;
+    margin: auto;
 }
