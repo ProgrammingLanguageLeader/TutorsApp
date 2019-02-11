@@ -31,6 +31,7 @@ class LessonForm extends React.Component {
       isSuccessful,
       students,
       setFieldValue,
+      submitLabel,
     } = this.props;
 
     return (
@@ -110,7 +111,7 @@ class LessonForm extends React.Component {
         </FormLayoutGroup>
 
         <Button size="xl" onClick={handleSubmit}>
-          Создать
+          {submitLabel || 'Отправить'}
         </Button>
       </FormLayout>
     );
