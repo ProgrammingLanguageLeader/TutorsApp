@@ -23,7 +23,7 @@ const withTabbar = (
           <Tabbar
             userId={currentUserId}
             selectedItem={selectedItem}
-            notificationsCount={unreadNotificationsCount}
+            unreadNotificationsCount={unreadNotificationsCount}
           />
         }>
           <Root id="root" activeView="view" popout={popout}>
