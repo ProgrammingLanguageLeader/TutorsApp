@@ -11,7 +11,7 @@ import FormStatus from '@vkontakte/vkui/dist/components/FormStatus/FormStatus';
 
 import { educationLevelList, subjectsList } from 'vk-apps-frontend/constants';
 
-class CreateVacancyForm extends React.Component {
+class VacancyForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -103,4 +103,4 @@ class CreateVacancyForm extends React.Component {
   }
 }
 
-export default CreateVacancyForm;
+export default VacancyForm;

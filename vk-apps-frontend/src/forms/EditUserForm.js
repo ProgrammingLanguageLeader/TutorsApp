@@ -9,7 +9,7 @@ import Textarea from '@vkontakte/vkui/dist/components/Textarea/Textarea';
 import DivSpinner from 'vk-apps-frontend/components/DivSpinner';
 import SuccessfulFormStatus from 'vk-apps-frontend/components/SuccessfulFormStatus';
 
-const EditProfileForm = ({
+const EditUserForm = ({
   values,
   errors,
   status,
@@ -86,4 +86,4 @@ const EditProfileForm = ({
   </FormLayout>
 );
 
-export default EditProfileForm;
+export default EditUserForm;

@@ -19,7 +19,7 @@ import { ROOT_URL } from 'vk-apps-frontend/constants';
 import { usersActions } from 'vk-apps-frontend/actions/api';
 
 import UploadAvatarForm from 'vk-apps-frontend/forms/UploadAvatarForm';
-import EditProfileForm from 'vk-apps-frontend/forms/EditProfileForm';
+import EditUserForm from 'vk-apps-frontend/forms/EditUserForm';
 
 const mapStateToProps = state => {
   const { currentUserReducer } = state;
@@ -161,7 +161,7 @@ class UserEdit extends React.Component {
                 metro_station: user.metro_station,
                 bio: user.bio
               }}
-              component={EditProfileForm}
+              component={EditUserForm}
               onSubmit={ async (values, actions) => {
                 await this.handleEditProfileSubmit(values);
                 actions.setSubmitting(false);

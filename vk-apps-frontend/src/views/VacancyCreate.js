@@ -12,7 +12,7 @@ import Div from '@vkontakte/vkui/dist/components/Div/Div';
 import BackIcon from 'vk-apps-frontend/components/BackIcon';
 import SuccessfulFormStatus from 'vk-apps-frontend/components/SuccessfulFormStatus';
 
-import CreateVacancyForm from 'vk-apps-frontend/forms/CreateVacancyForm';
+import VacancyForm from 'vk-apps-frontend/forms/VacancyForm';
 
 import { vacanciesActions } from 'vk-apps-frontend/actions/api';
 
@@ -69,7 +69,7 @@ class VacancyCreate extends React.Component {
 
         <Group title="Заполняемые поля">
           <Formik
-            component={CreateVacancyForm}
+            component={VacancyForm}
             onSubmit={ async (values, action) => {
               await this.handleCreateVacancyFormSubmit(values);
               action.setSubmitting(false);
