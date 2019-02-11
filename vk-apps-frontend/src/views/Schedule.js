@@ -1,12 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-
+import Datetime from 'react-datetime';
 import Moment from 'react-moment';
 import moment from 'moment';
-import { DayPickerSingleDateController } from 'react-dates';
-import 'react-dates/lib/css/_datepicker.css';
-import 'react-dates/initialize';
 
 import PanelHeader from '@vkontakte/vkui/dist/components/PanelHeader/PanelHeader';
 import Cell from '@vkontakte/vkui/dist/components/Cell/Cell';
@@ -15,6 +12,7 @@ import Group from '@vkontakte/vkui/dist/components/Group/Group';
 import HeaderButton from '@vkontakte/vkui/dist/components/HeaderButton/HeaderButton';
 import CellButton from '@vkontakte/vkui/dist/components/CellButton/CellButton';
 import List from '@vkontakte/vkui/dist/components/List/List';
+import Div from '@vkontakte/vkui/dist/components/Div/Div';
 
 import Icon24Add from '@vkontakte/icons/dist/24/add';
 
@@ -86,13 +84,15 @@ class Schedule extends React.Component {
         </PanelHeader>
 
         <Group title="Календарь" style={{ paddingBottom: "10px" }}>
-          <DayPickerSingleDateController
-            numberOfMonths={1}
-            date={this.state.date}
-            onDateChange={this.handleDateChange}
-            onFocusChange={() => true}
-            hideKeyboardShortcutsPanel={true}
-          />
+          <Div>
+            <Datetime
+              input={false}
+              value={this.state.date}
+              timeFormat={null}
+              onChange={this.handleDateChange}
+              locale="ru"
+            />
+          </Div>
         </Group>
 
         <Group title="Добавление занятия">
