@@ -13,10 +13,10 @@ import ShortUserCard from 'vk-apps-frontend/components/ShortUserCard';
 import { tutorsActions } from 'vk-apps-frontend/actions/api';
 
 const mapStateToProps = state => {
-  const { tutors, fetching } = state.apiReducer.tutorsReducer;
+  const { students, fetching } = state.apiReducer.tutorsReducer;
   const { currentUserReducer } = state;
   return {
-    tutors,
+    students,
     fetching,
     currentUserReducer,
   };
@@ -24,19 +24,19 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    getTutorsList: bindActionCreators(tutorsActions.getTutorsList, dispatch),
+    getStudentsList: bindActionCreators(tutorsActions.getStudentsList, dispatch),
   };
 };
 
-class Tutors extends React.Component {
+class Students extends React.Component {
   componentDidMount() {
     if (this.props.currentUserReducer.user) {
-      this.props.getTutorsList();
+      this.props.getStudentsList();
     }
   }
 
   render() {
-    const { tutors, fetching } = this.props;
+    const { students, fetching } = this.props;
 
     return (
       <div>
@@ -45,22 +45,22 @@ class Tutors extends React.Component {
             <BackIcon />
           </HeaderButton>
         }>
-          Список учителей
+          Список учеников
         </PanelHeader>
 
         {fetching && (
           <DivSpinner />
         )}
 
-        {tutors.map(tutor => (
-          <ShortUserCard history={this.props.history} key={tutor.id} user={tutor} />
+        {students.map(student => (
+          <ShortUserCard history={this.props.history} key={student.id} user={student} />
         ))}
         <Footer>
-          Показано пользователей: {tutors.length}
+          Показано пользователей: {students.length}
         </Footer>
       </div>
     );
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Tutors);
+export default connect(mapStateToProps, mapDispatchToProps)(Students);

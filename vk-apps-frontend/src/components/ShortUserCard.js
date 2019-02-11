@@ -12,7 +12,7 @@ const PaddingTopGroup = styled(Group)`
   padding-top: 8px;
 `;
 
-const ShortUserCard = ({ user }) => (
+const ShortUserCard = ({ user, history }) => (
   <PaddingTopGroup key={user.id}>
     <List>
       <Cell
@@ -20,7 +20,7 @@ const ShortUserCard = ({ user }) => (
         expandable
         description="Нажмите для просмотра страницы пользователя"
         before={<Avatar size={64} src={ROOT_URL + user.avatar} />}
-        onClick={() => this.props.history.push(`/user/${user.id}`)}
+        onClick={() => history.push(`/user/${user.id}`)}
       >
         {user.first_name} {user.last_name}
       </Cell>
