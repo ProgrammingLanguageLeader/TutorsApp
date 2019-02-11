@@ -12,6 +12,7 @@ import CellButton from '@vkontakte/vkui/dist/components/CellButton/CellButton';
 import FormStatus from '@vkontakte/vkui/dist/components/FormStatus/FormStatus';
 import Div from '@vkontakte/vkui/dist/components/Div/Div';
 
+import Icon24Write from '@vkontakte/icons/dist/24/write';
 import Icon24Education from '@vkontakte/icons/dist/24/education';
 import Icon24MoneyCircle from '@vkontakte/icons/dist/24/money_circle';
 import Icon24Info from '@vkontakte/icons/dist/24/info';
@@ -72,8 +73,10 @@ class Vacancy extends React.Component {
       fetching,
       vacancy,
       errors,
-      studentRequestSuccess
+      studentRequestSuccess,
+      currentUserReducer,
     } = this.props;
+    const isEditable = currentUserReducer.user && vacancy && currentUserReducer.user.id === vacancy.owner.id;
 
     return (
       <div>
@@ -87,6 +90,17 @@ class Vacancy extends React.Component {
 
         {fetching && (
           <DivSpinner />
+        )}
+
+        {isEditable && (
+          <Group title="Управление">
+            <CellButton
+              before={<Icon24Write />}
+              onClick={() => this.props.history.push(`/vacancy_edit/${vacancy.id}`)}
+            >
+              Редактировать предложение
+            </CellButton>
+          </Group>
         )}
 
         {vacancy && (
