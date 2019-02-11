@@ -3,14 +3,16 @@ from rest_framework.decorators import action
 
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework import viewsets, mixins
+from rest_framework import viewsets, mixins, generics
 
 from tutors.serializers import StudentRequestSerializer, \
     ReadStudentRequestSerializer, AcceptStudentRequestSerializer
 from tutors.models import TutorStudents, StudentRequest
 from tutors.permissions import IsStudentOrIsTutor, IsTutor
 from tutors.filters import StudentRequestsFilter
+
 from users.serializers import UserSerializer
+from users.models import User
 
 
 class StudentsViewSet(mixins.ListModelMixin,
@@ -36,6 +38,23 @@ class StudentsViewSet(mixins.ListModelMixin,
             user=self.request.user,
         )
         return tutor.students.all()
+
+
+class TutorsListView(generics.ListAPIView):
+    """
+    Return a list of tutors of the current user
+    """
+    permission_classes = (IsAuthenticated, )
+    serializer_class = UserSerializer
+
+    def get_queryset(self):
+        tutors_ids = TutorStudents.objects.filter(
+            students__in=[self.request.user.id],
+        ).values_list('user', flat=True)
+        tutors = User.objects.filter(
+            id__in=tutors_ids
+        )
+        return tutors
 
 
 class StudentRequestsViewSet(mixins.CreateModelMixin,
