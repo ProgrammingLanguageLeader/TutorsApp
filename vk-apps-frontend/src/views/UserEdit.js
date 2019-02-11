@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Formik } from 'formik';
@@ -53,6 +52,7 @@ class UserEdit extends React.Component {
     super(props);
     this.handleEditProfileSubmit = this.handleEditProfileSubmit.bind(this);
     this.handleUploadAvatarFormSubmit = this.handleUploadAvatarFormSubmit.bind(this);
+    this.startDiv = React.createRef();
   }
 
   componentDidMount() {
@@ -63,7 +63,9 @@ class UserEdit extends React.Component {
   }
 
   componentDidUpdate() {
-    ReactDOM.findDOMNode(this).scrollIntoView();
+    this.startDiv.current.scrollIntoView({
+      behavior: 'smooth',
+    });
   }
 
   async handleUploadAvatarFormSubmit(values) {
@@ -105,6 +107,8 @@ class UserEdit extends React.Component {
         }>
           Изменение профиля
         </PanelHeader>
+
+        <div ref={this.startDiv} />
 
         {fetching && (
           <DivSpinner />

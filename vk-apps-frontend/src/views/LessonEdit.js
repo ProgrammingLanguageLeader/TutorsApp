@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Formik } from 'formik';
@@ -39,6 +38,12 @@ const mapDispatchToProps = dispatch => {
 };
 
 class LessonEdit extends React.Component {
+  constructor(props) {
+    super(props);
+    this.startDiv = React.createRef();
+  }
+
+
   componentDidMount() {
     if (this.props.currentUserReducer.user) {
       const { id } = this.props.match.params;
@@ -50,7 +55,9 @@ class LessonEdit extends React.Component {
   }
 
   componentDidUpdate() {
-    ReactDOM.findDOMNode(this).scrollIntoView();
+    this.startDiv.current.scrollIntoView({
+      behavior: 'smooth',
+    });
   }
 
   render() {
@@ -70,6 +77,8 @@ class LessonEdit extends React.Component {
         }>
           Редактирование урока
         </PanelHeader>
+
+        <div ref={this.startDiv} />
 
         {fetching && (
           <DivSpinner />
