@@ -16,13 +16,15 @@ else:
     POSTGRES_USER = config('POSTGRES_USER')
     POSTGRES_PASSWORD = config('POSTGRES_PASSWORD')
     POSTGRES_DB = config('POSTGRES_DB')
+    POSTGRES_HOST = config('POSTGRES_HOST')
+    POSTGRES_PORT = config('POSTGRES_PORT')
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
             'NAME': POSTGRES_DB,
             'USER': POSTGRES_USER,
             'PASSWORD': POSTGRES_PASSWORD,
-            'HOST': 'postgresql',
-            'PORT': 5432,
+            'HOST': POSTGRES_HOST,
+            'PORT': POSTGRES_PORT,
         }
     }
