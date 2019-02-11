@@ -142,7 +142,6 @@ class App extends React.Component {
   render() {
     const { user } = this.props.currentUserReducer;
     const { unreadNotificationsCount } = this.props;
-    console.log(unreadNotificationsCount);
     const popout =
       this.props.fetching && (
         <ScreenSpinner/>
