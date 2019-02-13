@@ -74,7 +74,10 @@ class VkAppsUsersViewSet(mixins.CreateModelMixin,
         })
         if not serializer.is_valid():
             user.delete()
-            return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST
+            )
         vk_apps_user = VkAppsUser.objects.create(user=user, vk_id=vk_id)
         return Response(GetVkAppsUserSerializer(vk_apps_user).data)
 
@@ -111,3 +114,4 @@ class GetVkAppsUserByUserIdView(generics.RetrieveAPIView):
         except ObjectDoesNotExist:
             raise exceptions.NotFound()
         return Response(GetVkAppsUserSerializer(vk_apps_user).data)
+    
