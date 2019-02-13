@@ -1,7 +1,6 @@
 import React from 'react';
 import { bindActionCreators } from "redux";
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
 import Moment from "react-moment";
 
 import PanelHeader from '@vkontakte/vkui/dist/components/PanelHeader/PanelHeader';
@@ -19,8 +18,7 @@ import DivSpinner from 'vk-apps-frontend/components/DivSpinner';
 import BackIcon from 'vk-apps-frontend/components/BackIcon';
 
 const mapStateToProps = state => {
-  const { user } = state.apiReducer.usersReducer;
-  const { fetching } = state.apiReducer.vkAppsUsersReducer;
+  const { user, fetching } = state.apiReducer.usersReducer;
   const { currentUserReducer } = state;
   return {
     user,
