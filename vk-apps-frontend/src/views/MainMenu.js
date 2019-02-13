@@ -41,16 +41,16 @@ class MainMenu extends React.Component {
           </List>
         </Group>
 
-        <Group title="Вакансии">
+        <Group title="Предложения">
           <List>
             <Cell expandable onClick={() => this.props.history.push('/vacancies')}>
-              Поиск вакансий
+              Поиск предложений
             </Cell>
             <Cell expandable onClick={() => this.props.history.push('/user_vacancies')}>
-              Просмотреть мои вакансии
+              Просмотреть мои предложения
             </Cell>
             <Cell expandable onClick={() => this.props.history.push('/vacancy_create')}>
-              Создать вакансию
+              Создать предложение
             </Cell>
           </List>
         </Group>
