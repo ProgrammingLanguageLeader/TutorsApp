@@ -13,6 +13,7 @@ import List from '@vkontakte/vkui/dist/components/List/List';
 import CellButton from '@vkontakte/vkui/dist/components/CellButton/CellButton';
 
 import Icon24Filter from '@vkontakte/icons/dist/24/filter';
+import Icon24Add from '@vkontakte/icons/dist/24/add';
 
 import DivSpinner from 'vk-apps-frontend/components/DivSpinner';
 import BackIcon from 'vk-apps-frontend/components/BackIcon';
@@ -62,6 +63,15 @@ class Vacancies extends React.Component {
         <Group title="Фильтрация">
           <CellButton before={<Icon24Filter />} onClick={() => this.props.history.push('/vacancies_filter')}>
             Параметры фильтра
+          </CellButton>
+        </Group>
+
+        <Group>
+          <CellButton
+            before={<Icon24Add/>}
+            onClick={() => this.props.history.push('/vacancy_create')}
+          >
+            Создать предложение
           </CellButton>
         </Group>
 
