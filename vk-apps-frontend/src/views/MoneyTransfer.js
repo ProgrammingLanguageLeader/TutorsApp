@@ -11,23 +11,26 @@ import BackIcon from 'vk-apps-frontend/components/BackIcon';
 import MoneyTransferForm from 'vk-apps-frontend/forms/MoneyTransferForm';
 
 import { appsActions } from 'vk-apps-frontend/actions/vk';
-import { tutorsActions } from 'vk-apps-frontend/actions/api';
+import { tutorsActions, vkAppsUsersActions } from 'vk-apps-frontend/actions/api';
 
 const mapStateToProps = state => {
   const { tutors } = state.apiReducer.tutorsReducer;
   const { currentUserReducer } = state;
   const { success, errors } = state.vkReducer.appsPayReducer;
+  const { vkId } = state.apiReducer.vkAppsUsersReducer;
   return {
     tutors,
     success,
     errors,
     currentUserReducer,
+    vkId,
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
     getTutorsList: bindActionCreators(tutorsActions.getTutorsList, dispatch),
+    retrieveVkAppsUserByUserId: bindActionCreators(vkAppsUsersActions.retrieveVkAppsUserByUserId, dispatch),
     openPayForm: bindActionCreators(appsActions.openPayForm, dispatch),
   };
 };
@@ -72,16 +75,19 @@ class MoneyTransfer extends React.Component {
               <MoneyTransferForm {...formikProps} isSuccessful={success} tutors={tutors || []} />
             }
             onSubmit={ async (values, actions) => {
-              await this.props.openPayForm(
+              await this.props.retrieveVkAppsUserByUserId(values.recipient);
+              const { vkId } = this.props;
+              console.log(vkId);
+              this.props.openPayForm(
                 'pay-to-user',
                 {
-                  'user_id': values.recipient,
+                  'user_id': vkId,
                   'amount': values.amount,
-                  'description': values.message,
+                  'message': values.message,
                 }
               );
               actions.setSubmitting(false);
-              actions.setErrors(this.props.errors || {})
+              actions.setErrors(this.props.errors || {});
             }}
           />
         </Group>
