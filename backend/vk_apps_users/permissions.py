@@ -19,10 +19,14 @@ class AuthenticatedCreateUserOrSelfOnly(permissions.BasePermission):
         return request.user.id == obj.user.id
 
 
-class AuthenticatedUsingPasswordAndVKApps(permissions.BasePermission):
+class AuthenticatedUsingVkApps(permissions.BasePermission):
     def has_permission(self, request, view):
-        is_authenticated_via_vk = VkAppsAuthBackend. \
-            check_vk_apps_authentication(request)
+        return VkAppsAuthBackend.check_vk_apps_authentication(request)
+
+
+class AuthenticatedUsingPasswordAndVkApps(AuthenticatedUsingVkApps):
+    def has_permission(self, request, view):
+        is_authenticated_via_vk = super().has_permission(request, view)
         if not is_authenticated_via_vk:
             return False
         username = request.data.get('username')

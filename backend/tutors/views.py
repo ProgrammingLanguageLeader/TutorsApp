@@ -42,7 +42,7 @@ class StudentsViewSet(mixins.ListModelMixin,
 
 class TutorsListView(generics.ListAPIView):
     """
-    Return a list of tutors of the current user
+    Returns a list of tutors of the current user
     """
     permission_classes = (IsAuthenticated, )
     serializer_class = UserSerializer

@@ -4,13 +4,12 @@ from string import ascii_lowercase, digits
 from django.contrib.auth import get_user_model, authenticate
 from django.core.exceptions import ObjectDoesNotExist
 
-from rest_framework import viewsets, mixins
+from rest_framework import viewsets, mixins, generics, exceptions, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework.status import HTTP_400_BAD_REQUEST
 
 from vk_apps_users.permissions import AuthenticatedCreateUserOrSelfOnly, \
-    AuthenticatedUsingPasswordAndVKApps
+    AuthenticatedUsingPasswordAndVkApps, AuthenticatedUsingVkApps
 from vk_apps_users.serializers import VkAppsUserSerializer, \
     GetVkAppsUserSerializer
 from vk_apps_users.models import VkAppsUser
@@ -24,10 +23,13 @@ class VkAppsUsersViewSet(mixins.CreateModelMixin,
     create:
         Creates user by VK Apps credentials with random username and
         unusable password
+
     destroy:
         Deletes connection between VK ID and user
+
     retrieve:
         Returns the given user with VK ID
+
     connect:
         Creates connection between existing user and VK ID providing
         an opportunity to authenticate via VK Apps
@@ -76,8 +78,8 @@ class VkAppsUsersViewSet(mixins.CreateModelMixin,
         vk_apps_user = VkAppsUser.objects.create(user=user, vk_id=vk_id)
         return Response(GetVkAppsUserSerializer(vk_apps_user).data)
 
-    @action(detail=False, methods=['post'],
-            permission_classes=[AuthenticatedUsingPasswordAndVKApps],
+    @action(detail=False, methods=('post',),
+            permission_classes=(AuthenticatedUsingPasswordAndVkApps,),
             name='Connect User')
     def connect(self, request):
         username = request.data.get('username')
@@ -89,6 +91,23 @@ class VkAppsUsersViewSet(mixins.CreateModelMixin,
             'user': user.id,
         })
         if not serializer.is_valid():
-            return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST
+            )
         vk_apps_user = VkAppsUser.objects.create(user=user, vk_id=vk_id)
         return Response(VkAppsUserSerializer(vk_apps_user).data)
+
+
+class GetVkAppsUserByUserIdView(generics.RetrieveAPIView):
+    """
+    Returns VK Apps user by the given user ID
+    """
+    permission_classes = (AuthenticatedUsingVkApps,)
+
+    def retrieve(self, request, user_id=None, *args, **kwargs):
+        try:
+            vk_apps_user = VkAppsUser.objects.get(user_id=user_id)
+        except ObjectDoesNotExist:
+            raise exceptions.NotFound()
+        return Response(GetVkAppsUserSerializer(vk_apps_user).data)
