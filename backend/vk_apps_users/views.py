@@ -114,4 +114,3 @@ class GetVkAppsUserByUserIdView(generics.RetrieveAPIView):
         except ObjectDoesNotExist:
             raise exceptions.NotFound()
         return Response(GetVkAppsUserSerializer(vk_apps_user).data)
-    
