@@ -146,7 +146,6 @@ class App extends React.Component {
   initVkApps() {
     this.props.init();
     this.props.fetchCurrentUserInfo();
-    this.props.fetchAccessToken();
   }
 
   render() {
@@ -163,18 +162,6 @@ class App extends React.Component {
               Соединение с клиентским приложением VK...
             </Div>
             <DivSpinner />
-          </PopoutDiv>
-        </PopoutWrapper>
-      )
-      || !this.props.accessToken && (
-        <PopoutWrapper>
-          <PopoutDiv>
-            <Div>
-              Пожалуйста, примите запрос на права доступа. Это необходимо для работы приложения
-            </Div>
-            <Button onClick={this.initVkApps}>
-              Авторизоваться в приложении
-            </Button>
           </PopoutDiv>
         </PopoutWrapper>
       )
