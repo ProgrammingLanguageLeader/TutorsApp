@@ -98,7 +98,7 @@ const retrieveVkAppsUserByUserId = (id, options = {}) => {
     dispatch({
       type: vkAppsUsersConstants.RETRIEVE_VK_APPS_USER_BY_USER_ID_REQUEST,
     });
-    return makeApiRequest(`vk_apps_users/by_user_id/${id}`, 'post', options)
+    return makeApiRequest(`vk_apps_users/by_user_id/${id}`, 'get', options)
       .then(
         response => {
           dispatch({
