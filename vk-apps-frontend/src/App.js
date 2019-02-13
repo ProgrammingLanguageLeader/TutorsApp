@@ -2,11 +2,9 @@ import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { HashRouter as Router, Switch, Redirect, Route } from 'react-router-dom';
-import axios from 'axios';
 
 import PopoutWrapper from '@vkontakte/vkui/dist/components/PopoutWrapper/PopoutWrapper';
 import Div from '@vkontakte/vkui/dist/components/Div/Div';
-import Button from '@vkontakte/vkui/dist/components/Button/Button';
 
 import Home from 'vk-apps-frontend/views/Home';
 import User from 'vk-apps-frontend/views/User';
@@ -31,26 +29,23 @@ import Students from 'vk-apps-frontend/views/Students';
 
 import { appsActions } from 'vk-apps-frontend/actions/vk';
 import { currentUserActions } from 'vk-apps-frontend/actions';
-import { vkAppsUsersActions, notificationsActions, usersActions } from 'vk-apps-frontend/actions/api';
+import { vkAppsUsersActions, notificationsActions } from 'vk-apps-frontend/actions/api';
 
 import withTabbar from 'vk-apps-frontend/components/withTabbar';
 import DivSpinner from 'vk-apps-frontend/components/DivSpinner';
 import PopoutDiv from 'vk-apps-frontend/components/PopoutDiv';
 
 const mapStateToProps = state => {
-  const { accessToken } = state.vkReducer.appsTokenReducer;
+  const fetching = state.apiReducer.vkAppsUsersReducer.fetching || state.vkReducer.appsUserReducer.fetching;
   const { vkUserInfo } = state.vkReducer.appsUserReducer;
-  const fetching = state.apiReducer.vkAppsUsersReducer.fetching
-    || state.vkReducer.appsUserReducer.fetching
-    || state.vkReducer.appsTokenReducer.fetching;
-  const { vkAppsUsersReducer } = state.apiReducer;
+  const { user, vkId } = state.apiReducer.vkAppsUsersReducer;
   const { currentUserReducer } = state;
   const { unreadNotificationsCount } = state.apiReducer.notificationsReducer;
   return {
-    accessToken,
     fetching,
     vkUserInfo,
-    vkAppsUsersReducer,
+    user,
+    vkId,
     currentUserReducer,
     unreadNotificationsCount,
   };
@@ -60,11 +55,7 @@ const mapDispatchToProps = dispatch => {
   return {
     init: bindActionCreators(appsActions.init, dispatch),
     fetchCurrentUserInfo: bindActionCreators(appsActions.fetchCurrentUserInfo, dispatch),
-    fetchAccessToken: bindActionCreators(appsActions.fetchAccessToken, dispatch),
     getVkAppsUser: bindActionCreators(vkAppsUsersActions.getVkAppsUser, dispatch),
-    createVkAppsUser: bindActionCreators(vkAppsUsersActions.createVkAppsUser, dispatch),
-    updateUser: bindActionCreators(usersActions.updateUser, dispatch),
-    uploadAvatar: bindActionCreators(usersActions.uploadAvatar, dispatch),
     saveCurrentUserData: bindActionCreators(currentUserActions.currentUserSaveData, dispatch),
     getUnreadNotificationsList: bindActionCreators(notificationsActions.getUnreadNotificationsList, dispatch),
   };
@@ -73,68 +64,24 @@ const mapDispatchToProps = dispatch => {
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.initVkApps = this.initVkApps.bind(this);
     this.getUnreadNotificationsListWithInterval = this.getUnreadNotificationsListWithInterval.bind(this);
-    this.createUser = this.createUser.bind(this);
-    this.uploadAvatarFromVK = this.uploadAvatarFromVK.bind(this);
-    this.updateUserFromVK = this.updateUserFromVK.bind(this);
   }
 
   componentDidMount() {
-    this.initVkApps();
+    this.props.init();
+    this.props.fetchCurrentUserInfo();
+    this.getUnreadNotificationsListWithInterval();
   }
 
-  async componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps) {
     if (this.props.vkUserInfo !== prevProps.vkUserInfo) {
       const { id } = this.props.vkUserInfo;
-      await this.props.getVkAppsUser(id);
-      if (!this.props.vkAppsUsersReducer.user) {
-        await this.createUser();
-      }
-      const { user, vkId } = this.props.vkAppsUsersReducer;
-      this.props.saveCurrentUserData(user, vkId);
-
-      await this.props.getUnreadNotificationsList();
-      this.getUnreadNotificationsListWithInterval();
+      this.props.getVkAppsUser(id);
     }
-  }
-
-  async createUser() {
-    await this.props.createVkAppsUser();
-    const { id } = this.props.vkAppsUsersReducer.user;
-    Promise.all([
-      this.updateUserFromVK(id),
-      this.uploadAvatarFromVK(id)
-    ]);
-  }
-
-  async updateUserFromVK(id) {
-    const { first_name, last_name, city } = this.props.vkUserInfo;
-    await this.props.updateUser(id, {
-      first_name,
-      last_name,
-      city: city ? city.title : null,
-    });
-  }
-
-  async uploadAvatarFromVK(id) {
-    const { photo_200 } = this.props.vkUserInfo;
-    const response = await axios({
-      url: photo_200,
-      method: 'GET',
-      responseType: 'blob',
-    });
-    const avatar = new File(
-      [response.data],
-      "uploaded_file.jpg",
-      {
-        type: "image/jpeg",
-        lastModified: Date.now()
-      }
-    );
-    await this.props.uploadAvatar(id, {
-      avatar,
-    });
+    if (prevProps.user !== this.props.user && prevProps.vkId !== this.props.vkId) {
+      const { user, vkId } = this.props;
+      this.props.saveCurrentUserData(user, vkId);
+    }
   }
 
   getUnreadNotificationsListWithInterval() {
@@ -143,61 +90,43 @@ class App extends React.Component {
     }, 15000);
   }
 
-  initVkApps() {
-    this.props.init();
-    this.props.fetchCurrentUserInfo();
-  }
-
   render() {
     const { user } = this.props.currentUserReducer;
     const { unreadNotificationsCount } = this.props;
-    const popout =
-      this.props.fetching && (
-        <PopoutWrapper>
-          <PopoutDiv>
-            <Div>
-              Инициализация сервиса.
-            </Div>
-            <Div>
-              Соединение с клиентским приложением VK...
-            </Div>
-            <DivSpinner />
-          </PopoutDiv>
-        </PopoutWrapper>
-      )
-      || !user && (
-        <PopoutWrapper>
-          <PopoutDiv>
-            <Div>
-              Соединение прервано
-            </Div>
-            <Button onClick={() => window.location.reload()}>
-              Попробовать снова
-            </Button>
-          </PopoutDiv>
-        </PopoutWrapper>
-      );
+    const popout = this.props.fetching && (
+      <PopoutWrapper>
+        <PopoutDiv>
+          <Div>
+            Инициализация сервиса.
+          </Div>
+          <Div>
+            Соединение с клиентским приложением VK...
+          </Div>
+          <DivSpinner />
+        </PopoutDiv>
+      </PopoutWrapper>
+    );
 
     return (
       <Router>
         <Switch>
           <Route exact path="/">
-            <Redirect to="/home" />
+            { user ? (
+              <Redirect to={`/user/${user.id}`} />
+            ) : (
+              <Redirect to="/home" />
+            )}
           </Route>
 
           <Route
             path="/home"
-            component={
-              withTabbar(
-                Home,
-                user ? user.id : null,
-                unreadNotificationsCount,
-                "home",
-                popout,
-                "white",
-                true
+            render={routerProps => (
+              !user ? (
+                <Home {...routerProps} />
+              ) : (
+                <Redirect to={`/user/${user.id}`} />
               )
-            }
+            )}
           />
 
           <Route
