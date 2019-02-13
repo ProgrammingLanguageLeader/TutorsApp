@@ -70,7 +70,7 @@ const deleteVkAppsUser = (id, options = {}) => {
   };
 };
 
-const connectVkAppsUser = (id, options = {}) => {
+const connectVkAppsUser = (options = {}) => {
   return async dispatch => {
     dispatch({
       type: vkAppsUsersConstants.CONNECT_VK_APPS_USER_REQUEST,
@@ -93,9 +93,33 @@ const connectVkAppsUser = (id, options = {}) => {
   };
 };
 
+const retrieveVkAppsUserByUserId = (id, options = {}) => {
+  return async dispatch => {
+    dispatch({
+      type: vkAppsUsersConstants.RETRIEVE_VK_APPS_USER_BY_USER_ID_REQUEST,
+    });
+    return makeApiRequest(`vk_apps_users/by_user_id/${id}`, 'post', options)
+      .then(
+        response => {
+          dispatch({
+            type: vkAppsUsersConstants.RETRIEVE_VK_APPS_USER_BY_USER_ID_SUCCESS,
+            payload: response,
+          })
+        },
+        errors => {
+          dispatch({
+            type: vkAppsUsersConstants.RETRIEVE_VK_APPS_USER_BY_USER_ID_FAILURE,
+            payload: errors,
+          });
+        }
+      )
+  };
+};
+
 export const vkAppsUsersActions = {
   createVkAppsUser,
   getVkAppsUser,
   deleteVkAppsUser,
   connectVkAppsUser,
+  retrieveVkAppsUserByUserId,
 };
