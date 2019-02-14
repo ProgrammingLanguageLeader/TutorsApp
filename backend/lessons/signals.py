@@ -14,13 +14,11 @@ def send_notification_on_lesson_creation(
     created,
     **kwargs
 ):
-    if not created:
-        return
     Notification.objects.create(
         sender=instance.tutor,
         recipient=instance.student,
         target=instance,
-        verb='create'
+        verb='lesson create' if created else 'lesson update'
     )
 
 
@@ -39,5 +37,5 @@ def delete_old_notification_and_create_new_on_lesson_deletion(
     Notification.objects.create(
         sender=instance.tutor,
         recipient=instance.student,
-        verb='delete'
+        verb='lesson delete'
     )

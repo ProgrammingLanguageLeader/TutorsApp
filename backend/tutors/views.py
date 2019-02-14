@@ -10,6 +10,7 @@ from tutors.serializers import StudentRequestSerializer, \
 from tutors.models import TutorStudents, StudentRequest
 from tutors.permissions import IsStudentOrIsTutor, IsTutor
 from tutors.filters import StudentRequestsFilter
+from tutors.signals import student_request_answer
 
 from users.serializers import UserSerializer
 from users.models import User
@@ -97,11 +98,24 @@ class StudentRequestsViewSet(mixins.CreateModelMixin,
             return AcceptStudentRequestSerializer
         return StudentRequestSerializer
 
+    def destroy(self, request, *args, **kwargs):
+        student_request_answer.send(
+            sender=StudentRequest,
+            instance=self.get_object(),
+            accepted=False
+        )
+        super().destroy(request, *args, **kwargs)
+
     @action(detail=True, methods=['post'],
             permission_classes=[IsTutor],
             name='Student Request Accept')
     def accept(self, request, *args, **kwargs):
         student_request = self.get_object()
+        student_request_answer.send(
+            sender=StudentRequest,
+            instance=student_request,
+            accepted=True
+        )
         student = student_request.student
         tutor, created = TutorStudents.objects.get_or_create(
             user=student_request.tutor

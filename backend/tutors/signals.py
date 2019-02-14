@@ -1,3 +1,4 @@
+from django.dispatch import Signal
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.dispatch import receiver
@@ -5,6 +6,9 @@ from django.dispatch import receiver
 from tutors.models import StudentRequest
 
 from notifications.models import Notification
+
+
+student_request_answer = Signal(providing_args=['instance', 'accepted'])
 
 
 @receiver(models.signals.post_save, sender=StudentRequest)
@@ -20,14 +24,15 @@ def send_notification_on_student_request_creation(
         sender=instance.student,
         recipient=instance.tutor,
         target=instance,
-        verb='create'
+        verb='student request create'
     )
 
 
-@receiver(models.signals.pre_delete, sender=StudentRequest)
-def delete_old_notifications_and_create_new_one_on_student_request_deletion(
+@receiver(student_request_answer)
+def delete_old_notifications_and_create_new_one_on_student_request_answer(
     sender,
     instance,
+    accepted,
     **kwargs
 ):
     notifications = Notification.objects.filter(
@@ -39,5 +44,5 @@ def delete_old_notifications_and_create_new_one_on_student_request_deletion(
     Notification.objects.create(
         sender=instance.tutor,
         recipient=instance.student,
-        verb='delete'
+        verb='student request %s' % 'accept' if accepted else 'reject'
     )
