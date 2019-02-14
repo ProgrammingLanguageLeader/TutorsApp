@@ -18,6 +18,7 @@ import Icon24MoneyCircle from '@vkontakte/icons/dist/24/money_circle';
 import Icon24Info from '@vkontakte/icons/dist/24/info';
 import Icon24Home from '@vkontakte/icons/dist/24/home';
 import Icon24UserAdd from '@vkontakte/icons/dist/24/user_add';
+import Icon24Cancel from '@vkontakte/icons/dist/24/cancel';
 
 import SuccessFormStatus from 'vk-apps-frontend/components/SuccessfulFormStatus';
 import DivSpinner from 'vk-apps-frontend/components/DivSpinner';
@@ -44,6 +45,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     getVacancy: bindActionCreators(vacanciesActions.getVacancy, dispatch),
+    deleteVacancy: bindActionCreators(vacanciesActions.deleteVacancy, dispatch),
     createStudentRequest: bindActionCreators(tutorsActions.createStudentRequest, dispatch),
   };
 };
@@ -52,6 +54,13 @@ class Vacancy extends React.Component {
   constructor(props) {
     super(props);
     this.createStudentRequest = this.createStudentRequest.bind(this);
+    this.deleteVacancyButtonClick = this.deleteVacancyButtonClick.bind(this);
+
+    // TODO: add popout for delete approving
+    this.state = {
+      popout: null,
+      isDeleteApproved: true,
+    }
   }
 
 
@@ -66,6 +75,13 @@ class Vacancy extends React.Component {
     this.props.createStudentRequest({
       tutor: tutorId,
     });
+  }
+
+  async deleteVacancyButtonClick(id) {
+    if (this.state.isDeleteApproved) {
+      await this.props.deleteVacancy(id);
+      this.props.history.goBack();
+    }
   }
 
   render() {
@@ -99,6 +115,13 @@ class Vacancy extends React.Component {
               onClick={() => this.props.history.push(`/vacancy_edit/${vacancy.id}`)}
             >
               Редактировать предложение
+            </CellButton>
+            <CellButton
+              level="danger"
+              before={<Icon24Cancel/>}
+              onClick={() => this.deleteVacancyButtonClick(vacancy.id)}
+            >
+              Удалить предложение
             </CellButton>
           </Group>
         )}
