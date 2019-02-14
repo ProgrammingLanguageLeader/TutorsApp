@@ -104,13 +104,15 @@ const retrieveVkAppsUserByUserId = (id, options = {}) => {
           dispatch({
             type: vkAppsUsersConstants.RETRIEVE_VK_APPS_USER_BY_USER_ID_SUCCESS,
             payload: response,
-          })
+          });
+          return response;
         },
         errors => {
           dispatch({
             type: vkAppsUsersConstants.RETRIEVE_VK_APPS_USER_BY_USER_ID_FAILURE,
             payload: errors,
           });
+          return errors;
         }
       )
   };

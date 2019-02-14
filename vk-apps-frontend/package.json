@@ -1,6 +1,6 @@
 {
   "name": "tutors-app",
-  "version": "0.3.11",
+  "version": "0.3.12",
   "homepage": "https://tutors-app/vk-apps/",
   "description": "VK Apps React application",
   "scripts": {

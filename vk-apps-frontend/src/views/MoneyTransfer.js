@@ -75,13 +75,12 @@ class MoneyTransfer extends React.Component {
               <MoneyTransferForm {...formikProps} isSuccessful={success} tutors={tutors || []} />
             }
             onSubmit={ async (values, actions) => {
-              await this.props.retrieveVkAppsUserByUserId(values.recipient);
-              const { vkId } = this.props;
-              console.log(vkId);
+              const vkAppsUser = await this.props.retrieveVkAppsUserByUserId(values.recipient);
+              // TODO: handle errors of the response
               this.props.openPayForm(
                 'pay-to-user',
                 {
-                  'user_id': vkId,
+                  'user_id': vkAppsUser.vk_id,
                   'amount': values.amount,
                   'message': values.message,
                 }
