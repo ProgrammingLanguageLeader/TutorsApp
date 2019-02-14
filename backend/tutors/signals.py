@@ -25,7 +25,7 @@ def send_notification_on_student_request_creation(
 
 
 @receiver(models.signals.pre_delete, sender=StudentRequest)
-def delete_notification_on_student_request_deletion(
+def delete_old_notifications_and_create_new_one_on_student_request_deletion(
     sender,
     instance,
     **kwargs
@@ -36,3 +36,8 @@ def delete_notification_on_student_request_deletion(
     )
     for notification in notifications:
         notification.delete()
+    Notification.objects.create(
+        sender=instance.tutor,
+        recipient=instance.student,
+        verb='delete'
+    )
