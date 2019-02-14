@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 
 import Tabbar from '@vkontakte/vkui/dist/components/Tabbar/Tabbar';
 import TabbarItem from '@vkontakte/vkui/dist/components/TabbarItem/TabbarItem';
@@ -10,43 +9,45 @@ import Icon28User from '@vkontakte/icons/dist/28/user';
 import Icon28Notification from '@vkontakte/icons/dist/28/notification';
 import Icon28Menu from '@vkontakte/icons/dist/28/menu';
 
+import TabbarLink from 'vk-apps-frontend/components/TabbarLink';
+
 export default ({
   userId,
   selectedItem,
   unreadNotificationsCount = 0
 }) => (
   <Tabbar>
-    <TabbarItem selected={selectedItem === 'user'}>
-      <Link to={`/user/${userId}/`}>
+    <TabbarLink to={`/user/${userId}/`}>
+      <TabbarItem selected={selectedItem === 'user'}>
         <Icon28User />
-      </Link>
-    </TabbarItem>
+      </TabbarItem>
+    </TabbarLink>
 
-    <TabbarItem selected={selectedItem === 'vacancies'}>
-      <Link to='/vacancies'>
+    <TabbarLink to='/vacancies'>
+      <TabbarItem selected={selectedItem === 'vacancies'}>
         <Icon28Search />
-      </Link>
-    </TabbarItem>
+      </TabbarItem>
+    </TabbarLink>
 
-    <TabbarItem selected={selectedItem === 'schedule'}>
-      <Link to='/schedule'>
+    <TabbarLink to='/schedule'>
+      <TabbarItem selected={selectedItem === 'schedule'}>
         <Icon28Newsfeed />
-      </Link>
-    </TabbarItem>
+      </TabbarItem>
+    </TabbarLink>
 
-    <TabbarItem
-      selected={selectedItem === 'notifications'}
-      label={unreadNotificationsCount ? unreadNotificationsCount : null}
-    >
-      <Link to='/notifications'>
+    <TabbarLink to='/notifications'>
+      <TabbarItem
+        selected={selectedItem === 'notifications'}
+        label={unreadNotificationsCount ? unreadNotificationsCount : null}
+      >
         <Icon28Notification/>
-      </Link>
-    </TabbarItem>
+      </TabbarItem>
+    </TabbarLink>
 
-    <TabbarItem selected={selectedItem === 'main_menu'}>
-      <Link to='/main_menu'>
+    <TabbarLink to='/main_menu'>
+      <TabbarItem selected={selectedItem === 'main_menu'}>
         <Icon28Menu />
-      </Link>
-    </TabbarItem>
+      </TabbarItem>
+    </TabbarLink>
   </Tabbar>
 );
