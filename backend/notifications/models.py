@@ -18,14 +18,19 @@ class Notification(models.Model):
         related_name='notification_recipient',
         on_delete=models.CASCADE
     )
-    verb = models.CharField(max_length=255)
+    verb = models.CharField(max_length=32)
 
     target_content_type = models.ForeignKey(
         ContentType,
         related_name='notification_target_content_type',
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True
     )
-    target_object_id = models.PositiveIntegerField()
+    target_object_id = models.PositiveIntegerField(
+        null=True,
+        blank=True
+    )
     target = GenericForeignKey('target_content_type', 'target_object_id')
 
     unread = models.BooleanField(default=True)
