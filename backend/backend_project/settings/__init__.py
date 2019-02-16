@@ -11,3 +11,4 @@ from .static import *
 from .social_auth import *
 from .swagger import *
 from .vacancies import *
+from .celery import *
