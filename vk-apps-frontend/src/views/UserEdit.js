@@ -23,17 +23,10 @@ import EditUserForm from 'vk-apps-frontend/forms/EditUserForm';
 const mapStateToProps = state => {
   const { currentUserReducer } = state;
   const { vkUserInfo } = state.vkReducer.appsUserReducer;
-  const {
-    user,
-    fetching,
-    errors,
-    success,
-  } = state.apiReducer.usersReducer;
+  const { user, fetching } = state.apiReducer.usersReducer;
   return {
     vkUserInfo,
     fetching,
-    errors,
-    success,
     currentUserReducer,
     user,
   };
@@ -53,6 +46,10 @@ class UserEdit extends React.Component {
     this.handleEditProfileSubmit = this.handleEditProfileSubmit.bind(this);
     this.handleUploadAvatarFormSubmit = this.handleUploadAvatarFormSubmit.bind(this);
     this.startDiv = React.createRef();
+    this.state = {
+      success: null,
+      errors: {},
+    }
   }
 
   componentDidMount() {
@@ -69,34 +66,46 @@ class UserEdit extends React.Component {
   }
 
   async handleUploadAvatarFormSubmit(values) {
-    try {
-      const { id } = this.props.currentUserReducer.user;
-      const { avatar } = values;
-      await this.props.uploadAvatar(id, {
-        avatar,
+    const { id } = this.props.currentUserReducer.user;
+    const { avatar } = values;
+    const response = await this.props.uploadAvatar(id, {
+      avatar,
+    });
+    if (response.status === 200) {
+      await this.setState({
+        success: true,
+        errors: {},
       });
-      await this.props.getUser(id);
+      this.props.getUser(id);
+      return;
     }
-    catch (exception) {
-      console.log(exception);
-    }
+    await this.setState({
+      success: false,
+      errors: response
+    });
   }
 
   async handleEditProfileSubmit(values) {
-    try {
-      const { id } = this.props.currentUserReducer.user;
-      await this.props.updateUser(id, {
-        ...values
+    const { id } = this.props.currentUserReducer.user;
+    const response = await this.props.updateUser(id, {
+      ...values
+    });
+    if (response.status === 200) {
+      await this.setState({
+        success: true,
+        errors: {},
       });
-      await this.props.getUser(id);
+      this.props.getUser(id);
+      return;
     }
-    catch (exception) {
-      console.log(exception);
-    }
+    await this.setState({
+      success: false,
+      errors: response,
+    });
   }
 
   render() {
-    const { user, fetching, success } = this.props;
+    const { user, fetching } = this.props;
 
     return (
       <div>
@@ -126,7 +135,7 @@ class UserEdit extends React.Component {
           </Group>
         )}
 
-        {success && (
+        {this.state.success && (
           <Group>
             <Div>
               <SuccessfulFormStatus title="Успешно" />
@@ -144,7 +153,7 @@ class UserEdit extends React.Component {
               onSubmit={ async (values, actions) => {
                 await this.handleUploadAvatarFormSubmit(values);
                 actions.setSubmitting(false);
-                actions.setErrors(this.props.errors || {})
+                actions.setErrors(this.state.errors)
               }}
             />
           </Group>
@@ -168,7 +177,7 @@ class UserEdit extends React.Component {
               onSubmit={ async (values, actions) => {
                 await this.handleEditProfileSubmit(values);
                 actions.setSubmitting(false);
-                actions.setErrors(this.props.errors || {});
+                actions.setErrors(this.state.errors);
               }}
             />
           </Group>
