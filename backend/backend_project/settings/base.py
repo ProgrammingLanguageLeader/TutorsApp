@@ -15,12 +15,14 @@ SECRET_KEY = config(
     'SECRET_KEY',
     default='dj%j-iz3%7$^%#c0ca#4!)^tr1w(n222=@i55uy3t%eafz0f61'
 )
+
 VK_APP_SECRET = config('VK_APP_SECRET', default='FAKE_KEY')
+VK_APP_ACCESS_TOKEN = config('VK_APP_ACCESS_TOKEN', default='FAKE TOKEN')
 VK_APP_ID = config('VK_APP_ID', default=0)
 
 SESSION_COOKIE_SECURE = config(
     'SESSION_COOKIE_SECURE',
-    default=True,
+    default=DEBUG,
     cast=bool
 )
 SESSION_COOKIE_HTTPONLY = True
