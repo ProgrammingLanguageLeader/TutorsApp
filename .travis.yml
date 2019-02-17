@@ -1,3 +1,6 @@
+services:
+  - redis-server
+
 matrix:
   include:
     - language: python
