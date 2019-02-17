@@ -2,8 +2,11 @@ import axios from 'axios';
 
 import { API_URL } from 'vk-apps-frontend/constants/api';
 
-class ApiManager {
+class APIRequestManager {
   constructor(vkExecutionParams, sign) {
+    if (APIRequestManager.instance) {
+      throw 'APIRequestManager instance already exists. Use getInstance() instead';
+    }
     this.vkExecutionParams = vkExecutionParams;
     this.sign = sign;
   }
@@ -11,7 +14,7 @@ class ApiManager {
   static cancelRequests() {};
 
   static getInstance() {
-    if (!ApiManager.instance) {
+    if (!APIRequestManager.instance) {
       let url = new URL(window.location.href);
       let sign = null;
       let vkExecutionParams = {};
@@ -22,12 +25,12 @@ class ApiManager {
           vkExecutionParams[param[0]] = param[1];
         }
       }
-      ApiManager.instance = new ApiManager(vkExecutionParams, sign);
+      APIRequestManager.instance = new APIRequestManager(vkExecutionParams, sign);
     }
-    return ApiManager.instance;
+    return APIRequestManager.instance;
   }
 
-  async makeRequest(endpoint, method, options, useFormData = false) {
+  makeRequest(endpoint, method, options, useFormData = false) {
     const url = `${API_URL}/${endpoint}`;
     let optionsWithSign = {
       ...options,
@@ -42,38 +45,33 @@ class ApiManager {
       optionsWithSign = formData;
     }
 
-    if (method.toLowerCase() === 'get') {
-      return axios({
+    const axiosRequestPromise = method.toLowerCase() === 'get' ?
+      axios({
         url: url,
         method: method,
         params: optionsWithSign,
         cancelToken: new axios.CancelToken(cancelFunction => {
-          ApiManager.cancelRequests = cancelFunction;
+          APIRequestManager.cancelRequests = cancelFunction;
         })
       })
-        .then(result => {
-          if (result.status !== 200) {
-            return null;
-          }
-          return result.data;
-        })
-    }
-
-    return axios({
+    : axios({
       url: url,
       method: method,
       data: optionsWithSign,
       cancelToken: new axios.CancelToken(cancelFunction => {
-        ApiManager.cancelRequests = cancelFunction;
+        APIRequestManager.cancelRequests = cancelFunction;
       })
-    })
-      .then(result => {
-        if (result.status !== 200) {
-          return null;
+    });
+
+    return axiosRequestPromise
+      .then(response => response)
+      .catch(error => {
+        if (error.response) {
+          return error.response;
         }
-        return result.data;
+        return error.message;
       });
   }
 }
 
-export default ApiManager;
+export default APIRequestManager;
