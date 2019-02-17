@@ -16,14 +16,12 @@ import { lessonsActions, tutorsActions } from 'vk-apps-frontend/actions/api';
 import LessonForm from 'vk-apps-frontend/forms/LessonForm';
 
 const mapStateToProps = state => {
-  const { lesson, fetching, success, errors } = state.apiReducer.lessonsReducer;
+  const { lesson, fetching } = state.apiReducer.lessonsReducer;
   const { currentUserReducer } = state;
   const { students } = state.apiReducer.tutorsReducer;
   return {
     lesson,
     fetching,
-    success,
-    errors,
     students,
     currentUserReducer,
   };
@@ -40,9 +38,13 @@ const mapDispatchToProps = dispatch => {
 class LessonEdit extends React.Component {
   constructor(props) {
     super(props);
+    this.handleLessonFormSubmit = this.handleLessonFormSubmit.bind(this);
     this.startDiv = React.createRef();
+    this.state = {
+      success: null,
+      errors: {},
+    };
   }
-
 
   componentDidMount() {
     if (this.props.currentUserReducer.user) {
@@ -60,13 +62,23 @@ class LessonEdit extends React.Component {
     });
   }
 
+  async handleLessonFormSubmit(id, values) {
+    const response = await this.props.updateLesson(id, values);
+    if (response.status < 400) {
+      this.setState({
+        success: true,
+        errors: {},
+      });
+      return;
+    }
+    this.setState({
+      success: false,
+      errors: response,
+    });
+  }
+
   render() {
-    const {
-      fetching,
-      success,
-      students,
-      lesson,
-    } = this.props;
+    const { fetching, students, lesson } = this.props;
 
     return (
       <div>
@@ -97,17 +109,16 @@ class LessonEdit extends React.Component {
                 formikProps => (
                   <LessonForm
                     {...formikProps}
-                    isSuccessful={success}
+                    isSuccessful={this.state.success}
                     students={students || []}
                     submitLabel="Сохранить"
                   />
                 )
               }
               onSubmit={async (values, action) => {
-                console.log(values);
-                await this.props.updateLesson(lesson.id, values);
+                await this.handleLessonFormSubmit(lesson.id, values);
                 action.setSubmitting(false);
-                action.setErrors(this.props.errors || {});
+                action.setErrors(this.state.errors);
               }}
             />
           </Group>

@@ -16,13 +16,11 @@ import { lessonsActions, tutorsActions } from 'vk-apps-frontend/actions/api';
 import LessonForm from 'vk-apps-frontend/forms/LessonForm';
 
 const mapStateToProps = state => {
-  const { fetching, success, errors } = state.apiReducer.lessonsReducer;
+  const { fetching } = state.apiReducer.lessonsReducer;
   const { currentUserReducer } = state;
   const { students } = state.apiReducer.tutorsReducer;
   return {
     fetching,
-    success,
-    errors,
     students,
     currentUserReducer,
   };
@@ -38,9 +36,13 @@ const mapDispatchToProps = dispatch => {
 class LessonCreate extends React.Component {
   constructor(props) {
     super(props);
+    this.handleLessonFormSubmit = this.handleLessonFormSubmit.bind(this);
     this.startDiv = React.createRef();
+    this.state = {
+      success: null,
+      errors: {},
+    }
   }
-
 
   componentDidMount() {
     if (this.props.currentUserReducer.user) {
@@ -54,8 +56,23 @@ class LessonCreate extends React.Component {
     });
   }
 
+  async handleLessonFormSubmit(values) {
+    const response = await this.props.createLesson(values);
+    if (response.status < 400) {
+      this.setState({
+        success: true,
+        errors: {},
+      });
+      return;
+    }
+    this.setState({
+      success: false,
+      errors: response,
+    });
+  }
+
   render() {
-    const { fetching, success, students } = this.props;
+    const { fetching, students } = this.props;
 
     return (
       <div>
@@ -84,16 +101,16 @@ class LessonCreate extends React.Component {
               formikProps => (
                 <LessonForm
                   {...formikProps}
-                  isSuccessful={success}
+                  isSuccessful={this.state.success}
                   students={students || []}
                   submitLabel="Создать"
                 />
               )
             }
             onSubmit={async (values, action) => {
-              await this.props.createLesson(values);
+              await this.handleLessonFormSubmit(values);
               action.setSubmitting(false);
-              action.setErrors(this.props.errors || {});
+              action.setErrors(this.state.errors);
             }}
           />
         </Group>
