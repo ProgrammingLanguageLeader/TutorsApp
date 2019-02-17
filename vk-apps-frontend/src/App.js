@@ -36,8 +36,7 @@ import DivSpinner from 'vk-apps-frontend/components/DivSpinner';
 import PopoutDiv from 'vk-apps-frontend/components/PopoutDiv';
 
 const mapStateToProps = state => {
-  const fetching = state.apiReducer.vkAppsUsersReducer.fetching || state.vkReducer.appsUserReducer.fetching;
-  const { vkUserInfo } = state.vkReducer.appsUserReducer;
+  const { vkUserInfo, fetching } = state.vkReducer.appsUserReducer;
   const { user, vkId } = state.currentUserReducer;
   const { unreadNotificationsCount } = state.apiReducer.notificationsReducer;
   return {
