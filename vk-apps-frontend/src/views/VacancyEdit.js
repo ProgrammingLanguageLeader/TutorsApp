@@ -16,13 +16,11 @@ import VacancyForm from 'vk-apps-frontend/forms/VacancyForm';
 import { vacanciesActions } from 'vk-apps-frontend/actions/api';
 
 const mapStateToProps = state => {
-  const { vacancy, errors, success } = state.apiReducer.vacanciesReducer;
+  const { vacancy } = state.apiReducer.vacanciesReducer;
   const { currentUserReducer } = state;
   return {
     currentUserReducer,
     vacancy,
-    errors,
-    success,
   };
 };
 
@@ -37,8 +35,12 @@ class VacancyEdit extends React.Component {
   constructor(props) {
     super(props);
     this.startDiv = React.createRef();
+    this.handleVacancyEditSubmit = this.handleVacancyEditSubmit.bind(this);
+    this.state = {
+      success: null,
+      errors: {},
+    };
   }
-
 
   componentDidMount() {
     if (this.props.currentUserReducer.user) {
@@ -53,8 +55,23 @@ class VacancyEdit extends React.Component {
     });
   }
 
+  async handleVacancyEditSubmit(id, values) {
+    const response = await this.props.updateVacancy(id, values);
+    if (response.status >= 400) {
+      this.setState({
+        success: false,
+        errors: response,
+      });
+      return;
+    }
+    this.setState({
+      success: true,
+      errors: {},
+    });
+  }
+
   render() {
-    const { vacancy, success } = this.props;
+    const { vacancy } = this.props;
 
     return (
       <div>
@@ -68,7 +85,7 @@ class VacancyEdit extends React.Component {
 
         <div ref={this.startDiv} />
 
-        {success && (
+        {this.state.success && (
           <Group>
             <Div>
               <SuccessfulFormStatus title="Успешно" />
@@ -81,14 +98,15 @@ class VacancyEdit extends React.Component {
             initialValues={{
               ...vacancy,
             }}
+            enableReinitialize
             render={formikProps =>
               <VacancyForm { ...formikProps } submitLabel="Редактировать" />
             }
             onSubmit={ async (values, action) => {
               const { id } = this.props.vacancy;
-              await this.props.updateVacancy(id, values);
+              await this.handleVacancyEditSubmit(id, values);
+              action.setErrors(this.state.errors);
               action.setSubmitting(false);
-              action.setErrors(this.props.errors || {});
             }}
           />
         </Group>

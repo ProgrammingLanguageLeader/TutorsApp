@@ -16,11 +16,7 @@ import VacancyForm from 'vk-apps-frontend/forms/VacancyForm';
 import { vacanciesActions } from 'vk-apps-frontend/actions/api';
 
 const mapStateToProps = state => {
-  const { errors, success } = state.apiReducer.vacanciesReducer;
-  return {
-    errors,
-    success,
-  };
+  return {};
 };
 
 const mapDispatchToProps = dispatch => {
@@ -34,6 +30,10 @@ class VacancyCreate extends React.Component {
     super(props);
     this.handleCreateVacancyFormSubmit = this.handleCreateVacancyFormSubmit.bind(this);
     this.startDiv = React.createRef();
+    this.state = {
+      success: null,
+      errors: {},
+    };
   }
 
   componentDidUpdate() {
@@ -43,14 +43,23 @@ class VacancyCreate extends React.Component {
   }
 
   async handleCreateVacancyFormSubmit(values) {
-    await this.props.createVacancy({
+    const response = await this.props.createVacancy({
       ...values
+    });
+    if (response.status < 400) {
+      this.setState({
+        success: true,
+        errors: {},
+      });
+      return;
+    }
+    this.setState({
+      success: false,
+      errors: response,
     });
   }
 
   render() {
-    const { success } = this.props;
-
     return (
       <div>
         <PanelHeader left={
@@ -63,7 +72,7 @@ class VacancyCreate extends React.Component {
 
         <div ref={this.startDiv} />
 
-        {success && (
+        {this.state.success && (
           <Group>
             <Div>
               <SuccessfulFormStatus title="Успешно" />
@@ -76,10 +85,11 @@ class VacancyCreate extends React.Component {
             render={formikProps =>
               <VacancyForm { ...formikProps } submitLabel="Создать" />
             }
+            enableReinitialize
             onSubmit={ async (values, action) => {
               await this.handleCreateVacancyFormSubmit(values);
               action.setSubmitting(false);
-              action.setErrors(this.props.errors || {});
+              action.setErrors(this.state.errors);
             }}
           />
         </Group>
