@@ -12,13 +12,15 @@ const searchVacancies = (options = {}) => {
           dispatch({
             type: vacanciesConstants.SEARCH_VACANCIES_SUCCESS,
             payload: response,
-          })
+          });
+          return response;
         },
         errors => {
           dispatch({
             type: vacanciesConstants.SEARCH_VACANCIES_FAILURE,
             payload: errors,
           });
+          return errors;
         }
       )
   }
@@ -35,13 +37,15 @@ const createVacancy = (options = {}) => {
           dispatch({
             type: vacanciesConstants.CREATE_VACANCY_SUCCESS,
             payload: response,
-          })
+          });
+          return response;
         },
         errors => {
           dispatch({
             type: vacanciesConstants.CREATE_VACANCY_FAILURE,
             payload: errors,
           });
+          return errors;
         }
       )
   }
@@ -58,13 +62,15 @@ const getVacancy = (id, options = {}) => {
           dispatch({
             type: vacanciesConstants.GET_VACANCY_SUCCESS,
             payload: response,
-          })
+          });
+          return response;
         },
         errors => {
           dispatch({
             type: vacanciesConstants.GET_VACANCY_FAILURE,
             payload: errors,
           });
+          return errors;
         }
       )
   }
@@ -81,13 +87,15 @@ const updateVacancy = (id, options = {}) => {
           dispatch({
             type: vacanciesConstants.UPDATE_VACANCY_SUCCESS,
             payload: response,
-          })
+          });
+          return response;
         },
         errors => {
           dispatch({
             type: vacanciesConstants.UPDATE_VACANCY_FAILURE,
             payload: errors,
           });
+          return errors;
         }
       )
   }
@@ -104,13 +112,15 @@ const deleteVacancy = (id, options = {}) => {
           dispatch({
             type: vacanciesConstants.DELETE_VACANCY_SUCCESS,
             payload: response,
-          })
+          });
+          return response;
         },
         errors => {
           dispatch({
             type: vacanciesConstants.DELETE_VACANCY_FAILURE,
             payload: errors,
           });
+          return errors;
         }
       )
   }

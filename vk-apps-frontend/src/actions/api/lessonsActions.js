@@ -12,13 +12,15 @@ const getLessonsList = (options = {}) => {
           dispatch({
             type: lessonsConstants.GET_LESSONS_LIST_SUCCESS,
             payload: response,
-          })
+          });
+          return response;
         },
         errors => {
           dispatch({
             type: lessonsConstants.GET_LESSONS_LIST_FAILURE,
             payload: errors,
           });
+          return errors;
         }
       )
   };
@@ -35,13 +37,15 @@ const createLesson = (options = {}) => {
           dispatch({
             type: lessonsConstants.CREATE_LESSON_SUCCESS,
             payload: response,
-          })
+          });
+          return response;
         },
         errors => {
           dispatch({
             type: lessonsConstants.CREATE_LESSON_FAILURE,
             payload: errors,
           });
+          return errors;
         }
       )
   };
@@ -58,13 +62,15 @@ const getLesson = (id, options = {}) => {
           dispatch({
             type: lessonsConstants.GET_LESSON_SUCCESS,
             payload: response,
-          })
+          });
+          return response;
         },
         errors => {
           dispatch({
             type: lessonsConstants.GET_LESSON_FAILURE,
             payload: errors,
           });
+          return errors;
         }
       )
   };
@@ -81,13 +87,15 @@ const updateLesson = (id, options = {}) => {
           dispatch({
             type: lessonsConstants.UPDATE_LESSON_SUCCESS,
             payload: response,
-          })
+          });
+          return response;
         },
         errors => {
           dispatch({
             type: lessonsConstants.UPDATE_LESSON_FAILURE,
             payload: errors,
           });
+          return errors;
         }
       )
   };
@@ -104,13 +112,15 @@ const deleteLesson = (id, options = {}) => {
           dispatch({
             type: lessonsConstants.DELETE_LESSON_SUCCESS,
             payload: response,
-          })
+          });
+          return response;
         },
         errors => {
           dispatch({
             type: lessonsConstants.DELETE_LESSON_FAILURE,
             payload: errors,
           });
+          return errors;
         }
       )
   };

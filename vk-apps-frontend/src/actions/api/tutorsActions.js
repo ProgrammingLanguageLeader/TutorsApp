@@ -12,13 +12,15 @@ const getStudentRequestsList = (options = {}) => {
           dispatch({
             type: tutorsConstants.GET_STUDENT_REQUESTS_LIST_SUCCESS,
             payload: response,
-          })
+          });
+          return response;
         },
         errors => {
           dispatch({
             type: tutorsConstants.GET_STUDENT_REQUESTS_LIST_FAILURE,
             payload: errors,
           });
+          return errors;
         }
       )
   };
@@ -35,13 +37,15 @@ const createStudentRequest = (options = {}) => {
           dispatch({
             type: tutorsConstants.CREATE_STUDENT_REQUEST_SUCCESS,
             payload: response,
-          })
+          });
+          return response;
         },
         errors => {
           dispatch({
             type: tutorsConstants.CREATE_STUDENT_REQUEST_FAILURE,
             payload: errors,
           });
+          return errors;
         }
       )
   };
@@ -58,13 +62,15 @@ const getStudentRequest = (id, options = {}) => {
           dispatch({
             type: tutorsConstants.GET_STUDENT_REQUEST_SUCCESS,
             payload: response,
-          })
+          });
+          return response;
         },
         errors => {
           dispatch({
             type: tutorsConstants.GET_STUDENT_REQUEST_FAILURE,
             payload: errors,
           });
+          return errors;
         }
       )
   };
@@ -81,13 +87,15 @@ const deleteStudentRequest = (id, options = {}) => {
           dispatch({
             type: tutorsConstants.DELETE_STUDENT_REQUEST_SUCCESS,
             payload: response,
-          })
+          });
+          return response;
         },
         errors => {
           dispatch({
             type: tutorsConstants.DELETE_STUDENT_REQUEST_FAILURE,
             payload: errors,
           });
+          return errors;
         }
       )
   };
@@ -104,13 +112,15 @@ const acceptStudentRequest = (id, options = {}) => {
           dispatch({
             type: tutorsConstants.ACCEPT_STUDENT_REQUEST_SUCCESS,
             payload: response,
-          })
+          });
+          return response;
         },
         errors => {
           dispatch({
             type: tutorsConstants.ACCEPT_STUDENT_REQUEST_FAILURE,
             payload: errors,
           });
+          return errors;
         }
       )
   };
@@ -127,13 +137,15 @@ const getStudentsList = (options = {}) => {
           dispatch({
             type: tutorsConstants.GET_STUDENTS_LIST_SUCCESS,
             payload: response,
-          })
+          });
+          return response;
         },
         errors => {
           dispatch({
             type: tutorsConstants.GET_STUDENTS_LIST_FAILURE,
             payload: errors,
           });
+          return errors;
         }
       )
   };
@@ -150,13 +162,15 @@ const getStudent = (id, options = {}) => {
           dispatch({
             type: tutorsConstants.GET_STUDENT_SUCCESS,
             payload: response,
-          })
+          });
+          return response;
         },
         errors => {
           dispatch({
             type: tutorsConstants.GET_STUDENT_FAILURE,
             payload: errors,
           });
+          return errors;
         }
       )
   };
@@ -173,13 +187,15 @@ const deleteStudent = (id, options = {}) => {
           dispatch({
             type: tutorsConstants.DELETE_STUDENT_SUCCESS,
             payload: response,
-          })
+          });
+          return response;
         },
         errors => {
           dispatch({
             type: tutorsConstants.DELETE_STUDENT_FAILURE,
             payload: errors,
           });
+          return errors;
         }
       )
   };
@@ -196,13 +212,15 @@ const getTutorsList = (options = {}) => {
           dispatch({
             type: tutorsConstants.GET_TUTORS_LIST_SUCCESS,
             payload: response,
-          })
+          });
+          return response;
         },
         errors => {
           dispatch({
             type: tutorsConstants.GET_TUTORS_LIST_FAILURE,
             payload: errors,
           });
+          return errors;
         }
       )
   };

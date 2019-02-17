@@ -12,13 +12,15 @@ const createVkAppsUser = (options = {}) => {
           dispatch({
             type: vkAppsUsersConstants.CREATE_VK_APPS_USER_SUCCESS,
             payload: response,
-          })
+          });
+          return response;
         },
         errors => {
           dispatch({
             type: vkAppsUsersConstants.CREATE_VK_APPS_USER_FAILURE,
             payload: errors,
           });
+          return errors;
         }
       )
   };
@@ -35,13 +37,15 @@ const getVkAppsUser = (id, options = {}) => {
           dispatch({
             type: vkAppsUsersConstants.GET_VK_APPS_USER_SUCCESS,
             payload: response,
-          })
+          });
+          return response;
         },
         errors => {
           dispatch({
             type: vkAppsUsersConstants.GET_VK_APPS_USER_FAILURE,
             payload: errors,
           });
+          return errors;
         }
       )
   };
@@ -58,13 +62,15 @@ const deleteVkAppsUser = (id, options = {}) => {
           dispatch({
             type: vkAppsUsersConstants.DELETE_VK_APPS_USER_SUCCESS,
             payload: response,
-          })
+          });
+          return response;
         },
         errors => {
           dispatch({
             type: vkAppsUsersConstants.DELETE_VK_APPS_USER_FAILURE,
             payload: errors,
           });
+          return errors;
         }
       )
   };
@@ -81,13 +87,15 @@ const connectVkAppsUser = (options = {}) => {
           dispatch({
             type: vkAppsUsersConstants.CONNECT_VK_APPS_USER_SUCCESS,
             payload: response,
-          })
+          });
+          return response;
         },
         errors => {
           dispatch({
             type: vkAppsUsersConstants.CONNECT_VK_APPS_USER_FAILURE,
             payload: errors,
           });
+          return errors;
         }
       )
   };

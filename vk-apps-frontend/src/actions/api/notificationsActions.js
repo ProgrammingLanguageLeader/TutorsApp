@@ -12,13 +12,15 @@ const getNotificationsList = (options = {}) => {
           dispatch({
             type: notificationsConstants.GET_NOTIFICATIONS_LIST_SUCCESS,
             payload: response,
-          })
+          });
+          return response;
         },
         errors => {
           dispatch({
             type: notificationsConstants.GET_NOTIFICATIONS_LIST_FAILURE,
             payload: errors,
           });
+          return errors;
         }
       )
   };
@@ -36,13 +38,15 @@ const getReadNotificationsList = (options = {}) => {
           dispatch({
             type: notificationsConstants.GET_READ_NOTIFICATIONS_LIST_SUCCESS,
             payload: response,
-          })
+          });
+          return response;
         },
         errors => {
           dispatch({
             type: notificationsConstants.GET_READ_NOTIFICATIONS_LIST_FAILURE,
             payload: errors,
           });
+          return errors;
         }
       )
   };
@@ -60,13 +64,15 @@ const getUnreadNotificationsList = (options = {}) => {
           dispatch({
             type: notificationsConstants.GET_UNREAD_NOTIFICATIONS_LIST_SUCCESS,
             payload: response,
-          })
+          });
+          return response;
         },
         errors => {
           dispatch({
             type: notificationsConstants.GET_UNREAD_NOTIFICATIONS_LIST_FAILURE,
             payload: errors,
           });
+          return errors;
         }
       )
   };
@@ -83,13 +89,15 @@ const getNotification = (id, options = {}) => {
           dispatch({
             type: notificationsConstants.GET_NOTIFICATION_SUCCESS,
             payload: response,
-          })
+          });
+          return response;
         },
         errors => {
           dispatch({
             type: notificationsConstants.GET_NOTIFICATION_FAILURE,
             payload: errors,
           });
+          return errors;
         }
       )
   };
@@ -106,13 +114,15 @@ const setUnreadNotification = (id, options = {}) => {
           dispatch({
             type: notificationsConstants.SET_UNREAD_NOTIFICATION_SUCCESS,
             payload: response,
-          })
+          });
+          return response;
         },
         errors => {
           dispatch({
             type: notificationsConstants.SET_UNREAD_NOTIFICATION_FAILURE,
             payload: errors,
           });
+          return errors;
         }
       )
   };
