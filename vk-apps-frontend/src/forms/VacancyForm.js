@@ -7,9 +7,10 @@ import FormLayoutGroup from '@vkontakte/vkui/dist/components/FormLayoutGroup/For
 import Input from '@vkontakte/vkui/dist/components/Input/Input';
 import Radio from '@vkontakte/vkui/dist/components/Radio/Radio';
 import Select from '@vkontakte/vkui/dist/components/Select/Select';
-import FormStatus from '@vkontakte/vkui/dist/components/FormStatus/FormStatus';
 
 import { educationLevelList, subjectsList } from 'vk-apps-frontend/constants';
+
+import ErrorFormStatus from 'vk-apps-frontend/components/ErrorFormStatus';
 
 class VacancyForm extends React.Component {
   constructor(props) {
@@ -27,6 +28,16 @@ class VacancyForm extends React.Component {
     });
   }
 
+  static getDerivedStateFromProps(props, state) {
+    if (props.values.subject !== state.selectSubject) {
+      return {
+        selectSubject: '',
+        inputSubject: props.values.subject,
+      };
+    }
+    return state;
+  }
+
   render() {
     const {
       values,
@@ -41,9 +52,7 @@ class VacancyForm extends React.Component {
     return (
       <FormLayout>
         { Object.keys(errors).length > 0 && (
-          <FormStatus title="Ошибка" state="error">
-            Проверьте заполненные поля: {JSON.stringify(errors)}
-          </FormStatus>
+          <ErrorFormStatus errors={errors} />
         )}
 
         <FormLayoutGroup top="Предмет">

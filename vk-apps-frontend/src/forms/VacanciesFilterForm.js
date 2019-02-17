@@ -1,4 +1,5 @@
 import React from 'react';
+import styled from 'styled-components';
 
 import FormLayout from '@vkontakte/vkui/dist/components/FormLayout/FormLayout';
 import Button from '@vkontakte/vkui/dist/components/Button/Button';
@@ -9,6 +10,10 @@ import FormLayoutGroup from '@vkontakte/vkui/dist/components/FormLayoutGroup/For
 import Checkbox from '@vkontakte/vkui/dist/components/Checkbox/Checkbox';
 
 import { subjectsList, educationLevelList } from 'vk-apps-frontend/constants';
+
+const DangerButton = styled(Button)`
+  background: #dc3545 !important;
+`;
 
 class VacanciesFilterForm extends React.Component {
   constructor(props) {
@@ -141,20 +146,12 @@ class VacanciesFilterForm extends React.Component {
           <Button size="xl" onClick={handleSubmit}>
             Применить
           </Button>
-        </FormLayoutGroup>
-        <FormLayoutGroup>
-          <Button
-            size="xl"
-            style={{
-              background: "#DC143C"
-            }}
-            onClick={() => {
-              handleReset(values, { setValues });
-              this.resetState();
-            }}
-          >
+          <DangerButton size="xl" onClick={() => {
+            handleReset(values, { setValues });
+            this.resetState();
+          }}>
             Очистить
-          </Button>
+          </DangerButton>
         </FormLayoutGroup>
       </FormLayout>
     );

@@ -2,12 +2,11 @@ import React from 'react';
 
 import Button from '@vkontakte/vkui/dist/components/Button/Button';
 import FormLayout from '@vkontakte/vkui/dist/components/FormLayout/FormLayout';
-import FormStatus from '@vkontakte/vkui/dist/components/FormStatus/FormStatus';
 import Input from '@vkontakte/vkui/dist/components/Input/Input';
 import Textarea from '@vkontakte/vkui/dist/components/Textarea/Textarea';
 
 import DivSpinner from 'vk-apps-frontend/components/DivSpinner';
-import SuccessfulFormStatus from 'vk-apps-frontend/components/SuccessfulFormStatus';
+import ErrorFormStatus from 'vk-apps-frontend/components/ErrorFormStatus';
 
 const EditUserForm = ({
   values,
@@ -21,15 +20,10 @@ const EditUserForm = ({
 }) => (
   <FormLayout>
     { Object.keys(errors).length > 0 && (
-      <FormStatus title="Ошибка" state="error">
-        Проверьте заполненные поля: {JSON.stringify(errors)}
-      </FormStatus>
+      <ErrorFormStatus errors={errors} />
     )}
     { isSubmitting && (
       <DivSpinner />
-    )}
-    { values.isSuccessful && (
-      <SuccessfulFormStatus title="Успешно" />
     )}
 
     <Input

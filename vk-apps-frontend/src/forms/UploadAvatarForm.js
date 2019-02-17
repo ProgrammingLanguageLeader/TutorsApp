@@ -4,12 +4,12 @@ import Button from '@vkontakte/vkui/dist/components/Button/Button';
 import Div from '@vkontakte/vkui/dist/components/Div/Div';
 import File from '@vkontakte/vkui/dist/components/File/File';
 import FormLayout from '@vkontakte/vkui/dist/components/FormLayout/FormLayout';
-import FormStatus from '@vkontakte/vkui/dist/components/FormStatus/FormStatus';
 
 import Icon24Camera from '@vkontakte/icons/dist/24/camera';
 import Icon24Upload from '@vkontakte/icons/dist/24/upload';
 
 import DivSpinner from 'vk-apps-frontend/components/DivSpinner';
+import ErrorFormStatus from 'vk-apps-frontend/components/ErrorFormStatus';
 
 class UploadAvatarForm extends React.Component {
   constructor(props) {
@@ -46,9 +46,7 @@ class UploadAvatarForm extends React.Component {
     return (
       <FormLayout>
         { Object.keys(errors).length > 0 && (
-          <FormStatus title="Ошибка" state="error">
-            Проверьте заполненные поля: {JSON.stringify(errors)}
-          </FormStatus>
+          <ErrorFormStatus errors={errors} />
         )}
         {
           isSubmitting ? (

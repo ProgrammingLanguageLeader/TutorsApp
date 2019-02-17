@@ -8,11 +8,11 @@ import FormLayout from '@vkontakte/vkui/dist/components/FormLayout/FormLayout';
 import FormLayoutGroup from '@vkontakte/vkui/dist/components/FormLayoutGroup/FormLayoutGroup';
 import Input from '@vkontakte/vkui/dist/components/Input/Input';
 import Select from '@vkontakte/vkui/dist/components/Select/Select';
-import FormStatus from '@vkontakte/vkui/dist/components/FormStatus/FormStatus';
 import Slider from '@vkontakte/vkui/dist/components/Slider/Slider';
 
 import DivSpinner from 'vk-apps-frontend/components/DivSpinner';
 import TimePicker from 'vk-apps-frontend/components/TimePicker';
+import ErrorFormStatus from 'vk-apps-frontend/components/ErrorFormStatus';
 import SuccessfulFormStatus from 'vk-apps-frontend/components/SuccessfulFormStatus';
 
 import durationHumanizer from 'vk-apps-frontend/helpers/durationHumanizer';
@@ -34,9 +34,7 @@ class LessonForm extends React.Component {
     return (
       <FormLayout>
         { Object.keys(errors).length > 0 && (
-          <FormStatus title="Ошибка" state="error">
-            Проверьте заполненные поля: {JSON.stringify(errors)}
-          </FormStatus>
+          <ErrorFormStatus errors={errors} />
         )}
 
         { isSubmitting && (
@@ -44,9 +42,7 @@ class LessonForm extends React.Component {
         )}
 
         { isSuccessful && (
-          <Div>
-            <SuccessfulFormStatus title="Успешно" />
-          </Div>
+          <SuccessfulFormStatus title="Успешно" />
         )}
 
         <FormLayoutGroup top="Выбор ученика">
