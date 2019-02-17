@@ -1,4 +1,4 @@
-from django.urls import path, include
+from django.urls import path, include, re_path
 
 from rest_framework.routers import DefaultRouter
 
@@ -9,5 +9,8 @@ router.register(r'', VkAppsUsersViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('by_user_id/<int:user_id>/', GetVkAppsUserByUserIdView.as_view())
+    re_path(
+        '^by_user_id/(?P<user_id>[^/.]+)/$',
+        GetVkAppsUserByUserIdView.as_view()
+    ),
 ]

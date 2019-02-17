@@ -111,6 +111,6 @@ class GetVkAppsUserByUserIdView(generics.RetrieveAPIView):
     def retrieve(self, request, user_id=None, *args, **kwargs):
         try:
             vk_apps_user = VkAppsUser.objects.get(user_id=user_id)
-        except ObjectDoesNotExist:
+        except (ObjectDoesNotExist, ValueError):
             raise exceptions.NotFound()
         return Response(GetVkAppsUserSerializer(vk_apps_user).data)
