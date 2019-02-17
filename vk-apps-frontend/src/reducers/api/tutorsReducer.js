@@ -111,16 +111,8 @@ const tutorsReducer = (state = initialState, action) => {
     case tutorsConstants.GET_STUDENT_FAILURE:
     case tutorsConstants.DELETE_STUDENT_FAILURE:
     case tutorsConstants.GET_TUTORS_LIST_FAILURE:
-      if (action.payload.response) {
-        return state.merge({
-          errors: action.payload.response.data,
-          studentRequestSuccess: null,
-          studentSuccess: null,
-          fetching: false,
-        });
-      }
       return state.merge({
-        errors: ['Network error'],
+        errors: action.payload,
         studentRequestSuccess: null,
         studentSuccess: null,
         fetching: false,

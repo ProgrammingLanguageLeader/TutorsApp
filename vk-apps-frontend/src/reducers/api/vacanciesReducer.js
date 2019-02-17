@@ -55,15 +55,8 @@ const vacanciesReducer = (state = initialState, action) => {
     case vacanciesConstants.GET_VACANCY_FAILURE:
     case vacanciesConstants.UPDATE_VACANCY_FAILURE:
     case vacanciesConstants.DELETE_VACANCY_FAILURE:
-      if (action.payload.response) {
-        return state.merge({
-          errors: action.payload.response.data,
-          success: null,
-          fetching: false,
-        });
-      }
       return state.merge({
-        errors: ['Network error'],
+        errors: action.payload,
         success: null,
         fetching: false,
       });

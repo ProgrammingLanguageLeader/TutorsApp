@@ -55,15 +55,8 @@ const lessonsReducer = (state = initialState, action) => {
     case lessonsConstants.GET_LESSONS_LIST_FAILURE:
     case lessonsConstants.UPDATE_LESSON_FAILURE:
     case lessonsConstants.DELETE_LESSON_FAILURE:
-      if (action.payload.response) {
-        return state.merge({
-          errors: action.payload.response.data,
-          success: null,
-          fetching: false,
-        });
-      }
       return state.merge({
-        errors: ['Network error'],
+        errors: action.payload,
         success: null,
         fetching: false,
       });
