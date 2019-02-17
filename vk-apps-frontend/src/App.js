@@ -38,15 +38,13 @@ import PopoutDiv from 'vk-apps-frontend/components/PopoutDiv';
 const mapStateToProps = state => {
   const fetching = state.apiReducer.vkAppsUsersReducer.fetching || state.vkReducer.appsUserReducer.fetching;
   const { vkUserInfo } = state.vkReducer.appsUserReducer;
-  const { user, vkId } = state.apiReducer.vkAppsUsersReducer;
-  const { currentUserReducer } = state;
+  const { user, vkId } = state.currentUserReducer;
   const { unreadNotificationsCount } = state.apiReducer.notificationsReducer;
   return {
     fetching,
     vkUserInfo,
     user,
     vkId,
-    currentUserReducer,
     unreadNotificationsCount,
   };
 };
@@ -73,14 +71,15 @@ class App extends React.Component {
     this.getUnreadNotificationsListWithInterval();
   }
 
-  componentDidUpdate(prevProps) {
+  async componentDidUpdate(prevProps) {
     if (this.props.vkUserInfo !== prevProps.vkUserInfo) {
       const { id } = this.props.vkUserInfo;
-      this.props.getVkAppsUser(id);
-    }
-    if (prevProps.user !== this.props.user && prevProps.vkId !== this.props.vkId) {
-      const { user, vkId } = this.props;
-      this.props.saveCurrentUserData(user, vkId);
+      const response = await this.props.getVkAppsUser(id);
+      console.log(response);
+      if (response.status === 200) {
+        const { user, vk_id } = response.data;
+        this.props.saveCurrentUserData(user, vk_id);
+      }
     }
   }
 
@@ -91,8 +90,7 @@ class App extends React.Component {
   }
 
   render() {
-    const { user } = this.props.currentUserReducer;
-    const { unreadNotificationsCount } = this.props;
+    const { user, unreadNotificationsCount } = this.props;
     const popout = this.props.fetching && (
       <PopoutWrapper>
         <PopoutDiv>
