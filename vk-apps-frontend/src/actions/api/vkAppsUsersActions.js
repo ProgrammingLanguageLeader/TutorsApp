@@ -1,28 +1,20 @@
+import APIRequestManager from 'vk-apps-frontend/services/APIRequestManager';
+import handleAPIResponse from 'vk-apps-frontend/helpers/handleAPIResponse';
 import { vkAppsUsersConstants } from 'vk-apps-frontend/constants/api';
-import { makeApiRequest } from 'vk-apps-frontend/services/api';
+
+const requestManager = APIRequestManager.getInstance();
 
 const createVkAppsUser = (options = {}) => {
   return async dispatch => {
     dispatch({
       type: vkAppsUsersConstants.CREATE_VK_APPS_USER_REQUEST,
     });
-    return makeApiRequest('vk_apps_users/', 'post', options)
-      .then(
-        response => {
-          dispatch({
-            type: vkAppsUsersConstants.CREATE_VK_APPS_USER_SUCCESS,
-            payload: response,
-          });
-          return response;
-        },
-        errors => {
-          dispatch({
-            type: vkAppsUsersConstants.CREATE_VK_APPS_USER_FAILURE,
-            payload: errors,
-          });
-          return errors;
-        }
-      )
+    return requestManager.makeRequest('vk_apps_users/', 'post', options)
+      .then(handleAPIResponse(
+        vkAppsUsersConstants.CREATE_VK_APPS_USER_SUCCESS,
+        vkAppsUsersConstants.CREATE_VK_APPS_USER_FAILURE,
+        dispatch
+      ))
   };
 };
 
@@ -31,23 +23,12 @@ const getVkAppsUser = (id, options = {}) => {
     dispatch({
       type: vkAppsUsersConstants.GET_VK_APPS_USER_REQUEST,
     });
-    return makeApiRequest(`vk_apps_users/${id}/`, 'get', options)
-      .then(
-        response => {
-          dispatch({
-            type: vkAppsUsersConstants.GET_VK_APPS_USER_SUCCESS,
-            payload: response,
-          });
-          return response;
-        },
-        errors => {
-          dispatch({
-            type: vkAppsUsersConstants.GET_VK_APPS_USER_FAILURE,
-            payload: errors,
-          });
-          return errors;
-        }
-      )
+    return requestManager.makeRequest(`vk_apps_users/${id}/`, 'get', options)
+      .then(handleAPIResponse(
+        vkAppsUsersConstants.GET_VK_APPS_USER_SUCCESS,
+        vkAppsUsersConstants.GET_VK_APPS_USER_FAILURE,
+        dispatch
+      ))
   };
 };
 
@@ -56,23 +37,12 @@ const deleteVkAppsUser = (id, options = {}) => {
     dispatch({
       type: vkAppsUsersConstants.DELETE_VK_APPS_USER_REQUEST,
     });
-    return makeApiRequest(`vk_apps_users/${id}/`, 'delete', options)
-      .then(
-        response => {
-          dispatch({
-            type: vkAppsUsersConstants.DELETE_VK_APPS_USER_SUCCESS,
-            payload: response,
-          });
-          return response;
-        },
-        errors => {
-          dispatch({
-            type: vkAppsUsersConstants.DELETE_VK_APPS_USER_FAILURE,
-            payload: errors,
-          });
-          return errors;
-        }
-      )
+    return requestManager.makeRequest(`vk_apps_users/${id}/`, 'delete', options)
+      .then(handleAPIResponse(
+        vkAppsUsersConstants.DELETE_VK_APPS_USER_SUCCESS,
+        vkAppsUsersConstants.DELETE_VK_APPS_USER_FAILURE,
+        dispatch
+      ))
   };
 };
 
@@ -81,23 +51,12 @@ const connectVkAppsUser = (options = {}) => {
     dispatch({
       type: vkAppsUsersConstants.CONNECT_VK_APPS_USER_REQUEST,
     });
-    return makeApiRequest(`vk_apps_users/connect/`, 'post', options)
-      .then(
-        response => {
-          dispatch({
-            type: vkAppsUsersConstants.CONNECT_VK_APPS_USER_SUCCESS,
-            payload: response,
-          });
-          return response;
-        },
-        errors => {
-          dispatch({
-            type: vkAppsUsersConstants.CONNECT_VK_APPS_USER_FAILURE,
-            payload: errors,
-          });
-          return errors;
-        }
-      )
+    return requestManager.makeRequest(`vk_apps_users/connect/`, 'post', options)
+      .then(handleAPIResponse(
+        vkAppsUsersConstants.CONNECT_VK_APPS_USER_SUCCESS,
+        vkAppsUsersConstants.CONNECT_VK_APPS_USER_FAILURE,
+        dispatch
+      ))
   };
 };
 
@@ -106,23 +65,12 @@ const retrieveVkAppsUserByUserId = (id, options = {}) => {
     dispatch({
       type: vkAppsUsersConstants.RETRIEVE_VK_APPS_USER_BY_USER_ID_REQUEST,
     });
-    return makeApiRequest(`vk_apps_users/by_user_id/${id}`, 'get', options)
-      .then(
-        response => {
-          dispatch({
-            type: vkAppsUsersConstants.RETRIEVE_VK_APPS_USER_BY_USER_ID_SUCCESS,
-            payload: response,
-          });
-          return response;
-        },
-        errors => {
-          dispatch({
-            type: vkAppsUsersConstants.RETRIEVE_VK_APPS_USER_BY_USER_ID_FAILURE,
-            payload: errors,
-          });
-          return errors;
-        }
-      )
+    return requestManager.makeRequest(`vk_apps_users/by_user_id/${id}`, 'get', options)
+      .then(handleAPIResponse(
+        vkAppsUsersConstants.RETRIEVE_VK_APPS_USER_BY_USER_ID_SUCCESS,
+        vkAppsUsersConstants.RETRIEVE_VK_APPS_USER_BY_USER_ID_FAILURE,
+        dispatch
+      ))
   };
 };
 

@@ -1,28 +1,20 @@
-import { makeApiRequest } from 'vk-apps-frontend/services/api';
+import APIRequestManager from 'vk-apps-frontend/services/APIRequestManager';
+import handleAPIResponse from 'vk-apps-frontend/helpers/handleAPIResponse';
 import { notificationsConstants } from 'vk-apps-frontend/constants/api';
+
+const requestManager = APIRequestManager.getInstance();
 
 const getNotificationsList = (options = {}) => {
   return async dispatch => {
     dispatch({
       type: notificationsConstants.GET_NOTIFICATIONS_LIST_REQUEST,
     });
-    return makeApiRequest('notifications/', 'get', options)
-      .then(
-        response => {
-          dispatch({
-            type: notificationsConstants.GET_NOTIFICATIONS_LIST_SUCCESS,
-            payload: response,
-          });
-          return response;
-        },
-        errors => {
-          dispatch({
-            type: notificationsConstants.GET_NOTIFICATIONS_LIST_FAILURE,
-            payload: errors,
-          });
-          return errors;
-        }
-      )
+    return requestManager.makeRequest('notifications/', 'get', options)
+      .then(handleAPIResponse(
+        notificationsConstants.GET_NOTIFICATIONS_LIST_SUCCESS,
+        notificationsConstants.GET_NOTIFICATIONS_LIST_FAILURE,
+        dispatch
+      ))
   };
 };
 
@@ -32,23 +24,12 @@ const getReadNotificationsList = (options = {}) => {
       type: notificationsConstants.GET_READ_NOTIFICATIONS_LIST_REQUEST,
     });
     options.unread = false;
-    return makeApiRequest('notifications/', 'get', options)
-      .then(
-        response => {
-          dispatch({
-            type: notificationsConstants.GET_READ_NOTIFICATIONS_LIST_SUCCESS,
-            payload: response,
-          });
-          return response;
-        },
-        errors => {
-          dispatch({
-            type: notificationsConstants.GET_READ_NOTIFICATIONS_LIST_FAILURE,
-            payload: errors,
-          });
-          return errors;
-        }
-      )
+    return requestManager.makeRequest('notifications/', 'get', options)
+      .then(handleAPIResponse(
+        notificationsConstants.GET_READ_NOTIFICATIONS_LIST_SUCCESS,
+        notificationsConstants.GET_READ_NOTIFICATIONS_LIST_FAILURE,
+        dispatch
+      ))
   };
 };
 
@@ -58,23 +39,12 @@ const getUnreadNotificationsList = (options = {}) => {
       type: notificationsConstants.GET_UNREAD_NOTIFICATIONS_LIST_REQUEST,
     });
     options.unread = true;
-    return makeApiRequest('notifications/', 'get', options)
-      .then(
-        response => {
-          dispatch({
-            type: notificationsConstants.GET_UNREAD_NOTIFICATIONS_LIST_SUCCESS,
-            payload: response,
-          });
-          return response;
-        },
-        errors => {
-          dispatch({
-            type: notificationsConstants.GET_UNREAD_NOTIFICATIONS_LIST_FAILURE,
-            payload: errors,
-          });
-          return errors;
-        }
-      )
+    return requestManager.makeRequest('notifications/', 'get', options)
+      .then(handleAPIResponse(
+        notificationsConstants.GET_UNREAD_NOTIFICATIONS_LIST_SUCCESS,
+        notificationsConstants.GET_UNREAD_NOTIFICATIONS_LIST_FAILURE,
+        dispatch
+      ))
   };
 };
 
@@ -83,23 +53,12 @@ const getNotification = (id, options = {}) => {
     dispatch({
       type: notificationsConstants.GET_NOTIFICATION_REQUEST,
     });
-    return makeApiRequest(`notifications/${id}/`, 'get', options)
-      .then(
-        response => {
-          dispatch({
-            type: notificationsConstants.GET_NOTIFICATION_SUCCESS,
-            payload: response,
-          });
-          return response;
-        },
-        errors => {
-          dispatch({
-            type: notificationsConstants.GET_NOTIFICATION_FAILURE,
-            payload: errors,
-          });
-          return errors;
-        }
-      )
+    return requestManager.makeRequest(`notifications/${id}/`, 'get', options)
+      .then(handleAPIResponse(
+        notificationsConstants.GET_NOTIFICATION_SUCCESS,
+        notificationsConstants.GET_NOTIFICATION_FAILURE,
+        dispatch
+      ))
   };
 };
 
@@ -108,23 +67,12 @@ const setUnreadNotification = (id, options = {}) => {
     dispatch({
       type: notificationsConstants.SET_UNREAD_NOTIFICATION_REQUEST,
     });
-    return makeApiRequest(`notifications/${id}/set_unread/`, 'patch', options)
-      .then(
-        response => {
-          dispatch({
-            type: notificationsConstants.SET_UNREAD_NOTIFICATION_SUCCESS,
-            payload: response,
-          });
-          return response;
-        },
-        errors => {
-          dispatch({
-            type: notificationsConstants.SET_UNREAD_NOTIFICATION_FAILURE,
-            payload: errors,
-          });
-          return errors;
-        }
-      )
+    return requestManager.makeRequest(`notifications/${id}/set_unread/`, 'patch', options)
+      .then(handleAPIResponse(
+        notificationsConstants.SET_UNREAD_NOTIFICATION_SUCCESS,
+        notificationsConstants.SET_UNREAD_NOTIFICATION_FAILURE,
+        dispatch
+      ))
   };
 };
 

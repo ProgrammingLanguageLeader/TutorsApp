@@ -1,28 +1,20 @@
-import { makeApiRequest } from 'vk-apps-frontend/services/api';
+import APIRequestManager from 'vk-apps-frontend/services/APIRequestManager';
+import handleAPIResponse from 'vk-apps-frontend/helpers/handleAPIResponse';
 import { lessonsConstants } from 'vk-apps-frontend/constants/api';
+
+const requestManager = APIRequestManager.getInstance();
 
 const getLessonsList = (options = {}) => {
   return async dispatch => {
     dispatch({
       type: lessonsConstants.GET_LESSONS_LIST_REQUEST,
     });
-    return makeApiRequest('lessons/', 'get', options)
-      .then(
-        response => {
-          dispatch({
-            type: lessonsConstants.GET_LESSONS_LIST_SUCCESS,
-            payload: response,
-          });
-          return response;
-        },
-        errors => {
-          dispatch({
-            type: lessonsConstants.GET_LESSONS_LIST_FAILURE,
-            payload: errors,
-          });
-          return errors;
-        }
-      )
+    return requestManager.makeRequest('lessons/', 'get', options)
+      .then(handleAPIResponse(
+        lessonsConstants.GET_LESSONS_LIST_SUCCESS,
+        lessonsConstants.GET_LESSONS_LIST_FAILURE,
+        dispatch
+      ))
   };
 };
 
@@ -31,23 +23,12 @@ const createLesson = (options = {}) => {
     dispatch({
       type: lessonsConstants.CREATE_LESSON_REQUEST,
     });
-    return makeApiRequest('lessons/', 'post', options)
-      .then(
-        response => {
-          dispatch({
-            type: lessonsConstants.CREATE_LESSON_SUCCESS,
-            payload: response,
-          });
-          return response;
-        },
-        errors => {
-          dispatch({
-            type: lessonsConstants.CREATE_LESSON_FAILURE,
-            payload: errors,
-          });
-          return errors;
-        }
-      )
+    return requestManager.makeRequest('lessons/', 'post', options)
+      .then(handleAPIResponse(
+        lessonsConstants.CREATE_LESSON_SUCCESS,
+        lessonsConstants.CREATE_LESSON_FAILURE,
+        dispatch
+      ))
   };
 };
 
@@ -56,23 +37,12 @@ const getLesson = (id, options = {}) => {
     dispatch({
       type: lessonsConstants.GET_LESSON_REQUEST,
     });
-    return makeApiRequest(`lessons/${id}/`, 'get', options)
-      .then(
-        response => {
-          dispatch({
-            type: lessonsConstants.GET_LESSON_SUCCESS,
-            payload: response,
-          });
-          return response;
-        },
-        errors => {
-          dispatch({
-            type: lessonsConstants.GET_LESSON_FAILURE,
-            payload: errors,
-          });
-          return errors;
-        }
-      )
+    return requestManager.makeRequest(`lessons/${id}/`, 'get', options)
+      .then(handleAPIResponse(
+        lessonsConstants.GET_LESSON_SUCCESS,
+        lessonsConstants.GET_LESSON_FAILURE,
+        dispatch
+      ))
   };
 };
 
@@ -81,23 +51,12 @@ const updateLesson = (id, options = {}) => {
     dispatch({
       type: lessonsConstants.UPDATE_LESSON_REQUEST,
     });
-    return makeApiRequest(`lessons/${id}/`, 'patch', options)
-      .then(
-        response => {
-          dispatch({
-            type: lessonsConstants.UPDATE_LESSON_SUCCESS,
-            payload: response,
-          });
-          return response;
-        },
-        errors => {
-          dispatch({
-            type: lessonsConstants.UPDATE_LESSON_FAILURE,
-            payload: errors,
-          });
-          return errors;
-        }
-      )
+    return requestManager.makeRequest(`lessons/${id}/`, 'patch', options)
+      .then(handleAPIResponse(
+        lessonsConstants.UPDATE_LESSON_SUCCESS,
+        lessonsConstants.UPDATE_LESSON_FAILURE,
+        dispatch
+      ))
   };
 };
 
@@ -106,23 +65,12 @@ const deleteLesson = (id, options = {}) => {
     dispatch({
       type: lessonsConstants.DELETE_LESSON_REQUEST,
     });
-    return makeApiRequest(`lessons/${id}/`, 'delete', options)
-      .then(
-        response => {
-          dispatch({
-            type: lessonsConstants.DELETE_LESSON_SUCCESS,
-            payload: response,
-          });
-          return response;
-        },
-        errors => {
-          dispatch({
-            type: lessonsConstants.DELETE_LESSON_FAILURE,
-            payload: errors,
-          });
-          return errors;
-        }
-      )
+    return requestManager.makeRequest(`lessons/${id}/`, 'delete', options)
+      .then(handleAPIResponse(
+        lessonsConstants.DELETE_LESSON_SUCCESS,
+        lessonsConstants.DELETE_LESSON_FAILURE,
+        dispatch
+      ))
   };
 };
 
