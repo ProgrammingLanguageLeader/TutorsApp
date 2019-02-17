@@ -75,7 +75,6 @@ class App extends React.Component {
     if (this.props.vkUserInfo !== prevProps.vkUserInfo) {
       const { id } = this.props.vkUserInfo;
       const response = await this.props.getVkAppsUser(id);
-      console.log(response);
       if (response.status === 200) {
         const { user, vk_id } = response.data;
         this.props.saveCurrentUserData(user, vk_id);
@@ -84,9 +83,10 @@ class App extends React.Component {
   }
 
   getUnreadNotificationsListWithInterval() {
+    this.props.getUnreadNotificationsList();
     setInterval(() => {
       this.props.getUnreadNotificationsList();
-    }, 15000);
+    }, 30000);
   }
 
   render() {
