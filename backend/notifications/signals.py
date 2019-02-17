@@ -2,13 +2,13 @@ from django.db import models
 from django.dispatch import receiver
 
 from notifications.models import Notification
+from notifications.tasks import send_vk_notification
 
 from vk_apps_users.models import VkAppsUser
-from vk_apps_users.vk_api import API
 
 
 @receiver(models.signals.post_save, sender=Notification)
-def send_vk_notification(sender, instance, created, **kwargs):
+def send_vk_notification_on_creation(sender, instance, created, **kwargs):
     if not created:
         return
     user_ids = VkAppsUser.objects.filter(
@@ -16,8 +16,4 @@ def send_vk_notification(sender, instance, created, **kwargs):
     ).values_list('vk_id', flat=True)
     if not user_ids:
         return
-    api = API()
-    api.notifications.sendMessage(
-        user_ids=user_ids,
-        message='You have unread notifications'
-    )
+    send_vk_notification.delay(list(user_ids))
