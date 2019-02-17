@@ -9,7 +9,6 @@ import HeaderButton from '@vkontakte/vkui/dist/components/HeaderButton/HeaderBut
 import Avatar from '@vkontakte/vkui/dist/components/Avatar/Avatar';
 import Group from '@vkontakte/vkui/dist/components/Group/Group';
 import CellButton from '@vkontakte/vkui/dist/components/CellButton/CellButton';
-import FormStatus from '@vkontakte/vkui/dist/components/FormStatus/FormStatus';
 import Div from '@vkontakte/vkui/dist/components/Div/Div';
 
 import Icon24Write from '@vkontakte/icons/dist/24/write';
@@ -20,6 +19,7 @@ import Icon24Home from '@vkontakte/icons/dist/24/home';
 import Icon24UserAdd from '@vkontakte/icons/dist/24/user_add';
 import Icon24Cancel from '@vkontakte/icons/dist/24/cancel';
 
+import ErrorFormStatus from 'vk-apps-frontend/components/ErrorFormStatus';
 import SuccessFormStatus from 'vk-apps-frontend/components/SuccessfulFormStatus';
 import DivSpinner from 'vk-apps-frontend/components/DivSpinner';
 import BackIcon from 'vk-apps-frontend/components/BackIcon';
@@ -31,13 +31,10 @@ import { ROOT_URL } from 'vk-apps-frontend/constants';
 const mapStateToProps = state => {
   const fetching = state.apiReducer.vacanciesReducer.fetching || state.apiReducer.tutorsReducer.fetching;
   const { vacancy } = state.apiReducer.vacanciesReducer;
-  const { errors, studentRequestSuccess } = state.apiReducer.tutorsReducer;
   const { currentUserReducer } = state;
   return {
     vacancy,
     fetching,
-    errors,
-    studentRequestSuccess,
     currentUserReducer,
   };
 };
@@ -58,6 +55,8 @@ class Vacancy extends React.Component {
 
     // TODO: add popout for delete approving
     this.state = {
+      success: null,
+      errors: {},
       popout: null,
       isDeleteApproved: true,
     }
@@ -71,9 +70,20 @@ class Vacancy extends React.Component {
     }
   }
 
-  createStudentRequest(tutorId) {
-    this.props.createStudentRequest({
+  async createStudentRequest(tutorId) {
+    const response = await this.props.createStudentRequest({
       tutor: tutorId,
+    });
+    if (response.status < 400) {
+      this.setState({
+        success: true,
+        errors: {},
+      });
+      return;
+    }
+    this.setState({
+      success: false,
+      errors: response,
     });
   }
 
@@ -85,13 +95,7 @@ class Vacancy extends React.Component {
   }
 
   render() {
-    const {
-      fetching,
-      vacancy,
-      errors,
-      studentRequestSuccess,
-      currentUserReducer,
-    } = this.props;
+    const { fetching, vacancy, currentUserReducer } = this.props;
     const isEditable = currentUserReducer.user && vacancy && currentUserReducer.user.id === vacancy.owner.id;
 
     return (
@@ -153,14 +157,14 @@ class Vacancy extends React.Component {
               <CellButton before={<Icon24UserAdd />} onClick={() => this.createStudentRequest(vacancy.owner.id)}>
                 Отправить заявку
               </CellButton>
-              { studentRequestSuccess && (
+              {this.state.success && (
                 <Div>
                   <SuccessFormStatus title="Успешно" />
                 </Div>
               )}
-              { errors && (
+              {Object.keys(this.state.errors).length > 0 && (
                 <Div>
-                  <FormStatus state="error" title="Ошибка">{JSON.stringify(errors)}</FormStatus>
+                  <ErrorFormStatus errors={this.state.errors} />
                 </Div>
               )}
             </Group>
