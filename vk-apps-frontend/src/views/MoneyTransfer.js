@@ -16,14 +16,11 @@ import { tutorsActions, vkAppsUsersActions } from 'vk-apps-frontend/actions/api'
 const mapStateToProps = state => {
   const { tutors } = state.apiReducer.tutorsReducer;
   const { currentUserReducer } = state;
-  const { success, errors } = state.vkReducer.appsPayReducer;
-  const { vkId } = state.apiReducer.vkAppsUsersReducer;
+  const { errors } = state.vkReducer.appsPayReducer;
   return {
     tutors,
-    success,
     errors,
     currentUserReducer,
-    vkId,
   };
 };
 
@@ -54,7 +51,7 @@ class MoneyTransfer extends React.Component {
   }
 
   render() {
-    const { tutors, success } = this.props;
+    const { tutors } = this.props;
 
     return (
       <div>
@@ -70,17 +67,25 @@ class MoneyTransfer extends React.Component {
 
         <Group title="Форма перевода">
           <Formik
-            initialValues={{}}
+            initialValues={{
+              amount: 500,
+            }}
             render={formikProps =>
-              <MoneyTransferForm {...formikProps} isSuccessful={success} tutors={tutors || []} />
+              <MoneyTransferForm {...formikProps} tutors={tutors || []} />
             }
             onSubmit={ async (values, actions) => {
-              const vkAppsUser = await this.props.retrieveVkAppsUserByUserId(values.recipient);
-              // TODO: handle errors of the response
+              const response = await this.props.retrieveVkAppsUserByUserId(values.recipient);
+              if (response.status >= 400) {
+                actions.setSubmitting(false);
+                actions.setErrors({
+                  message: 'Выбранный пользователь не зарегистрирован через VK Apps'
+                });
+                return;
+              }
               this.props.openPayForm(
                 'pay-to-user',
                 {
-                  'user_id': vkAppsUser.vk_id,
+                  'user_id': response.data.vk_id,
                   'amount': values.amount,
                   'message': values.message,
                 }
