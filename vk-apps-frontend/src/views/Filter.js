@@ -3,6 +3,8 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Formik } from 'formik';
 
+import View from '@vkontakte/vkui/dist/components/View/View';
+import Panel from '@vkontakte/vkui/dist/components/Panel/Panel';
 import PanelHeader from '@vkontakte/vkui/dist/components/PanelHeader/PanelHeader';
 import Group from '@vkontakte/vkui/dist/components/Group/Group';
 import HeaderButton from '@vkontakte/vkui/dist/components/HeaderButton/HeaderButton';
@@ -48,32 +50,34 @@ class Filter extends React.Component {
 
   render() {
     return (
-      <div>
-        <PanelHeader
-          left={
-            <HeaderButton onClick={this.props.history.goBack}>
-              <BackIcon />
-            </HeaderButton>
-          }
-        >
-          Фильтр предложений
-        </PanelHeader>
+      <View activePanel="panel">
+        <Panel id="panel">
+          <PanelHeader
+            left={
+              <HeaderButton onClick={this.props.history.goBack}>
+                <BackIcon />
+              </HeaderButton>
+            }
+          >
+            Фильтр предложений
+          </PanelHeader>
 
-        <Group title="Поля фильтра">
-          <Formik
-            component={VacanciesFilterForm}
-            initialValues={{...this.props.filterReducer}}
-            onSubmit={async (values, action) => {
-              this.handleVacanciesFilterFormSubmit(values);
-              await action.setSubmitting(false);
-            }}
-            onReset={async (values, action) => {
-              this.handleVacanciesFilterFormReset();
-              await action.setValues({...this.props.filterReducer});
-            }}
-          />
-        </Group>
-      </div>
+          <Group title="Поля фильтра">
+            <Formik
+              component={VacanciesFilterForm}
+              initialValues={{...this.props.filterReducer}}
+              onSubmit={async (values, action) => {
+                this.handleVacanciesFilterFormSubmit(values);
+                await action.setSubmitting(false);
+              }}
+              onReset={async (values, action) => {
+                this.handleVacanciesFilterFormReset();
+                await action.setValues({...this.props.filterReducer});
+              }}
+            />
+          </Group>
+        </Panel>
+      </View>
     );
   }
 }

@@ -2,6 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
+import View from '@vkontakte/vkui/dist/components/View/View';
+import Panel from '@vkontakte/vkui/dist/components/Panel/Panel';
 import PanelHeader from '@vkontakte/vkui/dist/components/PanelHeader/PanelHeader';
 import HeaderButton from '@vkontakte/vkui/dist/components/HeaderButton/HeaderButton';
 import Footer from '@vkontakte/vkui/dist/components/Footer/Footer';
@@ -39,26 +41,28 @@ class Students extends React.Component {
     const { students, fetching } = this.props;
 
     return (
-      <div>
-        <PanelHeader left={
-          <HeaderButton onClick={this.props.history.goBack}>
-            <BackIcon />
-          </HeaderButton>
-        }>
-          Список учеников
-        </PanelHeader>
+      <View activePanel="panel">
+        <Panel id="panel">
+          <PanelHeader left={
+            <HeaderButton onClick={this.props.history.goBack}>
+              <BackIcon />
+            </HeaderButton>
+          }>
+            Список учеников
+          </PanelHeader>
 
-        {fetching && (
-          <DivSpinner />
-        )}
+          {fetching && (
+            <DivSpinner />
+          )}
 
-        {students.map(student => (
-          <ShortUserCard history={this.props.history} key={student.id} user={student} />
-        ))}
-        <Footer>
-          Показано пользователей: {students.length}
-        </Footer>
-      </div>
+          {students.map(student => (
+            <ShortUserCard history={this.props.history} key={student.id} user={student} />
+          ))}
+          <Footer>
+            Показано пользователей: {students.length}
+          </Footer>
+        </Panel>
+      </View>
     );
   }
 }

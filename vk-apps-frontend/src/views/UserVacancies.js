@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Link } from 'react-router-dom';
 
+import View from '@vkontakte/vkui/dist/components/View/View';
+import Panel from '@vkontakte/vkui/dist/components/Panel/Panel';
 import PanelHeader from '@vkontakte/vkui/dist/components/PanelHeader/PanelHeader';
 import Cell from '@vkontakte/vkui/dist/components/Cell/Cell';
 import HeaderButton from '@vkontakte/vkui/dist/components/HeaderButton/HeaderButton';
@@ -50,78 +52,80 @@ class UserVacancies extends React.Component {
     const { fetching, vacancies } = this.props;
 
     return (
-      <div>
-        <PanelHeader left={
-          <HeaderButton onClick={() => this.props.history.goBack()}>
-            <BackIcon />
-          </HeaderButton>
-        }>
-          Ваши предложения
-        </PanelHeader>
+      <View activePanel="panel">
+        <Panel id="panel">
+          <PanelHeader left={
+            <HeaderButton onClick={() => this.props.history.goBack()}>
+              <BackIcon />
+            </HeaderButton>
+          }>
+            Ваши предложения
+          </PanelHeader>
 
-        {fetching && (
-          <DivSpinner />
-        )}
+          {fetching && (
+            <DivSpinner />
+          )}
 
-        <Group>
-          <CellButton
-            before={<Icon24Add/>}
-            onClick={() => this.props.history.push('/vacancy_create')}
-          >
-            Создать предложение
-          </CellButton>
-        </Group>
+          <Group>
+            <CellButton
+              before={<Icon24Add/>}
+              onClick={() => this.props.history.push('/vacancy_create')}
+            >
+              Создать предложение
+            </CellButton>
+          </Group>
 
-        {vacancies && (
-          <div>
-            <Group title="Список предложений">
-              <List>
-                { vacancies
-                  .map(vacancy => (
-                    <Link to={`/vacancy/${vacancy.id}`} key={vacancy.id}>
-                      <Cell expandable multiline description={
-                        <div>
+          {vacancies && (
+            <div>
+              <Group title="Список предложений">
+                <List>
+                  { vacancies
+                    .map(vacancy => (
+                      <Link to={`/vacancy/${vacancy.id}`} key={vacancy.id}>
+                        <Cell expandable multiline description={
                           <div>
-                            {vacancy.subject}
+                            <div>
+                              {vacancy.subject}
+                            </div>
+                            <div>
+                              {vacancy.owner.city}
+                            </div>
+                            <div>
+                              {vacancy.price} рублей/час
+                            </div>
                           </div>
-                          <div>
-                            {vacancy.owner.city}
-                          </div>
-                          <div>
-                            {vacancy.price} рублей/час
-                          </div>
-                        </div>
-                      }
-                            before={
-                              <Avatar size={64} src={ROOT_URL + vacancy.owner.avatar} />
-                            }
-                      >
-                        {vacancy.owner.first_name} {vacancy.owner.last_name}
+                        }
+                              before={
+                                <Avatar size={64} src={ROOT_URL + vacancy.owner.avatar} />
+                              }
+                        >
+                          {vacancy.owner.first_name} {vacancy.owner.last_name}
+                        </Cell>
+                      </Link>
+                    ))
+                  }
+                  {
+                    vacancies.length === 0 && (
+                      <Cell multiline>
+                        Не найдено ни одного предложения
                       </Cell>
-                    </Link>
-                  ))
-                }
+                    )
+                  }
+                </List>
+              </Group>
+              <Footer>
                 {
-                  vacancies.length === 0 && (
-                    <Cell multiline>
-                      Не найдено ни одного предложения
-                    </Cell>
-                  )
+                  vacancies.length === 1
+                    ? `Показано ${vacancies.length} предложение`
+                    : (2 <= vacancies.length) && (vacancies.length <= 4)
+                    ? `Показано ${vacancies.length} предложения`
+                    : `Показано ${vacancies.length} предложений`
                 }
-              </List>
-            </Group>
-            <Footer>
-              {
-                vacancies.length === 1
-                  ? `Показано ${vacancies.length} предложение`
-                  : (2 <= vacancies.length) && (vacancies.length <= 4)
-                  ? `Показано ${vacancies.length} предложения`
-                  : `Показано ${vacancies.length} предложений`
-              }
-            </Footer>
-          </div>
-        )}
-      </div>
+              </Footer>
+            </div>
+          )}
+        </Panel>
+      </View>
     );
   }
 }

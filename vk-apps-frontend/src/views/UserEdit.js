@@ -3,6 +3,8 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Formik } from 'formik';
 
+import View from '@vkontakte/vkui/dist/components/View/View';
+import Panel from '@vkontakte/vkui/dist/components/Panel/Panel';
 import PanelHeader from '@vkontakte/vkui/dist/components/PanelHeader/PanelHeader';
 import Cell from '@vkontakte/vkui/dist/components/Cell/Cell';
 import Avatar from '@vkontakte/vkui/dist/components/Avatar/Avatar';
@@ -108,81 +110,83 @@ class UserEdit extends React.Component {
     const { user, fetching } = this.props;
 
     return (
-      <div>
-        <PanelHeader left={
-          <HeaderButton onClick={this.props.history.goBack}>
-            <BackIcon />
-          </HeaderButton>
-        }>
-          Изменение профиля
-        </PanelHeader>
+      <View activePanel="panel">
+        <Panel id="panel">
+          <PanelHeader left={
+            <HeaderButton onClick={this.props.history.goBack}>
+              <BackIcon />
+            </HeaderButton>
+          }>
+            Изменение профиля
+          </PanelHeader>
 
-        <div ref={this.startDiv} />
+          <div ref={this.startDiv} />
 
-        {fetching && (
-          <DivSpinner />
-        )}
+          {fetching && (
+            <DivSpinner />
+          )}
 
-        {user && (
-          <Group>
-            <Cell
-              multiline
-              description="Редактирование информации пользователя"
-              before={<Avatar size={80} src={ROOT_URL + user.avatar} />}
-            >
-              {user.first_name} {user.last_name}
-            </Cell>
-          </Group>
-        )}
+          {user && (
+            <Group>
+              <Cell
+                multiline
+                description="Редактирование информации пользователя"
+                before={<Avatar size={80} src={ROOT_URL + user.avatar} />}
+              >
+                {user.first_name} {user.last_name}
+              </Cell>
+            </Group>
+          )}
 
-        {this.state.success && (
-          <Group>
-            <Div>
-              <SuccessfulFormStatus title="Успешно" />
-            </Div>
-          </Group>
-        )}
+          {this.state.success && (
+            <Group>
+              <Div>
+                <SuccessfulFormStatus title="Успешно" />
+              </Div>
+            </Group>
+          )}
 
-        {user && (
-          <Group title="Изображение профиля">
-            <Formik
-              initialValues={{
-                avatar: null,
-              }}
-              component={UploadAvatarForm}
-              onSubmit={ async (values, actions) => {
-                await this.handleUploadAvatarFormSubmit(values);
-                actions.setSubmitting(false);
-                actions.setErrors(this.state.errors)
-              }}
-            />
-          </Group>
-        )}
+          {user && (
+            <Group title="Изображение профиля">
+              <Formik
+                initialValues={{
+                  avatar: null,
+                }}
+                component={UploadAvatarForm}
+                onSubmit={ async (values, actions) => {
+                  await this.handleUploadAvatarFormSubmit(values);
+                  actions.setSubmitting(false);
+                  actions.setErrors(this.state.errors)
+                }}
+              />
+            </Group>
+          )}
 
-        {user && (
-          <Group title="Информация о пользователе">
-            <Formik
-              initialValues={{
-                first_name: user.first_name,
-                last_name: user.last_name,
-                experience: user.experience,
-                education: user.education,
-                city: user.city,
-                district: user.district,
-                street: user.street,
-                metro_station: user.metro_station,
-                bio: user.bio
-              }}
-              component={EditUserForm}
-              onSubmit={ async (values, actions) => {
-                await this.handleEditProfileSubmit(values);
-                actions.setSubmitting(false);
-                actions.setErrors(this.state.errors);
-              }}
-            />
-          </Group>
-        )}
-      </div>
+          {user && (
+            <Group title="Информация о пользователе">
+              <Formik
+                initialValues={{
+                  first_name: user.first_name,
+                  last_name: user.last_name,
+                  experience: user.experience,
+                  education: user.education,
+                  city: user.city,
+                  district: user.district,
+                  street: user.street,
+                  metro_station: user.metro_station,
+                  bio: user.bio
+                }}
+                component={EditUserForm}
+                onSubmit={ async (values, actions) => {
+                  await this.handleEditProfileSubmit(values);
+                  actions.setSubmitting(false);
+                  actions.setErrors(this.state.errors);
+                }}
+              />
+            </Group>
+          )}
+        </Panel>
+      </View>
     );
   }
 }

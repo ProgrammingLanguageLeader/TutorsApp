@@ -4,6 +4,8 @@ import { bindActionCreators } from 'redux';
 import Moment from 'react-moment';
 import moment from 'moment';
 
+import View from '@vkontakte/vkui/dist/components/View/View';
+import Panel from '@vkontakte/vkui/dist/components/Panel/Panel';
 import PanelHeader from '@vkontakte/vkui/dist/components/PanelHeader/PanelHeader';
 import Cell from '@vkontakte/vkui/dist/components/Cell/Cell';
 import HeaderButton from '@vkontakte/vkui/dist/components/HeaderButton/HeaderButton';
@@ -54,92 +56,94 @@ class Lesson extends React.Component {
     } = this.props;
 
     return (
-      <div>
-        <PanelHeader left={
-          <HeaderButton onClick={this.props.history.goBack}>
-            <BackIcon />
-          </HeaderButton>
-        }>
-          Урок
-        </PanelHeader>
+      <View activePanel="panel">
+        <Panel id="panel">
+          <PanelHeader left={
+            <HeaderButton onClick={this.props.history.goBack}>
+              <BackIcon />
+            </HeaderButton>
+          }>
+            Урок
+          </PanelHeader>
 
-        {fetching && (
-          <DivSpinner />
-        )}
+          {fetching && (
+            <DivSpinner />
+          )}
 
-        {lesson && (
-          <div>
-            {lesson.tutor.id === currentUserReducer.user.id && (
-              <Group>
-                <CellButton
-                  before={<Icon24Write/>}
-                  onClick={() => this.props.history.push(`/lesson_edit/${lesson.id}`)}
+          {lesson && (
+            <div>
+              {lesson.tutor.id === currentUserReducer.user.id && (
+                <Group>
+                  <CellButton
+                    before={<Icon24Write/>}
+                    onClick={() => this.props.history.push(`/lesson_edit/${lesson.id}`)}
+                  >
+                    Редактирование урока
+                  </CellButton>
+                </Group>
+              )}
+
+              <Group title="Учитель">
+                <Cell
+                  expandable
+                  before={<Avatar src={ROOT_URL + lesson.tutor.avatar} size={64} />}
+                  onClick={() => this.props.history.push(`/user/${lesson.tutor.id}`)}
                 >
-                  Редактирование урока
-                </CellButton>
+                  <div>
+                    {lesson.tutor.first_name} {lesson.tutor.last_name}
+                  </div>
+                </Cell>
               </Group>
-            )}
 
-            <Group title="Учитель">
-              <Cell
-                expandable
-                before={<Avatar src={ROOT_URL + lesson.tutor.avatar} size={64} />}
-                onClick={() => this.props.history.push(`/user/${lesson.tutor.id}`)}
-              >
-                <div>
-                  {lesson.tutor.first_name} {lesson.tutor.last_name}
-                </div>
-              </Cell>
-            </Group>
+              <Group title="Ученик">
+                <Cell
+                  expandable
+                  before={<Avatar src={ROOT_URL + lesson.student.avatar} size={64} />}
+                  onClick={() => this.props.history.push(`/user/${lesson.student.id}`)}
+                >
+                  <div>
+                    {lesson.student.first_name} {lesson.student.last_name}
+                  </div>
+                </Cell>
+              </Group>
 
-            <Group title="Ученик">
-              <Cell
-                expandable
-                before={<Avatar src={ROOT_URL + lesson.student.avatar} size={64} />}
-                onClick={() => this.props.history.push(`/user/${lesson.student.id}`)}
-              >
-                <div>
-                  {lesson.student.first_name} {lesson.student.last_name}
-                </div>
-              </Cell>
-            </Group>
+              <Group title="Информация об уроке">
+                <Cell multiline description="Дата">
+                  <Moment locale="ru" format="D MMMM YYYY">
+                    {lesson.beginning_time}
+                  </Moment>
+                </Cell>
 
-            <Group title="Информация об уроке">
-              <Cell multiline description="Дата">
-                <Moment locale="ru" format="D MMMM YYYY">
-                  {lesson.beginning_time}
-                </Moment>
-              </Cell>
+                <Cell multiline description="Время начала">
+                  <Moment locale="ru" format="HH:mm">
+                    {lesson.beginning_time}
+                  </Moment>
+                </Cell>
 
-              <Cell multiline description="Время начала">
-                <Moment locale="ru" format="HH:mm">
-                  {lesson.beginning_time}
-                </Moment>
-              </Cell>
+                <Cell multiline description="Длительность">
+                  {durationHumanizer(moment.duration(lesson.duration))}
+                </Cell>
 
-              <Cell multiline description="Длительность">
-                {durationHumanizer(moment.duration(lesson.duration))}
-              </Cell>
+                <Cell multiline description="Стоимость">
+                  {lesson.price}
+                </Cell>
 
-              <Cell multiline description="Стоимость">
-                {lesson.price}
-              </Cell>
+                <Cell multiline description="Время создания">
+                  <Moment locale="ru" format="D MMMM YYYY - HH:mm">
+                    {lesson.creation_time}
+                  </Moment>
+                </Cell>
 
-              <Cell multiline description="Время создания">
-                <Moment locale="ru" format="D MMMM YYYY - HH:mm">
-                  {lesson.creation_time}
-                </Moment>
-              </Cell>
-
-              <Cell multiline description="Время изменения">
-                <Moment locale="ru" format="D MMMM YYYY - HH:mm">
-                  {lesson.modification_time}
-                </Moment>
-              </Cell>
-            </Group>
-          </div>
-        )}
-      </div>
+                <Cell multiline description="Время изменения">
+                  <Moment locale="ru" format="D MMMM YYYY - HH:mm">
+                    {lesson.modification_time}
+                  </Moment>
+                </Cell>
+              </Group>
+            </div>
+          )}
+        </Panel>
+      </View>
     );
   }
 }

@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Moment from 'react-moment';
 
+import View from '@vkontakte/vkui/dist/components/View/View';
+import Panel from '@vkontakte/vkui/dist/components/Panel/Panel';
 import PanelHeader from '@vkontakte/vkui/dist/components/PanelHeader/PanelHeader';
 import HeaderButton from '@vkontakte/vkui/dist/components/HeaderButton/HeaderButton';
 import Button from '@vkontakte/vkui/dist/components/Button/Button';
@@ -74,109 +76,111 @@ class StudentRequest extends React.Component {
     const showingUser = studentRequest ? (isTutor ? studentRequest.student : studentRequest.tutor) : {};
 
     return (
-      <div>
-        <PanelHeader left={
-          <HeaderButton onClick={this.props.history.goBack}>
-            <BackIcon />
-          </HeaderButton>
-        }>
-          Заявка ученика
-        </PanelHeader>
+      <View activePanel="panel">
+        <Panel id="panel">
+          <PanelHeader left={
+            <HeaderButton onClick={this.props.history.goBack}>
+              <BackIcon />
+            </HeaderButton>
+          }>
+            Заявка ученика
+          </PanelHeader>
 
-        {fetching && (
-          <DivSpinner />
-        )}
+          {fetching && (
+            <DivSpinner />
+          )}
 
-        {studentRequest && (
-          <div>
-            <Group title={isTutor ? "Информация об ученике" : "Информация об учителе"}>
-              <Cell before={<Avatar size={64} src={ROOT_URL + showingUser.avatar} />}>
-                {showingUser.first_name} {showingUser.last_name}
-              </Cell>
-
-              <Cell multiline description="Дата создания профиля">
-                <Moment locale="ru" format="D MMMM YYYY">
-                  {showingUser.date_joined}
-                </Moment>
-              </Cell>
-
-              {showingUser.education && (
-                <Cell description="Образование">
-                  {showingUser.education}
+          {studentRequest && (
+            <div>
+              <Group title={isTutor ? "Информация об ученике" : "Информация об учителе"}>
+                <Cell before={<Avatar size={64} src={ROOT_URL + showingUser.avatar} />}>
+                  {showingUser.first_name} {showingUser.last_name}
                 </Cell>
-              )}
 
-              {showingUser.city && (
-                <Cell description="Город">
-                  {showingUser.city}
+                <Cell multiline description="Дата создания профиля">
+                  <Moment locale="ru" format="D MMMM YYYY">
+                    {showingUser.date_joined}
+                  </Moment>
                 </Cell>
-              )}
 
-              {showingUser.district && (
-                <Cell description="Район">
-                  {showingUser.district}
-                </Cell>
-              )}
-
-              {showingUser.street && (
-                <Cell description="Улица">
-                  {showingUser.street}
-                </Cell>
-              )}
-
-              {showingUser.metro_station && (
-                <Cell description="Станция метро">
-                  {showingUser.metro_station}
-                </Cell>
-              )}
-
-              {showingUser.bio && (
-                <Cell multiline description="О себе">
-                  {showingUser.bio}
-                </Cell>
-              )}
-            </Group>
-
-            <Group title="Управление заявкой">
-              <div style={{ display: "flex", padding: 8 }}>
-                { isTutor && (
-                  <div>
-                    <Button
-                      size="m"
-                      level="primary"
-                      before={<Icon24Add/>}
-                      style={{ marginRight: 4 }}
-                      onClick={this.handleAcceptButtonClick}
-                    >
-                      Принять
-                    </Button>
-                    <Button
-                      size="m"
-                      level="secondary"
-                      before={<Icon24Cancel/>}
-                      onClick={this.handleDeclineOrDeleteButtonClick}
-                    >
-                      Отклонить
-                    </Button>
-                  </div>
+                {showingUser.education && (
+                  <Cell description="Образование">
+                    {showingUser.education}
+                  </Cell>
                 )}
-                { !isTutor && (
-                  <div>
-                    <Button
-                      size="m"
-                      level="secondary"
-                      before={<Icon24Cancel/>}
-                      onClick={this.handleDeclineOrDeleteButtonClick}
-                    >
-                      Удалить
-                    </Button>
-                  </div>
+
+                {showingUser.city && (
+                  <Cell description="Город">
+                    {showingUser.city}
+                  </Cell>
                 )}
-              </div>
-            </Group>
-          </div>
-        )}
-      </div>
+
+                {showingUser.district && (
+                  <Cell description="Район">
+                    {showingUser.district}
+                  </Cell>
+                )}
+
+                {showingUser.street && (
+                  <Cell description="Улица">
+                    {showingUser.street}
+                  </Cell>
+                )}
+
+                {showingUser.metro_station && (
+                  <Cell description="Станция метро">
+                    {showingUser.metro_station}
+                  </Cell>
+                )}
+
+                {showingUser.bio && (
+                  <Cell multiline description="О себе">
+                    {showingUser.bio}
+                  </Cell>
+                )}
+              </Group>
+
+              <Group title="Управление заявкой">
+                <div style={{ display: "flex", padding: 8 }}>
+                  { isTutor && (
+                    <div>
+                      <Button
+                        size="m"
+                        level="primary"
+                        before={<Icon24Add/>}
+                        style={{ marginRight: 4 }}
+                        onClick={this.handleAcceptButtonClick}
+                      >
+                        Принять
+                      </Button>
+                      <Button
+                        size="m"
+                        level="secondary"
+                        before={<Icon24Cancel/>}
+                        onClick={this.handleDeclineOrDeleteButtonClick}
+                      >
+                        Отклонить
+                      </Button>
+                    </div>
+                  )}
+                  { !isTutor && (
+                    <div>
+                      <Button
+                        size="m"
+                        level="secondary"
+                        before={<Icon24Cancel/>}
+                        onClick={this.handleDeclineOrDeleteButtonClick}
+                      >
+                        Удалить
+                      </Button>
+                    </div>
+                  )}
+                </div>
+              </Group>
+            </div>
+          )}
+        </Panel>
+      </View>
     );
   }
 }

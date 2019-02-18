@@ -5,6 +5,8 @@ import Datetime from 'react-datetime';
 import Moment from 'react-moment';
 import moment from 'moment';
 
+import View from '@vkontakte/vkui/dist/components/View/View';
+import Panel from '@vkontakte/vkui/dist/components/Panel/Panel';
 import PanelHeader from '@vkontakte/vkui/dist/components/PanelHeader/PanelHeader';
 import Cell from '@vkontakte/vkui/dist/components/Cell/Cell';
 import Avatar from '@vkontakte/vkui/dist/components/Avatar/Avatar';
@@ -74,65 +76,67 @@ class Schedule extends React.Component {
     const { fetching, lessons, currentUserReducer } = this.props;
 
 		return (
-		  <div>
-        <PanelHeader left={
-          <HeaderButton onClick={this.props.history.goBack}>
-            <BackIcon />
-          </HeaderButton>
-        }>
-          Расписание
-        </PanelHeader>
+      <View activePanel="panel">
+        <Panel id="panel">
+          <PanelHeader left={
+            <HeaderButton onClick={this.props.history.goBack}>
+              <BackIcon />
+            </HeaderButton>
+          }>
+            Расписание
+          </PanelHeader>
 
-        <Group title="Календарь" style={{ paddingBottom: "10px" }}>
-          <Div>
-            <Datetime
-              input={false}
-              value={this.state.date}
-              timeFormat={null}
-              onChange={this.handleDateChange}
-              locale="ru"
-            />
-          </Div>
-        </Group>
+          <Group title="Календарь" style={{ paddingBottom: "10px" }}>
+            <Div>
+              <Datetime
+                input={false}
+                value={this.state.date}
+                timeFormat={null}
+                onChange={this.handleDateChange}
+                locale="ru"
+              />
+            </Div>
+          </Group>
 
-        <Group title="Добавление занятия">
-          <CellButton before={<Icon24Add />} onClick={() => this.props.history.push('/lesson_create')}>
-            Добавить урок
-          </CellButton>
-        </Group>
+          <Group title="Добавление занятия">
+            <CellButton before={<Icon24Add />} onClick={() => this.props.history.push('/lesson_create')}>
+              Добавить урок
+            </CellButton>
+          </Group>
 
-        <Group title="Занятия в выбранный день">
-          { fetching && (
-            <DivSpinner />
-          )}
-          { lessons && (
-            <List>
-              { lessons.map(lesson => {
-                const visibleUser = (currentUserReducer.user.id === lesson.tutor.id) ? lesson.student : lesson.tutor;
-                return (
-                  <Cell
-                    size="l"
-                    expandable
-                    multiline
-                    description={
-                      <div>
-                        <Moment format="HH:mm - " date={lesson.beginning_time}/>
-                        <Moment format="HH:mm" date={lesson.ending_time}/>
-                        <div>{lesson.price} рублей за занятие</div>
-                      </div>
-                    }
-                    before={<Avatar src={ROOT_URL + visibleUser.avatar} size={64}/>}
-                    key={lesson.id}
-                    onClick={() => this.props.history.push(`/lesson/${lesson.id}`)}
-                  >
-                    {visibleUser.first_name} {visibleUser.last_name}
-                  </Cell>
-                );
-              })}
-            </List>
-          )}
-        </Group>
-      </div>
+          <Group title="Занятия в выбранный день">
+            { fetching && (
+              <DivSpinner />
+            )}
+            { lessons && (
+              <List>
+                { lessons.map(lesson => {
+                  const visibleUser = (currentUserReducer.user.id === lesson.tutor.id) ? lesson.student : lesson.tutor;
+                  return (
+                    <Cell
+                      size="l"
+                      expandable
+                      multiline
+                      description={
+                        <div>
+                          <Moment format="HH:mm - " date={lesson.beginning_time}/>
+                          <Moment format="HH:mm" date={lesson.ending_time}/>
+                          <div>{lesson.price} рублей за занятие</div>
+                        </div>
+                      }
+                      before={<Avatar src={ROOT_URL + visibleUser.avatar} size={64}/>}
+                      key={lesson.id}
+                      onClick={() => this.props.history.push(`/lesson/${lesson.id}`)}
+                    >
+                      {visibleUser.first_name} {visibleUser.last_name}
+                    </Cell>
+                  );
+                })}
+              </List>
+            )}
+          </Group>
+        </Panel>
+      </View>
 		);
 	}
 }

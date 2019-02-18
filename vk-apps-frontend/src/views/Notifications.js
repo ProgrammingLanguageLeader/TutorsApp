@@ -2,6 +2,8 @@ import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
+import View from '@vkontakte/vkui/dist/components/View/View';
+import Panel from '@vkontakte/vkui/dist/components/Panel/Panel';
 import PanelHeader from '@vkontakte/vkui/dist/components/PanelHeader/PanelHeader';
 import Group from '@vkontakte/vkui/dist/components/Group/Group';
 import List from '@vkontakte/vkui/dist/components/List/List';
@@ -67,68 +69,70 @@ class Notifications extends React.Component {
     const { fetching, unreadNotifications, readNotifications } = this.props;
 
     return (
-      <div>
-        <PanelHeader left={
-          <HeaderButton onClick={this.props.history.goBack}>
-            <BackIcon />
-          </HeaderButton>
-        }>
-          Уведомления
-        </PanelHeader>
+      <View activePanel="panel">
+        <Panel id="panel">
+          <PanelHeader left={
+            <HeaderButton onClick={this.props.history.goBack}>
+              <BackIcon />
+            </HeaderButton>
+          }>
+            Уведомления
+          </PanelHeader>
 
-        <Group title="Новые уведомления">
-          {fetching && (
-            <DivSpinner />
-          )}
-          <List>
-            { unreadNotifications.map(notification => (
-              <NotificationCell
-                key={notification.id}
-                notification={notification}
-                buttonBefore={<Icon24Hide/>}
-                buttonLabel={"Пометить прочитанным"}
-                onButtonClick={
-                  () => this.handleSetUnreadNotification(notification.id, false)
-                }
-                onSenderClick={
-                  notification.target
-                    ? () => this.props.history.push(`/${notification.target.content_type}/${notification.target.id}`)
-                    : null
-                }
-              />
-            ))}
-
-            { unreadNotifications.length === 0 && (
-              <Div>Нет уведомлений</Div>
+          <Group title="Новые уведомления">
+            {fetching && (
+              <DivSpinner />
             )}
-          </List>
-        </Group>
+            <List>
+              { unreadNotifications.map(notification => (
+                <NotificationCell
+                  key={notification.id}
+                  notification={notification}
+                  buttonBefore={<Icon24Hide/>}
+                  buttonLabel={"Пометить прочитанным"}
+                  onButtonClick={
+                    () => this.handleSetUnreadNotification(notification.id, false)
+                  }
+                  onSenderClick={
+                    notification.target
+                      ? () => this.props.history.push(`/${notification.target.content_type}/${notification.target.id}`)
+                      : null
+                  }
+                />
+              ))}
 
-        <Group title="Просмотренные уведомления">
-          <List>
-            { readNotifications.map(notification => (
-              <NotificationCell
-                key={notification.id}
-                notification={notification}
-                buttonBefore={<Icon24View/>}
-                buttonLabel={"Пометить непрочитанным"}
-                onButtonClick={
-                  () => this.handleSetUnreadNotification(notification.id, true)
-                }
-                onSenderClick={
-                  notification.target
-                    ? () => this.props.history.push(`/${notification.target.content_type}/${notification.target.id}`)
-                    : null
-                }
-              />
-            ))}
+              { unreadNotifications.length === 0 && (
+                <Div>Нет уведомлений</Div>
+              )}
+            </List>
+          </Group>
 
-            {readNotifications.length === 0 && (
-              <Div>Нет уведомлений</Div>
-            )}
-          </List>
-        </Group>
-      </div>
+          <Group title="Просмотренные уведомления">
+            <List>
+              { readNotifications.map(notification => (
+                <NotificationCell
+                  key={notification.id}
+                  notification={notification}
+                  buttonBefore={<Icon24View/>}
+                  buttonLabel={"Пометить непрочитанным"}
+                  onButtonClick={
+                    () => this.handleSetUnreadNotification(notification.id, true)
+                  }
+                  onSenderClick={
+                    notification.target
+                      ? () => this.props.history.push(`/${notification.target.content_type}/${notification.target.id}`)
+                      : null
+                  }
+                />
+              ))}
+
+              {readNotifications.length === 0 && (
+                <Div>Нет уведомлений</Div>
+              )}
+            </List>
+          </Group>
+        </Panel>
+      </View>
     )
   }
 }

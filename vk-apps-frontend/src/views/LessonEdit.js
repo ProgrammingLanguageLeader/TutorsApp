@@ -4,6 +4,8 @@ import { bindActionCreators } from 'redux';
 import { Formik } from 'formik';
 import moment from 'moment';
 
+import View from '@vkontakte/vkui/dist/components/View/View';
+import Panel from '@vkontakte/vkui/dist/components/Panel/Panel';
 import PanelHeader from '@vkontakte/vkui/dist/components/PanelHeader/PanelHeader';
 import HeaderButton from '@vkontakte/vkui/dist/components/HeaderButton/HeaderButton';
 import Group from '@vkontakte/vkui/dist/components/Group/Group';
@@ -81,49 +83,51 @@ class LessonEdit extends React.Component {
     const { fetching, students, lesson } = this.props;
 
     return (
-      <div>
-        <PanelHeader left={
-          <HeaderButton onClick={this.props.history.goBack}>
-            <BackIcon />
-          </HeaderButton>
-        }>
-          Редактирование урока
-        </PanelHeader>
+      <View activePanel="panel">
+        <Panel id="panel">
+          <PanelHeader left={
+            <HeaderButton onClick={this.props.history.goBack}>
+              <BackIcon />
+            </HeaderButton>
+          }>
+            Редактирование урока
+          </PanelHeader>
 
-        <div ref={this.startDiv} />
+          <div ref={this.startDiv} />
 
-        {fetching && (
-          <DivSpinner />
-        )}
+          {fetching && (
+            <DivSpinner />
+          )}
 
-        {lesson && (
-          <Group title="Форма редактирования">
-            <Formik
-              initialValues={{
-                student: lesson.student.id,
-                beginning_time: moment(lesson.beginning_time),
-                duration: moment.duration(lesson.duration),
-                price: lesson.price,
-              }}
-              render={
-                formikProps => (
-                  <LessonForm
-                    {...formikProps}
-                    isSuccessful={this.state.success}
-                    students={students || []}
-                    submitLabel="Сохранить"
-                  />
-                )
-              }
-              onSubmit={async (values, action) => {
-                await this.handleLessonFormSubmit(lesson.id, values);
-                action.setSubmitting(false);
-                action.setErrors(this.state.errors);
-              }}
-            />
-          </Group>
-        )}
-      </div>
+          {lesson && (
+            <Group title="Форма редактирования">
+              <Formik
+                initialValues={{
+                  student: lesson.student.id,
+                  beginning_time: moment(lesson.beginning_time),
+                  duration: moment.duration(lesson.duration),
+                  price: lesson.price,
+                }}
+                render={
+                  formikProps => (
+                    <LessonForm
+                      {...formikProps}
+                      isSuccessful={this.state.success}
+                      students={students || []}
+                      submitLabel="Сохранить"
+                    />
+                  )
+                }
+                onSubmit={async (values, action) => {
+                  await this.handleLessonFormSubmit(lesson.id, values);
+                  action.setSubmitting(false);
+                  action.setErrors(this.state.errors);
+                }}
+              />
+            </Group>
+          )}
+        </Panel>
+      </View>
     );
   }
 }

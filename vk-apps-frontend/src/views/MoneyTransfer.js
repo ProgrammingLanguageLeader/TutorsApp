@@ -3,6 +3,8 @@ import { Formik } from 'formik';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
+import View from '@vkontakte/vkui/dist/components/View/View';
+import Panel from '@vkontakte/vkui/dist/components/Panel/Panel';
 import PanelHeader from '@vkontakte/vkui/dist/components/PanelHeader/PanelHeader';
 import HeaderButton from '@vkontakte/vkui/dist/components/HeaderButton/HeaderButton';
 import Group from '@vkontakte/vkui/dist/components/Group/Group';
@@ -54,48 +56,50 @@ class MoneyTransfer extends React.Component {
     const { tutors } = this.props;
 
     return (
-      <div>
-        <PanelHeader left={
-          <HeaderButton onClick={() => this.props.history.goBack()}>
-            <BackIcon />
-          </HeaderButton>
-        }>
-          Перевод денег
-        </PanelHeader>
+      <View activePanel="panel">
+        <Panel id="panel">
+          <PanelHeader left={
+            <HeaderButton onClick={() => this.props.history.goBack()}>
+              <BackIcon />
+            </HeaderButton>
+          }>
+            Перевод денег
+          </PanelHeader>
 
-        <div ref={this.startDiv} />
+          <div ref={this.startDiv} />
 
-        <Group title="Форма перевода">
-          <Formik
-            initialValues={{
-              amount: 500,
-            }}
-            render={formikProps =>
-              <MoneyTransferForm {...formikProps} tutors={tutors || []} />
-            }
-            onSubmit={ async (values, actions) => {
-              const response = await this.props.retrieveVkAppsUserByUserId(values.recipient);
-              if (response.status >= 400) {
-                actions.setSubmitting(false);
-                actions.setErrors({
-                  message: 'Выбранный пользователь не зарегистрирован через VK Apps'
-                });
-                return;
+          <Group title="Форма перевода">
+            <Formik
+              initialValues={{
+                amount: 500,
+              }}
+              render={formikProps =>
+                <MoneyTransferForm {...formikProps} tutors={tutors || []} />
               }
-              this.props.openPayForm(
-                'pay-to-user',
-                {
-                  'user_id': response.data.vk_id,
-                  'amount': values.amount,
-                  'message': values.message,
+              onSubmit={ async (values, actions) => {
+                const response = await this.props.retrieveVkAppsUserByUserId(values.recipient);
+                if (response.status >= 400) {
+                  actions.setSubmitting(false);
+                  actions.setErrors({
+                    message: 'Выбранный пользователь не зарегистрирован через VK Apps'
+                  });
+                  return;
                 }
-              );
-              actions.setSubmitting(false);
-              actions.setErrors(this.props.errors || {});
-            }}
-          />
-        </Group>
-      </div>
+                this.props.openPayForm(
+                  'pay-to-user',
+                  {
+                    'user_id': response.data.vk_id,
+                    'amount': values.amount,
+                    'message': values.message,
+                  }
+                );
+                actions.setSubmitting(false);
+                actions.setErrors(this.props.errors || {});
+              }}
+            />
+          </Group>
+        </Panel>
+      </View>
     );
   }
 }

@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Moment from 'react-moment';
 
+import View from '@vkontakte/vkui/dist/components/View/View';
+import Panel from '@vkontakte/vkui/dist/components/Panel/Panel';
 import PanelHeader from '@vkontakte/vkui/dist/components/PanelHeader/PanelHeader';
 import Cell from '@vkontakte/vkui/dist/components/Cell/Cell';
 import HeaderButton from '@vkontakte/vkui/dist/components/HeaderButton/HeaderButton';
@@ -99,110 +101,112 @@ class Vacancy extends React.Component {
     const isEditable = currentUserReducer.user && vacancy && currentUserReducer.user.id === vacancy.owner.id;
 
     return (
-      <div>
-        <PanelHeader left={
-          <HeaderButton onClick={this.props.history.goBack}>
-            <BackIcon />
-          </HeaderButton>
-        }>
-          Предложение
-        </PanelHeader>
+      <View activePanel="panel">
+        <Panel id="panel">
+          <PanelHeader left={
+            <HeaderButton onClick={this.props.history.goBack}>
+              <BackIcon />
+            </HeaderButton>
+          }>
+            Предложение
+          </PanelHeader>
 
-        {fetching && (
-          <DivSpinner />
-        )}
+          {fetching && (
+            <DivSpinner />
+          )}
 
-        {isEditable && (
-          <Group title="Управление">
-            <CellButton
-              before={<Icon24Write />}
-              onClick={() => this.props.history.push(`/vacancy_edit/${vacancy.id}`)}
-            >
-              Редактировать предложение
-            </CellButton>
-            <CellButton
-              level="danger"
-              before={<Icon24Cancel/>}
-              onClick={() => this.deleteVacancyButtonClick(vacancy.id)}
-            >
-              Удалить предложение
-            </CellButton>
-          </Group>
-        )}
-
-        {vacancy && (
-          <div>
-            <Group title="Учитель">
-              <Cell
-                expandable
-                size="l"
-                description={
-                  <div>
-                    Пользуется сервисом с
-                    <div>
-                      <Moment format="LL" date={vacancy.owner.date_joined} />
-                    </div>
-                  </div>
-                }
-                before={<Avatar src={ROOT_URL + vacancy.owner.avatar} size={64} />}
-                onClick={() => this.props.history.push(`/user/${vacancy.owner.id}`)}
+          {isEditable && (
+            <Group title="Управление">
+              <CellButton
+                before={<Icon24Write />}
+                onClick={() => this.props.history.push(`/vacancy_edit/${vacancy.id}`)}
               >
-                <div>
-                  {vacancy.owner.first_name} {vacancy.owner.last_name}
-                </div>
-              </Cell>
-            </Group>
-
-            <Group title="Добавление в список учеников">
-              <CellButton before={<Icon24UserAdd />} onClick={() => this.createStudentRequest(vacancy.owner.id)}>
-                Отправить заявку
+                Редактировать предложение
               </CellButton>
-              {this.state.success && (
-                <Div>
-                  <SuccessFormStatus title="Успешно" />
-                </Div>
-              )}
-              {Object.keys(this.state.errors).length > 0 && (
-                <Div>
-                  <ErrorFormStatus errors={this.state.errors} />
-                </Div>
-              )}
+              <CellButton
+                level="danger"
+                before={<Icon24Cancel/>}
+                onClick={() => this.deleteVacancyButtonClick(vacancy.id)}
+              >
+                Удалить предложение
+              </CellButton>
             </Group>
+          )}
 
-            <Group title="Информация о вакансии">
-              <Cell
-                multiline
-                description="Предмет обучения"
-                before={<Icon24Education />}
-              >
-                {vacancy.subject}
-              </Cell>
+          {vacancy && (
+            <div>
+              <Group title="Учитель">
+                <Cell
+                  expandable
+                  size="l"
+                  description={
+                    <div>
+                      Пользуется сервисом с
+                      <div>
+                        <Moment format="LL" date={vacancy.owner.date_joined} />
+                      </div>
+                    </div>
+                  }
+                  before={<Avatar src={ROOT_URL + vacancy.owner.avatar} size={64} />}
+                  onClick={() => this.props.history.push(`/user/${vacancy.owner.id}`)}
+                >
+                  <div>
+                    {vacancy.owner.first_name} {vacancy.owner.last_name}
+                  </div>
+                </Cell>
+              </Group>
 
-              <Cell
-                multiline
-                description="Стоимость занятия"
-                before={<Icon24MoneyCircle/>}
-              >
-                {vacancy.price} рублей/час
-              </Cell>
+              <Group title="Добавление в список учеников">
+                <CellButton before={<Icon24UserAdd />} onClick={() => this.createStudentRequest(vacancy.owner.id)}>
+                  Отправить заявку
+                </CellButton>
+                {this.state.success && (
+                  <Div>
+                    <SuccessFormStatus title="Успешно" />
+                  </Div>
+                )}
+                {Object.keys(this.state.errors).length > 0 && (
+                  <Div>
+                    <ErrorFormStatus errors={this.state.errors} />
+                  </Div>
+                )}
+              </Group>
 
-              <Cell description="Выезд на дом" before={<Icon24Home />}>
-                {vacancy.home_schooling ? "Да" : "Нет"}
-              </Cell>
-
-              {vacancy.extra_info && (
+              <Group title="Информация о вакансии">
                 <Cell
                   multiline
-                  description="Дополнительная информация"
-                  before={<Icon24Info />}
+                  description="Предмет обучения"
+                  before={<Icon24Education />}
                 >
-                  {vacancy.extra_info || "Не указана"}
+                  {vacancy.subject}
                 </Cell>
-              )}
-            </Group>
-          </div>
-        )}
-      </div>
+
+                <Cell
+                  multiline
+                  description="Стоимость занятия"
+                  before={<Icon24MoneyCircle/>}
+                >
+                  {vacancy.price} рублей/час
+                </Cell>
+
+                <Cell description="Выезд на дом" before={<Icon24Home />}>
+                  {vacancy.home_schooling ? "Да" : "Нет"}
+                </Cell>
+
+                {vacancy.extra_info && (
+                  <Cell
+                    multiline
+                    description="Дополнительная информация"
+                    before={<Icon24Info />}
+                  >
+                    {vacancy.extra_info || "Не указана"}
+                  </Cell>
+                )}
+              </Group>
+            </div>
+          )}
+        </Panel>
+      </View>
     );
   }
 }
