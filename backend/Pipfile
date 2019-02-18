@@ -28,7 +28,6 @@ pyyaml = "*"
 pillow = "*"
 social-auth-app-django = "*"
 drf-extensions = "*"
-djangorestframework-filters = "*"
 django-rest-swagger = "*"
 djangorestframework-simplejwt = "*"
 djangorestframework-recaptcha = "*"
@@ -36,9 +35,7 @@ python-decouple = "*"
 vk = "*"
 celery = "*"
 redis = "*"
+django-filter = "*"
 
 [requires]
 python_version = "3.6"
-
-[pipenv]
-allow_prereleases = true
