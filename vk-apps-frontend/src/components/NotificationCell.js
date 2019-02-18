@@ -83,7 +83,9 @@ const NotificationCell = ({ notification, onSenderClick, buttonBefore, onButtonC
       </FlexDivWithPadding>
       <FlexDiv>
         <GraySmallTextDiv>
-          <Moment format="LLLL" value={notification.creation_time} />
+          <Moment format="LLLL">
+            {notification.creation_time}
+          </Moment>
         </GraySmallTextDiv>
       </FlexDiv>
     </Cell>
