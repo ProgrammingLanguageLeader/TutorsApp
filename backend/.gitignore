@@ -7,3 +7,4 @@ settings.ini
 *.log
 staticfiles/
 media/
+celerybeat-schedule
