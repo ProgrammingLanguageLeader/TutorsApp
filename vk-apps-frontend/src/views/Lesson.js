@@ -14,7 +14,9 @@ import Group from '@vkontakte/vkui/dist/components/Group/Group';
 import CellButton from '@vkontakte/vkui/dist/components/CellButton/CellButton';
 
 import Icon24Write from '@vkontakte/icons/dist/24/write';
+import Icon24Cancel from '@vkontakte/icons/dist/24/cancel';
 
+import DeleteConfirmationAlert from 'vk-apps-frontend/components/DeleteConfirmationAlert';
 import DivSpinner from 'vk-apps-frontend/components/DivSpinner';
 import BackIcon from 'vk-apps-frontend/components/BackIcon';
 
@@ -37,15 +39,42 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     getLesson: bindActionCreators(lessonsActions.getLesson, dispatch),
+    deleteLesson: bindActionCreators(lessonsActions.deleteLesson, dispatch),
   };
 };
 
 class Lesson extends React.Component {
+  constructor(props) {
+    super(props);
+    this.deleteLessonButtonClick = this.deleteLessonButtonClick.bind(this);
+    this.state = {
+      popout: null,
+    };
+  }
+
   componentDidMount() {
     if (this.props.currentUserReducer.user) {
       const { id } = this.props.match.params;
       this.props.getLesson(id);
     }
+  }
+
+  deleteLessonButtonClick(id) {
+    const popout = (
+      <DeleteConfirmationAlert
+        label="Вы уверены, что хотите удалить урок?"
+        onConfirm={async () => {
+          await this.props.deleteLesson(id);
+          this.props.history.goBack();
+        }}
+        onClose={() => this.setState({
+          popout: null
+        })}
+      />
+    );
+    this.setState({
+      popout: popout
+    });
   }
 
   render() {
@@ -56,7 +85,7 @@ class Lesson extends React.Component {
     } = this.props;
 
     return (
-      <View activePanel="panel">
+      <View activePanel="panel" popout={this.state.popout}>
         <Panel id="panel">
           <PanelHeader left={
             <HeaderButton onClick={this.props.history.goBack}>
@@ -79,6 +108,13 @@ class Lesson extends React.Component {
                     onClick={() => this.props.history.push(`/lesson_edit/${lesson.id}`)}
                   >
                     Редактирование урока
+                  </CellButton>
+                  <CellButton
+                    level="danger"
+                    before={<Icon24Cancel/>}
+                    onClick={() => this.deleteLessonButtonClick(lesson.id)}
+                  >
+                    Удаление урока
                   </CellButton>
                 </Group>
               )}

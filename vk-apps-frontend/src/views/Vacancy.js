@@ -25,6 +25,7 @@ import ErrorFormStatus from 'vk-apps-frontend/components/ErrorFormStatus';
 import SuccessFormStatus from 'vk-apps-frontend/components/SuccessfulFormStatus';
 import DivSpinner from 'vk-apps-frontend/components/DivSpinner';
 import BackIcon from 'vk-apps-frontend/components/BackIcon';
+import DeleteConfirmationAlert from 'vk-apps-frontend/components/DeleteConfirmationAlert';
 
 import { vacanciesActions, tutorsActions } from 'vk-apps-frontend/actions/api';
 
@@ -55,12 +56,10 @@ class Vacancy extends React.Component {
     this.createStudentRequest = this.createStudentRequest.bind(this);
     this.deleteVacancyButtonClick = this.deleteVacancyButtonClick.bind(this);
 
-    // TODO: add popout for delete approving
     this.state = {
       success: null,
       errors: {},
       popout: null,
-      isDeleteApproved: true,
     }
   }
 
@@ -89,11 +88,22 @@ class Vacancy extends React.Component {
     });
   }
 
-  async deleteVacancyButtonClick(id) {
-    if (this.state.isDeleteApproved) {
-      await this.props.deleteVacancy(id);
-      this.props.history.goBack();
-    }
+  deleteVacancyButtonClick(id) {
+    const popout = (
+      <DeleteConfirmationAlert
+        label="Вы уверены, что хотите удалить предложение?"
+        onConfirm={async () => {
+          await this.props.deleteVacancy(id);
+          this.props.history.goBack();
+        }}
+        onClose={() => this.setState({
+          popout: null
+        })}
+      />
+    );
+    this.setState({
+      popout: popout
+    });
   }
 
   render() {
@@ -101,7 +111,7 @@ class Vacancy extends React.Component {
     const isEditable = currentUserReducer.user && vacancy && currentUserReducer.user.id === vacancy.owner.id;
 
     return (
-      <View activePanel="panel">
+      <View activePanel="panel" popout={this.state.popout}>
         <Panel id="panel">
           <PanelHeader left={
             <HeaderButton onClick={this.props.history.goBack}>
