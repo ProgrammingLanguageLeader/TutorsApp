@@ -9,6 +9,9 @@ class APIRequestManager {
     }
     this.vkExecutionParams = vkExecutionParams;
     this.sign = sign;
+    this.headers = {
+      "Accept-Language": "ru-RU",
+    };
   }
 
   static cancelRequests() {};
@@ -49,19 +52,21 @@ class APIRequestManager {
       axios({
         url: url,
         method: method,
+        headers: this.headers,
         params: optionsWithSign,
         cancelToken: new axios.CancelToken(cancelFunction => {
           APIRequestManager.cancelRequests = cancelFunction;
         })
       })
     : axios({
-      url: url,
-      method: method,
-      data: optionsWithSign,
-      cancelToken: new axios.CancelToken(cancelFunction => {
-        APIRequestManager.cancelRequests = cancelFunction;
-      })
-    });
+        url: url,
+        method: method,
+        headers: this.headers,
+        data: optionsWithSign,
+        cancelToken: new axios.CancelToken(cancelFunction => {
+          APIRequestManager.cancelRequests = cancelFunction;
+        })
+      });
 
     return axiosRequestPromise
       .then(response => response)
