@@ -6,7 +6,7 @@ from vacancies.models import Vacancy
 from vacancies.serializers import VacancySerializer
 
 from lessons.models import Lesson
-from lessons.serializer import LessonSerializer
+from lessons.serializers import LessonSerializer
 
 from tutors.models import StudentRequest
 from tutors.serializers import StudentRequestSerializer

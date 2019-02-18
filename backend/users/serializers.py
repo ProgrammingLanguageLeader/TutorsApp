@@ -1,3 +1,5 @@
+from django.utils.translation import ugettext_lazy as _
+
 import re
 
 from django.contrib.auth import password_validation
@@ -52,7 +54,7 @@ class UserSerializer(serializers.ModelSerializer):
     def validate_username(self, username):
         regexp_search = self.username_regexp.search(username)
         if not regexp_search:
-            raise serializers.ValidationError('This field is not correct')
+            raise serializers.ValidationError(_('This field is not correct'))
         return username
 
     def validate_password(self, password):

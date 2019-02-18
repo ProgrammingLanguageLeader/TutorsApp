@@ -1,3 +1,5 @@
+from django.utils.translation import ugettext_lazy as _
+
 from rest_framework import serializers
 
 from tutors.models import StudentRequest, TutorStudents
@@ -25,14 +27,14 @@ class StudentRequestSerializer(serializers.ModelSerializer):
         if student == tutor:
             raise serializers.ValidationError({
                 'tutor': [
-                    'tutor must not be equal to student'
+                    _('tutor must not be equal to student')
                 ]
             })
         tutor, created = TutorStudents.objects.get_or_create(user=tutor)
         if student in tutor.students.all():
             raise serializers.ValidationError({
                 'student': [
-                    'student already exists in a list of students'
+                    _('student already exists in a list of students')
                 ]
             })
         return attrs

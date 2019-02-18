@@ -5,7 +5,7 @@ from rest_framework import viewsets
 from lessons.filters import LessonFilter
 from lessons.models import Lesson
 from lessons.permissions import IsTutorOrIsStudentAndReadOnly
-from lessons.serializer import LessonSerializer, GetLessonSerializer
+from lessons.serializers import LessonSerializer, GetLessonSerializer
 
 
 class LessonViewSet(viewsets.ModelViewSet):

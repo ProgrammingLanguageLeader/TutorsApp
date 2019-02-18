@@ -1,5 +1,6 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
+from django.utils.translation import ugettext_lazy as _
 
 from rest_framework import serializers
 from rest_framework.fields import CurrentUserDefault
@@ -29,7 +30,7 @@ class LessonSerializer(serializers.ModelSerializer):
         except ObjectDoesNotExist:
             raise serializers.ValidationError({
                 'student': [
-                    'user does not exist is a list of students',
+                    _('user does not exist is a list of students'),
                 ]
             })
 
@@ -48,7 +49,7 @@ class LessonSerializer(serializers.ModelSerializer):
         ).count()
         if lessons_count > 0:
             raise serializers.ValidationError(
-                'lesson timing has collisions with other lessons'
+                _('lesson timing has collisions with other lessons')
             )
         return attrs
 
