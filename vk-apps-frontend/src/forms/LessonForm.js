@@ -13,6 +13,7 @@ import Slider from '@vkontakte/vkui/dist/components/Slider/Slider';
 import DivSpinner from 'vk-apps-frontend/components/DivSpinner';
 import TimePicker from 'vk-apps-frontend/components/TimePicker';
 import ErrorFormStatus from 'vk-apps-frontend/components/ErrorFormStatus';
+import ErrorMessageDiv from 'vk-apps-frontend/components/ErrorMessageDiv';
 import SuccessfulFormStatus from 'vk-apps-frontend/components/SuccessfulFormStatus';
 
 import durationHumanizer from 'vk-apps-frontend/helpers/durationHumanizer';
@@ -59,6 +60,9 @@ class LessonForm extends React.Component {
               </option>
             ))}
           </Select>
+          {errors.data && errors.data["student"] && (
+            <ErrorMessageDiv>{errors.data["student"]}</ErrorMessageDiv>
+          )}
         </FormLayoutGroup>
 
         <FormLayoutGroup top="День занятия">
@@ -103,6 +107,9 @@ class LessonForm extends React.Component {
             value={String(values.price)}
             status={errors.data && errors.data["price"] && "error"}
           />
+          {errors.data && errors.data["price"] && (
+            <ErrorMessageDiv>{errors.data["price"]}</ErrorMessageDiv>
+          )}
         </FormLayoutGroup>
 
         <Button size="xl" onClick={handleSubmit}>

@@ -11,6 +11,7 @@ import Select from '@vkontakte/vkui/dist/components/Select/Select';
 import { educationLevelList, subjectsList } from 'vk-apps-frontend/constants';
 
 import ErrorFormStatus from 'vk-apps-frontend/components/ErrorFormStatus';
+import ErrorMessageDiv from 'vk-apps-frontend/components/ErrorMessageDiv';
 
 class VacancyForm extends React.Component {
   constructor(props) {
@@ -75,6 +76,9 @@ class VacancyForm extends React.Component {
               </option>
             ))}
           </Select>
+          {errors.data && errors.data["subject"] && (
+            <ErrorMessageDiv>{errors.data["subject"]}</ErrorMessageDiv>
+          )}
         </FormLayoutGroup>
 
         <FormLayoutGroup top="Если вашего предмета не оказалось в списке, введите его название вручную">
@@ -92,6 +96,9 @@ class VacancyForm extends React.Component {
               });
             }}
           />
+          {errors.data && errors.data["subject"] && (
+            <ErrorMessageDiv>{errors.data["subject"]}</ErrorMessageDiv>
+          )}
         </FormLayoutGroup>
 
         <FormLayoutGroup top="Уровень обучения">
@@ -124,6 +131,9 @@ class VacancyForm extends React.Component {
             value={String(values.price || '')}
             status={errors.data && errors.data["price"] && "error"}
           />
+          {errors.data && errors.data["price"] && (
+            <ErrorMessageDiv>{errors.data["price"]}</ErrorMessageDiv>
+          )}
         </FormLayoutGroup>
 
         <FormLayoutGroup top="Дополнительная информация">
