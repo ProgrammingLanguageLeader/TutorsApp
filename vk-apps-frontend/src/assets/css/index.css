@@ -7,8 +7,12 @@ a {
     align-items: flex-start;
 }
 
+select[status="error"] + .Select__container {
+    border: solid 1px var(--field_error_border);
+}
+
 .Input--s-error .Input__border {
-    border-color: red;
+    border-color: var(--field_error_border);
 }
 
 .rdtPicker {

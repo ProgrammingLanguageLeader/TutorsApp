@@ -59,6 +59,7 @@ class VacancyForm extends React.Component {
           <Select
             name="select_subject"
             value={selectSubject}
+            status={errors.data && errors.data["subject"] && "error"}
             placeholder="Выберите предмет"
             onChange={event => {
               setFieldValue("subject", event.currentTarget.value);
