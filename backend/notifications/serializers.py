@@ -3,13 +3,13 @@ from rest_framework import serializers
 from users.serializers import UserSerializer
 
 from vacancies.models import Vacancy
-from vacancies.serializers import VacancySerializer
+from vacancies.serializers import ReadVacancySerializer
 
 from lessons.models import Lesson
-from lessons.serializers import LessonSerializer
+from lessons.serializers import GetLessonSerializer
 
 from tutors.models import StudentRequest
-from tutors.serializers import StudentRequestSerializer
+from tutors.serializers import ReadStudentRequestSerializer
 
 from notifications.models import Notification
 
@@ -18,15 +18,15 @@ class TargetObjectRelatedField(serializers.RelatedField):
     def to_representation(self, value):
         serializer_data = None
         if isinstance(value, Vacancy):
-            serializer = VacancySerializer(value)
+            serializer = ReadVacancySerializer(value)
             serializer_data = serializer.data
             serializer_data['content_type'] = 'vacancy'
         if isinstance(value, StudentRequest):
-            serializer = StudentRequestSerializer(value)
+            serializer = ReadStudentRequestSerializer(value)
             serializer_data = serializer.data
             serializer_data['content_type'] = 'student_request'
         if isinstance(value, Lesson):
-            serializer = LessonSerializer(value)
+            serializer = GetLessonSerializer(value)
             serializer_data = serializer.data
             serializer_data['content_type'] = 'lesson'
         if not serializer_data:
