@@ -12,15 +12,19 @@ import HeaderButton from '@vkontakte/vkui/dist/components/HeaderButton/HeaderBut
 import Avatar from '@vkontakte/vkui/dist/components/Avatar/Avatar';
 import Group from '@vkontakte/vkui/dist/components/Group/Group';
 import CellButton from '@vkontakte/vkui/dist/components/CellButton/CellButton';
+import Div from '@vkontakte/vkui/dist/components/Div/Div';
 
+import Icon24MoneyTransfer from '@vkontakte/icons/dist/24/money_transfer';
 import Icon24Write from '@vkontakte/icons/dist/24/write';
 import Icon24Cancel from '@vkontakte/icons/dist/24/cancel';
 
+import ErrorFormStatus from 'vk-apps-frontend/components/ErrorFormStatus';
 import DeleteConfirmationAlert from 'vk-apps-frontend/components/DeleteConfirmationAlert';
 import DivSpinner from 'vk-apps-frontend/components/DivSpinner';
 import BackIcon from 'vk-apps-frontend/components/BackIcon';
 
-import { lessonsActions } from 'vk-apps-frontend/actions/api';
+import { lessonsActions, vkAppsUsersActions } from 'vk-apps-frontend/actions/api';
+import { appsActions } from 'vk-apps-frontend/actions/vk';
 
 import { ROOT_URL } from 'vk-apps-frontend/constants';
 
@@ -40,6 +44,8 @@ const mapDispatchToProps = dispatch => {
   return {
     getLesson: bindActionCreators(lessonsActions.getLesson, dispatch),
     deleteLesson: bindActionCreators(lessonsActions.deleteLesson, dispatch),
+    retrieveVkAppsUserByUserId: bindActionCreators(vkAppsUsersActions.retrieveVkAppsUserByUserId, dispatch),
+    openPayForm: bindActionCreators(appsActions.openPayForm, dispatch),
   };
 };
 
@@ -47,8 +53,10 @@ class Lesson extends React.Component {
   constructor(props) {
     super(props);
     this.deleteLessonButtonClick = this.deleteLessonButtonClick.bind(this);
+    this.handleMoneyTransferButton = this.handleMoneyTransferButton.bind(this);
     this.state = {
       popout: null,
+      errors: null,
     };
   }
 
@@ -77,6 +85,28 @@ class Lesson extends React.Component {
     });
   }
 
+  async handleMoneyTransferButton(userId, amount) {
+    const response = await this.props.retrieveVkAppsUserByUserId(userId);
+    if (response.status >= 400) {
+      this.setState({
+        errors: {
+          message: 'Выбранный пользователь не зарегистрирован через VK Apps'
+        }
+      });
+      return;
+    }
+    this.props.openPayForm(
+      'pay-to-user',
+      {
+        'user_id': response.data.vk_id,
+        'amount': amount,
+      }
+    );
+    this.setState({
+      errors: null
+    });
+  }
+
   render() {
     const {
       fetching,
@@ -102,7 +132,7 @@ class Lesson extends React.Component {
           {lesson && (
             <div>
               {lesson.tutor.id === currentUserReducer.user.id && (
-                <Group>
+                <Group title="Управление уроком">
                   <CellButton
                     before={<Icon24Write/>}
                     onClick={() => this.props.history.push(`/lesson_edit/${lesson.id}`)}
@@ -116,6 +146,21 @@ class Lesson extends React.Component {
                   >
                     Удаление урока
                   </CellButton>
+                </Group>
+              )}
+              {lesson.student.id === currentUserReducer.user.id && (
+                <Group title="Оплата урока">
+                  <CellButton
+                    before={<Icon24MoneyTransfer/>}
+                    onClick={() => this.handleMoneyTransferButton(lesson.tutor.id, lesson.price)}
+                  >
+                    Открыть форму перевода
+                  </CellButton>
+                  {this.state.errors && (
+                    <Div>
+                      <ErrorFormStatus errors={this.state.errors} />
+                    </Div>
+                  )}
                 </Group>
               )}
 
