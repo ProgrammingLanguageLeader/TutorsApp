@@ -118,6 +118,10 @@ class VacancyForm extends React.Component {
           <Input name="price" type="number" onChange={handleChange} value={String(values.price || '')} />
         </FormLayoutGroup>
 
+        <FormLayoutGroup top="Дополнительная информация">
+          <Input name="extra_info" onChange={handleChange} value={values.extra_info} />
+        </FormLayoutGroup>
+
         <Button size="xl" onClick={handleSubmit}>
           {submitLabel || "Отправить"}
         </Button>
