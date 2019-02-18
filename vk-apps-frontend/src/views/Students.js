@@ -11,6 +11,7 @@ import Footer from '@vkontakte/vkui/dist/components/Footer/Footer';
 import BackIcon from 'vk-apps-frontend/components/BackIcon';
 import DivSpinner from 'vk-apps-frontend/components/DivSpinner';
 import ShortUserCard from 'vk-apps-frontend/components/ShortUserCard';
+import DeleteConfirmationAlert from 'vk-apps-frontend/components/DeleteConfirmationAlert';
 
 import { tutorsActions } from 'vk-apps-frontend/actions/api';
 
@@ -27,21 +28,47 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     getStudentsList: bindActionCreators(tutorsActions.getStudentsList, dispatch),
+    deleteStudent: bindActionCreators(tutorsActions.deleteStudent, dispatch),
   };
 };
 
 class Students extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleDeleteStudentButtonClick = this.handleDeleteStudentButtonClick.bind(this);
+    this.state = {
+      popout: null,
+    };
+  }
+
   componentDidMount() {
     if (this.props.currentUserReducer.user) {
       this.props.getStudentsList();
     }
   }
 
+  handleDeleteStudentButtonClick(id) {
+    const popout = (
+      <DeleteConfirmationAlert
+        label="Вы уверены, что хотите удалить ученика?"
+        onClose={() => this.setState({
+          popout: null,
+        })}
+        onConfirm={async () => {
+          await this.props.deleteStudent(id);
+        }}
+      />
+    );
+    this.setState({
+      popout: popout,
+    });
+  }
+
   render() {
     const { students, fetching } = this.props;
 
     return (
-      <View activePanel="panel">
+      <View activePanel="panel" popout={this.state.popout}>
         <Panel id="panel">
           <PanelHeader left={
             <HeaderButton onClick={this.props.history.goBack}>
@@ -56,7 +83,13 @@ class Students extends React.Component {
           )}
 
           {students.map(student => (
-            <ShortUserCard history={this.props.history} key={student.id} user={student} />
+            <ShortUserCard
+              key={student.id}
+              history={this.props.history}
+              user={student}
+              isStudent={true}
+              onDelete={() => this.handleDeleteStudentButtonClick(student.id)}
+            />
           ))}
           <Footer>
             Показано пользователей: {students.length}

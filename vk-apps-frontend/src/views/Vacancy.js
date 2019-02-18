@@ -63,7 +63,6 @@ class Vacancy extends React.Component {
     }
   }
 
-
   componentDidMount() {
     if (this.props.currentUserReducer.user) {
       const { id } = this.props.match.params;
