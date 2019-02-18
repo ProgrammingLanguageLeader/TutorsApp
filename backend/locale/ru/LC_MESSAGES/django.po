@@ -1,0 +1,44 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Dmitry Shorokhov <vip.shoroch@gmail.com>, 2019.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-02-18 14:31+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n"
+"%100>=11 && n%100<=14)? 2 : 3);\n"
+
+#: lessons/serializer.py:33
+msgid "user does not exist is a list of students"
+msgstr "пользователь не существует в списке студентов"
+
+#: lessons/serializer.py:52
+msgid "lesson timing has collisions with other lessons"
+msgstr "время занятия пересекается с другими уроками"
+
+#: tutors/serializers.py:30
+msgid "tutor must not be equal to student"
+msgstr "учитель не должен быть равен студенту"
+
+#: tutors/serializers.py:37
+msgid "student already exists in a list of students"
+msgstr "студент уже существует в списке учеников"
+
+#: users/serializers.py:57
+msgid "This field is not correct"
+msgstr "Поле заполнено некорректно"
+
+#: utils/exception_handler.py:12
+msgid "vacations limit exceeded"
+msgstr "достигнуто ограничение по количеству предложений"
