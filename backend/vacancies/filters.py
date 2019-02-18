@@ -31,3 +31,21 @@ class VacancyFilter(filters.FilterSet):
         lookup_expr='lte',
         label='Creation time maximum'
     )
+
+    city = filters.CharFilter(
+        field_name='owner__city',
+        lookup_expr='icontains',
+        label='Owner\'s city'
+    )
+
+    district = filters.CharFilter(
+        field_name='owner__district',
+        lookup_expr='icontains',
+        label='Owner\'s district'
+    )
+
+    metro = filters.CharFilter(
+        field_name='owner__metro',
+        lookup_expr='icontains',
+        label='Owner\'s metro station'
+    )
