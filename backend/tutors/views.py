@@ -1,9 +1,11 @@
 from django.db.models import Q
-from rest_framework.decorators import action
+from django.core.exceptions import ObjectDoesNotExist
 
+from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import viewsets, mixins, generics
+from rest_framework.exceptions import NotFound
 
 from tutors.serializers import StudentRequestSerializer, \
     ReadStudentRequestSerializer, AcceptStudentRequestSerializer
@@ -39,6 +41,14 @@ class StudentsViewSet(mixins.ListModelMixin,
             user=self.request.user,
         )
         return tutor.students.all()
+
+    def destroy(self, request, pk=None, *args, **kwargs):
+        try:
+            tutor = TutorStudents.objects.get(user=self.request.user)
+            student = User.objects.get(pk=pk)
+            tutor.students.remove(student)
+        except ObjectDoesNotExist:
+            raise NotFound()
 
 
 class TutorsListView(generics.ListAPIView):
