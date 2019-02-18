@@ -105,6 +105,7 @@ class LessonCreate extends React.Component {
                   <LessonForm
                     {...formikProps}
                     isSuccessful={this.state.success}
+                    errors={this.state.errors}
                     students={students || []}
                     submitLabel="Создать"
                   />
