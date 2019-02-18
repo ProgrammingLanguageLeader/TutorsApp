@@ -1,4 +1,4 @@
-import django_filters as filters
+import django_filters.rest_framework as filters
 
 from lessons.models import Lesson
 

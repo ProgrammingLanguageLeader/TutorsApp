@@ -1,4 +1,4 @@
-from django_filters import FilterSet
+from django_filters.rest_framework import FilterSet
 
 from tutors.models import StudentRequest
 
