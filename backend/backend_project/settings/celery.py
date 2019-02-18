@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from decouple import config
 
 
@@ -12,4 +14,11 @@ CELERY_TASK_SERIALIZER = 'json'
 
 BROKER_TRANSPORT_OPTIONS = {
     'visibility_timeout': 3600
+}
+
+CELERY_BEAT_SCHEDULE = {
+    'send_payment_notifications': {
+        'task': 'notifications.tasks.send_payment_notifications',
+        'schedule': timedelta(hours=1),
+    },
 }

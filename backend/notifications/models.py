@@ -8,13 +8,13 @@ class Notification(models.Model):
     creation_time = models.DateTimeField(auto_now_add=True)
     sender = models.ForeignKey(
         settings.AUTH_USER_MODEL,
+        null=True,
         blank=True,
         related_name='notification_sender',
         on_delete=models.CASCADE
     )
     recipient = models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        blank=True,
         related_name='notification_recipient',
         on_delete=models.CASCADE
     )
