@@ -6,7 +6,13 @@ from vacancies.models import Vacancy
 class VacancyFilter(filters.FilterSet):
     class Meta:
         model = Vacancy
-        fields = '__all__'
+        exclude = ('subject', )
+
+    subject = filters.CharFilter(
+        field_name='subject',
+        lookup_expr='icontains',
+        label='Subject'
+    )
 
     price__gte = filters.NumberFilter(
         field_name='price',
