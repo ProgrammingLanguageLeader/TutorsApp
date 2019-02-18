@@ -142,10 +142,10 @@ class Home extends React.Component {
   async createUser() {
     await this.props.createVkAppsUser();
     const { user } = this.props;
-    await Promise.all([
-      this.updateUserInfoFromVK(user.id),
-      this.updateAvatarFromVK(user.id)
-    ]);
+    const vkId = this.props.vkUserInfo.id;
+    await this.updateUserInfoFromVK(user.id);
+    await this.updateAvatarFromVK(user.id);
+    this.props.saveCurrentUserData(user, vkId);
     this.props.history.push('');
   }
 
