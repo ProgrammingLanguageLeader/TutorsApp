@@ -6,11 +6,11 @@ from django.dispatch import receiver
 from users.models import User
 
 
-@receiver(models.signals.post_delete, sender=User)
+@receiver(models.signals.pre_delete, sender=User)
 def auto_delete_avatar_on_delete(sender, instance, **kwargs):
     """
     Deletes file from filesystem
-    when corresponding `MediaFile` object is deleted.
+    when corresponding User object will be deleted.
     """
     if instance.avatar:
         if os.path.isfile(instance.avatar.path):
@@ -21,7 +21,7 @@ def auto_delete_avatar_on_delete(sender, instance, **kwargs):
 def auto_delete_avatar_on_change(sender, instance, **kwargs):
     """
     Deletes old file from filesystem
-    when corresponding `MediaFile` object is updated
+    when corresponding User object is updated
     with new file.
     """
     if not instance.pk:
