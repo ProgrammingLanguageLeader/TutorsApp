@@ -30,23 +30,44 @@ const NotificationCell = ({ notification, onSenderClick, buttonBefore, onButtonC
       || verb === 'lesson create' && 'Создан урок'
       || verb === 'student request accept' && 'Принята заявка на добавление в список учеников'
       || verb === 'student request reject' && 'Отклонена заявка на добавление в список учеников'
-      || verb === 'lesson delete' && 'Удален урок';
+      || verb === 'lesson delete' && 'Удален урок'
+      || verb === 'lesson update' && 'Изменение урока'
+      || verb === 'lesson payment' && 'Оплата урока'
+      || verb;
   const isExpandable = Boolean(notification.target);
   return (
     <Cell multiline expandable={isExpandable}>
-      <FlexDiv onClick={onSenderClick}>
-        <Avatar size={64} src={ROOT_URL + notification.sender.avatar} />
-        <Div>
-          <div>
-            {notification.sender.first_name} {notification.sender.last_name}
-          </div>
-          {isExpandable && (
-            <GraySmallTextDiv>
-              Нажмите для просмотра
-            </GraySmallTextDiv>
-          )}
-        </Div>
-      </FlexDiv>
+      {notification.sender && (
+        <FlexDiv onClick={onSenderClick}>
+          <Avatar size={64} src={ROOT_URL + notification.sender.avatar} />
+          <Div>
+            <div>
+              {notification.sender.first_name} {notification.sender.last_name}
+            </div>
+            {isExpandable && (
+              <GraySmallTextDiv>
+                Нажмите для просмотра
+              </GraySmallTextDiv>
+            )}
+          </Div>
+        </FlexDiv>
+      )}
+
+      {verb === 'lesson payment' && notification.target.tutor && (
+        <FlexDiv onClick={onSenderClick}>
+          <Avatar size={64} src={ROOT_URL + notification.target.tutor.avatar} />
+          <Div>
+            <div>
+              {notification.target.tutor.first_name} {notification.target.tutor.last_name}
+            </div>
+            {isExpandable && (
+              <GraySmallTextDiv>
+                Нажмите для просмотра
+              </GraySmallTextDiv>
+            )}
+          </Div>
+        </FlexDiv>
+      )}
       <FlexDivWithPadding>
         { notificationLabel }
       </FlexDivWithPadding>
