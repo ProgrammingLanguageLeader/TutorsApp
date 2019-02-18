@@ -22,7 +22,7 @@ VK_APP_ID = config('VK_APP_ID', default=0)
 
 SESSION_COOKIE_SECURE = config(
     'SESSION_COOKIE_SECURE',
-    default=DEBUG,
+    default=not DEBUG,
     cast=bool
 )
 SESSION_COOKIE_HTTPONLY = True
@@ -34,4 +34,7 @@ CORS_ORIGIN_ALLOW_ALL = True
 ROOT_URLCONF = 'backend_project.urls'
 WSGI_APPLICATION = 'backend_project.wsgi.application'
 
-DRF_RECAPTCHA_SECRET_KEY = config('DRF_RECAPTCHA_SECRET_KEY', default='FAKE_KEY')
+DRF_RECAPTCHA_SECRET_KEY = config(
+    'DRF_RECAPTCHA_SECRET_KEY',
+    default='FAKE_KEY'
+)
