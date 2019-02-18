@@ -22,7 +22,7 @@ class NotificationsViewSet(viewsets.ReadOnlyModelViewSet):
     """
     queryset = Notification.objects.all()
     permission_classes = (SelfOnly,)
-    filter_class = NotificationFilter
+    filterset_class = NotificationFilter
 
     def get_queryset(self):
         return Notification.objects.filter(

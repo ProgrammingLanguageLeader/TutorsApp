@@ -31,7 +31,7 @@ class LessonViewSet(viewsets.ModelViewSet):
     queryset = Lesson.objects.all()
     permission_classes = (IsTutorOrIsStudentAndReadOnly, )
     serializer_class = LessonSerializer
-    filter_class = LessonFilter
+    filterset_class = LessonFilter
 
     def get_serializer_class(self):
         if self.action in ('retrieve', 'list'):

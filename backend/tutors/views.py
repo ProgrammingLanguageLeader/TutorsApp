@@ -83,7 +83,7 @@ class StudentRequestsViewSet(mixins.CreateModelMixin,
     permission_classes = (IsStudentOrIsTutor,)
     queryset = StudentRequest.objects.all()
     read_only_actions = ('retrieve', 'list',)
-    filter_class = StudentRequestsFilter
+    filterset_class = StudentRequestsFilter
 
     def get_queryset(self):
         return StudentRequest.objects.filter(

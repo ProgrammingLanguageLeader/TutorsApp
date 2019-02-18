@@ -29,7 +29,7 @@ class VacanciesViewSet(viewsets.ModelViewSet):
     """
     queryset = Vacancy.objects.all()
     read_only_actions = ('retrieve', 'list', )
-    filter_class = VacancyFilter
+    filterset_class = VacancyFilter
 
     def get_permissions(self):
         if self.action in self.read_only_actions:

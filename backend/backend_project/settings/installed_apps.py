@@ -14,8 +14,8 @@ INSTALLED_APPS = [
     'lessons',
     'notifications',
     'corsheaders',
+    'django_filters',
     'rest_framework_extensions',
-    'rest_framework_filters',
     'rest_framework_swagger',
     'rest_framework_recaptcha',
 ]
