@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-18 14:31+0000\n"
+"POT-Creation-Date: 2019-02-18 16:04+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,13 +19,17 @@ msgstr ""
 "%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n"
 "%100>=11 && n%100<=14)? 2 : 3);\n"
 
-#: lessons/serializer.py:33
+#: lessons/serializers.py:33
 msgid "user does not exist is a list of students"
 msgstr "пользователь не существует в списке студентов"
 
-#: lessons/serializer.py:52
+#: lessons/serializers.py:52
 msgid "lesson timing has collisions with other lessons"
 msgstr "время занятия пересекается с другими уроками"
+
+#: notifications/tasks.py:13
+msgid "You have unread notifications"
+msgstr "У Вас есть непрочитанные уведомления"
 
 #: tutors/serializers.py:30
 msgid "tutor must not be equal to student"

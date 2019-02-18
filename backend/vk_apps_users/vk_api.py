@@ -7,7 +7,8 @@ from utils.singleton import Singleton
 
 class API(vk.API, metaclass=Singleton):
     method_default_args = {
-        'v': '5.80'
+        'v': '5.92',
+        'timeout': 10
     }
 
     def __init__(self):

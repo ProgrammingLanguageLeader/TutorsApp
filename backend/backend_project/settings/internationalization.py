@@ -3,7 +3,7 @@ import os
 from backend_project.settings.base import BASE_DIR
 
 
-LANGUAGE_CODE = 'en'
+LANGUAGE_CODE = 'ru'
 LANGUAGES = (
   ('ru', 'Russian'),
   ('en', 'English'),
