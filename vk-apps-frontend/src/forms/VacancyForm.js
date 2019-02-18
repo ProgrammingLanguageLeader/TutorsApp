@@ -82,6 +82,7 @@ class VacancyForm extends React.Component {
             type="text"
             placeholder="Введите название предмета"
             value={inputSubject}
+            status={errors.data && errors.data["subject"] && "error"}
             onChange={event => {
               setFieldValue("subject", event.currentTarget.value);
               this.setState({
@@ -115,7 +116,13 @@ class VacancyForm extends React.Component {
         </FormLayoutGroup>
 
         <FormLayoutGroup top="Плата за час обучения">
-          <Input name="price" type="number" onChange={handleChange} value={String(values.price || '')} />
+          <Input
+            name="price"
+            type="number"
+            onChange={handleChange}
+            value={String(values.price || '')}
+            status={errors.data && errors.data["price"] && "error"}
+          />
         </FormLayoutGroup>
 
         <FormLayoutGroup top="Дополнительная информация">

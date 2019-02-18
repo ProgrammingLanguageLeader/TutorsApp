@@ -86,7 +86,7 @@ class VacancyCreate extends React.Component {
           <Group title="Заполняемые поля">
             <Formik
               render={formikProps =>
-                <VacancyForm { ...formikProps } submitLabel="Создать" />
+                <VacancyForm { ...formikProps } errors={this.state.errors} submitLabel="Создать" />
               }
               enableReinitialize
               onSubmit={ async (values, action) => {

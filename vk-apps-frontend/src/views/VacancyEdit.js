@@ -103,7 +103,7 @@ class VacancyEdit extends React.Component {
               }}
               enableReinitialize
               render={formikProps =>
-                <VacancyForm { ...formikProps } submitLabel="Редактировать" />
+                <VacancyForm { ...formikProps } errors={this.state.errors} submitLabel="Редактировать" />
               }
               onSubmit={ async (values, action) => {
                 const { id } = this.props.vacancy;
