@@ -1,3 +1,4 @@
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.conf import settings
 
@@ -19,7 +20,15 @@ class Vacancy(models.Model):
     olympiads = models.BooleanField(default=False)
     university = models.BooleanField(default=False)
     home_schooling = models.BooleanField(default=False)
-    price = models.IntegerField(blank=False)
+
+    price = models.IntegerField(
+        blank=False,
+        validators=[
+            MinValueValidator(limit_value=1),
+            MaxValueValidator(limit_value=10000),
+        ]
+    )
+
     extra_info = models.TextField(blank=True, max_length=256)
 
     class Meta:
