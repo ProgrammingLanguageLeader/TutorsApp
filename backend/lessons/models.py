@@ -1,6 +1,9 @@
+from datetime import timedelta
+
 from django.db import models
 from django.conf import settings
 from django.utils import timezone
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 
 class Lesson(models.Model):
@@ -14,10 +17,28 @@ class Lesson(models.Model):
         on_delete=models.CASCADE,
         related_name='lesson_student'
     )
-    price = models.IntegerField()
-    beginning_time = models.DateTimeField()
+
+    price = models.IntegerField(
+        validators=[
+            MinValueValidator(limit_value=1),
+            MaxValueValidator(limit_value=10000),
+        ]
+    )
+
+    beginning_time = models.DateTimeField(
+        validators=[
+            MinValueValidator(limit_value=timezone.now()),
+        ]
+    )
+
+    duration = models.DurationField(
+        validators=[
+            MinValueValidator(limit_value=timedelta(minutes=30)),
+            MaxValueValidator(limit_value=timedelta(hours=4)),
+        ]
+    )
+
     ending_time = models.DateTimeField(editable=False)
-    duration = models.DurationField()
     creation_time = models.DateTimeField(auto_now_add=True)
     modification_time = models.DateTimeField(editable=False)
 

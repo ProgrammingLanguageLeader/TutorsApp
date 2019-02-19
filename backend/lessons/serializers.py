@@ -14,7 +14,6 @@ from lessons.models import Lesson
 
 class LessonSerializer(serializers.ModelSerializer):
     tutor = serializers.HiddenField(default=CurrentUserDefault())
-    price = serializers.IntegerField(min_value=0, max_value=10000)
 
     class Meta:
         model = Lesson
