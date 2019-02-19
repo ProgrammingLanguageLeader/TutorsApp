@@ -59,8 +59,8 @@ class Schedule extends React.Component {
 
   getLessonsByDay() {
     const { date } = this.state;
-    const beginning_time__gte = date.startOf('day').format("YYYY-MM-DD HH:mm:ss");
-    const beginning_time__lte = date.endOf('day').format("YYYY-MM-DD HH:mm:ss");
+    const beginning_time__gte = date.clone().startOf('day').utc().format("YYYY-MM-DD HH:mm:ss");
+    const beginning_time__lte = date.clone().endOf('day').utc().format("YYYY-MM-DD HH:mm:ss");
     this.props.getLessonsList({
       beginning_time__gte,
       beginning_time__lte,
