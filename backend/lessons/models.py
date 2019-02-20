@@ -5,6 +5,8 @@ from django.conf import settings
 from django.utils import timezone
 from django.core.validators import MinValueValidator, MaxValueValidator
 
+from lessons.validators import validate_beginning_time
+
 
 class Lesson(models.Model):
     tutor = models.ForeignKey(
@@ -26,9 +28,7 @@ class Lesson(models.Model):
     )
 
     beginning_time = models.DateTimeField(
-        validators=[
-            MinValueValidator(limit_value=timezone.now()),
-        ]
+        validators=[validate_beginning_time, ]
     )
 
     duration = models.DurationField(
