@@ -8,9 +8,16 @@ from vk_apps_users.models import VkAppsUser
 
 
 @receiver(models.signals.post_save, sender=Notification)
-def send_vk_notification_on_creation(sender, instance, created, **kwargs):
+def notification_post_save(sender, instance, created, **kwargs):
+    notifications_limit = 100
+
     if not created:
         return
+    redundant_notifications = Notification.objects.filter(
+        recipient_id=instance.recipient.id
+    ).order_by('-creation_time')[notifications_limit:]
+    for notification in redundant_notifications:
+        notification.delete()
     user_ids = VkAppsUser.objects.filter(
         user_id=instance.recipient.id
     ).values_list('vk_id', flat=True)
