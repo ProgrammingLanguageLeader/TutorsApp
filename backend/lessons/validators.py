@@ -14,7 +14,9 @@ def validate_beginning_time(value):
             _('Ensure this value is greater than '
               'or equal to %s (UTC time).') % (
                 formats.date_format(
-                    hour_half_ago_datetime, "DATETIME_FORMAT", use_l10n=True
+                    hour_half_ago_datetime,
+                    'DATETIME_FORMAT',
+                    use_l10n=True
                 )
             )
         )
@@ -23,7 +25,9 @@ def validate_beginning_time(value):
             _('Ensure this value is less than '
               'or equal to %s (UTC time).') % (
                 formats.date_format(
-                    next_month_datetime, "DATETIME_FORMAT", use_l10n=True
+                    next_month_datetime,
+                    'DATETIME_FORMAT',
+                    use_l10n=True
                 )
             )
         )
