@@ -22,8 +22,10 @@ sudo certbot renew --dry-run
 
 ## Creating a certificate using certbot
 ```bash
-certbot certonly --webroot -w /var/lib/certbot -d tutors-app.ru -d www.tutors-app.ru
+sudo certbot --nginx -d tutors-app.ru -d www.tutors-app.ru
 ```
 
 ## Configuring nginx
-Move the nginx configuration file _**nginx.conf**_ to a directory /etc/nginx/conf.d/ and rename it to default.conf
+Move the nginx configuration file _**nginx.conf**_ to a directory /etc/nginx/conf.d/ and rename it to default.conf.
+
+__*Note*__: the configuration above is intended to be used when the project is located at __*/home/tutors-app/TutorsApp/*__.
