@@ -1,11 +1,14 @@
 import sys
 import os
+import re
 from io import BytesIO
 
 from PIL import Image
 
+from django.utils.translation import ugettext_lazy as _
 from django.contrib.staticfiles.templatetags.staticfiles import static
 from django.contrib.auth.models import AbstractBaseUser
+from django.core.validators import RegexValidator
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db import models
 from django.core.mail import send_mail
@@ -16,20 +19,85 @@ from users.managers import UserManager
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    username = models.CharField('username', max_length=30, unique=True)
-    email = models.EmailField('email address', blank=True)
-    first_name = models.CharField('first name', max_length=30, blank=False)
-    last_name = models.CharField('last name', max_length=30, blank=False)
-    date_joined = models.DateTimeField('date joined', auto_now_add=True)
-    is_active = models.BooleanField('active', default=True)
-    experience = models.TextField(blank=True, max_length=100)
-    education = models.TextField(blank=True, max_length=100)
-    city = models.TextField(blank=True, max_length=50)
-    district = models.TextField(blank=True, max_length=50)
-    street = models.TextField(blank=True, max_length=50)
-    metro_station = models.TextField(blank=True, max_length=50)
-    bio = models.TextField(blank=True, max_length=100)
-    avatar = models.ImageField(upload_to='avatars/', blank=True)
+    username = models.CharField(
+        verbose_name=_('username'),
+        max_length=30,
+        unique=True,
+        validators=[
+            RegexValidator(
+                regex=re.compile(r'^[\w.@+-]{3,30}$'),
+                message=_('Enter a valid value: '
+                          'minimum length is 3, '
+                          'maximum length is 30, '
+                          'alphanumeric characters, '
+                          '_, @, +, - are allowed')
+            ),
+        ]
+
+    )
+
+    email = models.EmailField(
+        verbose_name=_('email address'),
+        blank=True
+    )
+    first_name = models.CharField(
+        verbose_name=_('first name'),
+        max_length=30,
+        blank=False
+    )
+    last_name = models.CharField(
+        verbose_name=_('last name'),
+        max_length=30,
+        blank=False
+    )
+    date_joined = models.DateTimeField(
+        verbose_name=_('date joined'),
+        auto_now_add=True
+    )
+    is_active = models.BooleanField(
+        verbose_name=_('active'),
+        default=True
+    )
+    experience = models.TextField(
+        verbose_name=_('experience'),
+        blank=True,
+        max_length=100
+    )
+    education = models.TextField(
+        verbose_name=_('education'),
+        blank=True,
+        max_length=100
+    )
+    city = models.TextField(
+        verbose_name=_('city'),
+        blank=True,
+        max_length=50
+    )
+    district = models.TextField(
+        verbose_name=_('district'),
+        blank=True,
+        max_length=50
+    )
+    street = models.TextField(
+        verbose_name=_('street'),
+        blank=True,
+        max_length=50
+    )
+    metro_station = models.TextField(
+        verbose_name=_('metro station'),
+        blank=True,
+        max_length=50
+    )
+    bio = models.TextField(
+        blank=True,
+        max_length=100,
+        verbose_name=_('bio')
+    )
+    avatar = models.ImageField(
+        upload_to='avatars/',
+        blank=True,
+        verbose_name=_('avatar')
+    )
 
     objects = UserManager()
 
@@ -38,11 +106,11 @@ class User(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = ('first_name', 'last_name', 'email', )
 
     class Meta:
-        verbose_name = 'user'
-        verbose_name_plural = 'users'
+        verbose_name = _('user')
+        verbose_name_plural = _('users')
 
     def save(self, *args, **kwargs):
-        if self.avatar:
+        if self.avatar and max(self.avatar.height, self.avatar.width) > 200:
             old_file_path = self.avatar.path
             self.avatar = self.compress_avatar(self.avatar)
             if os.path.isfile(old_file_path):

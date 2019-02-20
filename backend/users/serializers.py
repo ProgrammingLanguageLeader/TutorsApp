@@ -1,7 +1,3 @@
-from django.utils.translation import ugettext_lazy as _
-
-import re
-
 from django.contrib.auth import password_validation
 from django.core.exceptions import ValidationError
 
@@ -12,8 +8,6 @@ from users.models import User
 
 
 class UserSerializer(serializers.ModelSerializer):
-    username_regexp = re.compile(r'^[\w.@+-]{3,30}$')
-
     password = serializers.CharField(style={
         'input_type': 'password'
     })
@@ -50,12 +44,6 @@ class UserSerializer(serializers.ModelSerializer):
         instance.set_password(password)
         instance.save()
         return instance
-
-    def validate_username(self, username):
-        regexp_search = self.username_regexp.search(username)
-        if not regexp_search:
-            raise serializers.ValidationError(_('This field is not correct'))
-        return username
 
     def validate_password(self, password):
         try:
