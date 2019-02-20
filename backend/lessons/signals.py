@@ -14,6 +14,12 @@ def send_notification_on_lesson_creation(
     created,
     **kwargs
 ):
+    if not created:
+        Notification.objects.filter(
+            target_content_type=ContentType.objects.get_for_model(instance),
+            target_object_id=instance.id,
+            verb='lesson update'
+        ).delete()
     Notification.objects.create(
         sender=instance.tutor,
         recipient=instance.student,
