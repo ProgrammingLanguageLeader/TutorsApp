@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-20 01:11+0000\n"
+"POT-Creation-Date: 2019-02-20 02:26+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,15 +27,13 @@ msgstr "пользователь не существует в списке ст�
 msgid "lesson timing has collisions with other lessons"
 msgstr "время занятия пересекается с другими уроками"
 
-#: lessons/validators.py:13
-#, python-format
-msgid "Ensure this value is greater than or equal to %s."
-msgstr "Убедитесь, что значение больше или равно, чем %s."
+#: lessons/validators.py:14
+msgid "Ensure this value is greater than or equal to %s (UTC time)."
+msgstr "Убедитесь, что значение больше или равно, чем %s (время по Гринвичу)."
 
-#: lessons/validators.py:18
-#, python-format
-msgid "Ensure this value is less than or equal to %s."
-msgstr "Убедитесь, что значение меньше или равно, чем %s."
+#: lessons/validators.py:23
+msgid "Ensure this value is less than or equal to %s (UTC time)."
+msgstr "Убедитесь, что значение меньше или равно, чем %s (время по Гринвичу)."
 
 #: notifications/tasks.py:21
 msgid "You have unread notifications"
