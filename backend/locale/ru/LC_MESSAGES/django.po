@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-19 23:45+0000\n"
+"POT-Creation-Date: 2019-02-20 01:11+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,6 +27,16 @@ msgstr "пользователь не существует в списке ст�
 msgid "lesson timing has collisions with other lessons"
 msgstr "время занятия пересекается с другими уроками"
 
+#: lessons/validators.py:13
+#, python-format
+msgid "Ensure this value is greater than or equal to %s."
+msgstr "Убедитесь, что значение больше или равно, чем %s."
+
+#: lessons/validators.py:18
+#, python-format
+msgid "Ensure this value is less than or equal to %s."
+msgstr "Убедитесь, что значение меньше или равно, чем %s."
+
 #: notifications/tasks.py:21
 msgid "You have unread notifications"
 msgstr "У Вас есть непрочитанные уведомления"
@@ -39,77 +49,77 @@ msgstr "учитель не должен быть равен студенту"
 msgid "student already exists in a list of students"
 msgstr "студент уже существует в списке учеников"
 
-#: users/models.py:22
+#: users/apps.py:7 users/models.py:110
+msgid "users"
+msgstr "пользователи"
+
+#: users/models.py:23
 msgid "username"
 msgstr "имя пользователя"
 
-#: users/models.py:28
+#: users/models.py:29
 msgid ""
 "Enter a valid value: minimum length is 3, maximum length is 30, alphanumeric "
 "characters, _, @, +, - are allowed"
 msgstr ""
-"Введите корректное значение: минимальная длина - 3, максимальная - 30, разрешается "
-"использовать символы латинского алфавита, _, @, +, -"
+"Введите корректное значение: минимальная длина - 3, максимальная - 30, "
+"разрешается использовать символы латинского алфавита, _, @, +, -"
 
-#: users/models.py:39
+#: users/models.py:40
 msgid "email address"
 msgstr "email адрес"
 
-#: users/models.py:43
+#: users/models.py:44
 msgid "first name"
 msgstr "имя"
 
-#: users/models.py:48
+#: users/models.py:49
 msgid "last name"
 msgstr "фамилия"
 
-#: users/models.py:53
+#: users/models.py:54
 msgid "date joined"
 msgstr "дата регистрации"
 
-#: users/models.py:57
+#: users/models.py:58
 msgid "active"
 msgstr "активный"
 
-#: users/models.py:61
+#: users/models.py:62
 msgid "experience"
 msgstr "опыт"
 
-#: users/models.py:66
+#: users/models.py:67
 msgid "education"
 msgstr "образование"
 
-#: users/models.py:71
+#: users/models.py:72
 msgid "city"
 msgstr "город"
 
-#: users/models.py:76
+#: users/models.py:77
 msgid "district"
 msgstr "район"
 
-#: users/models.py:81
+#: users/models.py:82
 msgid "street"
 msgstr "улица"
 
-#: users/models.py:86
+#: users/models.py:87
 msgid "metro station"
 msgstr "станция метро"
 
-#: users/models.py:93
+#: users/models.py:94
 msgid "bio"
 msgstr "о себе"
 
-#: users/models.py:98
+#: users/models.py:99
 msgid "avatar"
 msgstr "аватар"
 
-#: users/models.py:108
+#: users/models.py:109
 msgid "user"
 msgstr "пользователь"
-
-#: users/models.py:109
-msgid "users"
-msgstr "пользователи"
 
 #: utils/exception_handler.py:12
 msgid "vacations limit exceeded"
