@@ -60,7 +60,6 @@ class VacancyForm extends React.Component {
           <Select
             name="select_subject"
             value={selectSubject}
-            status={errors.data && errors.data["subject"] && "error"}
             placeholder="Выберите предмет"
             onChange={event => {
               setFieldValue("subject", event.currentTarget.value);
@@ -87,7 +86,6 @@ class VacancyForm extends React.Component {
             type="text"
             placeholder="Введите название предмета"
             value={inputSubject}
-            status={errors.data && errors.data["subject"] && "error"}
             onChange={event => {
               setFieldValue("subject", event.currentTarget.value);
               this.setState({
@@ -129,7 +127,6 @@ class VacancyForm extends React.Component {
             type="number"
             onChange={handleChange}
             value={String(values.price || '')}
-            status={errors.data && errors.data["price"] && "error"}
           />
           {errors.data && errors.data["price"] && (
             <ErrorMessageDiv>{errors.data["price"]}</ErrorMessageDiv>

@@ -7,14 +7,6 @@ a {
     align-items: flex-start;
 }
 
-select[status="error"] + .Select__container {
-    border: solid 1px var(--field_error_border);
-}
-
-.Input--s-error .Input__border {
-    border-color: var(--field_error_border);
-}
-
 .rdtPicker {
     border: 1px solid var(--field_border);
     border-radius: 10px;

@@ -52,7 +52,6 @@ class LessonForm extends React.Component {
             value={values.student}
             placeholder="Выберите ученика"
             onChange={handleChange}
-            status={errors.data && errors.data["student"] && "error"}
           >
             { students.map(student => (
               <option value={student.id} key={student.id}>
@@ -105,7 +104,6 @@ class LessonForm extends React.Component {
             type="number"
             onChange={handleChange}
             value={String(values.price)}
-            status={errors.data && errors.data["price"] && "error"}
           />
           {errors.data && errors.data["price"] && (
             <ErrorMessageDiv>{errors.data["price"]}</ErrorMessageDiv>
