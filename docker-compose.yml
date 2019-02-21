@@ -23,7 +23,7 @@ services:
       - postgres-volume:/var/lib/postgresql/data
     expose: 
       - "5432"
-    env_file: .env
+    env_file: docker/.env
 
   redis:
     image: redis:alpine
