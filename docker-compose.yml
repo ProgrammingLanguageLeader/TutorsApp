@@ -1,55 +1,48 @@
 version: "3"
 
 services:
+  nginx:
+    image: nginx:alpine
+    restart: always
+    volumes:
+      - ./vk-apps-frontend/build:/opt/services/vk-apps-frontend/build
+      - backend-volume:/opt/services/backend/
+      - ./docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./docker/nginx/nginx.crt:/etc/nginx/ssl/nginx.crt
+      - ./docker/nginx/nginx.key:/etc/nginx/ssl/nginx.key
+    ports:
+      - "443:443"
+      - "80:80"
+    depends_on: 
+      - backend
+
+  postgres:
+    image: postgres:alpine
+    restart: always
+    volumes:
+      - postgres-volume:/var/lib/postgresql/data
+    expose: 
+      - "5432"
+    env_file: .env
+
+  redis:
+    image: redis:alpine
+    restart: always
+    expose:
+      - "6379"
+
   backend:
     container_name: backend
     restart: always
     build: ./backend/
     volumes:
-      - backend-staticfiles:/opt/services/backend/staticfiles
-      - backend-media:/opt/services/backend/media
-    command: ["sh", "./entrypoint.sh"]
+      - backend-volume:/backend
     expose: 
       - "8000"
     depends_on:
       - postgres
-
-  vk-apps-frontend:
-    container_name: vk-apps-frontend
-    build: vk-apps-frontend/
-    volumes:
-      - vk-apps-frontend-build:/opt/services/vk-apps-frontend/build
-
-  nginx:
-    container_name: nginx
-    restart: always
-    build: ./docker/nginx/
-    ports:
-      - 80:80
-    volumes:
-      - backend-staticfiles:/var/www/backend/staticfiles
-      - backend-media:/var/www/backend/media
-      - vk-apps-frontend-build:/var/www/vk-apps-frontend
-    depends_on: 
-      - backend
-      - vk-apps-frontend
-
-  postgres:
-    container_name: postgres
-    restart: always
-    image: postgres:alpine
-    volumes:
-      - postgres-config:/etc/postgresql
-      - postgres-log:/var/log/postgresql
-      - postgres-db:/var/lib/postgresql
-    expose: 
-      - "5432"
-    env_file: .env
+      - redis
 
 volumes:
-  backend-staticfiles:
-  backend-media:
-  vk-apps-frontend-build:
-  postgres-config:
-  postgres-log:
-  postgres-db:
+  backend-volume:
+  postgres-volume:

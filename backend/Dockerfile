@@ -1,24 +1,18 @@
-FROM python:3-alpine
+FROM python:3.6-slim
 
 ENV PYTHONUNBUFFERED 1
 
-RUN mkdir -p /opt/services/backend
-WORKDIR /opt/services/backend
-
-RUN apk add --no-cache \ 
-        postgresql-libs \ 
-        python-dev \ 
-        py-pip \ 
-        jpeg-dev \ 
-        zlib-dev \ 
-        gcc \ 
-        musl-dev \ 
-        postgresql-dev
-
-RUN pip install --upgrade pip
+COPY . /backend/
+WORKDIR /backend
 RUN pip install pipenv
-COPY Pipfile Pipfile.lock /opt/services/backend/
 RUN pipenv install --system
 
-COPY . /opt/services/backend/
-RUN python manage.py collectstatic --no-input
+CMD python manage.py collectstatic --no-input; \
+    echo "Sleeping 10 seconds..."; \
+    sleep 10s; \
+    python manage.py migrate --no-input; \
+    gunicorn \
+        backend_project.wsgi:application \ 
+        -w 4 \
+        --bind unix:/backend/backend.sock \
+    & celery -A backend_project worker -l info -B

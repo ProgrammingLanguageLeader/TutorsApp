@@ -1,10 +1,2 @@
-.env
 .idea/
 .vscode/
-backups/
-staticfiles/
-build/
-*.pem
-*.crt
-*.key
-

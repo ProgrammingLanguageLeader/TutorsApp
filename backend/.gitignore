@@ -8,3 +8,4 @@ settings.ini
 staticfiles/
 media/
 celerybeat-schedule
+celeryd.pid
