@@ -6,18 +6,10 @@ An application for convinient interaction between tutors and students
 ## Structure
 - backend - Django project that provides server API
 - vk-apps-frontend - module for the client view of the application in "VK Apps" platform
+- docs - the project documentation
+- docker - files used by Docker
 
 ## Deploying the application using Docker Compose
-
-You need to create a file __*.env*__ to configure a Postgres database. 
-
-Example configuration file:
-```
-# postgres settings
-POSTGRES_USER=<POSTGRES USER NAME>
-POSTGRES_PASSWORD=<POSTGRES PASSWORD>
-POSTGRES_DB=<POSTGRES DATABASE NAME>
-```
 
 Running service:
 ```bash
