@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-22 22:52+0000\n"
+"POT-Creation-Date: 2019-02-22 23:10+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -31,7 +31,7 @@ msgstr "учитель"
 msgid "student"
 msgstr "ученик"
 
-#: lessons/models.py:31
+#: lessons/models.py:31 vacancies/models.py:67
 msgid "price"
 msgstr "цена"
 
@@ -47,7 +47,7 @@ msgstr "длительность"
 msgid "ending time"
 msgstr "время окончания"
 
-#: lessons/models.py:53 tutors/models.py:46
+#: lessons/models.py:53 tutors/models.py:46 vacancies/models.py:10
 msgid "creation time"
 msgstr "время создания"
 
@@ -213,7 +213,7 @@ msgstr "фамилия"
 msgid "date joined"
 msgstr "дата регистрации"
 
-#: users/models.py:59
+#: users/models.py:59 vacancies/models.py:20
 msgid "active"
 msgstr "активный"
 
@@ -260,3 +260,59 @@ msgstr "пользователи"
 #: utils/exception_handler.py:12
 msgid "vacations limit exceeded"
 msgstr "достигнуто ограничение по количеству предложений"
+
+#: vacancies/apps.py:7
+msgid "Vacancies"
+msgstr "Предложения"
+
+#: vacancies/models.py:16
+msgid "owner"
+msgstr "владелец"
+
+#: vacancies/models.py:25
+msgid "subject"
+msgstr "предмет"
+
+#: vacancies/models.py:30
+msgid "ege"
+msgstr "ЕГЭ"
+
+#: vacancies/models.py:34
+msgid "oge"
+msgstr "ОГЭ"
+
+#: vacancies/models.py:38
+msgid "foreign language certificate"
+msgstr "сертификат о знании иностранного языка"
+
+#: vacancies/models.py:42
+msgid "primary school"
+msgstr "начальная школа"
+
+#: vacancies/models.py:46
+msgid "secondary school"
+msgstr "средняя школа"
+
+#: vacancies/models.py:50
+msgid "olympiads"
+msgstr "олимпиады"
+
+#: vacancies/models.py:54
+msgid "university"
+msgstr "университет"
+
+#: vacancies/models.py:58
+msgid "home schooling"
+msgstr "выезд на дом"
+
+#: vacancies/models.py:73
+msgid "extra info"
+msgstr "дополнительная информация"
+
+#: vacancies/models.py:77
+msgid "vacancy"
+msgstr "предложение"
+
+#: vacancies/models.py:78
+msgid "vacancies"
+msgstr "предложения"

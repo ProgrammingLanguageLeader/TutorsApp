@@ -1,37 +1,79 @@
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.conf import settings
+from django.utils.translation import ugettext_lazy as _
 
 
 class Vacancy(models.Model):
-    creation_time = models.DateTimeField(auto_now_add=True)
+    creation_time = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name=_('creation time')
+    )
     owner = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name='vacancy_owner'
+        related_name='vacancy_owner',
+        verbose_name=_('owner')
     )
-    is_active = models.BooleanField(default=True)
-    subject = models.CharField(max_length=128)
-    ege = models.BooleanField(default=False)
-    oge = models.BooleanField(default=False)
-    foreign_lang_cert = models.BooleanField(default=False)
-    primary_school = models.BooleanField(default=False)
-    secondary_school = models.BooleanField(default=False)
-    olympiads = models.BooleanField(default=False)
-    university = models.BooleanField(default=False)
-    home_schooling = models.BooleanField(default=False)
+    is_active = models.BooleanField(
+        default=True,
+        verbose_name=_('active')
+    )
+
+    subject = models.CharField(
+        max_length=128,
+        verbose_name=_('subject')
+    )
+
+    ege = models.BooleanField(
+        default=False,
+        verbose_name=_('ege')
+    )
+    oge = models.BooleanField(
+        default=False,
+        verbose_name=_('oge')
+    )
+    foreign_lang_cert = models.BooleanField(
+        default=False,
+        verbose_name=_('foreign language certificate')
+    )
+    primary_school = models.BooleanField(
+        default=False,
+        verbose_name=_('primary school')
+    )
+    secondary_school = models.BooleanField(
+        default=False,
+        verbose_name=_('secondary school')
+    )
+    olympiads = models.BooleanField(
+        default=False,
+        verbose_name=_('olympiads')
+    )
+    university = models.BooleanField(
+        default=False,
+        verbose_name=_('university')
+    )
+    home_schooling = models.BooleanField(
+        default=False,
+        verbose_name=_('home schooling')
+    )
 
     price = models.IntegerField(
         blank=False,
         validators=[
             MinValueValidator(limit_value=1),
             MaxValueValidator(limit_value=10000),
-        ]
+        ],
+        verbose_name=_('price')
     )
 
-    extra_info = models.TextField(blank=True, max_length=256)
+    extra_info = models.TextField(
+        blank=True,
+        max_length=256,
+        verbose_name=_('extra info')
+    )
 
     class Meta:
-        verbose_name = 'Vacancy'
-        verbose_name_plural = 'Vacancies'
+        verbose_name = _('vacancy')
+        verbose_name_plural = _('vacancies')
         ordering = ('-id', )
