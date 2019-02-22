@@ -1,0 +1,38 @@
+{% extends 'admin/base_site.html' %}
+
+{% load static %}
+{% load i18n %}
+
+{% block extrahead %}
+    <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/admin/base_site.css' %}"/>
+{% endblock %}
+
+{% block userlinks %}
+    <form action="{% url 'set_language' %}" method="post" class="switch-lang-form">
+        {% csrf_token %}
+        <input name="language" type="hidden" value="ru">
+        <input type="submit" value="" class="switch-lang-button switch-lang-ru">
+    </form> /
+    <form action="{% url 'set_language' %}" method="post" class="switch-lang-form">
+        {% csrf_token %}
+        <input name="language" type="hidden" value="en">
+        <input type="submit" value="" class="switch-lang-button switch-lang-en">
+    </form> /
+    {% if user.is_active and user.is_staff %}
+        {% url 'django-admindocs-docroot' as docs_root %}
+        {% if docsroot %}
+            <a href="{{ docs_root }}">
+              {% trans 'Documentation' %}
+            </a> /
+        {% endif %}
+    {% endif %}
+    {% if user.has_usable_password %}
+        <a href="{% url 'admin:password_change' %}">
+          {% trans 'Change password' %}
+        </a> /
+    {% endif %}
+    <a href="{% url 'admin:logout' %}">
+      {% trans 'Log out' %}
+    </a>
+{% endblock %}
