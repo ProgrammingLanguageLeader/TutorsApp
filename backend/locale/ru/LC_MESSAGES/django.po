@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-22 16:08+0000\n"
+"POT-Creation-Date: 2019-02-22 21:49+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -41,6 +41,18 @@ msgstr "Убедитесь, что значение меньше или равн
 msgid "You have unread notifications"
 msgstr "У Вас есть непрочитанные уведомления"
 
+#: templates/admin/base_site.html:9
+msgid "Tutors App administration"
+msgstr "Администрирование Tutors App"
+
+#: templates/admin/base_site.html:31
+msgid "Change password"
+msgstr "Изменить пароль"
+
+#: templates/admin/base_site.html:35
+msgid "Log out"
+msgstr "Выйти"
+
 #: tutors/serializers.py:30
 msgid "tutor must not be equal to student"
 msgstr "учитель не должен быть равен студенту"
@@ -48,6 +60,10 @@ msgstr "учитель не должен быть равен студенту"
 #: tutors/serializers.py:37
 msgid "student already exists in a list of students"
 msgstr "студент уже существует в списке учеников"
+
+#: users/admin.py:29
+msgid "full name"
+msgstr "Полное имя"
 
 #: users/apps.py:7
 msgid "Users"
@@ -77,51 +93,55 @@ msgstr "имя"
 msgid "last name"
 msgstr "фамилия"
 
-#: users/models.py:54
+#: users/models.py:55
 msgid "date joined"
 msgstr "дата регистрации"
 
-#: users/models.py:58
+#: users/models.py:59
 msgid "active"
 msgstr "активный"
 
-#: users/models.py:62
+#: users/models.py:63
+msgid "staff"
+msgstr "сотрудник"
+
+#: users/models.py:68
 msgid "experience"
 msgstr "опыт"
 
-#: users/models.py:67
+#: users/models.py:73
 msgid "education"
 msgstr "образование"
 
-#: users/models.py:72
+#: users/models.py:78
 msgid "city"
 msgstr "город"
 
-#: users/models.py:77
+#: users/models.py:83
 msgid "district"
 msgstr "район"
 
-#: users/models.py:82
+#: users/models.py:88
 msgid "street"
 msgstr "улица"
 
-#: users/models.py:87
+#: users/models.py:93
 msgid "metro station"
 msgstr "станция метро"
 
-#: users/models.py:94
+#: users/models.py:100
 msgid "bio"
 msgstr "о себе"
 
-#: users/models.py:99
+#: users/models.py:105
 msgid "avatar"
 msgstr "аватар"
 
-#: users/models.py:109
+#: users/models.py:115
 msgid "user"
 msgstr "пользователь"
 
-#: users/models.py:110
+#: users/models.py:116
 msgid "users"
 msgstr "пользователи"
 
