@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-22 22:03+0000\n"
+"POT-Creation-Date: 2019-02-22 22:17+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -76,6 +76,42 @@ msgstr "Убедитесь, что значение больше или равн
 #, python-format
 msgid "Ensure this value is less than or equal to %s (UTC time)."
 msgstr "Убедитесь, что значение меньше или равно, чем %s (время по Гринвичу)."
+
+#: notifications/apps.py:7 notifications/models.py:52
+msgid "Notifications"
+msgstr "Уведомления"
+
+#: notifications/models.py:16
+msgid "sender"
+msgstr "отправитель"
+
+#: notifications/models.py:22
+msgid "recipient"
+msgstr "получатель"
+
+#: notifications/models.py:26
+msgid "verb"
+msgstr "глагол"
+
+#: notifications/models.py:35
+msgid "target content type"
+msgstr "тип целевого объекта"
+
+#: notifications/models.py:40
+msgid "target object id"
+msgstr "id целевого объекта"
+
+#: notifications/models.py:43
+msgid "target"
+msgstr "цель"
+
+#: notifications/models.py:47
+msgid "unread"
+msgstr "не прочитано"
+
+#: notifications/models.py:51
+msgid "Notification"
+msgstr "Уведомление"
 
 #: notifications/tasks.py:21
 msgid "You have unread notifications"
