@@ -40,6 +40,7 @@ urlpatterns = [
     ),
     path('api/', swagger_schema_view),
     path('api/', include(api_urlpatterns)),
+    path('i18n/', include('django.conf.urls.i18n')),
 ]
 
 if DEBUG:
