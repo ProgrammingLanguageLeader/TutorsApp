@@ -1,3 +1,4 @@
+from django.utils.translation import ugettext_lazy as _
 from django.contrib import admin
 
 from tutors.models import TutorStudents, StudentRequest
@@ -9,6 +10,11 @@ class TutorStudentsAdmin(admin.ModelAdmin):
         'user',
         'students_count',
     )
+
+    def students_count(self, instance):
+        return instance.count_students()
+
+    students_count.short_description = _('students count')
 
 
 @admin.register(StudentRequest)

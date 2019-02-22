@@ -58,8 +58,8 @@ class Lesson(models.Model):
     )
 
     class Meta:
-        verbose_name = _('Lesson')
-        verbose_name_plural = _('Lessons')
+        verbose_name = _('lesson')
+        verbose_name_plural = _('lessons')
         ordering = ('-id', )
 
     def save(self, force_insert=False, force_update=False, using=None,

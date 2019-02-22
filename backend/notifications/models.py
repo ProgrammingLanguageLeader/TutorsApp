@@ -48,6 +48,6 @@ class Notification(models.Model):
     )
 
     class Meta:
-        verbose_name = _('Notification')
-        verbose_name_plural = _('Notifications')
+        verbose_name = _('notification')
+        verbose_name_plural = _('notifications')
         ordering = ('-id', )

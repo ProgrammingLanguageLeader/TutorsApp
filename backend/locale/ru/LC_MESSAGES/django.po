@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-22 22:17+0000\n"
+"POT-Creation-Date: 2019-02-22 22:52+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,15 +19,15 @@ msgstr ""
 "%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n"
 "%100>=11 && n%100<=14)? 2 : 3);\n"
 
-#: lessons/apps.py:7 lessons/models.py:62
+#: lessons/apps.py:7
 msgid "Lessons"
 msgstr "Уроки"
 
-#: lessons/models.py:17
+#: lessons/models.py:17 tutors/models.py:42
 msgid "tutor"
 msgstr "учитель"
 
-#: lessons/models.py:23
+#: lessons/models.py:23 tutors/models.py:36
 msgid "student"
 msgstr "ученик"
 
@@ -47,7 +47,7 @@ msgstr "длительность"
 msgid "ending time"
 msgstr "время окончания"
 
-#: lessons/models.py:53
+#: lessons/models.py:53 tutors/models.py:46
 msgid "creation time"
 msgstr "время создания"
 
@@ -56,8 +56,12 @@ msgid "modification time"
 msgstr "время изменения"
 
 #: lessons/models.py:61
-msgid "Lesson"
-msgstr "Урок"
+msgid "lesson"
+msgstr "урок"
+
+#: lessons/models.py:62
+msgid "lessons"
+msgstr "уроки"
 
 #: lessons/serializers.py:32
 msgid "user does not exist is a list of students"
@@ -77,7 +81,7 @@ msgstr "Убедитесь, что значение больше или равн
 msgid "Ensure this value is less than or equal to %s (UTC time)."
 msgstr "Убедитесь, что значение меньше или равно, чем %s (время по Гринвичу)."
 
-#: notifications/apps.py:7 notifications/models.py:52
+#: notifications/apps.py:7
 msgid "Notifications"
 msgstr "Уведомления"
 
@@ -110,8 +114,12 @@ msgid "unread"
 msgstr "не прочитано"
 
 #: notifications/models.py:51
-msgid "Notification"
-msgstr "Уведомление"
+msgid "notification"
+msgstr "уведомление"
+
+#: notifications/models.py:52
+msgid "notifications"
+msgstr "уведомления"
 
 #: notifications/tasks.py:21
 msgid "You have unread notifications"
@@ -128,6 +136,38 @@ msgstr "Изменить пароль"
 #: templates/admin/base_site.html:35
 msgid "Log out"
 msgstr "Выйти"
+
+#: tutors/admin.py:17
+msgid "students count"
+msgstr "количество учеников"
+
+#: tutors/apps.py:7
+msgid "Tutors"
+msgstr "Учителя"
+
+#: tutors/models.py:12 users/models.py:115
+msgid "user"
+msgstr "пользователь"
+
+#: tutors/models.py:17
+msgid "students"
+msgstr "ученики"
+
+#: tutors/models.py:24
+msgid "tutor's students"
+msgstr "ученики учителя"
+
+#: tutors/models.py:25
+msgid "tutors' students"
+msgstr "ученики учителей"
+
+#: tutors/models.py:50
+msgid "student request"
+msgstr "запрос от ученика"
+
+#: tutors/models.py:51
+msgid "students requests"
+msgstr "запросы от учеников"
 
 #: tutors/serializers.py:30
 msgid "tutor must not be equal to student"
@@ -212,10 +252,6 @@ msgstr "о себе"
 #: users/models.py:105
 msgid "avatar"
 msgstr "аватар"
-
-#: users/models.py:115
-msgid "user"
-msgstr "пользователь"
 
 #: users/models.py:116
 msgid "users"
