@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-22 23:10+0000\n"
+"POT-Creation-Date: 2019-02-22 23:17+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -145,7 +145,7 @@ msgstr "количество учеников"
 msgid "Tutors"
 msgstr "Учителя"
 
-#: tutors/models.py:12 users/models.py:115
+#: tutors/models.py:12 users/models.py:115 vk_apps_users/models.py:17
 msgid "user"
 msgstr "пользователь"
 
@@ -316,3 +316,15 @@ msgstr "предложение"
 #: vacancies/models.py:78
 msgid "vacancies"
 msgstr "предложения"
+
+#: vk_apps_users/apps.py:7 vk_apps_users/models.py:22
+msgid "VK Apps Users"
+msgstr "VK Apps пользователи"
+
+#: vk_apps_users/models.py:12
+msgid "VK ID"
+msgstr "ID ВКонтакте"
+
+#: vk_apps_users/models.py:21
+msgid "VK Apps User"
+msgstr "VK Apps пользователь"
