@@ -3,6 +3,13 @@
 {% load static %}
 {% load i18n %}
 
+{% block branding %}
+    <h1 id="head">
+        <img class="brand_img" src="{% static 'img/logo.png' %}" alt="Tutors App Logo" height="50" width="50">
+        {% trans 'Tutors App administration' %}
+    </h1>
+{% endblock branding %}
+
 {% block extrahead %}
     <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/admin/base_site.css' %}"/>
@@ -19,14 +26,6 @@
         <input name="language" type="hidden" value="en">
         <input type="submit" value="" class="switch-lang-button switch-lang-en">
     </form> /
-    {% if user.is_active and user.is_staff %}
-        {% url 'django-admindocs-docroot' as docs_root %}
-        {% if docsroot %}
-            <a href="{{ docs_root }}">
-              {% trans 'Documentation' %}
-            </a> /
-        {% endif %}
-    {% endif %}
     {% if user.has_usable_password %}
         <a href="{% url 'admin:password_change' %}">
           {% trans 'Change password' %}
