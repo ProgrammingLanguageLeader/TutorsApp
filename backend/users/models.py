@@ -50,6 +50,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         max_length=30,
         blank=False
     )
+
     date_joined = models.DateTimeField(
         verbose_name=_('date joined'),
         auto_now_add=True
@@ -58,6 +59,11 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name=_('active'),
         default=True
     )
+    is_staff = models.BooleanField(
+        verbose_name=_('staff'),
+        default=False
+    )
+
     experience = models.TextField(
         verbose_name=_('experience'),
         blank=True,
@@ -133,14 +139,10 @@ class User(AbstractBaseUser, PermissionsMixin):
             None
         )
 
-    @property
-    def is_staff(self):
-        return self.is_superuser
-
-    @property
-    def full_name(self):
+    def get_full_name(self):
         return ('%s %s' % (self.first_name, self.last_name)).strip()
 
+    # TODO: implement mailing using Celery
     def email_user(self, subject, message, from_email=None, **kwargs):
         send_mail(subject, message, from_email, [self.email], **kwargs)
 

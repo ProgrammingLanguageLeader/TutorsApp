@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.utils.translation import ugettext_lazy as _
 
 from users.models import User
 
@@ -21,3 +22,8 @@ class UserAdmin(admin.ModelAdmin):
         'username',
         'email',
     )
+
+    def full_name(self, instance):
+        return instance.get_full_name()
+
+    full_name.short_description = _('full name')
