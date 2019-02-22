@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-20 02:26+0000\n"
+"POT-Creation-Date: 2019-02-22 16:08+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,10 +28,12 @@ msgid "lesson timing has collisions with other lessons"
 msgstr "время занятия пересекается с другими уроками"
 
 #: lessons/validators.py:14
+#, python-format
 msgid "Ensure this value is greater than or equal to %s (UTC time)."
 msgstr "Убедитесь, что значение больше или равно, чем %s (время по Гринвичу)."
 
-#: lessons/validators.py:23
+#: lessons/validators.py:25
+#, python-format
 msgid "Ensure this value is less than or equal to %s (UTC time)."
 msgstr "Убедитесь, что значение меньше или равно, чем %s (время по Гринвичу)."
 
@@ -47,9 +49,9 @@ msgstr "учитель не должен быть равен студенту"
 msgid "student already exists in a list of students"
 msgstr "студент уже существует в списке учеников"
 
-#: users/apps.py:7 users/models.py:110
-msgid "users"
-msgstr "пользователи"
+#: users/apps.py:7
+msgid "Users"
+msgstr "Пользователи"
 
 #: users/models.py:23
 msgid "username"
@@ -118,6 +120,10 @@ msgstr "аватар"
 #: users/models.py:109
 msgid "user"
 msgstr "пользователь"
+
+#: users/models.py:110
+msgid "users"
+msgstr "пользователи"
 
 #: utils/exception_handler.py:12
 msgid "vacations limit exceeded"
