@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-22 23:17+0000\n"
+"POT-Creation-Date: 2019-02-23 23:00+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -71,15 +71,13 @@ msgstr "пользователь не существует в списке ст�
 msgid "lesson timing has collisions with other lessons"
 msgstr "время занятия пересекается с другими уроками"
 
-#: lessons/validators.py:14
-#, python-format
-msgid "Ensure this value is greater than or equal to %s (UTC time)."
-msgstr "Убедитесь, что значение больше или равно, чем %s (время по Гринвичу)."
+#: lessons/validators.py:13
+msgid "Ensure this value is greater than or equal to"
+msgstr "Убедитесь, что значение больше или равно, чем"
 
-#: lessons/validators.py:25
-#, python-format
-msgid "Ensure this value is less than or equal to %s (UTC time)."
-msgstr "Убедитесь, что значение меньше или равно, чем %s (время по Гринвичу)."
+#: lessons/validators.py:18
+msgid "Ensure this value is less than or equal to"
+msgstr "Убедитесь, что значение меньше или равно, чем"
 
 #: notifications/apps.py:7
 msgid "Notifications"
@@ -169,11 +167,15 @@ msgstr "запрос от ученика"
 msgid "students requests"
 msgstr "запросы от учеников"
 
-#: tutors/serializers.py:30
+#: tutors/serializers.py:33
+msgid "student request already exists"
+msgstr "запрос от ученика уже существует"
+
+#: tutors/serializers.py:41
 msgid "tutor must not be equal to student"
 msgstr "учитель не должен быть равен студенту"
 
-#: tutors/serializers.py:37
+#: tutors/serializers.py:46
 msgid "student already exists in a list of students"
 msgstr "студент уже существует в списке учеников"
 
