@@ -48,3 +48,7 @@ div.breadcrumbs {
 .change-list .filtered {
     min-height: auto;
 }
+
+#recent-actions-module {
+    padding-bottom: 5px;
+}
