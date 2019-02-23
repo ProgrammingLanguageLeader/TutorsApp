@@ -2,11 +2,15 @@ version: "3"
 
 services:
   nginx:
-    image: nginx:alpine
     restart: always
+    build: 
+      context: ./
+      dockerfile: ./docker/nginx/Dockerfile
     volumes:
-      - ./vk-apps-frontend/build:/opt/services/vk-apps-frontend/build
-      - backend-volume:/opt/services/backend/
+      - vk-apps-frontend-build:/opt/services/vk-apps-frontend/build
+      - backend-media:/opt/services/backend/media
+      - backend-staticfiles:/opt/services/backend/staticfiles
+      - backend-socket:/opt/services/backend/socket
       - ./docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
       - ./docker/nginx/nginx.crt:/etc/nginx/ssl/nginx.crt
       - ./docker/nginx/nginx.key:/etc/nginx/ssl/nginx.key
@@ -36,7 +40,9 @@ services:
     restart: always
     build: ./backend/
     volumes:
-      - backend-volume:/backend
+      - backend-media:/backend/media
+      - backend-staticfiles:/backend/staticfiles
+      - backend-socket:/backend/socket
     expose: 
       - "8000"
     depends_on:
@@ -44,5 +50,8 @@ services:
       - redis
 
 volumes:
-  backend-volume:
+  backend-media:
+  backend-staticfiles:
+  backend-socket:
+  vk-apps-frontend-build:
   postgres-volume:
