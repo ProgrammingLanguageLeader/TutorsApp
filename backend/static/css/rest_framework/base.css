@@ -1,0 +1,16 @@
+.navbar-brand {
+    padding: 0 15px;
+}
+
+.navbar-brand > img {
+    display: inline-block;
+}
+
+form + form {
+    padding-left: 5px;
+}
+
+.form-inline {
+    padding-top: 15px;
+    padding-bottom: 15px;
+}

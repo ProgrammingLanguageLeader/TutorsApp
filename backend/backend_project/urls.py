@@ -38,7 +38,7 @@ urlpatterns = [
             permanent=False
         ),
     ),
-    path('api/', swagger_schema_view),
+    path('api/', swagger_schema_view, name='global-api-root'),
     path('api/', include(api_urlpatterns)),
     path('i18n/', include('django.conf.urls.i18n')),
 ]

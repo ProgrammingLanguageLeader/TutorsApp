@@ -9,6 +9,10 @@ REST_FRAMEWORK = {
         'vk_apps_users.authentication.VkAppsAuthBackend',
     ),
 
+    'DEFAULT_VERSIONING_CLASS':
+        'rest_framework.versioning.QueryParameterVersioning',
+    'DEFAULT_VERSION': '1.0',
+
     'DEFAULT_FILTER_BACKENDS': (
         'django_filters.rest_framework.DjangoFilterBackend',
     ),

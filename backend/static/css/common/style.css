@@ -1,0 +1,17 @@
+input.switch-lang-button[type=submit] {
+    padding: 0;
+    width: 25px;
+    border-width: 0;
+}
+
+input.switch-lang-ru[type=submit] {
+    background: url("../../img/flag_russia_16.png") no-repeat;
+}
+
+input.switch-lang-en[type=submit] {
+    background: url("../../img/flag_united_kingdom_16.png") no-repeat;
+}
+
+.switch-lang-form {
+    display: inline-block;
+}
