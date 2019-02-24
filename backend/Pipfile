@@ -23,7 +23,6 @@ urllib3 = "*"
 django = "*"
 jinja2 = "*"
 markupsafe = "*"
-pyyaml = "*"
 pillow = "*"
 social-auth-app-django = "*"
 drf-extensions = "*"
@@ -34,6 +33,10 @@ vk = "*"
 celery = "*"
 redis = "*"
 django-filter = "*"
+pyyaml = "*"
 
 [requires]
 python_version = "3.6"
+
+[pipenv]
+allow_prereleases = true
