@@ -54,7 +54,7 @@ const ErrorFormStatus = ({ errors }) => (
       (errorKey, errorIndex) => {
         const errorMessage = switchcase(
           {
-            'non_field_errors': errors.data[errorKey],
+            'non_field_errors': errors.data[errorKey][0],
             'beginning_time': getTimingErrorMessage(errors.data, errorKey),
             'ending_time': getTimingErrorMessage(errors.data, errorKey),
           }, 
