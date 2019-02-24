@@ -2,8 +2,9 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 from django.views import generic
+from django.utils.translation import ugettext_lazy as _
 
-from rest_framework_swagger.views import get_swagger_view
+from rest_framework.documentation import include_docs_urls
 
 from rest_framework_simplejwt.views import TokenObtainPairView, \
     TokenRefreshView
@@ -11,6 +12,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView, \
 from backend_project.settings import DEBUG, MEDIA_URL, MEDIA_ROOT
 
 api_urlpatterns = [
+    path('', include_docs_urls(title=str(_('Tutors App API Documentation')))),
     path('users/', include('users.urls')),
     path('vk_apps_users/', include('vk_apps_users.urls')),
     path('vacancies/', include('vacancies.urls')),
@@ -22,12 +24,6 @@ api_urlpatterns = [
     path('token/obtain/', TokenRefreshView.as_view()),
 ]
 
-swagger_schema_view = get_swagger_view(
-    title='Tutors app API',
-    patterns=api_urlpatterns,
-    url='/api/'
-)
-
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('rest-auth/', include('rest_framework.urls')),
@@ -38,7 +34,6 @@ urlpatterns = [
             permanent=False
         ),
     ),
-    path('api/', swagger_schema_view, name='global-api-root'),
     path('api/', include(api_urlpatterns)),
     path('i18n/', include('django.conf.urls.i18n')),
 ]

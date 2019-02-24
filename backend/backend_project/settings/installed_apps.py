@@ -16,6 +16,5 @@ INSTALLED_APPS = [
     'corsheaders',
     'django_filters',
     'rest_framework_extensions',
-    'rest_framework_swagger',
     'rest_framework_recaptcha',
 ]
