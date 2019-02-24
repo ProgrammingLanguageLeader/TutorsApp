@@ -2,7 +2,6 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 from django.views import generic
-from django.utils.translation import ugettext_lazy as _
 
 from rest_framework.documentation import include_docs_urls
 
@@ -12,7 +11,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView, \
 from backend_project.settings import DEBUG, MEDIA_URL, MEDIA_ROOT
 
 api_urlpatterns = [
-    path('', include_docs_urls(title=str(_('Tutors App API Documentation')))),
+    path('', include_docs_urls(title='Tutors App API Documentation')),
     path('users/', include('users.urls')),
     path('vk_apps_users/', include('vk_apps_users.urls')),
     path('vacancies/', include('vacancies.urls')),
