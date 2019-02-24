@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-24 00:33+0000\n"
+"POT-Creation-Date: 2019-02-24 02:00+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -161,19 +161,19 @@ msgstr "ученики учителей"
 
 #: tutors/models.py:50
 msgid "student request"
-msgstr "запрос от ученика"
+msgstr "заявка от ученика"
 
 #: tutors/models.py:51
 msgid "students requests"
-msgstr "запросы от учеников"
+msgstr "заявки от учеников"
 
 #: tutors/serializers.py:33
-msgid "student request already exists"
-msgstr "запрос от ученика уже существует"
+msgid "request already exists"
+msgstr "заявка уже существует"
 
 #: tutors/serializers.py:41
-msgid "tutor must not be equal to student"
-msgstr "учитель не должен быть равен студенту"
+msgid "tutor and student must be different users"
+msgstr "учитель и ученик должны быть разными пользователями"
 
 #: tutors/serializers.py:46
 msgid "student already exists in a list of students"

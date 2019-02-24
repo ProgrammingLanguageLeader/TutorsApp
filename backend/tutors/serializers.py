@@ -30,7 +30,7 @@ class StudentRequestSerializer(serializers.ModelSerializer):
         except StudentRequest.DoesNotExist:
             return super().run_validators(value)
         raise serializers.ValidationError(
-            _('student request already exists')
+            _('request already exists')
         )
 
     def validate(self, attrs):
@@ -38,7 +38,7 @@ class StudentRequestSerializer(serializers.ModelSerializer):
         tutor = attrs.get('tutor')
         if student == tutor:
             raise serializers.ValidationError(
-                _('tutor must not be equal to student')
+                _('tutor and student must be different users')
             )
         tutor, created = TutorStudents.objects.get_or_create(user=tutor)
         if student in tutor.students.all():
