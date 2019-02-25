@@ -9,7 +9,7 @@ An application for convinient interaction between tutors and students
 - docs - the project documentation
 - docker - files used by Docker
 
-## Running the project locally using Docker Compose
+## Running locally using Docker Compose
 
 Running service:
 ```bash
@@ -21,7 +21,7 @@ Stopping service:
 docker-compose down
 ```
 
-## Running the project locally without Docker
+## Running locally without Docker
 
 ### vk-apps-frontend
 Node.js and NPM are required. 
@@ -74,7 +74,7 @@ pipenv shell
 python manage.py test
 ```
 
-## Deployment of the project
+## Deployment
 Use instructions from a __*docs/*__ folder.
 
 ## License
