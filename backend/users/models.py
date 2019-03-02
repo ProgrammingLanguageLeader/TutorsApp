@@ -17,6 +17,9 @@ from django.conf import settings
 
 from users.managers import UserManager
 
+from utils.validators import AlphabetSymbolsAndSpacesValidator, \
+    NoSpecialSymbolsValidator
+
 
 class User(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(
@@ -43,12 +46,20 @@ class User(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(
         verbose_name=_('first name'),
         max_length=30,
-        blank=False
+        blank=False,
+        default='Anonymous',
+        validators=[
+            AlphabetSymbolsAndSpacesValidator()
+        ]
     )
     last_name = models.CharField(
         verbose_name=_('last name'),
         max_length=30,
-        blank=False
+        blank=False,
+        default='Anonymous',
+        validators=[
+            AlphabetSymbolsAndSpacesValidator()
+        ]
     )
 
     date_joined = models.DateTimeField(
@@ -67,37 +78,58 @@ class User(AbstractBaseUser, PermissionsMixin):
     experience = models.TextField(
         verbose_name=_('experience'),
         blank=True,
-        max_length=100
+        max_length=100,
+        validators=[
+            NoSpecialSymbolsValidator()
+        ]
     )
     education = models.TextField(
         verbose_name=_('education'),
         blank=True,
-        max_length=100
+        max_length=100,
+        validators=[
+            NoSpecialSymbolsValidator()
+        ]
     )
     city = models.TextField(
         verbose_name=_('city'),
         blank=True,
-        max_length=50
+        max_length=50,
+        validators=[
+            NoSpecialSymbolsValidator()
+        ]
     )
     district = models.TextField(
         verbose_name=_('district'),
         blank=True,
-        max_length=50
+        max_length=50,
+        validators=[
+            NoSpecialSymbolsValidator()
+        ]
     )
     street = models.TextField(
         verbose_name=_('street'),
         blank=True,
-        max_length=50
+        max_length=50,
+        validators=[
+            NoSpecialSymbolsValidator()
+        ]
     )
     metro_station = models.TextField(
         verbose_name=_('metro station'),
         blank=True,
-        max_length=50
+        max_length=50,
+        validators=[
+            NoSpecialSymbolsValidator()
+        ]
     )
     bio = models.TextField(
         blank=True,
         max_length=100,
-        verbose_name=_('bio')
+        verbose_name=_('bio'),
+        validators=[
+            NoSpecialSymbolsValidator()
+        ]
     )
     avatar = models.ImageField(
         upload_to='avatars/',
