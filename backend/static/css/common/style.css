@@ -1,15 +1,15 @@
 input.switch-lang-button[type=submit] {
-    padding: 0;
-    width: 25px;
-    border-width: 0;
+    padding: 0 !important;
+    width: 25px !important;
+    border-width: 0 !important;
 }
 
 input.switch-lang-ru[type=submit] {
-    background: url("../../img/flag_russia_16.png") no-repeat;
+    background: url("../../img/flag_russia_16.png") no-repeat !important;
 }
 
 input.switch-lang-en[type=submit] {
-    background: url("../../img/flag_united_kingdom_16.png") no-repeat;
+    background: url("../../img/flag_united_kingdom_16.png") no-repeat !important;
 }
 
 .switch-lang-form {
