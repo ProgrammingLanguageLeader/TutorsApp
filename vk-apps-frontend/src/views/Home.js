@@ -10,10 +10,13 @@ import PanelHeader from '@vkontakte/vkui/dist/components/PanelHeader/PanelHeader
 import Gallery from '@vkontakte/vkui/dist/components/Gallery/Gallery';
 import Button from '@vkontakte/vkui/dist/components/Button/Button';
 import Div from '@vkontakte/vkui/dist/components/Div/Div';
+import PopoutWrapper from '@vkontakte/vkui/dist/components/PopoutWrapper/PopoutWrapper';
 
 import introOne from 'vk-apps-frontend/assets/images/intro_one.png'
 import introTwo from 'vk-apps-frontend/assets/images/intro_two.png'
 import introThree from 'vk-apps-frontend/assets/images/intro_three.png'
+
+import PopoutDiv from 'vk-apps-frontend/components/PopoutDiv';
 
 import { vkAppsUsersActions, usersActions } from 'vk-apps-frontend/actions/api';
 import { currentUserActions } from 'vk-apps-frontend/actions';
@@ -113,6 +116,16 @@ const StartWorkingButton = ({ onClick }) => (
   </Button>
 );
 
+const CreateUserPopout = () => (
+  <PopoutWrapper>
+    <PopoutDiv>
+      <Div>
+        Создание учётной записи пользователя...
+      </Div>
+    </PopoutDiv>
+  </PopoutWrapper>
+);
+
 const mapStateToProps = state => {
   const { user } = state.apiReducer.vkAppsUsersReducer;
   const { vkUserInfo } = state.vkReducer.appsUserReducer;
@@ -137,14 +150,23 @@ class Home extends React.Component {
     this.createUser = this.createUser.bind(this);
     this.updateUserInfoFromVK = this.updateUserInfoFromVK.bind(this);
     this.updateAvatarFromVK = this.updateAvatarFromVK.bind(this);
+    this.state = {
+      popout: null,
+    }
   }
 
   async createUser() {
+    await this.setState({
+      popout: <CreateUserPopout/>,
+    });
     await this.props.createVkAppsUser();
     const { user } = this.props;
     const vkId = this.props.vkUserInfo.id;
     await this.updateUserInfoFromVK(user.id);
     await this.updateAvatarFromVK(user.id);
+    await this.setState({
+      popout: null,
+    });
     this.props.saveCurrentUserData(user, vkId);
     this.props.history.push('');
   }
@@ -180,7 +202,7 @@ class Home extends React.Component {
 
   render() {
     return (
-      <View activePanel="panel">
+      <View activePanel="panel" popout={this.state.popout}>
         <FlexedWhitePanel id="panel">
           <PanelHeader>
             Поиск репетиторов
