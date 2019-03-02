@@ -9,7 +9,7 @@ An application for convinient interaction between tutors and students
 - docs - the project documentation
 - docker - files used by Docker
 
-## Deploying the application using Docker Compose
+## Running locally using Docker Compose
 
 Running service:
 ```bash
@@ -21,35 +21,35 @@ Stopping service:
 docker-compose down
 ```
 
-## Running project without Docker
+## Running locally without Docker
 
 ### vk-apps-frontend
-Node.js and NPM is required. 
+Node.js and NPM are required. 
 
 Installation of dependencies:
 ```bash
 npm install
 ```
 
-Running locally a development mode:
+Running locally in a development mode:
 ```bash
 npm start
 ```
 
-Build the module:
+Building the module:
 ```bash
 npm run build
 ```
 
 This module has an apportunity of using Github Pages as a hosting. 
 Set a property __*homepage*__ in a file __*package.json*__ to an address on Github Pages.
-Use the following command to deploy the module to Github Pages:
+Use the following command to deploy the module via this service:
 ```bash
 npm run deploy
 ```
 
 ### backend
-Python 3.5 or higher and pipenv is required.
+Python 3.6 or higher and pipenv are required.
 
 Run the following command to install dependencies and configure virtual environment:
 ```bash
@@ -60,10 +60,22 @@ After the installation you need to run database migrations:
 ```bash
 pipenv shell
 python manage.py migrate
+```
+
+Finally, you are able to launch the backend server:
+```bash
+pipenv shell
 python manage.py runserver
 ```
-Running tests:
+
+If you need to run tests, use these commands:
 ```bash
 pipenv shell
 python manage.py test
 ```
+
+## Deployment
+Use instructions from a __*docs/*__ folder.
+
+## License
+This project is licensed under the MIT License - see the LICENSE file for details
