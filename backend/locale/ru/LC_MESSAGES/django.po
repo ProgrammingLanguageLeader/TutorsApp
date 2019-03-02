@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-24 12:56+0000\n"
+"POT-Creation-Date: 2019-03-02 19:03+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -31,7 +31,7 @@ msgstr "учитель"
 msgid "student"
 msgstr "ученик"
 
-#: lessons/models.py:31 vacancies/models.py:67
+#: lessons/models.py:31 vacancies/models.py:73
 msgid "price"
 msgstr "цена"
 
@@ -47,7 +47,7 @@ msgstr "длительность"
 msgid "ending time"
 msgstr "время окончания"
 
-#: lessons/models.py:53 tutors/models.py:46 vacancies/models.py:10
+#: lessons/models.py:53 tutors/models.py:46 vacancies/models.py:13
 msgid "creation time"
 msgstr "время создания"
 
@@ -143,7 +143,7 @@ msgstr "количество учеников"
 msgid "Tutors"
 msgstr "Учителя"
 
-#: tutors/models.py:12 users/models.py:115 vk_apps_users/models.py:17
+#: tutors/models.py:12 users/models.py:147 vk_apps_users/models.py:17
 msgid "user"
 msgstr "пользователь"
 
@@ -187,75 +187,75 @@ msgstr "Полное имя"
 msgid "Users"
 msgstr "Пользователи"
 
-#: users/models.py:23
+#: users/models.py:26
 msgid "username"
 msgstr "имя пользователя"
 
-#: users/models.py:29
+#: users/models.py:32
 msgid ""
 "Enter a valid value: minimum length is 3, maximum length is 30, alphanumeric "
 "characters, _, @, +, - are allowed"
 msgstr ""
 "Введите корректное значение: минимальная длина - 3, максимальная - 30, "
-"разрешается использовать символы латинского алфавита, _, @, +, -"
+"разрешается использовать символы латинского алфавита, цифры, _, @, +, -"
 
-#: users/models.py:40
+#: users/models.py:43
 msgid "email address"
 msgstr "email адрес"
 
-#: users/models.py:44
+#: users/models.py:47
 msgid "first name"
 msgstr "имя"
 
-#: users/models.py:49
+#: users/models.py:56
 msgid "last name"
 msgstr "фамилия"
 
-#: users/models.py:55
+#: users/models.py:66
 msgid "date joined"
 msgstr "дата регистрации"
 
-#: users/models.py:59 vacancies/models.py:20
+#: users/models.py:70 vacancies/models.py:23
 msgid "active"
 msgstr "активный"
 
-#: users/models.py:63
+#: users/models.py:74
 msgid "staff"
 msgstr "сотрудник"
 
-#: users/models.py:68
+#: users/models.py:79
 msgid "experience"
 msgstr "опыт"
 
-#: users/models.py:73
+#: users/models.py:87
 msgid "education"
 msgstr "образование"
 
-#: users/models.py:78
+#: users/models.py:95
 msgid "city"
 msgstr "город"
 
-#: users/models.py:83
+#: users/models.py:103
 msgid "district"
 msgstr "район"
 
-#: users/models.py:88
+#: users/models.py:111
 msgid "street"
 msgstr "улица"
 
-#: users/models.py:93
+#: users/models.py:119
 msgid "metro station"
 msgstr "станция метро"
 
-#: users/models.py:100
+#: users/models.py:129
 msgid "bio"
 msgstr "о себе"
 
-#: users/models.py:105
+#: users/models.py:137
 msgid "avatar"
 msgstr "аватар"
 
-#: users/models.py:116
+#: users/models.py:148
 msgid "users"
 msgstr "пользователи"
 
@@ -263,61 +263,77 @@ msgstr "пользователи"
 msgid "vacations limit exceeded"
 msgstr "достигнуто ограничение по количеству предложений"
 
+#: utils/validators.py:9
+msgid "Only alphabet symbols are allowed"
+msgstr "Разрешены только символы алфавита"
+
+#: utils/validators.py:14
+msgid "Special symbols are not allowed"
+msgstr "Специальные символы не разрешены"
+
+#: utils/validators.py:19
+msgid "Only alphabet symbols and spaces are allowed"
+msgstr "Разрешены только символы алфавита и пробелы"
+
 #: vacancies/apps.py:7
 msgid "Vacancies"
 msgstr "Предложения"
 
-#: vacancies/models.py:16
+#: vacancies/models.py:19
 msgid "owner"
 msgstr "владелец"
 
-#: vacancies/models.py:25
+#: vacancies/models.py:28
 msgid "subject"
 msgstr "предмет"
 
-#: vacancies/models.py:30
+#: vacancies/models.py:36
 msgid "ege"
 msgstr "ЕГЭ"
 
-#: vacancies/models.py:34
+#: vacancies/models.py:40
 msgid "oge"
 msgstr "ОГЭ"
 
-#: vacancies/models.py:38
+#: vacancies/models.py:44
 msgid "foreign language certificate"
 msgstr "сертификат о знании иностранного языка"
 
-#: vacancies/models.py:42
+#: vacancies/models.py:48
 msgid "primary school"
 msgstr "начальная школа"
 
-#: vacancies/models.py:46
+#: vacancies/models.py:52
 msgid "secondary school"
 msgstr "средняя школа"
 
-#: vacancies/models.py:50
+#: vacancies/models.py:56
 msgid "olympiads"
 msgstr "олимпиады"
 
-#: vacancies/models.py:54
+#: vacancies/models.py:60
 msgid "university"
 msgstr "курс высшего образования"
 
-#: vacancies/models.py:58
+#: vacancies/models.py:64
 msgid "home schooling"
 msgstr "выезд на дом"
 
-#: vacancies/models.py:73
+#: vacancies/models.py:79
 msgid "extra info"
 msgstr "дополнительная информация"
 
-#: vacancies/models.py:77
+#: vacancies/models.py:86
 msgid "vacancy"
 msgstr "предложение"
 
-#: vacancies/models.py:78
+#: vacancies/models.py:87
 msgid "vacancies"
 msgstr "предложения"
+
+#: vacancies/serializers.py:29
+msgid "vacancy of this subject already exists"
+msgstr "предложение по данному предмету уже существует"
 
 #: vk_apps_users/apps.py:7 vk_apps_users/models.py:22
 msgid "VK Apps Users"
