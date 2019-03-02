@@ -24,3 +24,4 @@ chrome-user-data
 build/
 *.env
 .idea/
+src/jsconfig.json

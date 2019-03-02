@@ -135,6 +135,9 @@ class VacancyForm extends React.Component {
 
         <FormLayoutGroup top="Дополнительная информация">
           <Input name="extra_info" onChange={handleChange} value={values.extra_info} />
+          {errors.data && errors.data["extra_info"] && (
+            <ErrorMessageDiv>{errors.data["extra_info"]}</ErrorMessageDiv>
+          )}
         </FormLayoutGroup>
 
         <Button size="xl" onClick={handleSubmit}>
