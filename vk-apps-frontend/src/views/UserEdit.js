@@ -13,7 +13,6 @@ import Group from '@vkontakte/vkui/dist/components/Group/Group';
 import Div from '@vkontakte/vkui/dist/components/Div/Div';
 
 import BackIcon from 'vk-apps-frontend/components/BackIcon';
-import DivSpinner from 'vk-apps-frontend/components/DivSpinner';
 import SuccessfulFormStatus from 'vk-apps-frontend/components/SuccessfulFormStatus';
 
 import { ROOT_URL } from 'vk-apps-frontend/constants';
@@ -107,7 +106,7 @@ class UserEdit extends React.Component {
   }
 
   render() {
-    const { user, fetching } = this.props;
+    const { user } = this.props;
 
     return (
       <View activePanel="panel">
@@ -121,10 +120,6 @@ class UserEdit extends React.Component {
           </PanelHeader>
 
           <div ref={this.startDiv} />
-
-          {fetching && (
-            <DivSpinner />
-          )}
 
           {user && (
             <Group>
