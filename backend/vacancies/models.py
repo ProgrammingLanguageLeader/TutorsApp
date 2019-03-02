@@ -3,6 +3,9 @@ from django.db import models
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 
+from utils.validators import AlphabetSymbolsAndSpacesValidator, \
+    NoSpecialSymbolsValidator
+
 
 class Vacancy(models.Model):
     creation_time = models.DateTimeField(
@@ -22,7 +25,10 @@ class Vacancy(models.Model):
 
     subject = models.CharField(
         max_length=128,
-        verbose_name=_('subject')
+        verbose_name=_('subject'),
+        validators=[
+            AlphabetSymbolsAndSpacesValidator()
+        ]
     )
 
     ege = models.BooleanField(
@@ -69,11 +75,15 @@ class Vacancy(models.Model):
 
     extra_info = models.TextField(
         blank=True,
-        max_length=256,
-        verbose_name=_('extra info')
+        max_length=128,
+        verbose_name=_('extra info'),
+        validators=[
+            NoSpecialSymbolsValidator()
+        ]
     )
 
     class Meta:
         verbose_name = _('vacancy')
         verbose_name_plural = _('vacancies')
         ordering = ('-id', )
+        unique_together = ('owner', 'subject', )
