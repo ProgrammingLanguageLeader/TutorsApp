@@ -96,7 +96,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         blank=True,
         max_length=50,
         validators=[
-            NoSpecialSymbolsValidator()
+            AlphabetSymbolsAndSpacesValidator()
         ]
     )
     district = models.TextField(
