@@ -55,6 +55,8 @@ class UploadAvatarSerializer(serializers.ModelSerializer):
         model = User
         fields = ('avatar', )
 
+    avatar = serializers.ImageField(allow_null=False)
+
 
 class DeleteAvatarSerializer(serializers.Serializer):
     pass
