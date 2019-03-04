@@ -17,6 +17,10 @@ from tutors.signals import student_request_answer
 from users.serializers import UserSerializer
 from users.models import User
 
+from lessons.models import Lesson
+
+from notifications.models import Notification
+
 
 class StudentsViewSet(mixins.ListModelMixin,
                       mixins.RetrieveModelMixin,
@@ -47,8 +51,15 @@ class StudentsViewSet(mixins.ListModelMixin,
             tutor = TutorStudents.objects.get(user=self.request.user)
             student = User.objects.get(pk=pk)
             tutor.students.remove(student)
+            Lesson.objects.filter(student=student).delete()
+            Notification.objects.create(
+                sender=tutor.user,
+                recipient=student,
+                verb='student delete'
+            )
         except ObjectDoesNotExist:
             raise NotFound()
+        return Response('OK')
 
 
 class TutorsListView(generics.ListAPIView):
