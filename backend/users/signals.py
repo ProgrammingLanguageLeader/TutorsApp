@@ -4,10 +4,11 @@ from django.db import models
 from django.dispatch import receiver
 
 from users.models import User
+from users.tools import compress_avatar
 
 
 @receiver(models.signals.pre_delete, sender=User)
-def auto_delete_avatar_on_delete(sender, instance, **kwargs):
+def delete_avatar(sender, instance, **kwargs):
     """
     Deletes file from filesystem
     when corresponding User object will be deleted.
@@ -18,24 +19,28 @@ def auto_delete_avatar_on_delete(sender, instance, **kwargs):
 
 
 @receiver(models.signals.pre_save, sender=User)
-def auto_delete_avatar_on_change(sender, instance, **kwargs):
+def handle_avatar_on_change(sender, instance, **kwargs):
     """
     Deletes old file from filesystem
     when corresponding User object is updated
-    with new file.
+    with new file and compress the last one.
     """
     if not instance.pk:
         return False
 
     try:
-        old_file = sender.objects.get(pk=instance.pk).avatar
+        old_avatar = sender.objects.get(pk=instance.pk).avatar
     except sender.DoesNotExist:
         return False
 
-    if not old_file:
+    if not old_avatar:
         return False
 
-    new_file = instance.avatar
-    if not old_file == new_file:
-        if os.path.isfile(old_file.path):
-            os.remove(old_file.path)
+    new_avatar = instance.avatar
+    if not old_avatar == new_avatar:
+        if os.path.isfile(old_avatar.path):
+            os.remove(old_avatar.path)
+
+    if new_avatar and max(new_avatar.height, new_avatar.width) > 200:
+        instance.avatar = compress_avatar(new_avatar)
+        os.remove(new_avatar.file.name)

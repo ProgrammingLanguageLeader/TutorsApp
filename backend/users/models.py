@@ -1,15 +1,9 @@
-import sys
-import os
 import re
-from io import BytesIO
-
-from PIL import Image
 
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.staticfiles.templatetags.staticfiles import static
 from django.contrib.auth.models import AbstractBaseUser
 from django.core.validators import RegexValidator
-from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db import models
 from django.core.mail import send_mail
 from django.contrib.auth.models import PermissionsMixin
@@ -146,30 +140,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     class Meta:
         verbose_name = _('user')
         verbose_name_plural = _('users')
-
-    def save(self, *args, **kwargs):
-        if self.avatar and max(self.avatar.height, self.avatar.width) > 200:
-            old_file_path = self.avatar.path
-            self.avatar = self.compress_avatar(self.avatar)
-            if os.path.isfile(old_file_path):
-                os.remove(old_file_path)
-        super().save()
-
-    @staticmethod
-    def compress_avatar(avatar):
-        avatar_image = Image.open(avatar)
-        avatar_image.thumbnail((200, 200))
-        output = BytesIO()
-        avatar_image.save(output, format='JPEG', quality=100)
-        output.seek(0)
-        return InMemoryUploadedFile(
-            output,
-            'ImageField',
-            '%s.jpg' % avatar.name.split('.')[0],
-            'image/jpeg',
-            sys.getsizeof(output),
-            None
-        )
 
     def get_full_name(self):
         return ('%s %s' % (self.first_name, self.last_name)).strip()
