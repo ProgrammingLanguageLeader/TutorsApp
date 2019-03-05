@@ -48,7 +48,7 @@ const getTimingErrorMessage = (errorsData, errorKey) => {
 const capatalize = string => string[0].toUpperCase() + string.slice(1);
 
 const ErrorFormStatus = ({ errors }) => (
-  <FormStatus title={errors.status ? "" : "Ошибка"} state="error">
+  <FormStatus title={errors.status ? "" : "Проверьте заполненные поля"} state="error">
     {errors.status >= 500 && 'Внутренняя ошибка сервера'}
     {400 <= errors.status && errors.status < 500 && Object.keys(errors.data).map(
       (errorKey, errorIndex) => {

@@ -8,6 +8,7 @@ import Input from '@vkontakte/vkui/dist/components/Input/Input';
 
 import DivSpinner from 'vk-apps-frontend/components/DivSpinner';
 import ErrorFormStatus from 'vk-apps-frontend/components/ErrorFormStatus';
+import ErrorMessageDiv from 'vk-apps-frontend/components/ErrorMessageDiv';
 
 const MoneyTransferForm = ({
   values,
@@ -43,15 +44,27 @@ const MoneyTransferForm = ({
           );
         })}
       </Select>
+      {errors.recipient && (
+        <ErrorMessageDiv>
+          {errors.recipient}
+        </ErrorMessageDiv>
+      )}
     </FormLayoutGroup>
 
     <FormLayoutGroup top="Сумма">
       <Input
         name="amount"
         type="number"
+        min={1}
+        max={10000}
         value={String(values.amount)}
         onChange={handleChange}
       />
+      {errors.amount && (
+        <ErrorMessageDiv>
+          {errors.amount}
+        </ErrorMessageDiv>
+      )}
     </FormLayoutGroup>
 
     <Button size="xl" onClick={handleSubmit} disabled={isSubmitting}>
