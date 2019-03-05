@@ -96,7 +96,7 @@ class MoneyTransfer extends React.Component {
                 if (response.status >= 400) {
                   actions.setSubmitting(false);
                   actions.setErrors({
-                    message: 'Выбранный пользователь не зарегистрирован через VK Apps'
+                    recipient: 'Выбранный пользователь не зарегистрирован через VK Apps'
                   });
                   return;
                 }
