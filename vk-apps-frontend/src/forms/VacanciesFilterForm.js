@@ -69,14 +69,12 @@ class VacanciesFilterForm extends React.Component {
               <option value={subject} key={subject}>{subject}</option>
             ))}
           </Select>
-
-
         </FormLayoutGroup>
 
         <FormLayoutGroup top="Если вашего предмета не оказалось в списке, введите его название вручную">
           <Input
             name="input_subject"
-            type="text"
+            maxlength={64}
             placeholder="Введите название предмета"
             value={this.state.inputSubject}
             onChange={event => {
@@ -106,6 +104,7 @@ class VacanciesFilterForm extends React.Component {
           <Input
             name="city"
             placeholder="Любой"
+            maxlength={64}
             onChange={handleChange}
             value={values.city}
           />
@@ -115,6 +114,7 @@ class VacanciesFilterForm extends React.Component {
           <Input
             name="district"
             placeholder="Любой"
+            maxlength={64}
             onChange={handleChange}
             value={values.district}
           />
@@ -124,6 +124,7 @@ class VacanciesFilterForm extends React.Component {
           <Input
             name="metro_station"
             placeholder="Любая"
+            maxlength={64}
             onChange={handleChange}
             value={values.metro_station}
           />
