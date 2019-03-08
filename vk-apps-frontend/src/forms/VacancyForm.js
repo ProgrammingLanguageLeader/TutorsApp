@@ -5,7 +5,6 @@ import Checkbox from '@vkontakte/vkui/dist/components/Checkbox/Checkbox';
 import FormLayout from '@vkontakte/vkui/dist/components/FormLayout/FormLayout';
 import FormLayoutGroup from '@vkontakte/vkui/dist/components/FormLayoutGroup/FormLayoutGroup';
 import Input from '@vkontakte/vkui/dist/components/Input/Input';
-import Radio from '@vkontakte/vkui/dist/components/Radio/Radio';
 import Select from '@vkontakte/vkui/dist/components/Select/Select';
 
 import { educationLevelList, subjectsList } from 'vk-apps-frontend/constants';
@@ -113,12 +112,13 @@ class VacancyForm extends React.Component {
         </FormLayoutGroup>
 
         <FormLayoutGroup top="Выезд на дом">
-          <Radio value="yes" name="home_schooling" onChange={handleChange} checked={values.home_schooling}>
+          <Checkbox
+            name="home_schooling"
+            onChange={handleChange}
+            checked={values.home_schooling}
+          >
             Да
-          </Radio>
-          <Radio value="no" name="home_schooling" onChange={handleChange} checked={!values.home_schooling}>
-            Нет
-          </Radio>
+          </Checkbox>
         </FormLayoutGroup>
 
         <FormLayoutGroup top="Плата за час обучения">
