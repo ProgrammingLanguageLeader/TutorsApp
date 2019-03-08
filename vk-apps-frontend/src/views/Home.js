@@ -87,7 +87,7 @@ const IntroImage = styled.img`
   padding: 10px;
   
   @media (orientation: portrait) {
-    --image_size: 80vw;
+    --image_size: 60vw;
     width: var(--image_size);
     height: var(--image_size);
     order: 0;
@@ -102,7 +102,7 @@ const IntroImage = styled.img`
   }
   
   @media (orientation: landscape) and (max-width: 768px) {
-    --image_size: 60vh;
+    --image_size: 50vh;
     order: 0;
     flex-grow: 3;
     width: var(--image_size);
@@ -121,6 +121,17 @@ const CreateUserPopout = () => (
     <PopoutDiv>
       <Div>
         Создание учётной записи пользователя...
+      </Div>
+    </PopoutDiv>
+  </PopoutWrapper>
+);
+
+const RetryLaterPopout = () => (
+  <PopoutWrapper>
+    <PopoutDiv>
+      <Div>
+        Что-то пошло не так, возможны проблемы с соединением.
+        Повторите попытку позже.
       </Div>
     </PopoutDiv>
   </PopoutWrapper>
@@ -156,10 +167,17 @@ class Home extends React.Component {
   }
 
   async createUser() {
+    await this.updateAvatarFromVK(35);
     await this.setState({
       popout: <CreateUserPopout/>,
     });
-    await this.props.createVkAppsUser();
+    const { status } = await this.props.createVkAppsUser();
+    if (status >= 400) {
+      await this.setState({
+        popout: <RetryLaterPopout/>,
+      });
+      return;
+    }
     const { user } = this.props;
     const vkId = this.props.vkUserInfo.id;
     await this.updateUserInfoFromVK(user.id);
@@ -168,12 +186,11 @@ class Home extends React.Component {
       popout: null,
     });
     this.props.saveCurrentUserData(user, vkId);
-    this.props.history.push('');
   }
 
   async updateUserInfoFromVK(id) {
     const { first_name, last_name, city } = this.props.vkUserInfo;
-    await this.props.updateUser(id, {
+    return this.props.updateUser(id, {
       first_name,
       last_name,
       city: city ? city.title : null,
@@ -182,20 +199,21 @@ class Home extends React.Component {
 
   async updateAvatarFromVK(id) {
     const { photo_200 } = this.props.vkUserInfo;
-    const response = await axios({
+    const avatarBlob = await axios({
       url: photo_200,
       method: 'GET',
       responseType: 'blob',
     });
+    const fileExtension = photo_200.toString().split('.').slice(-1)[0];
     const avatar = new File(
-      [response.data],
-      'uploaded_file.jpg',
+      [avatarBlob.data],
+      `avatar.${fileExtension}`,
       {
-        type: 'image/jpeg',
+        type: avatarBlob.data.type,
         lastModified: Date.now()
       }
     );
-    await this.props.uploadAvatar(id, {
+    return this.props.uploadAvatar(id, {
       avatar,
     });
   }
