@@ -64,7 +64,7 @@ class Vacancies extends React.Component {
           </PanelHeader>
 
           <Group title="Фильтрация">
-            <CellButton before={<Icon24Filter />} onClick={() => this.props.history.push('/vacancies_filter')}>
+            <CellButton before={<Icon24Filter />} onClick={() => this.props.history.push('/vacancies/filter')}>
               Параметры фильтра
             </CellButton>
           </Group>
@@ -72,7 +72,7 @@ class Vacancies extends React.Component {
           <Group>
             <CellButton
               before={<Icon24Add/>}
-              onClick={() => this.props.history.push('/vacancy_create')}
+              onClick={() => this.props.history.push('/vacancy/create')}
             >
               Создать предложение
             </CellButton>

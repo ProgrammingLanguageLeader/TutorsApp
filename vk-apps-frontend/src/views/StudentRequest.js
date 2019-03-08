@@ -48,10 +48,8 @@ class StudentRequest extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.currentUserReducer.user) {
-      const { id } = this.props.match.params;
-      this.props.getStudentRequest(id);
-    }
+    const { id } = this.props.match.params;
+    this.props.getStudentRequest(id);
   }
 
   async handleAcceptButtonClick() {

@@ -49,13 +49,11 @@ class LessonEdit extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.currentUserReducer.user) {
-      const { id } = this.props.match.params;
-      Promise.all([
-        this.props.getLesson(id),
-        this.props.getStudentsList()
-      ]);
-    }
+    const { id } = this.props.match.params;
+    Promise.all([
+      this.props.getLesson(id),
+      this.props.getStudentsList()
+    ]);
   }
 
   componentDidUpdate() {

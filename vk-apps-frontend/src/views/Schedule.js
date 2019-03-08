@@ -52,9 +52,7 @@ class Schedule extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.currentUserReducer.user) {
-      this.getLessonsByDay();
-    }
+    this.getLessonsByDay();
   }
 
   getLessonsByDay() {
@@ -99,7 +97,7 @@ class Schedule extends React.Component {
           </Group>
 
           <Group title="Добавление занятия">
-            <CellButton before={<Icon24Add />} onClick={() => this.props.history.push('/lesson_create')}>
+            <CellButton before={<Icon24Add />} onClick={() => this.props.history.push('/lesson/create')}>
               Добавить урок
             </CellButton>
           </Group>

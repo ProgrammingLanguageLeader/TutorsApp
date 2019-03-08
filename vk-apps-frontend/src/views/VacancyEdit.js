@@ -45,10 +45,8 @@ class VacancyEdit extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.currentUserReducer.user) {
-      const { id } = this.props.match.params;
-      this.props.getVacancy(id);
-    }
+    const { id } = this.props.match.params;
+    this.props.getVacancy(id);
   }
 
   componentDidUpdate() {

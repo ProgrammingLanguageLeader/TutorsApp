@@ -69,7 +69,7 @@ class UserVacancies extends React.Component {
           <Group>
             <CellButton
               before={<Icon24Add/>}
-              onClick={() => this.props.history.push('/vacancy_create')}
+              onClick={() => this.props.history.push('/vacancy/create')}
             >
               Создать предложение
             </CellButton>
@@ -114,13 +114,7 @@ class UserVacancies extends React.Component {
                 </List>
               </Group>
               <Footer>
-                {
-                  vacancies.length === 1
-                    ? `Показано ${vacancies.length} предложение`
-                    : (2 <= vacancies.length) && (vacancies.length <= 4)
-                    ? `Показано ${vacancies.length} предложения`
-                    : `Показано ${vacancies.length} предложений`
-                }
+                Показано предложений: {vacancies.length}
               </Footer>
             </div>
           )}

@@ -47,9 +47,7 @@ class MoneyTransfer extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.currentUserReducer.user) {
-      this.props.getTutorsList();
-    }
+    this.props.getTutorsList();
   }
 
   render() {

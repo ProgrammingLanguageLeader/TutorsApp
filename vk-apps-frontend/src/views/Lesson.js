@@ -61,10 +61,8 @@ class Lesson extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.currentUserReducer.user) {
-      const { id } = this.props.match.params;
-      this.props.getLesson(id);
-    }
+    const { id } = this.props.match.params;
+    this.props.getLesson(id);
   }
 
   deleteLessonButtonClick(id) {
@@ -135,7 +133,7 @@ class Lesson extends React.Component {
                 <Group title="Управление уроком">
                   <CellButton
                     before={<Icon24Write/>}
-                    onClick={() => this.props.history.push(`/lesson_edit/${lesson.id}`)}
+                    onClick={() => this.props.history.push(`/lesson/${lesson.id}/edit`)}
                   >
                     Редактирование урока
                   </CellButton>

@@ -38,10 +38,8 @@ const mapDispatchToProps = dispatch => {
 
 class User extends React.Component {
   componentDidMount() {
-    if (this.props.currentUserReducer.user) {
-      const { id } = this.props.match.params;
-      this.props.getUser(id);
-    }
+    const { id } = this.props.match.params;
+    this.props.getUser(id);
   }
 
 	render() {
@@ -50,7 +48,7 @@ class User extends React.Component {
     const isProfileEditable = currentUserReducer.user && Number(id) === Number(currentUserReducer.user.id);
 
 		return (
-      <View activePanel="panel">
+      <View id={this.props.match} activePanel="panel">
         <Panel id="panel">
           <PanelHeader left={
             <HeaderButton onClick={() => this.props.history.goBack()}>
@@ -80,7 +78,7 @@ class User extends React.Component {
                 <Group>
                   <CellButton
                     before={<Icon24Write/>}
-                    onClick={() => this.props.history.push('/user_edit')}
+                    onClick={() => this.props.history.push(`/user/${user.id}/edit`)}
                   >
                     Редактировать
                   </CellButton>

@@ -54,10 +54,8 @@ class UserEdit extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.currentUserReducer.user) {
-      const { id } = this.props.currentUserReducer.user;
-      this.props.getUser(id);
-    }
+    const { id } = this.props.match.params;
+    this.props.getUser(id);
   }
 
   componentDidUpdate() {
@@ -67,7 +65,7 @@ class UserEdit extends React.Component {
   }
 
   async handleUploadAvatarFormSubmit(values) {
-    const { id } = this.props.currentUserReducer.user;
+    const { id } = this.props.match.params;
     const { avatar } = values;
     const response = await this.props.uploadAvatar(id, {
       avatar,
@@ -87,7 +85,7 @@ class UserEdit extends React.Component {
   }
 
   async handleEditProfileSubmit(values) {
-    const { id } = this.props.currentUserReducer.user;
+    const { id } = this.props.match.params;
     const response = await this.props.updateUser(id, {
       ...values
     });

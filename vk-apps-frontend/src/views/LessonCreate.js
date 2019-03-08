@@ -47,9 +47,7 @@ class LessonCreate extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.currentUserReducer.user) {
-      this.props.getStudentsList();
-    }
+    this.props.getStudentsList();
   }
 
   componentDidUpdate() {

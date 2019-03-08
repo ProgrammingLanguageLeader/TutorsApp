@@ -47,12 +47,10 @@ class Notifications extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.currentUserReducer.user) {
-      Promise.all([
-        this.props.getUnreadNotificationsList(),
-        this.props.getReadNotificationsList(),
-      ]);
-    }
+    Promise.all([
+      this.props.getUnreadNotificationsList(),
+      this.props.getReadNotificationsList(),
+    ]);
   }
 
   async handleSetUnreadNotification(id, unread) {

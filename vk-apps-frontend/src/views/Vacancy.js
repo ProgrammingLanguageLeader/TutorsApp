@@ -64,10 +64,8 @@ class Vacancy extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.currentUserReducer.user) {
-      const { id } = this.props.match.params;
-      this.props.getVacancy(id);
-    }
+    const { id } = this.props.match.params;
+    this.props.getVacancy(id);
   }
 
   async createStudentRequest(tutorId) {
@@ -128,7 +126,7 @@ class Vacancy extends React.Component {
             <Group title="Управление">
               <CellButton
                 before={<Icon24Write />}
-                onClick={() => this.props.history.push(`/vacancy_edit/${vacancy.id}`)}
+                onClick={() => this.props.history.push(`/vacancy/${vacancy.id}/edit`)}
               >
                 Редактировать предложение
               </CellButton>
