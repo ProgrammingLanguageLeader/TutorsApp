@@ -1,4 +1,5 @@
 import React from 'react';
+import { withRouter } from 'react-router-dom';
 
 import Tabbar from '@vkontakte/vkui/dist/components/Tabbar/Tabbar';
 import TabbarItem from '@vkontakte/vkui/dist/components/TabbarItem/TabbarItem';
@@ -11,43 +12,48 @@ import Icon28Menu from '@vkontakte/icons/dist/28/menu';
 
 import TabbarLink from 'vk-apps-frontend/components/TabbarLink';
 
-export default ({
-  userId,
-  selectedItem,
-  unreadNotificationsCount = 0
-}) => (
-  <Tabbar>
-    <TabbarLink to={`/user/${userId}/`}>
-      <TabbarItem selected={selectedItem === 'user'}>
-        <Icon28User />
-      </TabbarItem>
-    </TabbarLink>
+const MyTabbar = ({ location, hidden, currentUserId, unreadNotificationsCount = 0 }) => (
+  !hidden && (
+    <Tabbar>
+      <TabbarLink to={`/user/${currentUserId}`}>
+        <TabbarItem selected={location.pathname.startsWith('/user')}>
+          <Icon28User />
+        </TabbarItem>
+      </TabbarLink>
 
-    <TabbarLink to='/vacancies'>
-      <TabbarItem selected={selectedItem === 'vacancies'}>
-        <Icon28Search />
-      </TabbarItem>
-    </TabbarLink>
+      <TabbarLink to='/vacancies'>
+        <TabbarItem
+          selected={
+            location.pathname.startsWith('/vacancy')
+            || location.pathname.startsWith('/vacancies')
+          }
+        >
+          <Icon28Search />
+        </TabbarItem>
+      </TabbarLink>
 
-    <TabbarLink to='/schedule'>
-      <TabbarItem selected={selectedItem === 'schedule'}>
-        <Icon28Newsfeed />
-      </TabbarItem>
-    </TabbarLink>
+      <TabbarLink to='/schedule'>
+        <TabbarItem selected={location.pathname.startsWith('/schedule')}>
+          <Icon28Newsfeed />
+        </TabbarItem>
+      </TabbarLink>
 
-    <TabbarLink to='/notifications'>
-      <TabbarItem
-        selected={selectedItem === 'notifications'}
-        label={unreadNotificationsCount ? unreadNotificationsCount : null}
-      >
-        <Icon28Notification/>
-      </TabbarItem>
-    </TabbarLink>
+      <TabbarLink to='/notifications'>
+        <TabbarItem
+          selected={location.pathname.startsWith('/notifications')}
+          label={unreadNotificationsCount ? unreadNotificationsCount : null}
+        >
+          <Icon28Notification/>
+        </TabbarItem>
+      </TabbarLink>
 
-    <TabbarLink to='/main_menu'>
-      <TabbarItem selected={selectedItem === 'main_menu'}>
-        <Icon28Menu />
-      </TabbarItem>
-    </TabbarLink>
-  </Tabbar>
+      <TabbarLink to='/main_menu'>
+        <TabbarItem selected={location.pathname.startsWith('/main_menu')}>
+          <Icon28Menu />
+        </TabbarItem>
+      </TabbarLink>
+    </Tabbar>
+  )
 );
+
+export default withRouter(MyTabbar);
