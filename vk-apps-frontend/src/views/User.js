@@ -48,7 +48,7 @@ class User extends React.Component {
     const isProfileEditable = currentUserReducer.user && Number(id) === Number(currentUserReducer.user.id);
 
 		return (
-      <View id={this.props.match} activePanel="panel">
+      <View activePanel="panel">
         <Panel id="panel">
           <PanelHeader left={
             <HeaderButton onClick={() => this.props.history.goBack()}>

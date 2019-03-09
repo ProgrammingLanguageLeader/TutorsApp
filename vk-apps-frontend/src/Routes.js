@@ -1,8 +1,9 @@
 import React from 'react';
-import { Redirect, Switch, Route, withRouter, matchPath } from 'react-router-dom';
+import { Route, withRouter, matchPath } from 'react-router-dom';
 
 import Root from '@vkontakte/vkui/dist/components/Root/Root';
 
+import Entrypoint from 'vk-apps-frontend/views/Entrypoint';
 import Home from 'vk-apps-frontend/views/Home';
 import User from 'vk-apps-frontend/views/User';
 import Vacancies from 'vk-apps-frontend/views/Vacancies';
@@ -23,9 +24,6 @@ import VacancyEdit from 'vk-apps-frontend/views/VacancyEdit';
 import OutgoingStudentRequests from 'vk-apps-frontend/views/OutgoingStudentRequests';
 import Tutors from 'vk-apps-frontend/views/Tutors';
 import Students from 'vk-apps-frontend/views/Students';
-
-import DivSpinner from 'vk-apps-frontend/components/DivSpinner';
-import DisplayUnsetDiv from 'vk-apps-frontend/components/DisplayUnsetDiv';
 
 const urlsToComponents = {
   '/home': Home,
@@ -75,28 +73,38 @@ const getExactUrlPattern = path => {
 class Routes extends React.Component {
   render() {
     const { location, isUserRegistered, currentUser } = this.props;
-    const routes = Object.entries(urlsToComponents).map(
+    const panels = Object.entries(urlsToComponents).map(
       urlToComponent => {
-        const [url, component] = urlToComponent;
+        const [url, Component] = urlToComponent;
         return (
-          <Route id={url} exact path={url} render={withRouter(component)} />
+          <div key={url} id={url}>
+            <Route exact path={url} render={props => (
+              <Component {...props} />
+            )} />
+
+            // TODO: get rid of the stub after fix in VK UI
+            <div className="View__panel" />
+          </div>
         );
       }
     ).concat(
-      <Route id="/" exact path="/">
-        {!isUserRegistered
-          ? <Redirect to="/home"/>
-          : currentUser
-            ? <Redirect to={`/user/${currentUser.id}`}/>
-            : <DivSpinner/>
-        }
-      </Route>
+      <div key="/" id="/">
+        <Route exact path="/">
+          <Entrypoint
+            currentUser={currentUser}
+            isUserRegistered={isUserRegistered}
+          />
+        </Route>
+
+        // TODO: get rid of the stub after fix in VK UI
+        <div className="View__panel" />
+      </div>
     );
 
     return (
-      <Switch location={location}>
-        {routes}
-      </Switch>
+      <Root activeView={getExactUrlPattern(location.pathname)}>
+        {panels}
+      </Root>
     );
   }
 }
