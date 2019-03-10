@@ -27,6 +27,12 @@ import Students from 'vk-apps-frontend/views/Students';
 
 import DisplayUnsetDiv from 'vk-apps-frontend/components/DisplayUnsetDiv';
 
+const ViewPanelStub = () => (
+  <div className="View__panel" style={{
+    display: "none"
+  }} />
+);
+
 const urlsToComponents = {
   '/home': Home,
 
@@ -84,8 +90,8 @@ class Routes extends React.Component {
               <Component {...props} />
             )} />
 
-            // TODO: get rid of the stub after fix in VK UI
-            <div className="View__panel" />
+            {/* TODO: get rid of the stub after fix in VK UI */}
+            <ViewPanelStub/>
           </DisplayUnsetDiv>
         );
       }
@@ -98,8 +104,8 @@ class Routes extends React.Component {
           />
         </Route>
 
-        // TODO: get rid of the stub after fix in VK UI
-        <div className="View__panel" />
+        {/* TODO: get rid of the stub after fix in VK UI */}
+        <ViewPanelStub/>
       </DisplayUnsetDiv>
     );
 
