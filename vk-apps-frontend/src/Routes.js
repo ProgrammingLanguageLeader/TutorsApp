@@ -25,6 +25,8 @@ import OutgoingStudentRequests from 'vk-apps-frontend/views/OutgoingStudentReque
 import Tutors from 'vk-apps-frontend/views/Tutors';
 import Students from 'vk-apps-frontend/views/Students';
 
+import DisplayUnsetDiv from 'vk-apps-frontend/components/DisplayUnsetDiv';
+
 const urlsToComponents = {
   '/home': Home,
 
@@ -77,18 +79,18 @@ class Routes extends React.Component {
       urlToComponent => {
         const [url, Component] = urlToComponent;
         return (
-          <div key={url} id={url}>
+          <DisplayUnsetDiv key={url} id={url}>
             <Route exact path={url} render={props => (
               <Component {...props} />
             )} />
 
             // TODO: get rid of the stub after fix in VK UI
             <div className="View__panel" />
-          </div>
+          </DisplayUnsetDiv>
         );
       }
     ).concat(
-      <div key="/" id="/">
+      <DisplayUnsetDiv key="/" id="/">
         <Route exact path="/">
           <Entrypoint
             currentUser={currentUser}
@@ -98,7 +100,7 @@ class Routes extends React.Component {
 
         // TODO: get rid of the stub after fix in VK UI
         <div className="View__panel" />
-      </div>
+      </DisplayUnsetDiv>
     );
 
     return (
