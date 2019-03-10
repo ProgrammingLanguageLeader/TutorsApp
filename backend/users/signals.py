@@ -26,21 +26,17 @@ def handle_avatar_on_change(sender, instance, **kwargs):
     with new file and compress the last one.
     """
     if not instance.pk:
-        return False
-
+        return
     try:
         old_avatar = sender.objects.get(pk=instance.pk).avatar
     except sender.DoesNotExist:
-        return False
-
-    if not old_avatar:
-        return False
+        return
 
     new_avatar = instance.avatar
-    if not old_avatar == new_avatar:
+    if old_avatar and old_avatar != new_avatar:
         if os.path.isfile(old_avatar.path):
             os.remove(old_avatar.path)
 
     if new_avatar and max(new_avatar.height, new_avatar.width) > 200:
         instance.avatar = compress_avatar(new_avatar)
-        os.remove(new_avatar.file.name)
+        os.remove(new_avatar.path)
