@@ -80,7 +80,7 @@ const getExactUrlPattern = path => {
 
 class Routes extends React.Component {
   render() {
-    const { location, isUserRegistered, currentUser } = this.props;
+    const { location, fetching, currentUser } = this.props;
     const panels = Object.entries(urlsToComponents).map(
       urlToComponent => {
         const [url, Component] = urlToComponent;
@@ -100,7 +100,7 @@ class Routes extends React.Component {
         <Route exact path="/">
           <Entrypoint
             currentUser={currentUser}
-            isUserRegistered={isUserRegistered}
+            fetching={fetching}
           />
         </Route>
 

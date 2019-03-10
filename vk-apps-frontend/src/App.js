@@ -15,7 +15,7 @@ import { vkAppsUsersActions, notificationsActions } from 'vk-apps-frontend/actio
 import Tabbar from 'vk-apps-frontend/components/Tabbar';
 
 const mapStateToProps = state => {
-  const { vkUserInfo, fetching } = state.VK.appsUserReducer;
+  const { vkUserInfo, fetching } = state.VK.appsUser;
   const { user, vkId } = state.currentUser;
   const { unreadNotificationsCount } = state.API.notificationsReducer;
   return {
@@ -41,8 +41,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      historyLocalLength: 1,
-      isUserRegistered: true,
+      fetching: true,
     };
     this.getUnreadNotificationsListWithInterval = this.getUnreadNotificationsListWithInterval.bind(this);
     this.history = createHashHistory({
@@ -54,36 +53,22 @@ class App extends React.Component {
     this.props.init();
     this.props.fetchCurrentUserInfo();
     this.getUnreadNotificationsListWithInterval();
-
-    this.history.listen((location, action) => {
-      let newHistoryLocalLength = this.state.historyLocalLength;
-      if (action === 'POP') {
-        newHistoryLocalLength--;
-      } else {
-        newHistoryLocalLength++;
-      }
-      this.setState({
-        historyLocalLength: newHistoryLocalLength
-      });
-    });
   }
 
   async componentDidUpdate(prevProps) {
     if (this.props.vkUserInfo !== prevProps.vkUserInfo) {
+      this.setState({
+        fetching: true,
+      });
       const { id } = this.props.vkUserInfo;
       const response = await this.props.getVkAppsUser(id);
       if (response.status === 200) {
         const { user, vk_id } = response.data;
         this.props.saveCurrentUserData(user, vk_id);
-        this.setState({
-          isUserRegistered: true
-        });
       }
-      else {
-        this.setState({
-          isUserRegistered: false
-        });
-      }
+      this.setState({
+        fetching: false,
+      });
     }
   }
 
@@ -96,7 +81,7 @@ class App extends React.Component {
 
   render() {
     const { user, unreadNotificationsCount } = this.props;
-    const { isUserRegistered } = this.state;
+    const { fetching } = this.state;
 
     return (
       <Router history={this.history}>
@@ -109,7 +94,7 @@ class App extends React.Component {
         }>
           <Routes
             id="routes"
-            isUserRegistered={isUserRegistered}
+            fetching={fetching}
             currentUser={user}
           />
         </Epic>

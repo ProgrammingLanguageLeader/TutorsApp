@@ -6,14 +6,14 @@ import Panel from '@vkontakte/vkui/dist/components/Panel/Panel';
 
 import DivSpinner from 'vk-apps-frontend/components/DivSpinner';
 
-export default ({isUserRegistered, currentUser}) => (
+export default ({ fetching, currentUser }) => (
   <View activePanel="panel">
     <Panel id="panel">
-      {!isUserRegistered
-        ? <Redirect to="/home"/>
+      {fetching
+        ? <DivSpinner />
         : currentUser
-          ? <Redirect to={`/user/${currentUser.id}`}/>
-          : <DivSpinner/>
+          ? <Redirect to={`/user/${currentUser.id}`} />
+          : <Redirect to="/home" />
       }
     </Panel>
   </View>

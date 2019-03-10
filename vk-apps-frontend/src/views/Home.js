@@ -139,10 +139,12 @@ const RetryLaterPopout = () => (
 
 const mapStateToProps = state => {
   const { user } = state.API.vkAppsUsersReducer;
-  const { vkUserInfo } = state.VK.appsUserReducer;
+  const { vkUserInfo } = state.VK.appsUser;
+  const { currentUser } = state;
   return {
     user,
     vkUserInfo,
+    currentUser,
   };
 };
 
@@ -166,13 +168,26 @@ class Home extends React.Component {
     }
   }
 
+  redirectIfUserRegistered() {
+    if (this.props.currentUser.user) {
+      this.props.history.replace('/');
+    }
+  }
+
+  componentDidMount() {
+    this.redirectIfUserRegistered.call(this);
+  }
+
+  componentDidUpdate() {
+    this.redirectIfUserRegistered.call(this);
+  }
+
   async createUser() {
-    await this.updateAvatarFromVK(35);
     await this.setState({
       popout: <CreateUserPopout/>,
     });
     const { status } = await this.props.createVkAppsUser();
-    if (status >= 400) {
+    if (!status || status >= 400) {
       await this.setState({
         popout: <RetryLaterPopout/>,
       });
@@ -182,10 +197,10 @@ class Home extends React.Component {
     const vkId = this.props.vkUserInfo.id;
     await this.updateUserInfoFromVK(user.id);
     await this.updateAvatarFromVK(user.id);
+    this.props.saveCurrentUserData(user, vkId);
     await this.setState({
       popout: null,
     });
-    this.props.saveCurrentUserData(user, vkId);
   }
 
   async updateUserInfoFromVK(id) {
