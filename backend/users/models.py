@@ -11,8 +11,7 @@ from django.conf import settings
 
 from users.managers import UserManager
 
-from utils.validators import AlphabetSymbolsAndSpacesValidator, \
-    NoSpecialSymbolsValidator
+from utils.validators import NoSpecialSymbolsValidator
 
 
 class User(AbstractBaseUser, PermissionsMixin):
@@ -43,7 +42,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         blank=False,
         default='Anonymous',
         validators=[
-            AlphabetSymbolsAndSpacesValidator()
+            NoSpecialSymbolsValidator()
         ]
     )
     last_name = models.CharField(
@@ -52,7 +51,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         blank=False,
         default='Anonymous',
         validators=[
-            AlphabetSymbolsAndSpacesValidator()
+            NoSpecialSymbolsValidator()
         ]
     )
 
@@ -90,7 +89,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         blank=True,
         max_length=50,
         validators=[
-            AlphabetSymbolsAndSpacesValidator()
+            NoSpecialSymbolsValidator()
         ]
     )
     district = models.TextField(
