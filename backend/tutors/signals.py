@@ -45,5 +45,5 @@ def delete_old_notifications_and_create_new_one_on_student_request_answer(
     Notification.objects.create(
         sender=instance.tutor,
         recipient=instance.student,
-        verb='student request %s' % 'accept' if accepted else 'reject'
+        verb='student request %s' % ('accept' if accepted else 'reject')
     )
