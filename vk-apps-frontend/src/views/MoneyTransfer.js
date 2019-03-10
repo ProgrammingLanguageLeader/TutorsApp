@@ -16,13 +16,13 @@ import { appsActions } from 'vk-apps-frontend/actions/vk';
 import { tutorsActions, vkAppsUsersActions } from 'vk-apps-frontend/actions/api';
 
 const mapStateToProps = state => {
-  const { tutors } = state.apiReducer.tutorsReducer;
-  const { currentUserReducer } = state;
-  const { errors } = state.vkReducer.appsPayReducer;
+  const { tutors } = state.API.tutorsReducer;
+  const { currentUser } = state;
+  const { errors } = state.VK.appsPayReducer;
   return {
     tutors,
     errors,
-    currentUserReducer,
+    currentUser,
   };
 };
 
@@ -102,8 +102,7 @@ class MoneyTransfer extends React.Component {
                   'pay-to-user',
                   {
                     'user_id': response.data.vk_id,
-                    'amount': values.amount,
-                    'message': values.message,
+                    'amount': values.amount
                   }
                 );
                 actions.setSubmitting(false);

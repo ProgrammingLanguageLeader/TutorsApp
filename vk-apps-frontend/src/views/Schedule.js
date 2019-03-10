@@ -25,12 +25,12 @@ import { lessonsActions } from 'vk-apps-frontend/actions/api';
 import { ROOT_URL } from 'vk-apps-frontend/constants';
 
 const mapStateToProps = state => {
-  const { fetching, lessons } = state.apiReducer.lessonsReducer;
-  const { currentUserReducer } = state;
+  const { fetching, lessons } = state.API.lessonsReducer;
+  const { currentUser } = state;
   return {
     lessons,
     fetching,
-    currentUserReducer,
+    currentUser,
   };
 };
 
@@ -71,7 +71,7 @@ class Schedule extends React.Component {
   }
 
 	render() {
-    const { fetching, lessons, currentUserReducer } = this.props;
+    const { fetching, lessons, currentUser } = this.props;
 
 		return (
       <View activePanel="panel">
@@ -109,7 +109,7 @@ class Schedule extends React.Component {
             { lessons && (
               <List>
                 { lessons.map(lesson => {
-                  const visibleUser = (currentUserReducer.user.id === lesson.tutor.id) ? lesson.student : lesson.tutor;
+                  const visibleUser = (currentUser.user.id === lesson.tutor.id) ? lesson.student : lesson.tutor;
                   return (
                     <Cell
                       size="l"

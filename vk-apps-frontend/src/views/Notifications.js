@@ -20,13 +20,11 @@ import DivSpinner from 'vk-apps-frontend/components/DivSpinner';
 import { notificationsActions, tutorsActions } from 'vk-apps-frontend/actions/api';
 
 const mapStateToProps = state => {
-  const { fetching, unreadNotifications, readNotifications } = state.apiReducer.notificationsReducer;
-  const { currentUserReducer } = state;
+  const { fetching, unreadNotifications, readNotifications } = state.API.notificationsReducer;
   return {
     unreadNotifications,
     readNotifications,
     fetching,
-    currentUserReducer,
   };
 };
 

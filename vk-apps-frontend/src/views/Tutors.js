@@ -15,12 +15,10 @@ import ShortUserCard from 'vk-apps-frontend/components/ShortUserCard';
 import { tutorsActions } from 'vk-apps-frontend/actions/api';
 
 const mapStateToProps = state => {
-  const { tutors, fetching } = state.apiReducer.tutorsReducer;
-  const { currentUserReducer } = state;
+  const { tutors, fetching } = state.API.tutorsReducer;
   return {
     tutors,
     fetching,
-    currentUserReducer,
   };
 };
 

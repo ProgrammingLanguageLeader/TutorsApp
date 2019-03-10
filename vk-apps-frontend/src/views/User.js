@@ -21,11 +21,11 @@ import DivSpinner from 'vk-apps-frontend/components/DivSpinner';
 import BackIcon from 'vk-apps-frontend/components/BackIcon';
 
 const mapStateToProps = state => {
-  const { user, fetching } = state.apiReducer.usersReducer;
-  const { currentUserReducer } = state;
+  const { user, fetching } = state.API.usersReducer;
+  const { currentUser } = state;
   return {
     user,
-    currentUserReducer,
+    currentUser,
     fetching,
   };
 };
@@ -44,8 +44,8 @@ class User extends React.Component {
 
 	render() {
     const { id } = this.props.match.params;
-    const { user, fetching, currentUserReducer } = this.props;
-    const isProfileEditable = currentUserReducer.user && Number(id) === Number(currentUserReducer.user.id);
+    const { user, fetching, currentUser } = this.props;
+    const isProfileEditable = currentUser.user && Number(id) === Number(currentUser.user.id);
 
 		return (
       <View activePanel="panel">

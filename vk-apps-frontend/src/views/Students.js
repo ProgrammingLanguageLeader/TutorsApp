@@ -16,12 +16,10 @@ import DeleteConfirmationAlert from 'vk-apps-frontend/components/DeleteConfirmat
 import { tutorsActions } from 'vk-apps-frontend/actions/api';
 
 const mapStateToProps = state => {
-  const { students, fetching } = state.apiReducer.tutorsReducer;
-  const { currentUserReducer } = state;
+  const { students, fetching } = state.API.tutorsReducer;
   return {
     students,
     fetching,
-    currentUserReducer,
   };
 };
 

@@ -18,13 +18,11 @@ import { lessonsActions, tutorsActions } from 'vk-apps-frontend/actions/api';
 import LessonForm from 'vk-apps-frontend/forms/LessonForm';
 
 const mapStateToProps = state => {
-  const { fetching } = state.apiReducer.lessonsReducer;
-  const { currentUserReducer } = state;
-  const { students } = state.apiReducer.tutorsReducer;
+  const { fetching } = state.API.lessonsReducer;
+  const { students } = state.API.tutorsReducer;
   return {
     fetching,
     students,
-    currentUserReducer,
   };
 };
 

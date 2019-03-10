@@ -16,9 +16,9 @@ import BackIcon from 'vk-apps-frontend/components/BackIcon';
 import { filterActions } from 'vk-apps-frontend/actions';
 
 const mapStateToProps = state => {
-  const { filterReducer } = state;
+  const { vacanciesFilter } = state;
   return {
-    filterReducer,
+    vacanciesFilter,
   };
 };
 
@@ -65,14 +65,14 @@ class Filter extends React.Component {
           <Group title="Поля фильтра">
             <Formik
               component={VacanciesFilterForm}
-              initialValues={{...this.props.filterReducer}}
+              initialValues={{...this.props.vacanciesFilter}}
               onSubmit={async (values, action) => {
                 this.handleVacanciesFilterFormSubmit(values);
                 await action.setSubmitting(false);
               }}
               onReset={async (values, action) => {
                 this.handleVacanciesFilterFormReset();
-                await action.setValues({...this.props.filterReducer});
+                await action.setValues({...this.props.vacanciesFilter});
               }}
             />
           </Group>

@@ -23,12 +23,12 @@ import { tutorsActions } from 'vk-apps-frontend/actions/api';
 import { ROOT_URL } from 'vk-apps-frontend/constants';
 
 const mapStateToProps = state => {
-  const { studentRequest, fetching } = state.apiReducer.tutorsReducer;
-  const { currentUserReducer } = state;
+  const { studentRequest, fetching } = state.API.tutorsReducer;
+  const { currentUser } = state;
   return {
     studentRequest,
     fetching,
-    currentUserReducer,
+    currentUser,
   };
 };
 
@@ -68,9 +68,9 @@ class StudentRequest extends React.Component {
     const {
       studentRequest,
       fetching,
-      currentUserReducer,
+      currentUser,
     } = this.props;
-    const isTutor = currentUserReducer.user && studentRequest && currentUserReducer.user.id === studentRequest.tutor.id;
+    const isTutor = currentUser.user && studentRequest && currentUser.user.id === studentRequest.tutor.id;
     const showingUser = studentRequest ? (isTutor ? studentRequest.student : studentRequest.tutor) : {};
 
     return (

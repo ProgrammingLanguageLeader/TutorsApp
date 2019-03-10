@@ -32,13 +32,13 @@ import { vacanciesActions, tutorsActions } from 'vk-apps-frontend/actions/api';
 import { ROOT_URL } from 'vk-apps-frontend/constants';
 
 const mapStateToProps = state => {
-  const fetching = state.apiReducer.vacanciesReducer.fetching || state.apiReducer.tutorsReducer.fetching;
-  const { vacancy } = state.apiReducer.vacanciesReducer;
-  const { currentUserReducer } = state;
+  const fetching = state.API.vacanciesReducer.fetching || state.API.tutorsReducer.fetching;
+  const { vacancy } = state.API.vacanciesReducer;
+  const { currentUser } = state;
   return {
     vacancy,
     fetching,
-    currentUserReducer,
+    currentUser,
   };
 };
 
@@ -104,8 +104,8 @@ class Vacancy extends React.Component {
   }
 
   render() {
-    const { fetching, vacancy, currentUserReducer } = this.props;
-    const isEditable = currentUserReducer.user && vacancy && currentUserReducer.user.id === vacancy.owner.id;
+    const { fetching, vacancy, currentUser } = this.props;
+    const isEditable = currentUser.user && vacancy && currentUser.user.id === vacancy.owner.id;
 
     return (
       <View activePanel="panel" popout={this.state.popout}>

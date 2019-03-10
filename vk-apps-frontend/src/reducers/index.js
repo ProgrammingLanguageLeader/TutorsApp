@@ -6,10 +6,10 @@ import filterReducer from './filterReducer';
 import currentUserReducer from './currentUser';
 
 const rootReducer = combineReducers({
-  apiReducer,
-  vkReducer,
-  filterReducer,
-  currentUserReducer,
+  API: apiReducer,
+  VK: vkReducer,
+  vacanciesFilter: filterReducer,
+  currentUser: currentUserReducer,
 });
 
 export default rootReducer;

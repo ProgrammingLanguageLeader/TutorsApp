@@ -18,10 +18,8 @@ import VacancyForm from 'vk-apps-frontend/forms/VacancyForm';
 import { vacanciesActions } from 'vk-apps-frontend/actions/api';
 
 const mapStateToProps = state => {
-  const { vacancy } = state.apiReducer.vacanciesReducer;
-  const { currentUserReducer } = state;
+  const { vacancy } = state.API.vacanciesReducer;
   return {
-    currentUserReducer,
     vacancy,
   };
 };

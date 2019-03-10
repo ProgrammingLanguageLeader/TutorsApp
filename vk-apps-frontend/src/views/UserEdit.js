@@ -22,13 +22,11 @@ import UploadAvatarForm from 'vk-apps-frontend/forms/UploadAvatarForm';
 import EditUserForm from 'vk-apps-frontend/forms/EditUserForm';
 
 const mapStateToProps = state => {
-  const { currentUserReducer } = state;
-  const { vkUserInfo } = state.vkReducer.appsUserReducer;
-  const { user, fetching } = state.apiReducer.usersReducer;
+  const { vkUserInfo } = state.VK.appsUserReducer;
+  const { user, fetching } = state.API.usersReducer;
   return {
     vkUserInfo,
     fetching,
-    currentUserReducer,
     user,
   };
 };

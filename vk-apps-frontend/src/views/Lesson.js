@@ -31,12 +31,12 @@ import { ROOT_URL } from 'vk-apps-frontend/constants';
 import durationHumanizer from 'vk-apps-frontend/helpers/durationHumanizer';
 
 const mapStateToProps = state => {
-  const { lesson, fetching } = state.apiReducer.lessonsReducer;
-  const { currentUserReducer } = state;
+  const { lesson, fetching } = state.API.lessonsReducer;
+  const { currentUser } = state;
   return {
     lesson,
     fetching,
-    currentUserReducer,
+    currentUser,
   };
 };
 
@@ -109,7 +109,7 @@ class Lesson extends React.Component {
     const {
       fetching,
       lesson,
-      currentUserReducer
+      currentUser
     } = this.props;
 
     return (
@@ -129,7 +129,7 @@ class Lesson extends React.Component {
 
           {lesson && (
             <div>
-              {lesson.tutor.id === currentUserReducer.user.id && (
+              {lesson.tutor.id === currentUser.user.id && (
                 <Group title="Управление уроком">
                   <CellButton
                     before={<Icon24Write/>}
@@ -146,7 +146,7 @@ class Lesson extends React.Component {
                   </CellButton>
                 </Group>
               )}
-              {lesson.student.id === currentUserReducer.user.id && (
+              {lesson.student.id === currentUser.user.id && (
                 <Group title="Оплата урока">
                   <CellButton
                     before={<Icon24MoneyTransfer/>}

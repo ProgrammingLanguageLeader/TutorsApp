@@ -12,7 +12,7 @@ import List from '@vkontakte/vkui/dist/components/List/List';
 import BackIcon from 'vk-apps-frontend/components/BackIcon';
 
 const mapStateToProps = state => {
-  const { user } = state.currentUserReducer;
+  const { user } = state.currentUser;
   return {
     user,
   };

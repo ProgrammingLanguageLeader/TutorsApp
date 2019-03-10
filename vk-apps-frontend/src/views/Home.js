@@ -138,8 +138,8 @@ const RetryLaterPopout = () => (
 );
 
 const mapStateToProps = state => {
-  const { user } = state.apiReducer.vkAppsUsersReducer;
-  const { vkUserInfo } = state.vkReducer.appsUserReducer;
+  const { user } = state.API.vkAppsUsersReducer;
+  const { vkUserInfo } = state.VK.appsUserReducer;
   return {
     user,
     vkUserInfo,

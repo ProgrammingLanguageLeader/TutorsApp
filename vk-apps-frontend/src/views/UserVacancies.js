@@ -23,12 +23,12 @@ import { vacanciesActions } from 'vk-apps-frontend/actions/api';
 import { ROOT_URL } from 'vk-apps-frontend/constants';
 
 const mapStateToProps = state => {
-  const { vacancies, fetching } = state.apiReducer.vacanciesReducer;
-  const { currentUserReducer } = state;
+  const { vacancies, fetching } = state.API.vacanciesReducer;
+  const { currentUser } = state;
   return {
     vacancies,
     fetching,
-    currentUserReducer
+    currentUser
   };
 };
 
@@ -40,7 +40,7 @@ const mapDispatchToProps = dispatch => {
 
 class UserVacancies extends React.Component {
   componentDidMount() {
-    const { user } = this.props.currentUserReducer;
+    const { user } = this.props.currentUser;
     if (user) {
       this.props.searchVacancies({
         owner: user.id,

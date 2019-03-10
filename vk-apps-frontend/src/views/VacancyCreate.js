@@ -17,10 +17,6 @@ import VacancyForm from 'vk-apps-frontend/forms/VacancyForm';
 
 import { vacanciesActions } from 'vk-apps-frontend/actions/api';
 
-const mapStateToProps = state => {
-  return {};
-};
-
 const mapDispatchToProps = dispatch => {
   return {
     createVacancy: bindActionCreators(vacanciesActions.createVacancy, dispatch),
@@ -102,4 +98,4 @@ class VacancyCreate extends React.Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(VacancyCreate);
+export default connect(state => {}, mapDispatchToProps)(VacancyCreate);

@@ -1,7 +1,8 @@
 import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { HashRouter as Router } from 'react-router-dom';
+import { Router } from 'react-router-dom';
+import { createHashHistory } from 'history';
 
 import Epic from '@vkontakte/vkui/dist/components/Epic/Epic';
 
@@ -14,9 +15,9 @@ import { vkAppsUsersActions, notificationsActions } from 'vk-apps-frontend/actio
 import Tabbar from 'vk-apps-frontend/components/Tabbar';
 
 const mapStateToProps = state => {
-  const { vkUserInfo, fetching } = state.vkReducer.appsUserReducer;
-  const { user, vkId } = state.currentUserReducer;
-  const { unreadNotificationsCount } = state.apiReducer.notificationsReducer;
+  const { vkUserInfo, fetching } = state.VK.appsUserReducer;
+  const { user, vkId } = state.currentUser;
+  const { unreadNotificationsCount } = state.API.notificationsReducer;
   return {
     fetching,
     vkUserInfo,
@@ -40,15 +41,31 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      historyLocalLength: 1,
       isUserRegistered: true,
     };
     this.getUnreadNotificationsListWithInterval = this.getUnreadNotificationsListWithInterval.bind(this);
+    this.history = createHashHistory({
+      hashType: 'slash'
+    });
   }
 
   componentDidMount() {
     this.props.init();
     this.props.fetchCurrentUserInfo();
     this.getUnreadNotificationsListWithInterval();
+
+    this.history.listen((location, action) => {
+      let newHistoryLocalLength = this.state.historyLocalLength;
+      if (action === 'POP') {
+        newHistoryLocalLength--;
+      } else {
+        newHistoryLocalLength++;
+      }
+      this.setState({
+        historyLocalLength: newHistoryLocalLength
+      });
+    });
   }
 
   async componentDidUpdate(prevProps) {
@@ -82,7 +99,7 @@ class App extends React.Component {
     const { isUserRegistered } = this.state;
 
     return (
-      <Router>
+      <Router history={this.history}>
         <Epic activeStory="routes" tabbar={
           <Tabbar
             hidden={!user}
