@@ -13,7 +13,7 @@ import VacanciesFilterForm from 'vk-apps-frontend/forms/VacanciesFilterForm';
 
 import BackIcon from 'vk-apps-frontend/components/BackIcon';
 
-import { filterActions } from 'vk-apps-frontend/actions';
+import { vacanciesFilterActions } from 'vk-apps-frontend/actions';
 
 const mapStateToProps = state => {
   const { vacanciesFilter } = state;
@@ -24,12 +24,12 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    deleteFilter: bindActionCreators(filterActions.deleteFilter, dispatch),
-    updateFilter: bindActionCreators(filterActions.updateFilter, dispatch),
+    deleteFilter: bindActionCreators(vacanciesFilterActions.deleteFilter, dispatch),
+    updateFilter: bindActionCreators(vacanciesFilterActions.updateFilter, dispatch),
   }
 };
 
-class Filter extends React.Component {
+class VacanciesFilter extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -82,4 +82,4 @@ class Filter extends React.Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Filter);
+export default connect(mapStateToProps, mapDispatchToProps)(VacanciesFilter);

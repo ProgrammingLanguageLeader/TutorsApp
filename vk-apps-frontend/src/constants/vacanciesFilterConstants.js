@@ -1,6 +1,6 @@
 const VACANCIES_FILTER_UPDATE = 'vacancies/VACANCIES_FILTER_UPDATE';
 const VACANCIES_FILTER_DELETE = 'vacancies/VACANCIES_FILTER_DELETE';
 
-export const filterConstants = {
+export const vacanciesFilterConstants = {
   VACANCIES_FILTER_UPDATE, VACANCIES_FILTER_DELETE,
 };

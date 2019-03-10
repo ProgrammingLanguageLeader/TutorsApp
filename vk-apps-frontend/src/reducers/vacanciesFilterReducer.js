@@ -1,6 +1,6 @@
 import Immutable from 'seamless-immutable';
 
-import { filterConstants, educationLevelList } from 'vk-apps-frontend/constants';
+import { vacanciesFilterConstants, educationLevelList } from 'vk-apps-frontend/constants';
 
 const initialEducationLevels = educationLevelList.reduce((object, level) => {
   return {
@@ -20,9 +20,9 @@ const initialState = Immutable({
   ...initialEducationLevels,
 });
 
-const filterReducer = (state = initialState, action) => {
+const vacanciesFilterReducer = (state = initialState, action) => {
   switch (action.type) {
-    case filterConstants.VACANCIES_FILTER_UPDATE: {
+    case vacanciesFilterConstants.VACANCIES_FILTER_UPDATE: {
       const { params } = action;
       return Immutable.merge({
         ...state,
@@ -30,7 +30,7 @@ const filterReducer = (state = initialState, action) => {
       });
     }
     
-    case filterConstants.VACANCIES_FILTER_DELETE: {
+    case vacanciesFilterConstants.VACANCIES_FILTER_DELETE: {
       return Immutable.merge({
         ...initialState,
       });
@@ -41,4 +41,4 @@ const filterReducer = (state = initialState, action) => {
   }
 };
 
-export default filterReducer;
+export default vacanciesFilterReducer;

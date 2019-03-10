@@ -10,7 +10,7 @@ import Vacancies from 'vk-apps-frontend/views/Vacancies';
 import VacancyCreate from 'vk-apps-frontend/views/VacancyCreate';
 import UserEdit from 'vk-apps-frontend/views/UserEdit';
 import Schedule from 'vk-apps-frontend/views/Schedule';
-import Filter from 'vk-apps-frontend/views/Filter';
+import VacanciesFilter from 'vk-apps-frontend/views/VacanciesFilter';
 import Notifications from 'vk-apps-frontend/views/Notifications';
 import Vacancy from 'vk-apps-frontend/views/Vacancy';
 import MainMenu from 'vk-apps-frontend/views/MainMenu';
@@ -43,7 +43,7 @@ const urlsToComponents = {
   '/vacancy/:id(\\d+)/edit': VacancyEdit,
   '/vacancy/create': VacancyCreate,
   '/vacancies': Vacancies,
-  '/vacancies/filter': Filter,
+  '/vacancies/filter': VacanciesFilter,
   '/vacancies/current_user': UserVacancies,
 
   '/schedule': Schedule,

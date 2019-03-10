@@ -1,6 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom'; 
-import moment from 'moment';
+import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 
 import App from 'vk-apps-frontend/App';

@@ -1,2 +1,2 @@
-export * from './filterActions';
+export * from './vacanciesFilterActions';
 export * from './currentUserActions';

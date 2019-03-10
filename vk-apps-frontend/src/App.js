@@ -15,11 +15,10 @@ import { vkAppsUsersActions, notificationsActions } from 'vk-apps-frontend/actio
 import Tabbar from 'vk-apps-frontend/components/Tabbar';
 
 const mapStateToProps = state => {
-  const { vkUserInfo, fetching } = state.VK.appsUser;
+  const { vkUserInfo } = state.VK.appsUser;
   const { user, vkId } = state.currentUser;
   const { unreadNotificationsCount } = state.API.notificationsReducer;
   return {
-    fetching,
     vkUserInfo,
     user,
     vkId,
