@@ -18,7 +18,7 @@ import { tutorsActions, vkAppsUsersActions } from 'vk-apps-frontend/actions/api'
 const mapStateToProps = state => {
   const { tutors } = state.API.tutorsReducer;
   const { currentUser } = state;
-  const { errors } = state.VK.appsPayReducer;
+  const { errors } = state.VK.appsPay;
   return {
     tutors,
     errors,
