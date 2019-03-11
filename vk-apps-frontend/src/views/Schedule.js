@@ -25,11 +25,8 @@ import { lessonsActions } from 'vk-apps-frontend/actions/api';
 import { ROOT_URL } from 'vk-apps-frontend/constants';
 
 const mapStateToProps = state => {
-  const { fetching, lessons } = state.API.lessonsReducer;
   const { currentUser } = state;
   return {
-    lessons,
-    fetching,
     currentUser,
   };
 };
@@ -45,24 +42,44 @@ class Schedule extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      lessons: [],
+      fetching: false,
       date: moment(),
     };
     this.getLessonsByDay = this.getLessonsByDay.bind(this);
     this.handleDateChange = this.handleDateChange.bind(this);
   }
 
-  componentDidMount() {
-    this.getLessonsByDay();
+  async componentDidMount() {
+    await this.getLessonsByDay();
   }
 
-  getLessonsByDay() {
+  async getLessonsByDay() {
+    this.setState({
+      fetching: true,
+    });
     const { date } = this.state;
-    const beginning_time__gte = date.clone().startOf('day').utc().format("YYYY-MM-DD HH:mm:ss");
-    const beginning_time__lte = date.clone().endOf('day').utc().format("YYYY-MM-DD HH:mm:ss");
-    this.props.getLessonsList({
+    const beginning_time__gte = date
+      .clone()
+      .startOf('day')
+      .utc()
+      .format("YYYY-MM-DD HH:mm:ss");
+    const beginning_time__lte = date
+      .clone()
+      .endOf('day')
+      .utc()
+      .format("YYYY-MM-DD HH:mm:ss");
+    const lessonsListResponse = await this.props.getLessonsList({
       beginning_time__gte,
       beginning_time__lte,
     });
+    const lessons = lessonsListResponse.status === 200
+      ? lessonsListResponse.data.results
+      : [];
+    this.setState({
+      lessons,
+      fetching: false,
+    })
   }
 
   async handleDateChange(date) {
@@ -71,7 +88,8 @@ class Schedule extends React.Component {
   }
 
 	render() {
-    const { fetching, lessons, currentUser } = this.props;
+    const { currentUser } = this.props;
+    const { fetching, lessons } = this.state;
 
 		return (
       <View activePanel="panel">
@@ -84,7 +102,7 @@ class Schedule extends React.Component {
             Расписание
           </PanelHeader>
 
-          <Group title="Календарь" style={{ paddingBottom: "10px" }}>
+          <Group title="Календарь">
             <Div>
               <Datetime
                 input={false}
@@ -130,6 +148,7 @@ class Schedule extends React.Component {
                     </Cell>
                   );
                 })}
+                {lessons.length === 0 && <Div>Нет занятий</Div>}
               </List>
             )}
           </Group>
