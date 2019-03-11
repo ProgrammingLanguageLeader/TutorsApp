@@ -46,7 +46,7 @@ class LessonForm extends React.Component {
           <SuccessfulFormStatus title="Успешно" />
         )}
 
-        <FormLayoutGroup top="Выбор ученика">
+        <FormLayoutGroup top="Ученик">
           <Select
             name="student"
             value={values.student}

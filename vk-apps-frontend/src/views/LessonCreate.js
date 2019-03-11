@@ -10,21 +10,11 @@ import PanelHeader from '@vkontakte/vkui/dist/components/PanelHeader/PanelHeader
 import HeaderButton from '@vkontakte/vkui/dist/components/HeaderButton/HeaderButton';
 import Group from '@vkontakte/vkui/dist/components/Group/Group';
 
-import DivSpinner from 'vk-apps-frontend/components/DivSpinner';
 import BackIcon from 'vk-apps-frontend/components/BackIcon';
 
 import { lessonsActions, tutorsActions } from 'vk-apps-frontend/actions/api';
 
 import LessonForm from 'vk-apps-frontend/forms/LessonForm';
-
-const mapStateToProps = state => {
-  const { fetching } = state.API.lessonsReducer;
-  const { students } = state.API.tutorsReducer;
-  return {
-    fetching,
-    students,
-  };
-};
 
 const mapDispatchToProps = dispatch => {
   return {
@@ -39,13 +29,20 @@ class LessonCreate extends React.Component {
     this.handleLessonFormSubmit = this.handleLessonFormSubmit.bind(this);
     this.startDiv = React.createRef();
     this.state = {
+      students: [],
       success: null,
       errors: {},
     }
   }
 
-  componentDidMount() {
-    this.props.getStudentsList();
+  async componentDidMount() {
+    const studentsListResponse = await this.props.getStudentsList();
+    const students = studentsListResponse.status === 200
+      ? studentsListResponse.data.results
+      : [];
+    this.setState({
+      students,
+    });
   }
 
   componentDidUpdate() {
@@ -70,7 +67,7 @@ class LessonCreate extends React.Component {
   }
 
   render() {
-    const { fetching, students } = this.props;
+    const { students, success, errors } = this.state;
 
     return (
       <View activePanel="panel">
@@ -85,10 +82,6 @@ class LessonCreate extends React.Component {
 
           <div ref={this.startDiv} />
 
-          {fetching && (
-            <DivSpinner />
-          )}
-
           <Group title="Форма создания">
             <Formik
               initialValues={{
@@ -100,9 +93,9 @@ class LessonCreate extends React.Component {
                 formikProps => (
                   <LessonForm
                     {...formikProps}
-                    isSuccessful={this.state.success}
-                    errors={this.state.errors}
-                    students={students || []}
+                    isSuccessful={success}
+                    errors={errors}
+                    students={students}
                     submitLabel="Создать"
                   />
                 )
@@ -110,7 +103,7 @@ class LessonCreate extends React.Component {
               onSubmit={async (values, action) => {
                 await this.handleLessonFormSubmit(values);
                 action.setSubmitting(false);
-                action.setErrors(this.state.errors);
+                action.setErrors(errors);
               }}
             />
           </Group>
@@ -120,4 +113,4 @@ class LessonCreate extends React.Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(LessonCreate);
+export default connect(null, mapDispatchToProps)(LessonCreate);
