@@ -33,6 +33,7 @@ const NotificationCell = ({ notification, onSenderClick, buttonBefore, onButtonC
       || verb === 'lesson delete' && 'Удален урок'
       || verb === 'lesson update' && 'Изменение урока'
       || verb === 'lesson payment' && 'Оплата урока'
+      || verb === 'student delete' && 'Вы были удалены из списка учеников'
       || verb;
   const isExpandable = Boolean(notification.target);
   return (
