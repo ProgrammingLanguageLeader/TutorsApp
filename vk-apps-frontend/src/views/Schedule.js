@@ -102,6 +102,12 @@ class Schedule extends React.Component {
             Расписание
           </PanelHeader>
 
+          <Group title="Добавление занятия">
+            <CellButton before={<Icon24Add />} onClick={() => this.props.history.push('/lesson/create')}>
+              Добавить урок
+            </CellButton>
+          </Group>
+
           <Group title="Календарь">
             <Div>
               <Datetime
@@ -112,12 +118,6 @@ class Schedule extends React.Component {
                 locale="ru"
               />
             </Div>
-          </Group>
-
-          <Group title="Добавление занятия">
-            <CellButton before={<Icon24Add />} onClick={() => this.props.history.push('/lesson/create')}>
-              Добавить урок
-            </CellButton>
           </Group>
 
           <Group title="Занятия в выбранный день">

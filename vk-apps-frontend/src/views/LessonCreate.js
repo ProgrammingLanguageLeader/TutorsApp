@@ -55,17 +55,13 @@ class LessonCreate extends React.Component {
 
   async handleLessonFormSubmit(values) {
     const response = await this.props.createLesson(values);
-    if (response.status < 400) {
-      this.setState({
-        success: true,
-        errors: {},
-      });
-      return;
-    }
+    const success = response.status < 400;
+    const errors = success ? {} : response;
     this.setState({
-      success: false,
-      errors: response,
+      success,
+      errors,
     });
+    this.scrollIntoStartDiv();
   }
 
   render() {
@@ -85,23 +81,17 @@ class LessonCreate extends React.Component {
           <div ref={this.startDiv} />
 
           <Group title="Форма создания">
-            {success && (
-              <SuccessfulFormStatus title="Успешно" />
-            )}
+            {success && <SuccessfulFormStatus title="Успешно" />}
 
             <Formik
               initialValues={{
                 beginning_time: moment(),
                 duration: moment.duration(60, 'minutes'),
-                price: 500,
               }}
-              validateOnChange={false}
-              validateOnBlur={false}
               validate={values => {
                 this.setState({
                   success: false,
                 });
-                this.scrollIntoStartDiv();
                 return LessonForm.validate(values);
               }}
               render={

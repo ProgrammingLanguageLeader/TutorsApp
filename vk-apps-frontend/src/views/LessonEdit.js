@@ -77,6 +77,7 @@ class LessonEdit extends React.Component {
       success,
       errors,
     });
+    this.scrollIntoStartDiv();
   }
 
   render() {
@@ -95,15 +96,11 @@ class LessonEdit extends React.Component {
 
           <div ref={this.startDiv} />
 
-          {fetching && (
-            <DivSpinner />
-          )}
+          {fetching && <DivSpinner />}
 
           {lesson && (
             <Group title="Форма редактирования">
-              {success && (
-                <SuccessfulFormStatus title="Успешно" />
-              )}
+              {success && <SuccessfulFormStatus title="Успешно" />}
 
               <Formik
                 initialValues={{
@@ -112,13 +109,11 @@ class LessonEdit extends React.Component {
                   duration: moment.duration(lesson.duration),
                   price: lesson.price,
                 }}
-                validateOnChange={false}
-                validateOnBlur={false}
+                isInitialValid={true}
                 validate={values => {
                   this.setState({
                     success: false,
                   });
-                  this.scrollIntoStartDiv();
                   return LessonForm.validate(values);
                 }}
                 render={
