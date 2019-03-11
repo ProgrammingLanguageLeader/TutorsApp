@@ -42,6 +42,8 @@ const switchcase = (cases, defaultCase, key) => {
 
 const getTimingErrorMessage = (errorsData, errorKey) => {
   const [ message, timeValue ] = errorsData[errorKey];
+  // TODO: fix deprecation warning (it doesn't influence
+  //  a normal work on a correct function usage)
   const localTimeValue = moment
     .utc(timeValue)
     .local()
@@ -54,7 +56,7 @@ const capitalize = string => string[0].toUpperCase() + string.slice(1);
 const ErrorFormStatus = ({ errors }) => (
   <FormStatus state="error">
     {errors.status >= 500 && 'Внутренняя ошибка сервера'}
-    {400 <= errors.status && errors.status < 500 && Object.keys(errors.data).map(
+    {errors.data && (!errors.status || errors.status < 500) && Object.keys(errors.data).map(
       (errorKey, errorIndex) => {
         const errorMessage = switchcase(
           {
@@ -73,14 +75,6 @@ const ErrorFormStatus = ({ errors }) => (
       }
     )}
     {!errors.status && errors.message}
-    {!errors.status && Object.keys(errors).map(errorKey => {
-      const errorMessage = `${errorKeyValues[errorKey]} - ${errors[errorKey].toLowerCase()}`;
-      return (
-        <div key={errorKey}>
-          {capitalize(errorMessage)}
-        </div>
-      );
-    })}
   </FormStatus>
 );
 

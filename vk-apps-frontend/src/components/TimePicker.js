@@ -35,7 +35,7 @@ const TimePicker = ({ value, onChange }) => (
       </MarginLeftRightDiv>
       <Slider
         min={0}
-        max={24}
+        max={23}
         step={1}
         value={value.hours()}
         onChange={hour => {
