@@ -10,22 +10,13 @@ import PanelHeader from '@vkontakte/vkui/dist/components/PanelHeader/PanelHeader
 import HeaderButton from '@vkontakte/vkui/dist/components/HeaderButton/HeaderButton';
 import Group from '@vkontakte/vkui/dist/components/Group/Group';
 
+import SuccessfulFormStatus from 'vk-apps-frontend/components/SuccessfulFormStatus';
 import DivSpinner from 'vk-apps-frontend/components/DivSpinner';
 import BackIcon from 'vk-apps-frontend/components/BackIcon';
 
 import { lessonsActions, tutorsActions } from 'vk-apps-frontend/actions/api';
 
 import LessonForm from 'vk-apps-frontend/forms/LessonForm';
-
-const mapStateToProps = state => {
-  const { lesson, fetching } = state.API.lessonsReducer;
-  const { students } = state.API.tutorsReducer;
-  return {
-    lesson,
-    fetching,
-    students,
-  };
-};
 
 const mapDispatchToProps = dispatch => {
   return {
@@ -39,22 +30,40 @@ class LessonEdit extends React.Component {
   constructor(props) {
     super(props);
     this.handleLessonFormSubmit = this.handleLessonFormSubmit.bind(this);
+    this.scrollIntoStartDiv = this.scrollIntoStartDiv.bind(this);
     this.startDiv = React.createRef();
     this.state = {
+      lesson: null,
+      students: [],
+      fetching: false,
       success: null,
       errors: {},
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
+    this.setState({
+      fetching: true,
+    });
     const { id } = this.props.match.params;
-    Promise.all([
+    const [lessonResponse, studentsListResponse] = await Promise.all([
       this.props.getLesson(id),
       this.props.getStudentsList()
     ]);
+    const lesson = lessonResponse.status === 200
+      ? lessonResponse.data
+      : null;
+    const students = studentsListResponse.status === 200
+      ? studentsListResponse.data.results
+      : [];
+    this.setState({
+      lesson,
+      students,
+      fetching: false,
+    });
   }
 
-  componentDidUpdate() {
+  scrollIntoStartDiv() {
     this.startDiv.current.scrollIntoView({
       behavior: 'smooth',
     });
@@ -62,21 +71,16 @@ class LessonEdit extends React.Component {
 
   async handleLessonFormSubmit(id, values) {
     const response = await this.props.updateLesson(id, values);
-    if (response.status < 400) {
-      this.setState({
-        success: true,
-        errors: {},
-      });
-      return;
-    }
+    const success = response.status < 400;
+    const errors = success ? {} : response;
     this.setState({
-      success: false,
-      errors: response,
+      success,
+      errors,
     });
   }
 
   render() {
-    const { fetching, students, lesson } = this.props;
+    const { fetching, students, lesson, success } = this.state;
 
     return (
       <View activePanel="panel">
@@ -97,6 +101,10 @@ class LessonEdit extends React.Component {
 
           {lesson && (
             <Group title="Форма редактирования">
+              {success && (
+                <SuccessfulFormStatus title="Успешно" />
+              )}
+
               <Formik
                 initialValues={{
                   student: lesson.student.id,
@@ -104,21 +112,29 @@ class LessonEdit extends React.Component {
                   duration: moment.duration(lesson.duration),
                   price: lesson.price,
                 }}
+                validateOnChange={false}
+                validateOnBlur={false}
+                validate={values => {
+                  this.setState({
+                    success: false,
+                  });
+                  this.scrollIntoStartDiv();
+                  return LessonForm.validate(values);
+                }}
                 render={
                   formikProps => (
                     <LessonForm
                       {...formikProps}
-                      isSuccessful={this.state.success}
-                      errors={this.state.errors}
-                      students={students || []}
+                      students={students}
                       submitLabel="Сохранить"
                     />
                   )
                 }
                 onSubmit={async (values, action) => {
                   await this.handleLessonFormSubmit(lesson.id, values);
+                  const { errors } = this.state;
                   action.setSubmitting(false);
-                  action.setErrors(this.state.errors);
+                  action.setErrors(errors);
                 }}
               />
             </Group>
@@ -129,4 +145,4 @@ class LessonEdit extends React.Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(LessonEdit);
+export default connect(null, mapDispatchToProps)(LessonEdit);

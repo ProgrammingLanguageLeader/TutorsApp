@@ -11,6 +11,7 @@ import HeaderButton from '@vkontakte/vkui/dist/components/HeaderButton/HeaderBut
 import Group from '@vkontakte/vkui/dist/components/Group/Group';
 
 import BackIcon from 'vk-apps-frontend/components/BackIcon';
+import SuccessfulFormStatus from 'vk-apps-frontend/components/SuccessfulFormStatus';
 
 import { lessonsActions, tutorsActions } from 'vk-apps-frontend/actions/api';
 
@@ -27,6 +28,7 @@ class LessonCreate extends React.Component {
   constructor(props) {
     super(props);
     this.handleLessonFormSubmit = this.handleLessonFormSubmit.bind(this);
+    this.scrollIntoStartDiv = this.scrollIntoStartDiv.bind(this);
     this.startDiv = React.createRef();
     this.state = {
       students: [],
@@ -45,7 +47,7 @@ class LessonCreate extends React.Component {
     });
   }
 
-  componentDidUpdate() {
+  scrollIntoStartDiv() {
     this.startDiv.current.scrollIntoView({
       behavior: 'smooth',
     });
@@ -67,7 +69,7 @@ class LessonCreate extends React.Component {
   }
 
   render() {
-    const { students, success, errors } = this.state;
+    const { students, success } = this.state;
 
     return (
       <View activePanel="panel">
@@ -83,18 +85,29 @@ class LessonCreate extends React.Component {
           <div ref={this.startDiv} />
 
           <Group title="Форма создания">
+            {success && (
+              <SuccessfulFormStatus title="Успешно" />
+            )}
+
             <Formik
               initialValues={{
                 beginning_time: moment(),
                 duration: moment.duration(60, 'minutes'),
                 price: 500,
               }}
+              validateOnChange={false}
+              validateOnBlur={false}
+              validate={values => {
+                this.setState({
+                  success: false,
+                });
+                this.scrollIntoStartDiv();
+                return LessonForm.validate(values);
+              }}
               render={
                 formikProps => (
                   <LessonForm
                     {...formikProps}
-                    isSuccessful={success}
-                    errors={errors}
                     students={students}
                     submitLabel="Создать"
                   />
@@ -102,6 +115,7 @@ class LessonCreate extends React.Component {
               }
               onSubmit={async (values, action) => {
                 await this.handleLessonFormSubmit(values);
+                const { errors } = this.state;
                 action.setSubmitting(false);
                 action.setErrors(errors);
               }}

@@ -14,11 +14,23 @@ import DivSpinner from 'vk-apps-frontend/components/DivSpinner';
 import TimePicker from 'vk-apps-frontend/components/TimePicker';
 import ErrorFormStatus from 'vk-apps-frontend/components/ErrorFormStatus';
 import ErrorMessageDiv from 'vk-apps-frontend/components/ErrorMessageDiv';
-import SuccessfulFormStatus from 'vk-apps-frontend/components/SuccessfulFormStatus';
 
 import durationHumanizer from 'vk-apps-frontend/helpers/durationHumanizer';
 
 class LessonForm extends React.Component {
+  static validate(values) {
+    const errorsData = {};
+    if (!values.student) {
+      errorsData.student = 'Это поле обязательно';
+    }
+    if (!values.price) {
+      errorsData.price = 'Это поле обязательно';
+    }
+    return Object.keys(errorsData).length > 0
+      ? { data: errorsData }
+      : {};
+  }
+
   render() {
     const {
       values,
@@ -26,7 +38,6 @@ class LessonForm extends React.Component {
       handleChange,
       handleSubmit,
       isSubmitting,
-      isSuccessful,
       students,
       setFieldValue,
       submitLabel,
@@ -40,10 +51,6 @@ class LessonForm extends React.Component {
 
         { isSubmitting && (
           <DivSpinner/>
-        )}
-
-        { isSuccessful && (
-          <SuccessfulFormStatus title="Успешно" />
         )}
 
         <FormLayoutGroup top="Ученик">
@@ -72,6 +79,11 @@ class LessonForm extends React.Component {
               timeFormat={null}
               onChange={newMoment => setFieldValue("beginning_time", newMoment)}
               locale="ru"
+              isValidDate={currentMoment => {
+                const yesterdayMoment = moment().subtract(1, 'day');
+                const nextMonthMoment = moment().add(30, 'day');
+                return currentMoment.isAfter(yesterdayMoment) && currentMoment.isBefore(nextMonthMoment);
+              }}
             />
           </Div>
         </FormLayoutGroup>
@@ -96,9 +108,12 @@ class LessonForm extends React.Component {
               moment.duration(durationHours * 60, 'minutes')
             )}
           />
+          {errors.data && errors.data["duration"] && (
+            <ErrorMessageDiv>{errors.data["duration"]}</ErrorMessageDiv>
+          )}
         </FormLayoutGroup>
 
-        <FormLayoutGroup top="Сумма к оплате">
+        <FormLayoutGroup top="Цена">
           <Input
             name="price"
             type="number"
