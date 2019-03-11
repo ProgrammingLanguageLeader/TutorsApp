@@ -10,10 +10,9 @@ import Cell from '@vkontakte/vkui/dist/components/Cell/Cell';
 import Avatar from '@vkontakte/vkui/dist/components/Avatar/Avatar';
 import HeaderButton from '@vkontakte/vkui/dist/components/HeaderButton/HeaderButton';
 import Group from '@vkontakte/vkui/dist/components/Group/Group';
-import Div from '@vkontakte/vkui/dist/components/Div/Div';
 
 import BackIcon from 'vk-apps-frontend/components/BackIcon';
-import SuccessfulFormStatus from 'vk-apps-frontend/components/SuccessfulFormStatus';
+import DivSpinner from 'vk-apps-frontend/components/DivSpinner';
 
 import { ROOT_URL } from 'vk-apps-frontend/constants';
 import { usersActions } from 'vk-apps-frontend/actions/api';
@@ -23,11 +22,8 @@ import EditUserForm from 'vk-apps-frontend/forms/EditUserForm';
 
 const mapStateToProps = state => {
   const { vkUserInfo } = state.VK.appsUser;
-  const { user, fetching } = state.API.usersReducer;
   return {
     vkUserInfo,
-    fetching,
-    user,
   };
 };
 
@@ -44,21 +40,31 @@ class UserEdit extends React.Component {
     super(props);
     this.handleEditProfileSubmit = this.handleEditProfileSubmit.bind(this);
     this.handleUploadAvatarFormSubmit = this.handleUploadAvatarFormSubmit.bind(this);
-    this.startDiv = React.createRef();
+    this.fetchUser = this.fetchUser.bind(this);
     this.state = {
-      success: null,
+      user: null,
+      fetching: false,
       errors: {},
     }
   }
 
-  componentDidMount() {
-    const { id } = this.props.match.params;
-    this.props.getUser(id);
+  async componentDidMount() {
+    this.setState({
+      fetching: true,
+    });
+    await this.fetchUser();
   }
 
-  componentDidUpdate() {
-    this.startDiv.current.scrollIntoView({
-      behavior: 'smooth',
+  async fetchUser() {
+    this.setState({
+      fetching: true,
+    });
+    const { id } = this.props.match.params;
+    const userResponse = await this.props.getUser(id);
+    const user = userResponse.status === 200 && userResponse.data;
+    this.setState({
+      user,
+      fetching: false,
     });
   }
 
@@ -68,41 +74,42 @@ class UserEdit extends React.Component {
     const response = await this.props.uploadAvatar(id, {
       avatar,
     });
-    if (response.status === 200) {
-      await this.setState({
-        success: true,
-        errors: {},
-      });
-      this.props.getUser(id);
-      return;
-    }
-    await this.setState({
-      success: false,
-      errors: response
+    const errors = response.status < 400 ? {} : response;
+    this.setState({
+      fetching: false,
+      errors,
     });
+    await this.fetchUser();
+    if (Object.keys(errors).length === 0) {
+      this.props.history.goBack();
+    }
   }
 
   async handleEditProfileSubmit(values) {
+    this.setState({
+      fetching: true,
+    });
     const { id } = this.props.match.params;
     const response = await this.props.updateUser(id, {
       ...values
     });
-    if (response.status === 200) {
-      await this.setState({
-        success: true,
-        errors: {},
-      });
-      this.props.getUser(id);
-      return;
-    }
-    await this.setState({
-      success: false,
-      errors: response,
+    const errors = response.status < 400 ? {} : response;
+    const user = {
+      ...this.state.user,
+      ...values,
+    };
+    this.setState({
+      fetching: false,
+      errors,
+      user,
     });
+    if (Object.keys(errors).length === 0) {
+      this.props.history.goBack();
+    }
   }
 
   render() {
-    const { user } = this.props;
+    const { user, fetching } = this.state;
 
     return (
       <View activePanel="panel">
@@ -115,7 +122,7 @@ class UserEdit extends React.Component {
             Изменение профиля
           </PanelHeader>
 
-          <div ref={this.startDiv} />
+          {fetching && <DivSpinner />}
 
           {user && (
             <Group>
@@ -126,14 +133,6 @@ class UserEdit extends React.Component {
               >
                 {user.first_name} {user.last_name}
               </Cell>
-            </Group>
-          )}
-
-          {this.state.success && (
-            <Group>
-              <Div>
-                <SuccessfulFormStatus title="Успешно" />
-              </Div>
             </Group>
           )}
 
