@@ -120,11 +120,13 @@ class StudentRequestsViewSet(mixins.CreateModelMixin,
         return StudentRequestSerializer
 
     def destroy(self, request, *args, **kwargs):
-        student_request_answer.send(
-            sender=StudentRequest,
-            instance=self.get_object(),
-            accepted=False
-        )
+        instance = self.get_object()
+        if request.user != instance.student:
+            student_request_answer.send(
+                sender=StudentRequest,
+                instance=self.get_object(),
+                accepted=False
+            )
         return super().destroy(request, *args, **kwargs)
 
     @action(detail=True, methods=['post'],
