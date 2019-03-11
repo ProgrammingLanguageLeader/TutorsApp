@@ -15,11 +15,13 @@ class VacancySerializer(serializers.ModelSerializer):
     class Meta:
         model = Vacancy
         fields = '__all__'
-        read_only_fields = ('is_active', )
+        read_only_fields = ('is_active',)
 
     def run_validators(self, value):
-        owner = value.get('owner')
+        owner = value.get('owner') or (self.instance and self.instance.owner)
         subject = value.get('subject')
+        if self.instance and self.instance.subject == subject:
+            return super().run_validators(value)
         owner_and_subject_vacancies = Vacancy.objects.filter(
             owner=owner,
             subject=subject
