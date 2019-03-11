@@ -52,7 +52,7 @@ const TimePicker = ({ value, onChange }) => (
       <Slider
         top="Минуты"
         min={0}
-        max={60}
+        max={55}
         step={5}
         value={value.minutes()}
         onChange={minute => {
