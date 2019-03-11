@@ -23,11 +23,8 @@ import { tutorsActions } from 'vk-apps-frontend/actions/api';
 import { ROOT_URL } from 'vk-apps-frontend/constants';
 
 const mapStateToProps = state => {
-  const { studentRequest, fetching } = state.API.tutorsReducer;
   const { currentUser } = state;
   return {
-    studentRequest,
-    fetching,
     currentUser,
   };
 };
@@ -45,11 +42,23 @@ class StudentRequest extends React.Component {
     super(props);
     this.handleAcceptButtonClick = this.handleAcceptButtonClick.bind(this);
     this.handleDeclineOrDeleteButtonClick = this.handleDeclineOrDeleteButtonClick.bind(this);
+    this.state = {
+      studentRequest: null,
+      fetching: false,
+    }
   }
 
-  componentDidMount() {
+  async componentDidMount() {
+    this.setState({
+      fetching: true,
+    });
     const { id } = this.props.match.params;
-    this.props.getStudentRequest(id);
+    const studentRequestResponse = await this.props.getStudentRequest(id);
+    const studentRequest = studentRequestResponse && studentRequestResponse.data;
+    this.setState({
+      fetching: false,
+      studentRequest,
+    })
   }
 
   async handleAcceptButtonClick() {
@@ -65,13 +74,14 @@ class StudentRequest extends React.Component {
   }
 
   render() {
-    const {
-      studentRequest,
-      fetching,
-      currentUser,
-    } = this.props;
-    const isTutor = currentUser.user && studentRequest && currentUser.user.id === studentRequest.tutor.id;
-    const showingUser = studentRequest ? (isTutor ? studentRequest.student : studentRequest.tutor) : {};
+    const { currentUser } = this.props;
+    const { studentRequest, fetching } = this.state;
+    const isTutor = currentUser.user
+      && studentRequest
+      && currentUser.user.id === studentRequest.tutor.id;
+    const showingUser = studentRequest
+      ? (isTutor ? studentRequest.student : studentRequest.tutor)
+      : {};
 
     return (
       <View activePanel="panel">
