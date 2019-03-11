@@ -8,21 +8,14 @@ import Panel from '@vkontakte/vkui/dist/components/Panel/Panel';
 import PanelHeader from '@vkontakte/vkui/dist/components/PanelHeader/PanelHeader';
 import HeaderButton from '@vkontakte/vkui/dist/components/HeaderButton/HeaderButton';
 import Group from '@vkontakte/vkui/dist/components/Group/Group';
-import Div from '@vkontakte/vkui/dist/components/Div/Div';
 
 import BackIcon from 'vk-apps-frontend/components/BackIcon';
+import DivSpinner from 'vk-apps-frontend/components/DivSpinner';
 import SuccessfulFormStatus from 'vk-apps-frontend/components/SuccessfulFormStatus';
 
 import VacancyForm from 'vk-apps-frontend/forms/VacancyForm';
 
 import { vacanciesActions } from 'vk-apps-frontend/actions/api';
-
-const mapStateToProps = state => {
-  const { vacancy } = state.API.vacanciesReducer;
-  return {
-    vacancy,
-  };
-};
 
 const mapDispatchToProps = dispatch => {
   return {
@@ -36,18 +29,28 @@ class VacancyEdit extends React.Component {
     super(props);
     this.startDiv = React.createRef();
     this.handleVacancyEditSubmit = this.handleVacancyEditSubmit.bind(this);
+    this.scrollIntoViewStartDiv = this.scrollIntoViewStartDiv.bind(this);
     this.state = {
+      vacancy: null,
       success: null,
       errors: {},
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
+    this.setState({
+      fetching: true,
+    });
     const { id } = this.props.match.params;
-    this.props.getVacancy(id);
+    const vacancyResponse = await this.props.getVacancy(id);
+    const vacancy = vacancyResponse.status === 200 && vacancyResponse.data;
+    this.setState({
+      fetching: false,
+      vacancy,
+    });
   }
 
-  componentDidUpdate() {
+  scrollIntoViewStartDiv() {
     this.startDiv.current.scrollIntoView({
       behavior: 'smooth'
     });
@@ -55,21 +58,17 @@ class VacancyEdit extends React.Component {
 
   async handleVacancyEditSubmit(id, values) {
     const response = await this.props.updateVacancy(id, values);
-    if (response.status >= 400) {
-      this.setState({
-        success: false,
-        errors: response,
-      });
-      return;
-    }
+    const success = response.status < 400;
+    const errors = success ? {} : response;
     this.setState({
-      success: true,
-      errors: {},
+      success,
+      errors,
     });
+    this.scrollIntoViewStartDiv();
   }
 
   render() {
-    const { vacancy } = this.props;
+    const { fetching, errors, success, vacancy } = this.state;
 
     return (
       <View activePanel="panel">
@@ -84,27 +83,28 @@ class VacancyEdit extends React.Component {
 
           <div ref={this.startDiv} />
 
-          {this.state.success && (
-            <Group>
-              <Div>
-                <SuccessfulFormStatus title="Успешно" />
-              </Div>
-            </Group>
-          )}
+          {fetching && <DivSpinner />}
 
           <Group title="Заполняемые поля">
+            {success && <SuccessfulFormStatus title="Успешно" />}
+
             <Formik
               initialValues={{
                 ...vacancy,
               }}
               enableReinitialize
               render={formikProps =>
-                <VacancyForm { ...formikProps } errors={this.state.errors} submitLabel="Редактировать" />
+                <VacancyForm
+                  { ...formikProps }
+                  errors={errors}
+                  submitLabel="Редактировать"
+                />
               }
               onSubmit={ async (values, action) => {
-                const { id } = this.props.vacancy;
+                const { id } = vacancy;
+                const { errors } = this.state;
                 await this.handleVacancyEditSubmit(id, values);
-                action.setErrors(this.state.errors);
+                action.setErrors(errors);
                 action.setSubmitting(false);
               }}
             />
@@ -115,4 +115,4 @@ class VacancyEdit extends React.Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(VacancyEdit);
+export default connect(null, mapDispatchToProps)(VacancyEdit);

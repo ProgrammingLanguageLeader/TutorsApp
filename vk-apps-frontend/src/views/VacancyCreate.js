@@ -8,14 +8,13 @@ import Panel from '@vkontakte/vkui/dist/components/Panel/Panel';
 import PanelHeader from '@vkontakte/vkui/dist/components/PanelHeader/PanelHeader';
 import HeaderButton from '@vkontakte/vkui/dist/components/HeaderButton/HeaderButton';
 import Group from '@vkontakte/vkui/dist/components/Group/Group';
-import Div from '@vkontakte/vkui/dist/components/Div/Div';
 
 import BackIcon from 'vk-apps-frontend/components/BackIcon';
-import SuccessfulFormStatus from 'vk-apps-frontend/components/SuccessfulFormStatus';
 
 import VacancyForm from 'vk-apps-frontend/forms/VacancyForm';
 
 import { vacanciesActions } from 'vk-apps-frontend/actions/api';
+import DivSpinner from 'vk-apps-frontend/views/VacancyEdit';
 
 const mapDispatchToProps = dispatch => {
   return {
@@ -26,15 +25,15 @@ const mapDispatchToProps = dispatch => {
 class VacancyCreate extends React.Component {
   constructor(props) {
     super(props);
-    this.handleCreateVacancyFormSubmit = this.handleCreateVacancyFormSubmit.bind(this);
     this.startDiv = React.createRef();
+    this.handleCreateVacancyFormSubmit = this.handleCreateVacancyFormSubmit.bind(this);
+    this.scrollIntoStartDiv = this.scrollIntoStartDiv.bind(this);
     this.state = {
-      success: null,
       errors: {},
     };
   }
 
-  componentDidUpdate() {
+  scrollIntoStartDiv() {
     this.startDiv.current.scrollIntoView({
       behavior: 'smooth'
     });
@@ -44,20 +43,21 @@ class VacancyCreate extends React.Component {
     const response = await this.props.createVacancy({
       ...values
     });
-    if (response.status < 400) {
-      this.setState({
-        success: true,
-        errors: {},
-      });
-      return;
-    }
+    const errors = response.status < 400 ? {} : response;
     this.setState({
-      success: false,
-      errors: response,
+      errors,
     });
+    if (Object.keys(errors).length === 0) {
+      this.props.history.goBack();
+    }
+    else {
+      this.scrollIntoStartDiv();
+    }
   }
 
   render() {
+    const { errors } = this.state;
+
     return (
       <View activePanel="panel">
         <Panel id="panel">
@@ -71,24 +71,21 @@ class VacancyCreate extends React.Component {
 
           <div ref={this.startDiv} />
 
-          {this.state.success && (
-            <Group>
-              <Div>
-                <SuccessfulFormStatus title="Успешно" />
-              </Div>
-            </Group>
-          )}
-
           <Group title="Заполняемые поля">
             <Formik
               render={formikProps =>
-                <VacancyForm { ...formikProps } errors={this.state.errors} submitLabel="Создать" />
+                <VacancyForm
+                  { ...formikProps }
+                  errors={errors}
+                  submitLabel="Создать"
+                />
               }
               enableReinitialize
               onSubmit={ async (values, action) => {
+                const { errors } = this.state;
                 await this.handleCreateVacancyFormSubmit(values);
                 action.setSubmitting(false);
-                action.setErrors(this.state.errors);
+                action.setErrors(errors);
               }}
             />
           </Group>
@@ -98,4 +95,4 @@ class VacancyCreate extends React.Component {
   }
 }
 
-export default connect(state => {}, mapDispatchToProps)(VacancyCreate);
+export default connect(null, mapDispatchToProps)(VacancyCreate);
