@@ -20,14 +20,12 @@ import DivSpinner from 'vk-apps-frontend/components/DivSpinner';
 import BackIcon from 'vk-apps-frontend/components/BackIcon';
 
 import { vacanciesActions } from 'vk-apps-frontend/actions/api';
+
 import { ROOT_URL } from 'vk-apps-frontend/constants';
 
 const mapStateToProps = state => {
-  const { vacancies, fetching } = state.API.vacanciesReducer;
   const { currentUser } = state;
   return {
-    vacancies,
-    fetching,
     currentUser
   };
 };
@@ -39,17 +37,33 @@ const mapDispatchToProps = dispatch => {
 };
 
 class UserVacancies extends React.Component {
-  componentDidMount() {
-    const { user } = this.props.currentUser;
-    if (user) {
-      this.props.searchVacancies({
-        owner: user.id,
-      });
+  constructor(props) {
+    super(props);
+    this.state = {
+      vacancies: [],
+      fetching: false,
     }
   }
 
+  async componentDidMount() {
+    this.setState({
+      fetching: true,
+    });
+    const { user } = this.props.currentUser;
+    const vacanciesResponse = await this.props.searchVacancies({
+      owner: user && user.id,
+    });
+    const vacancies = vacanciesResponse.status === 200
+      ? vacanciesResponse.data.results
+      : [];
+    this.setState({
+      vacancies,
+      fetching: false,
+    });
+  }
+
   render() {
-    const { fetching, vacancies } = this.props;
+    const { fetching, vacancies } = this.state;
 
     return (
       <View activePanel="panel">
@@ -62,9 +76,7 @@ class UserVacancies extends React.Component {
             Ваши предложения
           </PanelHeader>
 
-          {fetching && (
-            <DivSpinner />
-          )}
+          {fetching && <DivSpinner />}
 
           <Group>
             <CellButton
