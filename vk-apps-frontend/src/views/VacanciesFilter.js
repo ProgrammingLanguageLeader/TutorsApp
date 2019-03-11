@@ -32,9 +32,6 @@ const mapDispatchToProps = dispatch => {
 class VacanciesFilter extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      reset: false
-    };
     this.handleVacanciesFilterFormSubmit = this.handleVacanciesFilterFormSubmit.bind(this);
     this.handleVacanciesFilterFormReset = this.handleVacanciesFilterFormReset.bind(this);
   }

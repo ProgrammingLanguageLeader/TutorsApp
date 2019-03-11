@@ -32,12 +32,8 @@ import { vacanciesActions, tutorsActions } from 'vk-apps-frontend/actions/api';
 import { ROOT_URL } from 'vk-apps-frontend/constants';
 
 const mapStateToProps = state => {
-  const fetching = state.API.vacanciesReducer.fetching || state.API.tutorsReducer.fetching;
-  const { vacancy } = state.API.vacanciesReducer;
   const { currentUser } = state;
   return {
-    vacancy,
-    fetching,
     currentUser,
   };
 };
@@ -55,34 +51,42 @@ class Vacancy extends React.Component {
     super(props);
     this.createStudentRequest = this.createStudentRequest.bind(this);
     this.deleteVacancyButtonClick = this.deleteVacancyButtonClick.bind(this);
-
     this.state = {
-      success: null,
+      fetching: false,
+      vacancy: null,
       errors: {},
       popout: null,
     }
   }
 
-  componentDidMount() {
+  async componentDidMount() {
+    this.setState({
+      fetching: true,
+    });
     const { id } = this.props.match.params;
-    this.props.getVacancy(id);
+    const vacancyResponse = await this.props.getVacancy(id);
+    const vacancy = vacancyResponse.status === 200 && vacancyResponse.data;
+    this.setState({
+      vacancy,
+      fetching: false,
+    });
   }
 
   async createStudentRequest(tutorId) {
+    this.setState({
+      fetching: false,
+    });
     const response = await this.props.createStudentRequest({
       tutor: tutorId,
     });
-    if (response.status < 400) {
-      this.setState({
-        success: true,
-        errors: {},
-      });
-      return;
-    }
+    const errors = response.status < 400 ? {} : response;
     this.setState({
-      success: false,
-      errors: response,
+      fetching: false,
+      errors,
     });
+    if (Object.keys(errors).length === 0) {
+      this.props.history.goBack();
+    }
   }
 
   deleteVacancyButtonClick(id) {
@@ -104,11 +108,12 @@ class Vacancy extends React.Component {
   }
 
   render() {
-    const { fetching, vacancy, currentUser } = this.props;
+    const { currentUser } = this.props;
+    const { fetching, vacancy, popout } = this.state;
     const isEditable = currentUser.user && vacancy && currentUser.user.id === vacancy.owner.id;
 
     return (
-      <View activePanel="panel" popout={this.state.popout}>
+      <View activePanel="panel" popout={popout}>
         <Panel id="panel">
           <PanelHeader left={
             <HeaderButton onClick={this.props.history.goBack}>
@@ -118,9 +123,7 @@ class Vacancy extends React.Component {
             Предложение
           </PanelHeader>
 
-          {fetching && (
-            <DivSpinner />
-          )}
+          {fetching && <DivSpinner />}
 
           {isEditable && (
             <Group title="Управление">
