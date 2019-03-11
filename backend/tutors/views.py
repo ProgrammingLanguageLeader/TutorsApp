@@ -125,7 +125,7 @@ class StudentRequestsViewSet(mixins.CreateModelMixin,
             instance=self.get_object(),
             accepted=False
         )
-        super().destroy(request, *args, **kwargs)
+        return super().destroy(request, *args, **kwargs)
 
     @action(detail=True, methods=['post'],
             permission_classes=[IsTutor],
