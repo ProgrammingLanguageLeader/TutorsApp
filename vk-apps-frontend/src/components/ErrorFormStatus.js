@@ -45,10 +45,10 @@ const getTimingErrorMessage = (errorsData, errorKey) => {
   return `${errorKeyValues[errorKey]} - ${message.toLowerCase()} ${moment(timeValue).format("D MMMM YYYY HH:mm")}`;
 };
 
-const capatalize = string => string[0].toUpperCase() + string.slice(1);
+const capitalize = string => string[0].toUpperCase() + string.slice(1);
 
 const ErrorFormStatus = ({ errors }) => (
-  <FormStatus title={errors.status ? "" : "Проверьте заполненные поля"} state="error">
+  <FormStatus state="error">
     {errors.status >= 500 && 'Внутренняя ошибка сервера'}
     {400 <= errors.status && errors.status < 500 && Object.keys(errors.data).map(
       (errorKey, errorIndex) => {
@@ -63,7 +63,7 @@ const ErrorFormStatus = ({ errors }) => (
         );
         return (
           <div key={errorIndex}>
-            {capatalize(errorMessage)}
+            {capitalize(errorMessage)}
           </div>
         );
       }

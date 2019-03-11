@@ -31,11 +31,8 @@ import { ROOT_URL } from 'vk-apps-frontend/constants';
 import durationHumanizer from 'vk-apps-frontend/helpers/durationHumanizer';
 
 const mapStateToProps = state => {
-  const { lesson, fetching } = state.API.lessonsReducer;
   const { currentUser } = state;
   return {
-    lesson,
-    fetching,
     currentUser,
   };
 };
@@ -57,12 +54,23 @@ class Lesson extends React.Component {
     this.state = {
       popout: null,
       errors: null,
+      lesson: null,
+      fetching: false,
+      paymentFormOpened: false,
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
+    this.setState({
+      fetching: true,
+    });
     const { id } = this.props.match.params;
-    this.props.getLesson(id);
+    const lessonResponse = await this.props.getLesson(id);
+    const lesson = lessonResponse.status === 200 && lessonResponse.data;
+    this.setState({
+      lesson,
+      fetching: false,
+    });
   }
 
   deleteLessonButtonClick(id) {
@@ -84,9 +92,16 @@ class Lesson extends React.Component {
   }
 
   async handleMoneyTransferButton(userId, amount) {
+    if (this.state.paymentFormOpened) {
+      return;
+    }
+    this.setState({
+      paymentFormOpened: true,
+    });
     const response = await this.props.retrieveVkAppsUserByUserId(userId);
     if (response.status >= 400) {
       this.setState({
+        paymentFormOpened: false,
         errors: {
           message: 'Выбранный пользователь не зарегистрирован через VK Apps'
         }
@@ -101,19 +116,23 @@ class Lesson extends React.Component {
       }
     );
     this.setState({
-      errors: null
+      paymentFormOpened: false,
+      errors: null,
     });
   }
 
   render() {
+    const { currentUser } = this.props;
     const {
-      fetching,
+      popout,
       lesson,
-      currentUser
-    } = this.props;
+      fetching,
+      errors,
+      paymentFormOpened,
+    } = this.state;
 
     return (
-      <View activePanel="panel" popout={this.state.popout}>
+      <View activePanel="panel" popout={popout}>
         <Panel id="panel">
           <PanelHeader left={
             <HeaderButton onClick={this.props.history.goBack}>
@@ -129,7 +148,7 @@ class Lesson extends React.Component {
 
           {lesson && (
             <div>
-              {lesson.tutor.id === currentUser.user.id && (
+              {currentUser.user && lesson.tutor.id === currentUser.user.id && (
                 <Group title="Управление уроком">
                   <CellButton
                     before={<Icon24Write/>}
@@ -151,12 +170,16 @@ class Lesson extends React.Component {
                   <CellButton
                     before={<Icon24MoneyTransfer/>}
                     onClick={() => this.handleMoneyTransferButton(lesson.tutor.id, lesson.price)}
+                    disabled={paymentFormOpened}
                   >
                     Открыть форму перевода
                   </CellButton>
-                  {this.state.errors && (
+                  {errors && (
                     <Div>
-                      <ErrorFormStatus errors={this.state.errors} />
+                      <ErrorFormStatus
+                        title="Ошибка при попытке оплаты"
+                        errors={errors}
+                      />
                     </Div>
                   )}
                 </Group>
