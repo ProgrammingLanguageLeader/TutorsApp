@@ -15,14 +15,6 @@ import DeleteConfirmationAlert from 'vk-apps-frontend/components/DeleteConfirmat
 
 import { tutorsActions } from 'vk-apps-frontend/actions/api';
 
-const mapStateToProps = state => {
-  const { students, fetching } = state.API.tutorsReducer;
-  return {
-    students,
-    fetching,
-  };
-};
-
 const mapDispatchToProps = dispatch => {
   return {
     getStudentsList: bindActionCreators(tutorsActions.getStudentsList, dispatch),
@@ -36,11 +28,23 @@ class Students extends React.Component {
     this.handleDeleteStudentButtonClick = this.handleDeleteStudentButtonClick.bind(this);
     this.state = {
       popout: null,
+      students: [],
+      fetching: false,
     };
   }
 
-  componentDidMount() {
-    this.props.getStudentsList();
+  async componentDidMount() {
+    this.setState({
+      fetching: true,
+    });
+    const studentsListResponse = await this.props.getStudentsList();
+    const students = studentsListResponse.status === 200
+      ? studentsListResponse.data.results
+      : [];
+    this.setState({
+      students,
+      fetching: false,
+    })
   }
 
   handleDeleteStudentButtonClick(id) {
@@ -61,7 +65,7 @@ class Students extends React.Component {
   }
 
   render() {
-    const { students, fetching } = this.props;
+    const { students, fetching } = this.state;
 
     return (
       <View activePanel="panel" popout={this.state.popout}>
@@ -96,4 +100,4 @@ class Students extends React.Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Students);
+export default connect(null, mapDispatchToProps)(Students);

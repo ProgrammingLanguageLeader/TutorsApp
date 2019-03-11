@@ -14,14 +14,6 @@ import ShortUserCard from 'vk-apps-frontend/components/ShortUserCard';
 
 import { tutorsActions } from 'vk-apps-frontend/actions/api';
 
-const mapStateToProps = state => {
-  const { tutors, fetching } = state.API.tutorsReducer;
-  return {
-    tutors,
-    fetching,
-  };
-};
-
 const mapDispatchToProps = dispatch => {
   return {
     getTutorsList: bindActionCreators(tutorsActions.getTutorsList, dispatch),
@@ -29,12 +21,30 @@ const mapDispatchToProps = dispatch => {
 };
 
 class Tutors extends React.Component {
-  componentDidMount() {
-    this.props.getTutorsList();
+  constructor(props) {
+    super(props);
+    this.state = {
+      tutors: [],
+      fetching: false,
+    };
+  }
+
+  async componentDidMount() {
+    this.setState({
+      fetching: true,
+    });
+    const tutorsListResponse = await this.props.getTutorsList();
+    const tutors = tutorsListResponse.status === 200
+      ? tutorsListResponse.data.results
+      : [];
+    this.setState({
+      tutors,
+      fetching: false,
+    })
   }
 
   render() {
-    const { tutors, fetching } = this.props;
+    const { tutors, fetching } = this.state;
 
     return (
       <View activePanel="panel">
@@ -63,4 +73,4 @@ class Tutors extends React.Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Tutors);
+export default connect(null, mapDispatchToProps)(Tutors);
