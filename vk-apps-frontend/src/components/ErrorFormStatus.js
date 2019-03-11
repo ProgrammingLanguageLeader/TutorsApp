@@ -73,11 +73,14 @@ const ErrorFormStatus = ({ errors }) => (
       }
     )}
     {!errors.status && errors.message}
-    {!errors.status && Object.keys(errors).map(errorKey => (
-      <div key={errorKey}>
-        {capitalize(errors[errorKey])}
-      </div>
-    ))}
+    {!errors.status && Object.keys(errors).map(errorKey => {
+      const errorMessage = `${errorKeyValues[errorKey]} - ${errors[errorKey].toLowerCase()}`;
+      return (
+        <div key={errorKey}>
+          {capitalize(errorMessage)}
+        </div>
+      );
+    })}
   </FormStatus>
 );
 
