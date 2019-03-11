@@ -41,6 +41,7 @@ class LessonForm extends React.Component {
       students,
       setFieldValue,
       submitLabel,
+      isValid,
     } = this.props;
 
     return (
@@ -77,7 +78,21 @@ class LessonForm extends React.Component {
               input={false}
               value={values.beginning_time}
               timeFormat={null}
-              onChange={newMoment => setFieldValue("beginning_time", newMoment)}
+              onChange={newMoment => {
+                const beginningTimeDate = newMoment.startOf('day');
+                const currentBeginningTime = values.beginning_time.clone();
+                const beginningTimeOffset = moment.duration(
+                  currentBeginningTime.diff(
+                    currentBeginningTime
+                      .clone()
+                      .startOf('day')
+                  )
+                );
+                const beginningTime = beginningTimeDate
+                  .clone()
+                  .add(beginningTimeOffset);
+                setFieldValue("beginning_time", beginningTime);
+              }}
               locale="ru"
               isValidDate={currentMoment => {
                 const yesterdayMoment = moment().subtract(1, 'day');
@@ -118,14 +133,14 @@ class LessonForm extends React.Component {
             name="price"
             type="number"
             onChange={handleChange}
-            value={String(values.price)}
+            value={String(values.price || "")}
           />
           {errors.data && errors.data["price"] && (
             <ErrorMessageDiv>{errors.data["price"]}</ErrorMessageDiv>
           )}
         </FormLayoutGroup>
 
-        <Button size="xl" onClick={handleSubmit}>
+        <Button size="xl" onClick={handleSubmit} disabled={!isValid}>
           {submitLabel || 'Отправить'}
         </Button>
       </FormLayout>
