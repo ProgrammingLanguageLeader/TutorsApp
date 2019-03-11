@@ -15,18 +15,16 @@ import CellButton from '@vkontakte/vkui/dist/components/CellButton/CellButton';
 import Icon24Write from '@vkontakte/icons/dist/24/write';
 
 import { usersActions } from 'vk-apps-frontend/actions/api';
+
 import { ROOT_URL } from 'vk-apps-frontend/constants';
 
 import DivSpinner from 'vk-apps-frontend/components/DivSpinner';
 import BackIcon from 'vk-apps-frontend/components/BackIcon';
 
 const mapStateToProps = state => {
-  const { user, fetching } = state.API.usersReducer;
   const { currentUser } = state;
   return {
-    user,
     currentUser,
-    fetching,
   };
 };
 
@@ -37,14 +35,31 @@ const mapDispatchToProps = dispatch => {
 };
 
 class User extends React.Component {
-  componentDidMount() {
+  constructor(props) {
+    super(props);
+    this.state = {
+      user: null,
+      fetching: false,
+    };
+  }
+
+  async componentDidMount() {
+    this.setState({
+      fetching: true,
+    });
     const { id } = this.props.match.params;
-    this.props.getUser(id);
+    const userResponse = await this.props.getUser(id);
+    const user = userResponse.status === 200 && userResponse.data;
+    this.setState({
+      user,
+      fetching: false,
+    })
   }
 
 	render() {
     const { id } = this.props.match.params;
-    const { user, fetching, currentUser } = this.props;
+    const { user, fetching } = this.state;
+    const { currentUser } = this.props;
     const isProfileEditable = currentUser.user && Number(id) === Number(currentUser.user.id);
 
 		return (
@@ -58,9 +73,7 @@ class User extends React.Component {
             Профиль
           </PanelHeader>
 
-          {fetching && (
-            <DivSpinner />
-          )}
+          {fetching && <DivSpinner />}
 
           {user && (
             <div>
