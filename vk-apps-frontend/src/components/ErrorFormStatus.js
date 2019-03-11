@@ -42,7 +42,11 @@ const switchcase = (cases, defaultCase, key) => {
 
 const getTimingErrorMessage = (errorsData, errorKey) => {
   const [ message, timeValue ] = errorsData[errorKey];
-  return `${errorKeyValues[errorKey]} - ${message.toLowerCase()} ${moment(timeValue).format("D MMMM YYYY HH:mm")}`;
+  const localTimeValue = moment
+    .utc(timeValue)
+    .local()
+    .format("D MMMM YYYY HH:mm");
+  return `${errorKeyValues[errorKey]} - ${message.toLowerCase()} ${localTimeValue}`;
 };
 
 const capitalize = string => string[0].toUpperCase() + string.slice(1);
@@ -69,6 +73,11 @@ const ErrorFormStatus = ({ errors }) => (
       }
     )}
     {!errors.status && errors.message}
+    {!errors.status && Object.keys(errors).map(errorKey => (
+      <div key={errorKey}>
+        {capitalize(errors[errorKey])}
+      </div>
+    ))}
   </FormStatus>
 );
 
