@@ -68,7 +68,7 @@ class VacancyEdit extends React.Component {
   }
 
   render() {
-    const { fetching, errors, success, vacancy } = this.state;
+    const { fetching, success, vacancy } = this.state;
 
     return (
       <View activePanel="panel">
@@ -92,18 +92,23 @@ class VacancyEdit extends React.Component {
               initialValues={{
                 ...vacancy,
               }}
+              validate={values => {
+                this.setState({
+                  success: false,
+                });
+                return VacancyForm.validate(values)
+              }}
               enableReinitialize
               render={formikProps =>
                 <VacancyForm
                   { ...formikProps }
-                  errors={errors}
                   submitLabel="Редактировать"
                 />
               }
               onSubmit={ async (values, action) => {
                 const { id } = vacancy;
-                const { errors } = this.state;
                 await this.handleVacancyEditSubmit(id, values);
+                const { errors } = this.state;
                 action.setErrors(errors);
                 action.setSubmitting(false);
               }}

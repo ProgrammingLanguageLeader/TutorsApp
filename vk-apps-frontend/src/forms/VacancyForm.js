@@ -6,6 +6,7 @@ import FormLayout from '@vkontakte/vkui/dist/components/FormLayout/FormLayout';
 import FormLayoutGroup from '@vkontakte/vkui/dist/components/FormLayoutGroup/FormLayoutGroup';
 import Input from '@vkontakte/vkui/dist/components/Input/Input';
 import Select from '@vkontakte/vkui/dist/components/Select/Select';
+import Textarea from '@vkontakte/vkui/dist/components/Textarea/Textarea';
 
 import { educationLevelList, subjectsList } from 'vk-apps-frontend/constants';
 
@@ -38,6 +39,19 @@ class VacancyForm extends React.Component {
     return state;
   }
 
+  static validate(values) {
+    const errorsData = {};
+    if (!values.subject) {
+      errorsData.subject = 'Это поле обязательно';
+    }
+    if (!values.price) {
+      errorsData.price = 'Это поле обязательно';
+    }
+    return Object.keys(errorsData).length > 0
+      ? { data: errorsData }
+      : {};
+  }
+
   render() {
     const {
       values,
@@ -46,6 +60,7 @@ class VacancyForm extends React.Component {
       handleSubmit,
       setFieldValue,
       submitLabel,
+      isValid
     } = this.props;
     const { selectSubject, inputSubject } = this.state;
 
@@ -134,13 +149,17 @@ class VacancyForm extends React.Component {
         </FormLayoutGroup>
 
         <FormLayoutGroup top="Дополнительная информация">
-          <Input name="extra_info" onChange={handleChange} value={values.extra_info} />
+          <Textarea
+            name="extra_info"
+            onChange={handleChange}
+            value={values.extra_info}
+          />
           {errors.data && errors.data["extra_info"] && (
             <ErrorMessageDiv>{errors.data["extra_info"]}</ErrorMessageDiv>
           )}
         </FormLayoutGroup>
 
-        <Button size="xl" onClick={handleSubmit}>
+        <Button size="xl" onClick={handleSubmit} disabled={!isValid}>
           {submitLabel || "Отправить"}
         </Button>
       </FormLayout>

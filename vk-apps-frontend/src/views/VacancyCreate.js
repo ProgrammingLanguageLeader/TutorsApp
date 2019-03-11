@@ -56,8 +56,6 @@ class VacancyCreate extends React.Component {
   }
 
   render() {
-    const { errors } = this.state;
-
     return (
       <View activePanel="panel">
         <Panel id="panel">
@@ -76,14 +74,19 @@ class VacancyCreate extends React.Component {
               render={formikProps =>
                 <VacancyForm
                   { ...formikProps }
-                  errors={errors}
                   submitLabel="Создать"
                 />
               }
+              validate={values => {
+                this.setState({
+                  success: false,
+                });
+                return VacancyForm.validate(values)
+              }}
               enableReinitialize
               onSubmit={ async (values, action) => {
-                const { errors } = this.state;
                 await this.handleCreateVacancyFormSubmit(values);
+                const { errors } = this.state;
                 action.setSubmitting(false);
                 action.setErrors(errors);
               }}
