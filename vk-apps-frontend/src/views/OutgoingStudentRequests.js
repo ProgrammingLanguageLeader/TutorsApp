@@ -36,17 +36,33 @@ const mapDispatchToProps = dispatch => {
 };
 
 class OutgoingStudentRequests extends React.Component {
-  componentDidMount() {
-    const { user } = this.props.currentUser;
-    if (user) {
-      this.props.getStudentRequestsList({
-        student: user.id,
-      });
+  constructor(props) {
+    super(props);
+    this.state = {
+      studentRequests: [],
+      fetching: false,
     }
   }
 
+  async componentDidMount() {
+    this.setState({
+      fetching: true,
+    });
+    const { user } = this.props.currentUser;
+    const studentRequestsResponse = await this.props.getStudentRequestsList({
+      student: user && user.id,
+    });
+    const studentRequests = studentRequestsResponse.status === 200
+      ? studentRequestsResponse.data.results
+      : [];
+    this.setState({
+      studentRequests,
+      fetching: false,
+    });
+  }
+
   render() {
-    const { studentRequests, fetching } = this.props;
+    const { studentRequests, fetching } = this.state;
 
     return (
       <View activePanel="panel">
