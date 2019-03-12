@@ -14,7 +14,7 @@ import CellButton from '@vkontakte/vkui/dist/components/CellButton/CellButton';
 
 import Icon24Write from '@vkontakte/icons/dist/24/write';
 
-import { usersActions } from 'vk-apps-frontend/actions/api';
+import { usersActions, vkAppsUsersActions } from 'vk-apps-frontend/actions/api';
 
 import { ROOT_URL } from 'vk-apps-frontend/constants';
 
@@ -31,6 +31,10 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     getUser: bindActionCreators(usersActions.getUser, dispatch),
+    retrieveVkAppsUserByUserId: bindActionCreators(
+      vkAppsUsersActions.retrieveVkAppsUserByUserId,
+      dispatch
+    ),
   }
 };
 
@@ -39,6 +43,7 @@ class User extends React.Component {
     super(props);
     this.state = {
       user: null,
+      vkId: null,
       fetching: false,
     };
   }
@@ -50,15 +55,18 @@ class User extends React.Component {
     const { id } = this.props.match.params;
     const userResponse = await this.props.getUser(id);
     const user = userResponse.status === 200 && userResponse.data;
+    const vkAppsUserResponse = await this.props.retrieveVkAppsUserByUserId(id);
+    const vkAppsUser = vkAppsUserResponse.status === 200 && vkAppsUserResponse.data;
     this.setState({
       user,
+      vkId: vkAppsUser && vkAppsUser.vk_id,
       fetching: false,
-    })
+    });
   }
 
 	render() {
     const { id } = this.props.match.params;
-    const { user, fetching } = this.state;
+    const { user, fetching, vkId } = this.state;
     const { currentUser } = this.props;
     const isProfileEditable = currentUser.user && Number(id) === Number(currentUser.user.id);
 
@@ -98,35 +106,42 @@ class User extends React.Component {
                 </Group>
               )}
 
+              {vkId && (
+                <Group title="Страница ВКонтакте">
+                  <a href={`https://vk.com/id${vkId}`}>
+                    <CellButton>
+                      Перейти по ссылке
+                    </CellButton>
+                  </a>
+                </Group>
+              )}
+
               <Group title="Информация о пользователе">
                 <Cell multiline description="Дата создания профиля">
                   <Moment locale="ru" format="D MMMM YYYY">
                     {user.date_joined || "Не задано"}
                   </Moment>
                 </Cell>
-                {
-                  user.experience && (
-                    <Cell multiline description="Опыт преподавания">
-                      {user.experience}
-                    </Cell>
-                  )
-                }
-                {
-                  user.education && (
-                    <Cell multiline description="Образование">
-                      {user.education || "Не задано"}
-                    </Cell>
-                  )
-                }
-                {
-                  user.city && (
-                    <Cell multiline description="Город">
-                      {user.city || "Не задано"}
-                    </Cell>
-                  )
-                }
-                {
-                  user.district && (
+
+                {user.experience && (
+                  <Cell multiline description="Опыт преподавания">
+                    {user.experience}
+                  </Cell>
+                )}
+
+                {user.education && (
+                  <Cell multiline description="Образование">
+                    {user.education || "Не задано"}
+                  </Cell>
+                )}
+
+                {user.city && (
+                  <Cell multiline description="Город">
+                    {user.city || "Не задано"}
+                  </Cell>
+                )}
+
+                {user.district && (
                     <Cell multiline description="Район">
                       {user.district}
                     </Cell>
