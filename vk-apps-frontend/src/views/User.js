@@ -108,7 +108,7 @@ class User extends React.Component {
 
               {vkId && (
                 <Group title="Страница ВКонтакте">
-                  <a href={`https://vk.com/id${vkId}`}>
+                  <a href={`https://vk.com/id${vkId}`} target="_blank" rel="noopener noreferrer">
                     <CellButton>
                       Перейти по ссылке
                     </CellButton>
