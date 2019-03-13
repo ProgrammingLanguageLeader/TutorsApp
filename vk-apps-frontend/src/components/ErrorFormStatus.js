@@ -31,6 +31,8 @@ const errorKeyValues = {
   'university': 'курс высшего образования',
   'home_schooling': 'выезд на дом',
   'extra_info': 'дополнительная информация',
+  'amount': 'сумма',
+  'recipient': 'получатель',
 };
 
 const switchcase = (cases, defaultCase, key) => {

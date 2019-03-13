@@ -74,21 +74,7 @@ class MoneyTransfer extends React.Component {
               render={formikProps =>
                 <MoneyTransferForm {...formikProps} tutors={tutors || []} />
               }
-              validate={values => {
-                let errors = {};
-
-                if (!values.amount) {
-                  errors.amount = 'Это поле обязательно';
-                } else if (!(1 <= Number(values.amount) && Number(values.amount) <= 10000)) {
-                  errors.amount = 'Значение должно быть от 1 до 10000';
-                }
-
-                if (!values.recipient) {
-                  errors.recipient = 'Это поле обязательно';
-                }
-
-                return errors;
-              }}
+              validate={MoneyTransferForm.validate}
               onSubmit={ async (values, actions) => {
                 const response = await this.props.retrieveVkAppsUserByUserId(values.recipient);
                 if (response.status >= 400) {
