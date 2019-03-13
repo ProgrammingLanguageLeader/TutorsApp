@@ -219,6 +219,7 @@ class Home extends React.Component {
     });
     const fileExtension = photo_200
       .toString()
+      .split('?')[0]
       .split('.')
       .slice(-1)[0];
     const avatar = new File(
