@@ -7,7 +7,6 @@ import Panel from '@vkontakte/vkui/dist/components/Panel/Panel';
 import PanelHeader from '@vkontakte/vkui/dist/components/PanelHeader/PanelHeader';
 import Group from '@vkontakte/vkui/dist/components/Group/Group';
 import List from '@vkontakte/vkui/dist/components/List/List';
-import HeaderButton from '@vkontakte/vkui/dist/components/HeaderButton/HeaderButton';
 import Div from '@vkontakte/vkui/dist/components/Div/Div';
 import PullToRefresh from '@vkontakte/vkui/dist/components/PullToRefresh/PullToRefresh';
 
@@ -15,7 +14,6 @@ import Icon24View from '@vkontakte/icons/dist/24/view';
 import Icon24Hide from '@vkontakte/icons/dist/24/hide';
 
 import NotificationCell from 'vk-apps-frontend/components/NotificationCell';
-import BackIcon from 'vk-apps-frontend/components/BackIcon';
 import DivSpinner from 'vk-apps-frontend/components/DivSpinner';
 
 import { notificationsActions, tutorsActions } from 'vk-apps-frontend/actions/api';
@@ -99,11 +97,7 @@ class Notifications extends React.Component {
     return (
       <View activePanel="panel">
         <Panel id="panel">
-          <PanelHeader left={
-            <HeaderButton onClick={this.props.history.goBack}>
-              <BackIcon />
-            </HeaderButton>
-          }>
+          <PanelHeader>
             Уведомления
           </PanelHeader>
 

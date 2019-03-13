@@ -7,7 +7,6 @@ import View from '@vkontakte/vkui/dist/components/View/View';
 import Panel from '@vkontakte/vkui/dist/components/Panel/Panel';
 import PanelHeader from '@vkontakte/vkui/dist/components/PanelHeader/PanelHeader';
 import Cell from '@vkontakte/vkui/dist/components/Cell/Cell';
-import HeaderButton from '@vkontakte/vkui/dist/components/HeaderButton/HeaderButton';
 import Avatar from '@vkontakte/vkui/dist/components/Avatar/Avatar';
 import Group from '@vkontakte/vkui/dist/components/Group/Group';
 import Footer from '@vkontakte/vkui/dist/components/Footer/Footer';
@@ -20,7 +19,6 @@ import Icon24Add from '@vkontakte/icons/dist/24/add';
 
 import PaginationButton from 'vk-apps-frontend/components/PaginationButton';
 import DivSpinner from 'vk-apps-frontend/components/DivSpinner';
-import BackIcon from 'vk-apps-frontend/components/BackIcon';
 
 import { vacanciesActions } from 'vk-apps-frontend/actions/api';
 
@@ -94,11 +92,7 @@ class Vacancies extends React.Component {
     return (
       <View activePanel="panel">
         <Panel id="panel">
-          <PanelHeader left={
-            <HeaderButton onClick={() => this.props.history.goBack()}>
-              <BackIcon />
-            </HeaderButton>
-          }>
+          <PanelHeader>
             Поиск предложений
           </PanelHeader>
 
