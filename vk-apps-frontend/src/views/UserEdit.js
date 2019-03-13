@@ -2,6 +2,7 @@ import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Formik } from 'formik';
+import axios from 'axios';
 
 import View from '@vkontakte/vkui/dist/components/View/View';
 import Panel from '@vkontakte/vkui/dist/components/Panel/Panel';
@@ -41,6 +42,7 @@ class UserEdit extends React.Component {
     this.handleEditProfileSubmit = this.handleEditProfileSubmit.bind(this);
     this.handleUploadAvatarFormSubmit = this.handleUploadAvatarFormSubmit.bind(this);
     this.fetchUser = this.fetchUser.bind(this);
+    this.handleUploadAvatarFromVK = this.handleUploadAvatarFromVK.bind(this);
     this.state = {
       user: null,
       fetching: false,
@@ -66,6 +68,35 @@ class UserEdit extends React.Component {
       user,
       fetching: false,
     });
+  }
+
+  async handleUploadAvatarFromVK() {
+    const { id } = this.props.match.params;
+    const { photo_200 } = this.props.vkUserInfo;
+    const avatarBlob = await axios({
+      url: photo_200,
+      method: 'GET',
+      responseType: 'blob',
+    });
+    const fileExtension = photo_200
+      .toString()
+      .split('.')
+      .slice(-1)[0];
+    const avatar = new File(
+      [avatarBlob.data],
+      `avatar.${fileExtension}`,
+      {
+        type: avatarBlob.data.type,
+        lastModified: Date.now()
+      }
+    );
+    const uploadAvatarResponse = await this.props.uploadAvatar(id, {
+      avatar,
+    });
+    const errors = uploadAvatarResponse.status < 400 ? {} : uploadAvatarResponse;
+    if (Object.keys(errors).length === 0) {
+      this.props.history.goBack();
+    }
   }
 
   async handleUploadAvatarFormSubmit(values) {
@@ -142,7 +173,13 @@ class UserEdit extends React.Component {
                 initialValues={{
                   avatar: null,
                 }}
-                component={UploadAvatarForm}
+                validate={UploadAvatarForm.validate}
+                render={formikProps =>
+                  <UploadAvatarForm
+                    { ...formikProps }
+                    handleUploadFromVK={this.handleUploadAvatarFromVK}
+                  />
+                }
                 onSubmit={ async (values, actions) => {
                   await this.handleUploadAvatarFormSubmit(values);
                   actions.setSubmitting(false);
