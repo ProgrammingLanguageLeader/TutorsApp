@@ -12,4 +12,7 @@ STATIC_URL = '/staticfiles/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
+FILE_UPLOAD_DIRECTORY_PERMISSIONS = 0o744
+FILE_UPLOAD_PERMISSIONS = 0o644
+
 DEFAULT_USER_AVATAR = 'img/default_avatar.png'
