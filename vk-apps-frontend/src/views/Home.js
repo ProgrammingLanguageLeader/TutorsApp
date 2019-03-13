@@ -138,11 +138,9 @@ const RetryLaterPopout = () => (
 );
 
 const mapStateToProps = state => {
-  const { user } = state.API.vkAppsUsersReducer;
   const { vkUserInfo } = state.VK.appsUser;
   const { currentUser } = state;
   return {
-    user,
     vkUserInfo,
     currentUser,
   };
@@ -186,14 +184,14 @@ class Home extends React.Component {
     await this.setState({
       popout: <CreateUserPopout/>,
     });
-    const { status } = await this.props.createVkAppsUser();
-    if (!status || status >= 400) {
+    const createVkAppsUserResponse = await this.props.createVkAppsUser();
+    if (createVkAppsUserResponse.status >= 400) {
       await this.setState({
         popout: <RetryLaterPopout/>,
       });
       return;
     }
-    const { user } = this.props;
+    const { user } = createVkAppsUserResponse.data;
     const vkId = this.props.vkUserInfo.id;
     await this.updateUserInfoFromVK(user.id);
     await this.updateAvatarFromVK(user.id);
@@ -205,7 +203,7 @@ class Home extends React.Component {
 
   async updateUserInfoFromVK(id) {
     const { first_name, last_name, city } = this.props.vkUserInfo;
-    return this.props.updateUser(id, {
+    await this.props.updateUser(id, {
       first_name,
       last_name,
       city: city ? city.title : null,
@@ -219,7 +217,10 @@ class Home extends React.Component {
       method: 'GET',
       responseType: 'blob',
     });
-    const fileExtension = photo_200.toString().split('.').slice(-1)[0];
+    const fileExtension = photo_200
+      .toString()
+      .split('.')
+      .slice(-1)[0];
     const avatar = new File(
       [avatarBlob.data],
       `avatar.${fileExtension}`,
@@ -228,7 +229,7 @@ class Home extends React.Component {
         lastModified: Date.now()
       }
     );
-    return this.props.uploadAvatar(id, {
+    await this.props.uploadAvatar(id, {
       avatar,
     });
   }
