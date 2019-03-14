@@ -8,6 +8,7 @@ import Panel from '@vkontakte/vkui/dist/components/Panel/Panel';
 import PanelHeader from '@vkontakte/vkui/dist/components/PanelHeader/PanelHeader';
 import Cell from '@vkontakte/vkui/dist/components/Cell/Cell';
 import Avatar from '@vkontakte/vkui/dist/components/Avatar/Avatar';
+import HeaderButton from '@vkontakte/vkui/dist/components/HeaderButton/HeaderButton';
 import Group from '@vkontakte/vkui/dist/components/Group/Group';
 import CellButton from '@vkontakte/vkui/dist/components/CellButton/CellButton';
 
@@ -18,6 +19,7 @@ import { usersActions, vkAppsUsersActions } from 'vk-apps-frontend/actions/api';
 import { ROOT_URL } from 'vk-apps-frontend/constants';
 
 import DivSpinner from 'vk-apps-frontend/components/DivSpinner';
+import BackIcon from 'vk-apps-frontend/components/BackIcon';
 
 const mapStateToProps = state => {
   const { currentUser } = state;
@@ -71,7 +73,11 @@ class User extends React.Component {
 		return (
       <View activePanel="panel">
         <Panel id="panel">
-          <PanelHeader>
+          <PanelHeader left={
+            <HeaderButton onClick={() => this.props.history.goBack()}>
+              <BackIcon />
+            </HeaderButton>
+          }>
             Профиль
           </PanelHeader>
 
