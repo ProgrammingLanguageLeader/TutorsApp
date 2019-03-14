@@ -37,6 +37,6 @@ def handle_avatar_on_change(sender, instance, **kwargs):
         if os.path.isfile(old_avatar.path):
             os.remove(old_avatar.path)
 
-    if new_avatar and max(new_avatar.height, new_avatar.width) > 200:
+    if new_avatar:
         instance.avatar = compress_avatar(new_avatar)
         os.remove(new_avatar.path)

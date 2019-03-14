@@ -10,6 +10,7 @@ from django.contrib.auth.models import PermissionsMixin
 from django.conf import settings
 
 from users.managers import UserManager
+from users.validators import validate_file_max_size
 
 from utils.validators import NoSpecialSymbolsValidator
 
@@ -125,9 +126,12 @@ class User(AbstractBaseUser, PermissionsMixin):
         ]
     )
     avatar = models.ImageField(
-        upload_to='avatars/',
+        upload_to=settings.AVATAR_MEDIA_URL,
         blank=True,
-        verbose_name=_('avatar')
+        verbose_name=_('avatar'),
+        validators=[
+            validate_file_max_size
+        ]
     )
 
     objects = UserManager()
