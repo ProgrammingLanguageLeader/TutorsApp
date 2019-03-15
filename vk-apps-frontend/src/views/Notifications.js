@@ -73,21 +73,11 @@ class Notifications extends React.Component {
   }
 
   async onRefresh() {
-    this.setState({
-      fetching: true,
-    });
     await this.fetchNotifications();
-    this.setState({
-      fetching: false,
-    })
   }
 
   render () {
-    const {
-      fetching,
-      unreadNotifications,
-      readNotifications,
-    } = this.state;
+    const { unreadNotifications, readNotifications } = this.state;
 
     return (
       <View activePanel="panel">
@@ -100,7 +90,7 @@ class Notifications extends React.Component {
             Уведомления
           </PanelHeader>
 
-          <PullToRefresh onRefresh={this.onRefresh} isFetching={fetching}>
+          <PullToRefresh onRefresh={this.onRefresh} isFetching={this.state.fetching}>
             <div>
               <Group title="Новые уведомления">
                 <List>
