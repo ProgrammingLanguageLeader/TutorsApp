@@ -23,6 +23,10 @@ const GraySmallTextDiv = styled.div`
   font-size: 14px;
 `;
 
+const AvatarFlexDiv = styled.div`
+  flex: 0 0 64px;
+`;
+
 const NotificationCell = ({ notification, onSenderClick, buttonBefore, onButtonClick, buttonLabel }) => {
   const { verb } = notification;
   const notificationLabel =
@@ -40,7 +44,9 @@ const NotificationCell = ({ notification, onSenderClick, buttonBefore, onButtonC
     <Cell multiline expandable={isExpandable}>
       {notification.sender && (
         <FlexDiv onClick={onSenderClick}>
-          <Avatar size={64} src={ROOT_URL + notification.sender.avatar} />
+          <AvatarFlexDiv>
+            <Avatar size={64} src={ROOT_URL + notification.sender.avatar} />
+          </AvatarFlexDiv>
           <Div>
             <div>
               {notification.sender.first_name} {notification.sender.last_name}
