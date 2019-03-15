@@ -16,7 +16,6 @@ import Icon24Hide from '@vkontakte/icons/dist/24/hide';
 
 import NotificationCell from 'vk-apps-frontend/components/NotificationCell';
 import BackIcon from 'vk-apps-frontend/components/BackIcon';
-import DivSpinner from 'vk-apps-frontend/components/DivSpinner';
 
 import { notificationsActions, tutorsActions } from 'vk-apps-frontend/actions/api';
 
@@ -34,9 +33,7 @@ class Notifications extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      refreshing: false,
-      fetchingUnreadNotifications: false,
-      fetchingReadNotifications: false,
+      fetching: false,
       unreadNotifications: [],
       readNotifications: [],
     };
@@ -47,8 +44,7 @@ class Notifications extends React.Component {
 
   async fetchNotifications() {
     this.setState({
-      fetchingUnreadNotifications: true,
-      fetchingReadNotifications: true,
+      fetching: true,
     });
     const unreadNotificationsResponse = await this.props.getUnreadNotificationsList();
     const readNotificationsResponse = await this.props.getReadNotificationsList();
@@ -59,8 +55,7 @@ class Notifications extends React.Component {
       ? readNotificationsResponse.data.results
       : [];
     this.setState({
-      fetchingReadNotifications: false,
-      fetchingUnreadNotifications: false,
+      fetching: false,
       unreadNotifications,
       readNotifications,
     });
@@ -79,21 +74,19 @@ class Notifications extends React.Component {
 
   async onRefresh() {
     this.setState({
-      refreshing: true,
+      fetching: true,
     });
     await this.fetchNotifications();
     this.setState({
-      refreshing: false,
+      fetching: false,
     })
   }
 
   render () {
     const {
-      fetchingUnreadNotifications,
-      fetchingReadNotifications,
+      fetching,
       unreadNotifications,
       readNotifications,
-      refreshing
     } = this.state;
 
     return (
@@ -107,66 +100,56 @@ class Notifications extends React.Component {
             Уведомления
           </PanelHeader>
 
-          <PullToRefresh onRefresh={this.onRefresh} isFetching={refreshing}>
+          <PullToRefresh onRefresh={this.onRefresh} isFetching={fetching}>
             <div>
               <Group title="Новые уведомления">
-                {fetchingUnreadNotifications
-                  ? <DivSpinner />
-                  : (
-                    <List>
-                      { unreadNotifications.map(notification => (
-                        <NotificationCell
-                          key={notification.id}
-                          notification={notification}
-                          buttonBefore={<Icon24Hide/>}
-                          buttonLabel={"Пометить прочитанным"}
-                          onButtonClick={
-                            () => this.handleSetUnreadNotification(notification.id, false)
-                          }
-                          onSenderClick={
-                            notification.target
-                              ? () => this.props.history.push(`/${notification.target.content_type}/${notification.target.id}`)
-                              : null
-                          }
-                        />
-                      ))}
+                <List>
+                  { unreadNotifications.map(notification => (
+                    <NotificationCell
+                      key={notification.id}
+                      notification={notification}
+                      buttonBefore={<Icon24Hide/>}
+                      buttonLabel={"Пометить прочитанным"}
+                      onButtonClick={
+                        () => this.handleSetUnreadNotification(notification.id, false)
+                      }
+                      onSenderClick={
+                        notification.target
+                          ? () => this.props.history.push(`/${notification.target.content_type}/${notification.target.id}`)
+                          : null
+                      }
+                    />
+                  ))}
 
-                      { unreadNotifications.length === 0 && (
-                        <Div>Нет уведомлений</Div>
-                      )}
-                    </List>
-                  )
-                }
+                  { !fetching && unreadNotifications.length === 0 && (
+                    <Div>Нет уведомлений</Div>
+                  )}
+                </List>
               </Group>
 
               <Group title="Просмотренные уведомления">
-                {fetchingReadNotifications
-                  ? <DivSpinner />
-                  : (
-                    <List>
-                      { readNotifications.map(notification => (
-                        <NotificationCell
-                          key={notification.id}
-                          notification={notification}
-                          buttonBefore={<Icon24View/>}
-                          buttonLabel={"Пометить непрочитанным"}
-                          onButtonClick={
-                            () => this.handleSetUnreadNotification(notification.id, true)
-                          }
-                          onSenderClick={
-                            notification.target
-                              ? () => this.props.history.push(`/${notification.target.content_type}/${notification.target.id}`)
-                              : null
-                          }
-                        />
-                      ))}
+                <List>
+                  { readNotifications.map(notification => (
+                    <NotificationCell
+                      key={notification.id}
+                      notification={notification}
+                      buttonBefore={<Icon24View/>}
+                      buttonLabel={"Пометить непрочитанным"}
+                      onButtonClick={
+                        () => this.handleSetUnreadNotification(notification.id, true)
+                      }
+                      onSenderClick={
+                        notification.target
+                          ? () => this.props.history.push(`/${notification.target.content_type}/${notification.target.id}`)
+                          : null
+                      }
+                    />
+                  ))}
 
-                      {!fetchingReadNotifications && readNotifications.length === 0 && (
-                        <Div>Нет уведомлений</Div>
-                      )}
-                    </List>
-                  )
-                }
+                  { !fetching && readNotifications.length === 0 && (
+                    <Div>Нет уведомлений</Div>
+                  )}
+                </List>
               </Group>
             </div>
           </PullToRefresh>
