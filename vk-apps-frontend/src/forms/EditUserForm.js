@@ -29,6 +29,7 @@ const EditUserForm = ({
 
     <Input
       name="first_name"
+      maxLength={30}
       top="Имя"
       value={values.first_name}
       onChange={handleChange}
@@ -39,6 +40,7 @@ const EditUserForm = ({
 
     <Input
       name="last_name"
+      maxLength={30}
       top="Фамилия"
       value={values.last_name}
       onChange={handleChange}
@@ -49,6 +51,7 @@ const EditUserForm = ({
 
     <Input
       name="experience"
+      maxLength={100}
       top="Опыт преподавания"
       value={values.experience}
       onChange={handleChange}
@@ -59,6 +62,7 @@ const EditUserForm = ({
 
     <Input
       name="education"
+      maxLength={100}
       top="Образование"
       value={values.education}
       onChange={handleChange}
@@ -69,6 +73,7 @@ const EditUserForm = ({
 
     <Input
       name="city"
+      maxLength={50}
       top="Город"
       value={values.city}
       onChange={handleChange}
@@ -79,6 +84,7 @@ const EditUserForm = ({
 
     <Input
       name="district"
+      maxLength={50}
       top="Район"
       value={values.district}
       onChange={handleChange}
@@ -89,6 +95,7 @@ const EditUserForm = ({
 
     <Input
       name="street"
+      maxLength={50}
       top="Улица"
       value={values.street}
       onChange={handleChange}
@@ -99,6 +106,7 @@ const EditUserForm = ({
 
     <Input
       name="metro_station"
+      maxLength={50}
       top="Станция метро"
       value={values.metro_station}
       onChange={handleChange}
@@ -109,6 +117,7 @@ const EditUserForm = ({
 
     <Textarea
       name="bio"
+      maxLength={100}
       top="О себе"
       value={values.bio}
       onChange={handleChange}

@@ -25,6 +25,8 @@ class LessonForm extends React.Component {
     }
     if (!values.price) {
       errorsData.price = 'Это поле обязательно';
+    } else if (!(1 <= Number(values.price) && Number(values.price) <= 10000)) {
+      errorsData.price = 'Значение должно быть от 1 до 10000';
     }
     return Object.keys(errorsData).length > 0
       ? { data: errorsData }
@@ -132,6 +134,8 @@ class LessonForm extends React.Component {
           <Input
             name="price"
             type="number"
+            min="1"
+            max="10000"
             onChange={handleChange}
             value={String(values.price || "")}
           />

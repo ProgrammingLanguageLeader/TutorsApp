@@ -99,6 +99,7 @@ class VacancyForm extends React.Component {
         <FormLayoutGroup top="Если вашего предмета не оказалось в списке, введите его название вручную">
           <Input
             name="input_subject"
+            maxLength={128}
             type="text"
             placeholder="Введите название предмета"
             value={inputSubject}
@@ -155,6 +156,7 @@ class VacancyForm extends React.Component {
         <FormLayoutGroup top="Дополнительная информация">
           <Textarea
             name="extra_info"
+            maxLength={128}
             onChange={handleChange}
             value={values.extra_info}
           />
