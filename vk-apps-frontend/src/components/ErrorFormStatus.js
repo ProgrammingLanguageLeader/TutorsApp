@@ -44,8 +44,9 @@ const switchcase = (cases, defaultCase, key) => {
 
 const getTimingErrorMessage = (errorsData, errorKey) => {
   const [ message, timeValue ] = errorsData[errorKey];
-  // TODO: fix deprecation warning (it doesn't influence
-  //  a normal work on a correct function usage)
+  if (!Date.parse(timeValue)) {
+    return null;
+  }
   const localTimeValue = moment
     .utc(timeValue)
     .local()
