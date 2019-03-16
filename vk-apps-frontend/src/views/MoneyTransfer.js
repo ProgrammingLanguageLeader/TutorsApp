@@ -54,8 +54,8 @@ class MoneyTransfer extends React.Component {
     const { tutors } = this.props;
 
     return (
-      <View activePanel="panel">
-        <Panel id="panel">
+      <View id={this.props.id} activePanel={this.props.id}>
+        <Panel id={this.props.id}>
           <PanelHeader left={
             <HeaderButton onClick={() => this.props.history.goBack()}>
               <BackIcon />

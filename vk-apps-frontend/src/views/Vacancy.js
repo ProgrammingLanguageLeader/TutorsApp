@@ -113,8 +113,8 @@ class Vacancy extends React.Component {
     const isEditable = currentUser.user && vacancy && currentUser.user.id === vacancy.owner.id;
 
     return (
-      <View activePanel="panel" popout={popout}>
-        <Panel id="panel">
+      <View id={this.props.id} activePanel={this.props.id} popout={popout}>
+        <Panel id={this.props.id}>
           <PanelHeader left={
             <HeaderButton onClick={this.props.history.goBack}>
               <BackIcon />

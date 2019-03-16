@@ -6,9 +6,9 @@ import Panel from '@vkontakte/vkui/dist/components/Panel/Panel';
 
 import DivSpinner from 'vk-apps-frontend/components/DivSpinner';
 
-export default ({ fetching, currentUser }) => (
-  <View activePanel="panel">
-    <Panel id="panel">
+export default ({ id, fetching, currentUser }) => (
+  <View id={id} activePanel={this.props.id}>
+    <Panel id={this.props.id}>
       {fetching
         ? <DivSpinner />
         : currentUser

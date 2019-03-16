@@ -47,7 +47,7 @@ class VacanciesFilter extends React.Component {
 
   render() {
     return (
-      <View activePanel="panel">
+      <View id={this.props.id} activePanel="panel">
         <Panel id="panel">
           <PanelHeader
             left={

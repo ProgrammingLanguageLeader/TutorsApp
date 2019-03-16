@@ -68,8 +68,8 @@ class Students extends React.Component {
     const { students, fetching } = this.state;
 
     return (
-      <View activePanel="panel" popout={this.state.popout}>
-        <Panel id="panel">
+      <View id={this.props.id} activePanel={this.props.id} popout={this.state.popout}>
+        <Panel id={this.props.id}>
           <PanelHeader left={
             <HeaderButton onClick={this.props.history.goBack}>
               <BackIcon />

@@ -237,8 +237,8 @@ class Home extends React.Component {
 
   render() {
     return (
-      <View activePanel="panel" popout={this.state.popout}>
-        <FlexedWhitePanel id="panel">
+      <View id={this.props.id} activePanel={this.props.id} popout={this.state.popout}>
+        <FlexedWhitePanel id={this.props.id}>
           <PanelHeader>
             Поиск репетиторов
           </PanelHeader>

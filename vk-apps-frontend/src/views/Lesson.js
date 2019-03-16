@@ -132,8 +132,8 @@ class Lesson extends React.Component {
     } = this.state;
 
     return (
-      <View activePanel="panel" popout={popout}>
-        <Panel id="panel">
+      <View id={this.props.id} activePanel={this.props.id} popout={popout}>
+        <Panel id={this.props.id}>
           <PanelHeader left={
             <HeaderButton onClick={this.props.history.goBack}>
               <BackIcon />

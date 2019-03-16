@@ -71,8 +71,8 @@ class User extends React.Component {
     const isProfileEditable = currentUser.user && Number(id) === Number(currentUser.user.id);
 
 		return (
-      <View activePanel="panel">
-        <Panel id="panel">
+      <View id={this.props.id} activePanel={this.props.id}>
+        <Panel id={this.props.id}>
           <PanelHeader left={
             <HeaderButton onClick={() => this.props.history.goBack()}>
               <BackIcon />
@@ -142,32 +142,25 @@ class User extends React.Component {
                 )}
 
                 {user.district && (
-                    <Cell multiline description="Район">
-                      {user.district}
-                    </Cell>
-                  )
-                }
-                {
-                  user.street && (
-                    <Cell multiline description="Улица">
-                      {user.street}
-                    </Cell>
-                  )
-                }
-                {
-                  user.metro_station && (
-                    <Cell multiline description="Станция метро">
-                      {user.metro_station}
-                    </Cell>
-                  )
-                }
-                {
-                  user.bio && (
-                    <Cell multiline description="О себе">
-                      {user.bio}
-                    </Cell>
-                  )
-                }
+                  <Cell multiline description="Район">
+                    {user.district}
+                  </Cell>
+                )}
+                {user.street && (
+                  <Cell multiline description="Улица">
+                    {user.street}
+                  </Cell>
+                )}
+                {user.metro_station && (
+                  <Cell multiline description="Станция метро">
+                    {user.metro_station}
+                  </Cell>
+                )}
+                {user.bio && (
+                  <Cell multiline description="О себе">
+                    {user.bio}
+                  </Cell>
+                )}
               </Group>
             </div>
           )}

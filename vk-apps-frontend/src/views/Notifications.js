@@ -16,16 +16,15 @@ import Icon24Hide from '@vkontakte/icons/dist/24/hide';
 
 import NotificationCell from 'vk-apps-frontend/components/NotificationCell';
 import BackIcon from 'vk-apps-frontend/components/BackIcon';
+import DivSpinner from 'vk-apps-frontend/components/DivSpinner';
 
-import { notificationsActions, tutorsActions } from 'vk-apps-frontend/actions/api';
+import { notificationsActions } from 'vk-apps-frontend/actions/api';
 
 const mapDispatchToProps = dispatch => {
   return {
     getUnreadNotificationsList: bindActionCreators(notificationsActions.getUnreadNotificationsList, dispatch),
     getReadNotificationsList: bindActionCreators(notificationsActions.getReadNotificationsList, dispatch),
     setUnreadNotification: bindActionCreators(notificationsActions.setUnreadNotification, dispatch),
-    acceptStudentRequest: bindActionCreators(tutorsActions.acceptStudentRequest, dispatch),
-    deleteStudentRequest: bindActionCreators(tutorsActions.deleteStudentRequest, dispatch),
   };
 };
 
@@ -33,6 +32,7 @@ class Notifications extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      refreshing: null,
       fetching: false,
       unreadNotifications: [],
       readNotifications: [],
@@ -73,15 +73,31 @@ class Notifications extends React.Component {
   }
 
   async onRefresh() {
+    this.setState({
+      refreshing: true,
+    });
     await this.fetchNotifications();
+    setTimeout(
+      () => {
+        this.setState({
+          refreshing: false,
+        });
+      },
+      1000
+    );
   }
 
   render () {
-    const { unreadNotifications, readNotifications } = this.state;
+    const {
+      refreshing,
+      fetching,
+      unreadNotifications,
+      readNotifications
+    } = this.state;
 
     return (
-      <View activePanel="panel">
-        <Panel id="panel">
+      <View id={this.props.id} activePanel={this.props.id}>
+        <Panel id={this.props.id}>
           <PanelHeader left={
             <HeaderButton onClick={this.props.history.goBack}>
               <BackIcon />
@@ -90,7 +106,13 @@ class Notifications extends React.Component {
             Уведомления
           </PanelHeader>
 
-          <PullToRefresh onRefresh={this.onRefresh} isFetching={this.state.fetching}>
+          { fetching && !refreshing && (
+            <Div>
+              <DivSpinner/>
+            </Div>
+          )}
+
+          <PullToRefresh onRefresh={this.onRefresh} isFetching={refreshing}>
             <div>
               <Group title="Новые уведомления">
                 <List>

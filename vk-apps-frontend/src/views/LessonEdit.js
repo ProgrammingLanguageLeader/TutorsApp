@@ -84,8 +84,8 @@ class LessonEdit extends React.Component {
     const { fetching, students, lesson, success } = this.state;
 
     return (
-      <View activePanel="panel">
-        <Panel id="panel">
+      <View id={this.props.id} activePanel={this.props.id}>
+        <Panel id={this.props.id}>
           <PanelHeader left={
             <HeaderButton onClick={this.props.history.goBack}>
               <BackIcon />
