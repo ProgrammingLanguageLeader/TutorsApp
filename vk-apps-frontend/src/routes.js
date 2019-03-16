@@ -24,7 +24,7 @@ export const pathsToViews = {
   '/main_menu': 'main-menu',
 
   '/student_request/:id(\\d+)': 'student-request',
-  '/student_requests/outgoing': 'outgoing-student-request',
+  '/student_requests/outgoing': 'outgoing-student-requests',
 
   '/money_transfer': 'money-transfer',
 
