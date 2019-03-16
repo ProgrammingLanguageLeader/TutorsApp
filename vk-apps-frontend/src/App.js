@@ -1,13 +1,35 @@
 import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Router } from 'react-router-dom';
-import { createHashHistory } from 'history';
+import { Router, Route } from 'react-router-dom';
 
 import Epic from '@vkontakte/vkui/dist/components/Epic/Epic';
+import Root from '@vkontakte/vkui/dist/components/Root/Root';
 
-import Routes from 'vk-apps-frontend/Routes';
+import Entrypoint from 'vk-apps-frontend/views/Entrypoint';
+import Home from 'vk-apps-frontend/views/Home';
+import User from 'vk-apps-frontend/views/User';
+import Vacancies from 'vk-apps-frontend/views/Vacancies';
+import VacancyCreate from 'vk-apps-frontend/views/VacancyCreate';
+import UserEdit from 'vk-apps-frontend/views/UserEdit';
+import Schedule from 'vk-apps-frontend/views/Schedule';
+import VacanciesFilter from 'vk-apps-frontend/views/VacanciesFilter';
+import Notifications from 'vk-apps-frontend/views/Notifications';
+import Vacancy from 'vk-apps-frontend/views/Vacancy';
+import MainMenu from 'vk-apps-frontend/views/MainMenu';
+import StudentRequest from 'vk-apps-frontend/views/StudentRequest';
+import Lesson from 'vk-apps-frontend/views/Lesson';
+import MoneyTransfer from 'vk-apps-frontend/views/MoneyTransfer';
+import LessonCreate from 'vk-apps-frontend/views/LessonCreate';
+import LessonEdit from 'vk-apps-frontend/views/LessonEdit';
+import UserVacancies from 'vk-apps-frontend/views/UserVacancies';
+import VacancyEdit from 'vk-apps-frontend/views/VacancyEdit';
+import OutgoingStudentRequests from 'vk-apps-frontend/views/OutgoingStudentRequests';
+import Tutors from 'vk-apps-frontend/views/Tutors';
+import Students from 'vk-apps-frontend/views/Students';
 
+import { matchView, getMatchedPath } from 'vk-apps-frontend/routes';
+import history from 'vk-apps-frontend/helpers/history';
 import { appsActions } from 'vk-apps-frontend/actions/vk';
 import { currentUserActions } from 'vk-apps-frontend/actions';
 import { vkAppsUsersActions, notificationsActions } from 'vk-apps-frontend/actions/api';
@@ -43,9 +65,6 @@ class App extends React.Component {
       fetching: true,
     };
     this.getUnreadNotificationsListWithInterval = this.getUnreadNotificationsListWithInterval.bind(this);
-    this.history = createHashHistory({
-      hashType: 'slash'
-    });
   }
 
   componentDidMount() {
@@ -83,20 +102,60 @@ class App extends React.Component {
     const { fetching } = this.state;
 
     return (
-      <Router history={this.history}>
-        <Epic activeStory="routes" tabbar={
-          <Tabbar
-            hidden={!user}
-            currentUserId={user && user.id}
-            unreadNotificationsCount={unreadNotificationsCount}
-          />
-        }>
-          <Routes
-            id="routes"
-            fetching={fetching}
-            currentUser={user}
-          />
-        </Epic>
+      <Router history={history}>
+        <Route path="/" component={props => {
+          const { pathname } = props.location;
+          const viewName = matchView(pathname);
+          const match = getMatchedPath(pathname);
+
+          return (
+            <Epic activeStory="root" tabbar={
+              <Tabbar
+                hidden={!user}
+                currentUserId={user && user.id}
+                unreadNotificationsCount={unreadNotificationsCount}
+              />
+            }>
+              <Root id="root" activeView={viewName}>
+                <Entrypoint
+                  id="entrypoint"
+                  history={history}
+                  match={match}
+                  fetching={fetching}
+                  currentUser={user}
+                />
+                <Home id="home" history={history} match={match} />
+
+                <User id="user" history={history} match={match} />
+                <UserEdit id="user-edit" history={history} match={match} />
+
+                <Vacancy id="vacancy" history={history} match={match} />
+                <VacancyEdit id="vacancy-edit" history={history} match={match} />
+                <VacancyCreate id="vacancy-create" history={history} match={match} />
+                <Vacancies id="vacancies" history={history} match={match} />
+                <VacanciesFilter id="vacancies-filter" history={history} match={match} />
+                <UserVacancies id="user-vacancies" history={history} match={match} />
+
+                <Schedule id="schedule" history={history} match={match} />
+                <Lesson id="lesson" history={history} match={match} />
+                <LessonEdit id="lesson-edit" history={history} match={match} />
+                <LessonCreate id="lesson-create" history={history} match={match} />
+
+                <Notifications id="notifications" history={history} match={match} />
+
+                <MainMenu id="main-menu" history={history} match={match} />
+
+                <StudentRequest id="student-request" history={history} match={match} />
+                <OutgoingStudentRequests id="outgoing-student-requests" history={history} match={match} />
+
+                <MoneyTransfer id="money-transfer" history={history} match={match} />
+
+                <Tutors id="tutors" history={history} match={match} />
+                <Students id="students" history={history} match={match} />
+              </Root>
+            </Epic>
+          )
+        }} />
       </Router>
     );
   }
