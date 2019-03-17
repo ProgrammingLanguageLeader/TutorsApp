@@ -51,7 +51,7 @@ class MyTabbar extends React.Component {
     });
   }
 
-  getUnreadNotificationsListWithInterval(interval = 30000) {
+  getUnreadNotificationsListWithInterval(interval = 60000) {
     this.fetchUnreadNotificationsCount.call(this);
     this.notificationsInterval = setInterval(() => {
       this.fetchUnreadNotificationsCount.call(this);
