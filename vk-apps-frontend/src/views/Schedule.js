@@ -2,14 +2,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Datetime from 'react-datetime';
-import Moment from 'react-moment';
 import moment from 'moment';
 
 import View from '@vkontakte/vkui/dist/components/View/View';
 import Panel from '@vkontakte/vkui/dist/components/Panel/Panel';
 import PanelHeader from '@vkontakte/vkui/dist/components/PanelHeader/PanelHeader';
-import Cell from '@vkontakte/vkui/dist/components/Cell/Cell';
-import Avatar from '@vkontakte/vkui/dist/components/Avatar/Avatar';
 import Group from '@vkontakte/vkui/dist/components/Group/Group';
 import HeaderButton from '@vkontakte/vkui/dist/components/HeaderButton/HeaderButton';
 import CellButton from '@vkontakte/vkui/dist/components/CellButton/CellButton';
@@ -18,11 +15,11 @@ import Div from '@vkontakte/vkui/dist/components/Div/Div';
 
 import Icon24Add from '@vkontakte/icons/dist/24/add';
 
+import LessonCell from 'vk-apps-frontend/components/LessonCell';
 import DivSpinner from 'vk-apps-frontend/components/DivSpinner';
 import BackIcon from 'vk-apps-frontend/components/BackIcon';
 
 import { lessonsActions } from 'vk-apps-frontend/actions/api';
-import { ROOT_URL } from 'vk-apps-frontend/constants';
 
 const mapStateToProps = state => {
   const { currentUser } = state;
@@ -76,6 +73,9 @@ class Schedule extends React.Component {
     const lessons = lessonsListResponse.status === 200
       ? lessonsListResponse.data.results
       : [];
+    lessons.sort((a, b) =>
+      moment(a.beginning_time) - moment(b.beginning_time)
+    );
     this.setState({
       lessons,
       fetching: false,
@@ -126,29 +126,18 @@ class Schedule extends React.Component {
             )}
             { lessons && (
               <List>
-                { lessons.map(lesson => {
-                  const visibleUser = (currentUser.user.id === lesson.tutor.id) ? lesson.student : lesson.tutor;
-                  return (
-                    <Cell
-                      size="l"
-                      expandable
-                      multiline
-                      description={
-                        <div>
-                          <Moment format="HH:mm - " date={lesson.beginning_time}/>
-                          <Moment format="HH:mm" date={lesson.ending_time}/>
-                          <div>{lesson.price} рублей за занятие</div>
-                        </div>
-                      }
-                      before={<Avatar src={ROOT_URL + visibleUser.avatar} size={64}/>}
-                      key={lesson.id}
-                      onClick={() => this.props.history.push(`/lesson/${lesson.id}`)}
-                    >
-                      {visibleUser.first_name} {visibleUser.last_name}
-                    </Cell>
-                  );
-                })}
-                {lessons.length === 0 && <Div>Нет занятий</Div>}
+                { lessons.sort(lesson => lesson.beginning_time).map(lesson => (
+                  <LessonCell
+                    key={lesson.id}
+                    lesson={lesson}
+                    currentUser={currentUser}
+                    onClick={() => this.props.history.push(`/lesson/${lesson.id}`)}
+                  />
+                ))}
+
+                { lessons.length === 0 && !fetching && (
+                  <Div>Нет занятий</Div>
+                )}
               </List>
             )}
           </Group>
