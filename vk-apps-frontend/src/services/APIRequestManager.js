@@ -3,14 +3,16 @@ import axios from 'axios';
 import { API_URL } from 'vk-apps-frontend/constants/api';
 
 class APIRequestManager {
-  constructor(vkExecutionParams, sign) {
+  constructor(vkExecutionParams, sign, acceptLanguage = "ru-RU") {
     if (APIRequestManager.instance) {
       throw 'APIRequestManager instance already exists. Use getInstance() instead';
     }
+    this.httpClient = axios.create();
+    this.httpClient.defaults.timeout = 5000;
     this.vkExecutionParams = vkExecutionParams;
     this.sign = sign;
     this.headers = {
-      "Accept-Language": "ru-RU",
+      'Accept-Language': acceptLanguage,
     };
   }
 
@@ -48,8 +50,8 @@ class APIRequestManager {
       optionsWithSign = formData;
     }
 
-    const axiosRequestPromise = method.toLowerCase() === 'get' ?
-      axios({
+    const httpRequestPromise = method.toLowerCase() === 'get' ?
+      this.httpClient({
         url: url,
         method: method,
         headers: this.headers,
@@ -58,7 +60,7 @@ class APIRequestManager {
           APIRequestManager.cancelRequests = cancelFunction;
         })
       })
-    : axios({
+    : this.httpClient({
         url: url,
         method: method,
         headers: this.headers,
@@ -68,7 +70,7 @@ class APIRequestManager {
         })
       });
 
-    return axiosRequestPromise
+    return httpRequestPromise
       .then(response => response)
       .catch(error => {
         if (error.response) {
