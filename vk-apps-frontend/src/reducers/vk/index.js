@@ -1,13 +1,13 @@
 import { combineReducers } from 'redux';
 
 import appsUserReducer from './appsUserReducer';
-import appsTokenReducer from './appsTokenReducer';
 import appsPayReducer from './appsPayReducer';
+import appsNotificationsReducer from './appsNotificationsReducer';
 
 const vkReducer = combineReducers({
   appsUser: appsUserReducer,
-  appsToken: appsTokenReducer,
   appsPay: appsPayReducer,
+  appsNotifications: appsNotificationsReducer,
 });
 
 export default vkReducer;
