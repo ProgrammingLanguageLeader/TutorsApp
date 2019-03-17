@@ -16,11 +16,9 @@ import { appsActions } from 'vk-apps-frontend/actions/vk';
 import { tutorsActions, vkAppsUsersActions } from 'vk-apps-frontend/actions/api';
 
 const mapStateToProps = state => {
-  const { tutors } = state.API.tutorsReducer;
   const { currentUser } = state;
   const { errors } = state.VK.appsPay;
   return {
-    tutors,
     errors,
     currentUser,
   };
@@ -38,6 +36,9 @@ class MoneyTransfer extends React.Component {
   constructor(props) {
     super(props);
     this.startDiv = React.createRef();
+    this.state = {
+      tutors: [],
+    }
   }
 
   componentDidUpdate() {
@@ -46,12 +47,18 @@ class MoneyTransfer extends React.Component {
     });
   }
 
-  componentDidMount() {
-    this.props.getTutorsList();
+  async componentDidMount() {
+    const tutorsListResponse = await this.props.getTutorsList();
+    const tutors = tutorsListResponse.status === 200
+      ? tutorsListResponse.data.results
+      : [];
+    this.setState({
+      tutors,
+    });
   }
 
   render() {
-    const { tutors } = this.props;
+    const { tutors } = this.state;
 
     return (
       <View id={this.props.id} activePanel={this.props.id}>
@@ -72,15 +79,19 @@ class MoneyTransfer extends React.Component {
                 amount: 500,
               }}
               render={formikProps =>
-                <MoneyTransferForm {...formikProps} tutors={tutors || []} />
+                <MoneyTransferForm {...formikProps} tutors={tutors} />
               }
               validate={MoneyTransferForm.validate}
+              validateOnBlur={false}
+              validateOnChange={false}
               onSubmit={ async (values, actions) => {
                 const response = await this.props.retrieveVkAppsUserByUserId(values.recipient);
                 if (response.status >= 400) {
                   actions.setSubmitting(false);
                   actions.setErrors({
-                    recipient: 'Выбранный пользователь не зарегистрирован через VK Apps'
+                    data: {
+                      recipient: 'Выбранный пользователь не зарегистрирован через VK Apps'
+                    }
                   });
                   return;
                 }
