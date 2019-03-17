@@ -16,6 +16,7 @@ import CellButton from '@vkontakte/vkui/dist/components/CellButton/CellButton';
 
 import Icon24Add from '@vkontakte/icons/dist/24/add';
 
+import VacancyCell from 'vk-apps-frontend/components/VacancyCell';
 import DivSpinner from 'vk-apps-frontend/components/DivSpinner';
 import BackIcon from 'vk-apps-frontend/components/BackIcon';
 
@@ -91,38 +92,19 @@ class UserVacancies extends React.Component {
             <div>
               <Group title="Список предложений">
                 <List>
-                  { vacancies
-                    .map(vacancy => (
-                      <Link to={`/vacancy/${vacancy.id}`} key={vacancy.id}>
-                        <Cell expandable multiline description={
-                          <div>
-                            <div>
-                              {vacancy.subject}
-                            </div>
-                            <div>
-                              {vacancy.owner.city}
-                            </div>
-                            <div>
-                              {vacancy.price} рублей/час
-                            </div>
-                          </div>
-                        }
-                              before={
-                                <Avatar size={64} src={ROOT_URL + vacancy.owner.avatar} />
-                              }
-                        >
-                          {vacancy.owner.first_name} {vacancy.owner.last_name}
-                        </Cell>
-                      </Link>
-                    ))
-                  }
-                  {
-                    vacancies.length === 0 && (
-                      <Cell multiline>
-                        Не найдено ни одного предложения
-                      </Cell>
-                    )
-                  }
+                  { vacancies.map(vacancy => (
+                    <VacancyCell
+                      key={vacancy.id}
+                      vacancy={vacancy}
+                      onClick={() => this.props.history.push(`/vacancy/${vacancy.id}`)}
+                    />
+                  ))}
+
+                  {vacancies.length === 0 && (
+                    <Cell multiline>
+                      Не найдено ни одного предложения
+                    </Cell>
+                  )}
                 </List>
               </Group>
               <Footer>

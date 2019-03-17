@@ -1,14 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Link } from 'react-router-dom';
 
 import View from '@vkontakte/vkui/dist/components/View/View';
 import Panel from '@vkontakte/vkui/dist/components/Panel/Panel';
 import PanelHeader from '@vkontakte/vkui/dist/components/PanelHeader/PanelHeader';
 import Cell from '@vkontakte/vkui/dist/components/Cell/Cell';
 import HeaderButton from '@vkontakte/vkui/dist/components/HeaderButton/HeaderButton';
-import Avatar from '@vkontakte/vkui/dist/components/Avatar/Avatar';
 import Group from '@vkontakte/vkui/dist/components/Group/Group';
 import Footer from '@vkontakte/vkui/dist/components/Footer/Footer';
 import List from '@vkontakte/vkui/dist/components/List/List';
@@ -18,13 +16,14 @@ import Div from '@vkontakte/vkui/dist/components/Div/Div';
 import Icon24Filter from '@vkontakte/icons/dist/24/filter';
 import Icon24Add from '@vkontakte/icons/dist/24/add';
 
+import VacancyCell from 'vk-apps-frontend/components/VacancyCell';
 import PaginationButton from 'vk-apps-frontend/components/PaginationButton';
 import DivSpinner from 'vk-apps-frontend/components/DivSpinner';
 import BackIcon from 'vk-apps-frontend/components/BackIcon';
 
 import { vacanciesActions } from 'vk-apps-frontend/actions/api';
 
-import { ROOT_URL, DEFAULT_RESULTS_COUNT } from 'vk-apps-frontend/constants';
+import { DEFAULT_RESULTS_COUNT } from 'vk-apps-frontend/constants';
 
 const mapStateToProps = state => {
   const { vacanciesFilter } = state;
@@ -120,28 +119,12 @@ class Vacancies extends React.Component {
             <div>
               <Group title="Список предложений">
                 <List>
-                  { vacancies.map(vacancy => (
-                    <Link to={`/vacancy/${vacancy.id}`} key={vacancy.id}>
-                      <Cell expandable multiline description={
-                        <div>
-                          <div>
-                            {vacancy.subject}
-                          </div>
-                          <div>
-                            {vacancy.owner.city}
-                          </div>
-                          <div>
-                            {vacancy.price} рублей/час
-                          </div>
-                        </div>
-                        }
-                        before={
-                          <Avatar size={64} src={ROOT_URL + vacancy.owner.avatar} />
-                        }
-                      >
-                        {vacancy.owner.first_name} {vacancy.owner.last_name}
-                      </Cell>
-                    </Link>
+                  {vacancies.map(vacancy => (
+                    <VacancyCell
+                      key={vacancy.id}
+                      vacancy={vacancy}
+                      onClick={() => this.props.history.push(`/vacancy/${vacancy.id}`)}
+                    />
                   ))}
                   {vacancies.length === 0 && (
                     <Cell multiline>
