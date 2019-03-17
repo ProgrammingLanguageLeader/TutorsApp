@@ -12,7 +12,8 @@ from django.conf import settings
 from users.managers import UserManager
 from users.validators import validate_file_max_size
 
-from utils.validators import NoSpecialSymbolsValidator
+from utils.validators import NoSpecialSymbolsValidator, \
+    AlphabetSymbolsValidator
 
 
 class User(AbstractBaseUser, PermissionsMixin):
@@ -43,7 +44,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         blank=False,
         default='Anonymous',
         validators=[
-            NoSpecialSymbolsValidator()
+            AlphabetSymbolsValidator()
         ]
     )
     last_name = models.CharField(
@@ -52,7 +53,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         blank=False,
         default='Anonymous',
         validators=[
-            NoSpecialSymbolsValidator()
+            AlphabetSymbolsValidator()
         ]
     )
 
