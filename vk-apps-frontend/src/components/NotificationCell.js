@@ -51,7 +51,7 @@ const NotificationCell = ({ notification, onSenderClick, buttonBefore, onButtonC
   return (
     <Cell>
       <NormalWhiteSpaceDiv>
-        {notification.sender && (
+        { verb !== 'lesson payment' && notification.sender && (
           <FlexDiv onClick={onSenderClick}>
             <AvatarFlexDiv>
               <Avatar size={64} src={ROOT_URL + notification.sender.avatar} />
@@ -74,14 +74,16 @@ const NotificationCell = ({ notification, onSenderClick, buttonBefore, onButtonC
         {verb === 'lesson payment' && notification.target.tutor && (
           <FlexDiv onClick={onSenderClick}>
             <Avatar size={64} src={ROOT_URL + notification.target.tutor.avatar} />
-            <div>
-              {notification.target.tutor.first_name} {notification.target.tutor.last_name}
-            </div>
-            {isExpandable && (
-              <GraySmallTextDiv>
-                Нажмите для просмотра
-              </GraySmallTextDiv>
-            )}
+            <Div>
+              <div>
+                {notification.target.tutor.first_name} {notification.target.tutor.last_name}
+              </div>
+              {isExpandable && (
+                <GraySmallTextDiv>
+                  Нажмите для просмотра
+                </GraySmallTextDiv>
+              )}
+            </Div>
           </FlexDiv>
         )}
         <FlexDivWithPadding>
