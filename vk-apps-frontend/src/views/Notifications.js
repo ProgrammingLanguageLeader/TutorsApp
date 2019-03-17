@@ -113,7 +113,7 @@ class Notifications extends React.Component {
           )}
 
           <PullToRefresh onRefresh={this.onRefresh} isFetching={refreshing}>
-            <div>
+            <div style={{ height: "100vh" }}>
               <Group title="Новые уведомления">
                 <List>
                   { unreadNotifications.map(notification => (
