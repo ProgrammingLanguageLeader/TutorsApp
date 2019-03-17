@@ -39,4 +39,5 @@ def handle_avatar_on_change(sender, instance, **kwargs):
 
     if new_avatar:
         instance.avatar = compress_avatar(new_avatar)
-        os.remove(new_avatar.path)
+        if os.path.isfile(new_avatar.path):
+            os.remove(new_avatar.path)
