@@ -46,9 +46,11 @@ class User extends React.Component {
       vkId: null,
       fetching: false,
     };
+    this._isMounted = false;
   }
 
   async componentDidMount() {
+    this._isMounted = true;
     this.setState({
       fetching: true,
     });
@@ -57,11 +59,15 @@ class User extends React.Component {
     const user = userResponse.status === 200 && userResponse.data;
     const vkAppsUserResponse = await this.props.retrieveVkAppsUserByUserId(id);
     const vkAppsUser = vkAppsUserResponse.status === 200 && vkAppsUserResponse.data;
-    this.setState({
+    this._isMounted && this.setState({
       user,
       vkId: vkAppsUser && vkAppsUser.vk_id,
       fetching: false,
     });
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
 	render() {
