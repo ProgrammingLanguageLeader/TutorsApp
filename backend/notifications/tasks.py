@@ -18,7 +18,8 @@ def send_vk_notification(user_ids):
     api = API()
     api.notifications.sendMessage(
         user_ids=user_ids,
-        message=str(_('You have unread notifications'))
+        message=str(_('You have unread notifications')),
+        fragment='notifications'
     )
 
 
