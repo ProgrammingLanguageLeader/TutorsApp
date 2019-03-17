@@ -9,6 +9,17 @@ import Avatar from '@vkontakte/vkui/dist/components/Avatar/Avatar';
 
 import { ROOT_URL } from 'vk-apps-frontend/constants';
 
+const notificationVerbs = {
+  'student request create': 'Создана заявка на добавление в список учеников',
+  'lesson create': 'Создан урок',
+  'student request accept': 'Принята заявка на добавление в список учеников',
+  'student request reject': 'Отклонена заявка на добавление в список учеников',
+  'lesson delete': 'Удален урок',
+  'lesson update': 'Изменение урока',
+  'lesson payment': 'Оплата урока',
+  'student delete': 'Вы были удалены из списка учеников',
+};
+
 const FlexDiv = styled.div`
   display: flex;
 `;
@@ -29,16 +40,7 @@ const AvatarFlexDiv = styled.div`
 
 const NotificationCell = ({ notification, onSenderClick, buttonBefore, onButtonClick, buttonLabel }) => {
   const { verb } = notification;
-  const notificationLabel =
-      verb === 'student request create' && 'Создана заявка на добавление в список учеников'
-      || verb === 'lesson create' && 'Создан урок'
-      || verb === 'student request accept' && 'Принята заявка на добавление в список учеников'
-      || verb === 'student request reject' && 'Отклонена заявка на добавление в список учеников'
-      || verb === 'lesson delete' && 'Удален урок'
-      || verb === 'lesson update' && 'Изменение урока'
-      || verb === 'lesson payment' && 'Оплата урока'
-      || verb === 'student delete' && 'Вы были удалены из списка учеников'
-      || verb;
+  const notificationLabel = notificationVerbs[verb] || verb;
   const isExpandable = Boolean(notification.target);
   return (
     <Cell multiline expandable={isExpandable}>
