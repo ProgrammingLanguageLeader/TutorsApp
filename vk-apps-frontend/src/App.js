@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { Router, Route } from 'react-router-dom';
 
 import Epic from '@vkontakte/vkui/dist/components/Epic/Epic';
-import Root from '@vkontakte/vkui/dist/components/Root/Root';
 
 import Entrypoint from 'vk-apps-frontend/views/Entrypoint';
 import Home from 'vk-apps-frontend/views/Home';
@@ -32,19 +31,17 @@ import { matchView, getMatchedPath } from 'vk-apps-frontend/routes';
 import history from 'vk-apps-frontend/helpers/history';
 import { appsActions } from 'vk-apps-frontend/actions/vk';
 import { currentUserActions } from 'vk-apps-frontend/actions';
-import { vkAppsUsersActions, notificationsActions } from 'vk-apps-frontend/actions/api';
+import { vkAppsUsersActions } from 'vk-apps-frontend/actions/api';
 
 import Tabbar from 'vk-apps-frontend/components/Tabbar';
 
 const mapStateToProps = state => {
   const { vkUserInfo } = state.VK.appsUser;
   const { user, vkId } = state.currentUser;
-  const { unreadNotificationsCount } = state.API.notificationsReducer;
   return {
     vkUserInfo,
     user,
     vkId,
-    unreadNotificationsCount,
   };
 };
 
@@ -54,7 +51,6 @@ const mapDispatchToProps = dispatch => {
     fetchCurrentUserInfo: bindActionCreators(appsActions.fetchCurrentUserInfo, dispatch),
     getVkAppsUser: bindActionCreators(vkAppsUsersActions.getVkAppsUser, dispatch),
     saveCurrentUserData: bindActionCreators(currentUserActions.currentUserSaveData, dispatch),
-    getUnreadNotificationsList: bindActionCreators(notificationsActions.getUnreadNotificationsList, dispatch),
   };
 };
 
@@ -64,13 +60,11 @@ class App extends React.Component {
     this.state = {
       fetching: true,
     };
-    this.getUnreadNotificationsListWithInterval = this.getUnreadNotificationsListWithInterval.bind(this);
   }
 
   componentDidMount() {
     this.props.init();
     this.props.fetchCurrentUserInfo();
-    this.getUnreadNotificationsListWithInterval();
   }
 
   async componentDidUpdate(prevProps) {
@@ -90,15 +84,8 @@ class App extends React.Component {
     }
   }
 
-  getUnreadNotificationsListWithInterval(interval = 30000) {
-    this.props.getUnreadNotificationsList();
-    setInterval(() => {
-      this.props.getUnreadNotificationsList();
-    }, interval);
-  }
-
   render() {
-    const { user, unreadNotificationsCount } = this.props;
+    const { user } = this.props;
     const { fetching } = this.state;
 
     return (
@@ -109,50 +96,47 @@ class App extends React.Component {
           const match = getMatchedPath(pathname);
 
           return (
-            <Epic activeStory="root" tabbar={
-              <Tabbar
-                hidden={!user}
-                currentUserId={user && user.id}
-                unreadNotificationsCount={unreadNotificationsCount}
+            <Epic
+              activeStory={viewName}
+              tabbar={
+                <Tabbar hidden={!user} currentUserId={user && user.id} />
+              }
+            >
+              <Entrypoint
+                id="entrypoint"
+                history={history}
+                match={match}
+                fetching={fetching}
+                currentUser={user}
               />
-            }>
-              <Root id="root" activeView={viewName}>
-                <Entrypoint
-                  id="entrypoint"
-                  history={history}
-                  match={match}
-                  fetching={fetching}
-                  currentUser={user}
-                />
-                <Home id="home" history={history} match={match} />
+              <Home id="home" history={history} match={match} />
 
-                <User id="user" history={history} match={match} />
-                <UserEdit id="user-edit" history={history} match={match} />
+              <User id="user" history={history} match={match} />
+              <UserEdit id="user-edit" history={history} match={match} />
 
-                <Vacancy id="vacancy" history={history} match={match} />
-                <VacancyEdit id="vacancy-edit" history={history} match={match} />
-                <VacancyCreate id="vacancy-create" history={history} match={match} />
-                <Vacancies id="vacancies" history={history} match={match} />
-                <VacanciesFilter id="vacancies-filter" history={history} match={match} />
-                <UserVacancies id="user-vacancies" history={history} match={match} />
+              <Vacancy id="vacancy" history={history} match={match} />
+              <VacancyEdit id="vacancy-edit" history={history} match={match} />
+              <VacancyCreate id="vacancy-create" history={history} match={match} />
+              <Vacancies id="vacancies" history={history} match={match} />
+              <VacanciesFilter id="vacancies-filter" history={history} match={match} />
+              <UserVacancies id="user-vacancies" history={history} match={match} />
 
-                <Schedule id="schedule" history={history} match={match} />
-                <Lesson id="lesson" history={history} match={match} />
-                <LessonEdit id="lesson-edit" history={history} match={match} />
-                <LessonCreate id="lesson-create" history={history} match={match} />
+              <Schedule id="schedule" history={history} match={match} />
+              <Lesson id="lesson" history={history} match={match} />
+              <LessonEdit id="lesson-edit" history={history} match={match} />
+              <LessonCreate id="lesson-create" history={history} match={match} />
 
-                <Notifications id="notifications" history={history} match={match} />
+              <Notifications id="notifications" history={history} match={match} />
 
-                <MainMenu id="main-menu" history={history} match={match} />
+              <MainMenu id="main-menu" history={history} match={match} />
 
-                <StudentRequest id="student-request" history={history} match={match} />
-                <OutgoingStudentRequests id="outgoing-student-requests" history={history} match={match} />
+              <StudentRequest id="student-request" history={history} match={match} />
+              <OutgoingStudentRequests id="outgoing-student-requests" history={history} match={match} />
 
-                <MoneyTransfer id="money-transfer" history={history} match={match} />
+              <MoneyTransfer id="money-transfer" history={history} match={match} />
 
-                <Tutors id="tutors" history={history} match={match} />
-                <Students id="students" history={history} match={match} />
-              </Root>
+              <Tutors id="tutors" history={history} match={match} />
+              <Students id="students" history={history} match={match} />
             </Epic>
           )
         }} />
