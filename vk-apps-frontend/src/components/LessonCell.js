@@ -31,7 +31,7 @@ const PaddingLeftDiv = styled.div`
 
 const GraySmallTextDiv = styled.div`
   color: var(--text_secondary);
-  font-size: 16px;
+  font-size: 14px;
 `;
 
 const LessonCell = ({ lesson, currentUser, onClick }) => {
@@ -40,7 +40,7 @@ const LessonCell = ({ lesson, currentUser, onClick }) => {
     : lesson.tutor;
 
   return (
-    <Cell expandable multiline onClick={onClick}>
+    <Cell multiline onClick={onClick}>
       <FlexDiv>
         <AvatarFlexDiv>
           <Avatar src={ROOT_URL + visibleUser.avatar} size={64}/>

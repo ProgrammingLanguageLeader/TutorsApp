@@ -91,8 +91,8 @@ class Vacancies extends React.Component {
     const pagesNumber = Math.ceil(count / DEFAULT_RESULTS_COUNT);
 
     return (
-      <View id={this.props.id} activePanel="panel">
-        <Panel id="panel">
+      <View id={this.props.id} activePanel={this.props.id}>
+        <Panel id={this.props.id}>
           <PanelHeader left={
             <HeaderButton onClick={() => this.props.history.goBack()}>
               <BackIcon />

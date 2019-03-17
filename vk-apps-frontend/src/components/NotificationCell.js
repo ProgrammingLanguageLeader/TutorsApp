@@ -30,8 +30,8 @@ const FlexDiv = styled.div`
 `;
 
 const FlexDivWithPadding = styled(FlexDiv)`
-  padding-top: 8px;
-  padding-bottom: 8px;
+  padding-top: 4px;
+  padding-bottom: 4px;
 `;
 
 const GraySmallTextDiv = styled.div`
@@ -74,16 +74,14 @@ const NotificationCell = ({ notification, onSenderClick, buttonBefore, onButtonC
         {verb === 'lesson payment' && notification.target.tutor && (
           <FlexDiv onClick={onSenderClick}>
             <Avatar size={64} src={ROOT_URL + notification.target.tutor.avatar} />
-            <Div>
-              <div>
-                {notification.target.tutor.first_name} {notification.target.tutor.last_name}
-              </div>
-              {isExpandable && (
-                <GraySmallTextDiv>
-                  Нажмите для просмотра
-                </GraySmallTextDiv>
-              )}
-            </Div>
+            <div>
+              {notification.target.tutor.first_name} {notification.target.tutor.last_name}
+            </div>
+            {isExpandable && (
+              <GraySmallTextDiv>
+                Нажмите для просмотра
+              </GraySmallTextDiv>
+            )}
           </FlexDiv>
         )}
         <FlexDivWithPadding>
