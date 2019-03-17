@@ -20,8 +20,13 @@ const notificationVerbs = {
   'student delete': 'Вы были удалены из списка учеников',
 };
 
+const NormalWhiteSpaceDiv = styled.div`
+  white-space: normal;
+`;
+
 const FlexDiv = styled.div`
   display: flex;
+  align-items: center;
 `;
 
 const FlexDivWithPadding = styled(FlexDiv)`
@@ -35,6 +40,7 @@ const GraySmallTextDiv = styled.div`
 `;
 
 const AvatarFlexDiv = styled.div`
+  display: flex;
   flex: 0 0 64px;
 `;
 
@@ -43,60 +49,64 @@ const NotificationCell = ({ notification, onSenderClick, buttonBefore, onButtonC
   const notificationLabel = notificationVerbs[verb] || verb;
   const isExpandable = Boolean(notification.target);
   return (
-    <Cell multiline expandable={isExpandable}>
-      {notification.sender && (
-        <FlexDiv onClick={onSenderClick}>
-          <AvatarFlexDiv>
-            <Avatar size={64} src={ROOT_URL + notification.sender.avatar} />
-          </AvatarFlexDiv>
-          <Div>
-            <div>
-              {notification.sender.first_name} {notification.sender.last_name}
-            </div>
-            {isExpandable && (
-              <GraySmallTextDiv>
-                Нажмите для просмотра
-              </GraySmallTextDiv>
-            )}
-          </Div>
-        </FlexDiv>
-      )}
+    <Cell>
+      <NormalWhiteSpaceDiv>
+        {notification.sender && (
+          <FlexDiv onClick={onSenderClick}>
+            <AvatarFlexDiv>
+              <Avatar size={64} src={ROOT_URL + notification.sender.avatar} />
+            </AvatarFlexDiv>
+            <Div>
+              <div>
+                {notification.sender.first_name} {notification.sender.last_name}
+              </div>
+              {isExpandable && (
+                <GraySmallTextDiv>
+                  Нажмите для просмотра
+                </GraySmallTextDiv>
+              )}
+            </Div>
+          </FlexDiv>
+        )}
+      </NormalWhiteSpaceDiv>
 
-      {verb === 'lesson payment' && notification.target.tutor && (
-        <FlexDiv onClick={onSenderClick}>
-          <Avatar size={64} src={ROOT_URL + notification.target.tutor.avatar} />
-          <Div>
-            <div>
-              {notification.target.tutor.first_name} {notification.target.tutor.last_name}
-            </div>
-            {isExpandable && (
-              <GraySmallTextDiv>
-                Нажмите для просмотра
-              </GraySmallTextDiv>
-            )}
-          </Div>
+      <NormalWhiteSpaceDiv>
+        {verb === 'lesson payment' && notification.target.tutor && (
+          <FlexDiv onClick={onSenderClick}>
+            <Avatar size={64} src={ROOT_URL + notification.target.tutor.avatar} />
+            <Div>
+              <div>
+                {notification.target.tutor.first_name} {notification.target.tutor.last_name}
+              </div>
+              {isExpandable && (
+                <GraySmallTextDiv>
+                  Нажмите для просмотра
+                </GraySmallTextDiv>
+              )}
+            </Div>
+          </FlexDiv>
+        )}
+        <FlexDivWithPadding>
+          { notificationLabel }
+        </FlexDivWithPadding>
+        <FlexDivWithPadding>
+          <Button
+            size="m"
+            level="outline"
+            before={buttonBefore}
+            onClick={onButtonClick}
+          >
+            { buttonLabel }
+          </Button>
+        </FlexDivWithPadding>
+        <FlexDiv>
+          <GraySmallTextDiv>
+            <Moment format="LLLL">
+              {notification.creation_time}
+            </Moment>
+          </GraySmallTextDiv>
         </FlexDiv>
-      )}
-      <FlexDivWithPadding>
-        { notificationLabel }
-      </FlexDivWithPadding>
-      <FlexDivWithPadding>
-        <Button
-          size="m"
-          level="outline"
-          before={buttonBefore}
-          onClick={onButtonClick}
-        >
-          { buttonLabel }
-        </Button>
-      </FlexDivWithPadding>
-      <FlexDiv>
-        <GraySmallTextDiv>
-          <Moment format="LLLL">
-            {notification.creation_time}
-          </Moment>
-        </GraySmallTextDiv>
-      </FlexDiv>
+      </NormalWhiteSpaceDiv>
     </Cell>
   );
 };
