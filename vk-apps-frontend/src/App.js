@@ -5,6 +5,7 @@ import { Router, Route } from 'react-router-dom';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 import Epic from '@vkontakte/vkui/dist/components/Epic/Epic';
+import ScreenSpinner from '@vkontakte/vkui/dist/components/ScreenSpinner/ScreenSpinner';
 
 import Entrypoint from 'vk-apps-frontend/views/Entrypoint';
 import Home from 'vk-apps-frontend/views/Home';
@@ -159,7 +160,7 @@ class App extends React.Component {
             }} />
           </Router>
         )
-        : <div>Loading...</div>
+        : <ScreenSpinner/>
     )
   }
 }

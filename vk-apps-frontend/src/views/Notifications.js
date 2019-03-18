@@ -1,6 +1,7 @@
 import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import styled from 'styled-components';
 
 import View from '@vkontakte/vkui/dist/components/View/View';
 import Panel from '@vkontakte/vkui/dist/components/Panel/Panel';
@@ -19,6 +20,10 @@ import BackIcon from 'vk-apps-frontend/components/BackIcon';
 import DivSpinner from 'vk-apps-frontend/components/DivSpinner';
 
 import { notificationsActions } from 'vk-apps-frontend/actions/api';
+
+const FullHeightDiv = styled.div`
+  height: calc(100vh - var(--tabbar_height) - 64px);
+`;
 
 const mapDispatchToProps = dispatch => {
   return {
@@ -113,7 +118,7 @@ class Notifications extends React.Component {
           )}
 
           <PullToRefresh onRefresh={this.onRefresh} isFetching={refreshing}>
-            <div style={{ height: "100vh" }}>
+            <FullHeightDiv>
               <Group title="Новые уведомления">
                 <List>
                   { unreadNotifications.map(notification => (
@@ -163,7 +168,7 @@ class Notifications extends React.Component {
                   )}
                 </List>
               </Group>
-            </div>
+            </FullHeightDiv>
           </PullToRefresh>
         </Panel>
       </View>
