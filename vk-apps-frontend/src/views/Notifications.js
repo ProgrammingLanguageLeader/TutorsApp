@@ -11,6 +11,7 @@ import List from '@vkontakte/vkui/dist/components/List/List';
 import HeaderButton from '@vkontakte/vkui/dist/components/HeaderButton/HeaderButton';
 import Div from '@vkontakte/vkui/dist/components/Div/Div';
 import PullToRefresh from '@vkontakte/vkui/dist/components/PullToRefresh/PullToRefresh';
+import CellButton from '@vkontakte/vkui/dist/components/CellButton/CellButton';
 
 import Icon24View from '@vkontakte/icons/dist/24/view';
 import Icon24Hide from '@vkontakte/icons/dist/24/hide';
@@ -20,16 +21,26 @@ import BackIcon from 'vk-apps-frontend/components/BackIcon';
 import DivSpinner from 'vk-apps-frontend/components/DivSpinner';
 
 import { notificationsActions } from 'vk-apps-frontend/actions/api';
+import { appsActions } from 'vk-apps-frontend/actions/vk';
 
 const FullHeightDiv = styled.div`
-  height: calc(100vh - var(--tabbar_height) - 64px);
+  height: calc(100vh - var(--tabbar_height) - 64px - 54px);
 `;
+
+const mapStateToProps = state => {
+  const { isAllowed } = state.VK.appsNotifications;
+  return {
+    isAllowed,
+  };
+};
 
 const mapDispatchToProps = dispatch => {
   return {
     getUnreadNotificationsList: bindActionCreators(notificationsActions.getUnreadNotificationsList, dispatch),
     getReadNotificationsList: bindActionCreators(notificationsActions.getReadNotificationsList, dispatch),
     setUnreadNotification: bindActionCreators(notificationsActions.setUnreadNotification, dispatch),
+    allowNotifications: bindActionCreators(appsActions.allowNotifications, dispatch),
+    denyNotifications: bindActionCreators(appsActions.denyNotifications, dispatch),
   };
 };
 
@@ -99,6 +110,10 @@ class Notifications extends React.Component {
       unreadNotifications,
       readNotifications
     } = this.state;
+    const notificationsAllowed = this.props.isAllowed;
+    const notificationsButtonClick = notificationsAllowed
+      ? () => this.props.denyNotifications()
+      : () => this.props.allowNotifications();
 
     return (
       <View id={this.props.id} activePanel={this.props.id}>
@@ -116,6 +131,15 @@ class Notifications extends React.Component {
               <DivSpinner/>
             </Div>
           )}
+
+          <Group>
+            <CellButton onClick={notificationsButtonClick}>
+              {notificationsAllowed
+                ? 'Запретить уведомления ВКонтакте'
+                : 'Разрешить уведомления ВКонтакте'
+              }
+            </CellButton>
+          </Group>
 
           <PullToRefresh onRefresh={this.onRefresh} isFetching={refreshing}>
             <FullHeightDiv>
@@ -176,4 +200,4 @@ class Notifications extends React.Component {
   }
 }
 
-export default connect(null, mapDispatchToProps)(Notifications);
+export default connect(mapStateToProps, mapDispatchToProps)(Notifications);
