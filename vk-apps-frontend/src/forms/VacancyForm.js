@@ -145,6 +145,7 @@ class VacancyForm extends React.Component {
             type="number"
             min="1"
             max="10000"
+            inputmode="numeric"
             onChange={handleChange}
             value={String(values.price || '')}
           />

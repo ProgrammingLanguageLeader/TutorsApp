@@ -96,6 +96,12 @@ class OutgoingStudentRequests extends React.Component {
                 {studentRequest.tutor.first_name} {studentRequest.tutor.last_name}
               </Cell>
             ))}
+
+            {studentRequests.length === 0 && (
+              <Cell>
+                Заявок нет
+              </Cell>
+            )}
           </Group>
           <Footer>
             Показано заявок: {studentRequests.length}

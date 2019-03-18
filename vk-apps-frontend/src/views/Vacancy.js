@@ -42,6 +42,7 @@ const mapDispatchToProps = dispatch => {
     getVacancy: bindActionCreators(vacanciesActions.getVacancy, dispatch),
     deleteVacancy: bindActionCreators(vacanciesActions.deleteVacancy, dispatch),
     createStudentRequest: bindActionCreators(tutorsActions.createStudentRequest, dispatch),
+    getStudentRequest: bindActionCreators(tutorsActions.getStudentRequest, dispatch),
   };
 };
 
@@ -83,9 +84,6 @@ class Vacancy extends React.Component {
       fetching: false,
       errors,
     });
-    if (Object.keys(errors).length === 0) {
-      this.props.history.goBack();
-    }
   }
 
   deleteVacancyButtonClick(id) {
@@ -143,9 +141,7 @@ class Vacancy extends React.Component {
           {vacancy && (
             <div>
               <Group title="Учитель">
-                <Cell
-                  expandable
-                  size="l"
+                <Cell expandable size="l"
                   description={
                     <div>
                       Пользуется сервисом с
@@ -206,7 +202,7 @@ class Vacancy extends React.Component {
                     description="Дополнительная информация"
                     before={<Icon24Info />}
                   >
-                    {vacancy.extra_info || "Не указана"}
+                    {vacancy.extra_info}
                   </Cell>
                 )}
               </Group>

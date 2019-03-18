@@ -123,12 +123,6 @@ class Notifications extends React.Component {
             Уведомления
           </PanelHeader>
 
-          { fetching && !refreshing && (
-            <Div>
-              <DivSpinner/>
-            </Div>
-          )}
-
           <Group>
             <CellButton onClick={notificationsButtonClick}>
               {notificationsAllowed
@@ -137,6 +131,12 @@ class Notifications extends React.Component {
               }
             </CellButton>
           </Group>
+
+          { fetching && !refreshing && (
+            <Div>
+              <DivSpinner/>
+            </Div>
+          )}
 
           <PullToRefresh onRefresh={this.onRefresh} isFetching={refreshing}>
             <FullHeightDiv>
