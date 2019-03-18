@@ -19,9 +19,8 @@ const ShortUserCard = ({ user, history, isStudent, onDelete }) => (
   <PaddingTopGroup key={user.id}>
     <List>
       <Cell
-        multiline
         expandable
-        description="Нажмите для просмотра страницы пользователя"
+        description="Нажмите для просмотра"
         before={<Avatar size={64} src={ROOT_URL + user.avatar} />}
         onClick={() => history.push(`/user/${user.id}`)}
       >

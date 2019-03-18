@@ -5,6 +5,7 @@ const CellHeaderDiv = styled.div`
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
+  flex: 1 1 auto;
 `;
 
 export default CellHeaderDiv;

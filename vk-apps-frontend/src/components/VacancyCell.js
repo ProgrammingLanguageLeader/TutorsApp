@@ -4,28 +4,18 @@ import styled from 'styled-components';
 import Cell from '@vkontakte/vkui/dist/components/Cell/Cell';
 import Avatar from '@vkontakte/vkui/dist/components/Avatar/Avatar';
 
-import { ROOT_URL } from 'vk-apps-frontend/constants';
+import CellHeaderDiv from 'vk-apps-frontend/components/CellHeaderDiv';
+import AvatarFlexDiv from 'vk-apps-frontend/components/AvatarFlexDiv';
 
-const NormalWhiteSpaceDiv = styled.div`
-  white-space: normal;
-`;
+import { ROOT_URL } from 'vk-apps-frontend/constants';
 
 const FlexDiv = styled.div`
   display: flex;
   align-items: center;
 `;
 
-const AvatarFlexDiv = styled.div`
-  display: flex;
-  flex: 0 0 64px;
-`;
-
 const PaddingTopBottomDiv = styled.div`
   padding: 8px 0;
-`;
-
-const PaddingLeftDiv = styled.div`
-  padding: 0 8px;
 `;
 
 const GraySmallTextDiv = styled.div`
@@ -33,30 +23,36 @@ const GraySmallTextDiv = styled.div`
   font-size: 14px;
 `;
 
+const HiddenOverflowDiv = styled.div`
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+`;
+
 const VacancyCell = ({ vacancy, onClick }) => {
   return (
-    <Cell multiline onClick={onClick}>
+    <Cell expandable multiline onClick={onClick}>
       <FlexDiv>
         <AvatarFlexDiv>
           <Avatar size={64} src={ROOT_URL + vacancy.owner.avatar} />
         </AvatarFlexDiv>
-        <NormalWhiteSpaceDiv>
-          <PaddingLeftDiv>
-            {vacancy.owner.first_name} {vacancy.owner.last_name}
-          </PaddingLeftDiv>
-        </NormalWhiteSpaceDiv>
+        <CellHeaderDiv>
+          {vacancy.owner.first_name} {vacancy.owner.last_name}
+        </CellHeaderDiv>
       </FlexDiv>
-      <NormalWhiteSpaceDiv>
-        <PaddingTopBottomDiv>
-          <GraySmallTextDiv>
-            <GraySmallTextDiv>
-              <div>Предмет - {vacancy.subject}</div>
-              <div>Город - {vacancy.owner.city}</div>
-              <div>Цена - {vacancy.price} рублей/час</div>
-            </GraySmallTextDiv>
-          </GraySmallTextDiv>
-        </PaddingTopBottomDiv>
-      </NormalWhiteSpaceDiv>
+      <PaddingTopBottomDiv>
+        <GraySmallTextDiv>
+          <HiddenOverflowDiv>
+            Предмет - {vacancy.subject}
+          </HiddenOverflowDiv>
+          <HiddenOverflowDiv>
+            Город - {vacancy.owner.city}
+          </HiddenOverflowDiv>
+          <HiddenOverflowDiv>
+            Цена - {vacancy.price} рублей/час
+          </HiddenOverflowDiv>
+        </GraySmallTextDiv>
+      </PaddingTopBottomDiv>
     </Cell>
   );
 };

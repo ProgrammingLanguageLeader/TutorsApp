@@ -91,7 +91,6 @@ class User extends React.Component {
               <Group>
                 <Cell
                   multiline
-                  description="Просмотр информации о пользователе"
                   before={<Avatar size={80} src={ROOT_URL + user.avatar} />}
                 >
                   {user.first_name} {user.last_name}

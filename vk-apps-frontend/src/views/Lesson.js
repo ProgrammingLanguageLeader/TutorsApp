@@ -188,9 +188,7 @@ class Lesson extends React.Component {
                   before={<Avatar src={ROOT_URL + lesson.tutor.avatar} size={64} />}
                   onClick={() => this.props.history.push(`/user/${lesson.tutor.id}`)}
                 >
-                  <div>
-                    {lesson.tutor.first_name} {lesson.tutor.last_name}
-                  </div>
+                  {lesson.tutor.first_name} {lesson.tutor.last_name}
                 </Cell>
               </Group>
 
@@ -200,9 +198,7 @@ class Lesson extends React.Component {
                   before={<Avatar src={ROOT_URL + lesson.student.avatar} size={64} />}
                   onClick={() => this.props.history.push(`/user/${lesson.student.id}`)}
                 >
-                  <div>
-                    {lesson.student.first_name} {lesson.student.last_name}
-                  </div>
+                  {lesson.student.first_name} {lesson.student.last_name}
                 </Cell>
               </Group>
 

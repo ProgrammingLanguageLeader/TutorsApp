@@ -5,6 +5,9 @@ import styled from 'styled-components';
 import Cell from '@vkontakte/vkui/dist/components/Cell/Cell';
 import Avatar from '@vkontakte/vkui/dist/components/Avatar/Avatar';
 
+import CellHeaderDiv from 'vk-apps-frontend/components/CellHeaderDiv';
+import AvatarFlexDiv from 'vk-apps-frontend/components/AvatarFlexDiv';
+
 import { ROOT_URL } from 'vk-apps-frontend/constants';
 
 const NormalWhiteSpaceDiv = styled.div`
@@ -16,17 +19,8 @@ const FlexDiv = styled.div`
   align-items: center;
 `;
 
-const AvatarFlexDiv = styled.div`
-  display: flex;
-  flex: 0 0 64px;
-`;
-
 const PaddingTopBottomDiv = styled.div`
   padding: 8px 0;
-`;
-
-const PaddingLeftDiv = styled.div`
-  padding: 0 8px;
 `;
 
 const GraySmallTextDiv = styled.div`
@@ -40,16 +34,14 @@ const LessonCell = ({ lesson, currentUser, onClick }) => {
     : lesson.tutor;
 
   return (
-    <Cell multiline onClick={onClick}>
+    <Cell expandable multiline onClick={onClick}>
       <FlexDiv>
         <AvatarFlexDiv>
           <Avatar src={ROOT_URL + visibleUser.avatar} size={64}/>
         </AvatarFlexDiv>
-        <NormalWhiteSpaceDiv>
-          <PaddingLeftDiv>
-            {visibleUser.first_name} {visibleUser.last_name}
-          </PaddingLeftDiv>
-        </NormalWhiteSpaceDiv>
+        <CellHeaderDiv>
+          {visibleUser.first_name} {visibleUser.last_name}
+        </CellHeaderDiv>
       </FlexDiv>
       <NormalWhiteSpaceDiv>
         <PaddingTopBottomDiv>
