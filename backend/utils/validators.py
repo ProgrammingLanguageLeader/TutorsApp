@@ -5,7 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 
 
 class AlphabetSymbolsValidator(RegexValidator):
-    regex = regex.compile(r'^\p{Alpha}*$', regex.UNICODE)
+    regex = regex.compile(r'^[\p{Alpha} -]*$', regex.UNICODE)
     message = _('Only alphabet symbols are allowed')
 
 
