@@ -6,14 +6,6 @@ import { VK_APP_ID, appsConstants } from 'vk-apps-frontend/constants/vk';
 
 const VKConnect = DEBUG ? mockVKConnect : realVKConnect;
 
-const fetchAccessToken = () => dispatch => {
-  const scope = "";
-  dispatch({
-    type: appsConstants.VK_GET_ACCESS_TOKEN_REQUEST
-  });
-  VKConnect.send('VKWebAppGetAuthToken', {'app_id': VK_APP_ID, 'scope': scope});
-};
-
 const denyNotifications = () => dispatch => {
   dispatch({
     type: appsConstants.VK_DENY_NOTIFICATIONS_REQUEST,
@@ -69,22 +61,9 @@ const init = () => dispatch => {
         });
         break;
 
-      case 'VKWebAppDinyNotificationsFailed':
+      case 'VKWebAppDenyNotificationsFailed':
         dispatch({
-          type: appsConstants.VK_DENY_NOTIFICATIONS_FAILURE
-        });
-        break;
-
-      case 'VKWebAppAccessTokenReceived':
-        dispatch({
-          type: appsConstants.VK_GET_ACCESS_TOKEN_FETCHED,
-          payload: data['access_token']
-        });
-        break;
-
-      case 'VKWebAppAccessTokenFailed':
-        dispatch({
-          type: appsConstants.VK_GET_ACCESS_TOKEN_FAILED,
+          type: appsConstants.VK_DENY_NOTIFICATIONS_FAILURE,
           payload: data,
         });
         break;
@@ -140,7 +119,6 @@ const openPayForm = (action, params) => dispatch => {
 };
 
 export const appsActions = {
-  fetchAccessToken,
   fetchCurrentUserInfo,
   denyNotifications,
   allowNotifications,
