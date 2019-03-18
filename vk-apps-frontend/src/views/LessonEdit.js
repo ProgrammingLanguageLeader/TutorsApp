@@ -7,12 +7,11 @@ import moment from 'moment';
 import View from '@vkontakte/vkui/dist/components/View/View';
 import Panel from '@vkontakte/vkui/dist/components/Panel/Panel';
 import PanelHeader from '@vkontakte/vkui/dist/components/PanelHeader/PanelHeader';
-import HeaderButton from '@vkontakte/vkui/dist/components/HeaderButton/HeaderButton';
 import Group from '@vkontakte/vkui/dist/components/Group/Group';
 
 import SuccessfulFormStatus from 'vk-apps-frontend/components/SuccessfulFormStatus';
 import DivSpinner from 'vk-apps-frontend/components/DivSpinner';
-import BackIcon from 'vk-apps-frontend/components/BackIcon';
+import SmartBackButton from 'vk-apps-frontend/components/SmartBackButton';
 
 import { lessonsActions, tutorsActions } from 'vk-apps-frontend/actions/api';
 
@@ -87,9 +86,7 @@ class LessonEdit extends React.Component {
       <View id={this.props.id} activePanel={this.props.id}>
         <Panel id={this.props.id}>
           <PanelHeader left={
-            <HeaderButton onClick={this.props.history.goBack}>
-              <BackIcon />
-            </HeaderButton>
+            <SmartBackButton history={this.props.history} />
           }>
             Редактирование урока
           </PanelHeader>

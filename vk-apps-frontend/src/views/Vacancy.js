@@ -7,7 +7,6 @@ import View from '@vkontakte/vkui/dist/components/View/View';
 import Panel from '@vkontakte/vkui/dist/components/Panel/Panel';
 import PanelHeader from '@vkontakte/vkui/dist/components/PanelHeader/PanelHeader';
 import Cell from '@vkontakte/vkui/dist/components/Cell/Cell';
-import HeaderButton from '@vkontakte/vkui/dist/components/HeaderButton/HeaderButton';
 import Avatar from '@vkontakte/vkui/dist/components/Avatar/Avatar';
 import Group from '@vkontakte/vkui/dist/components/Group/Group';
 import CellButton from '@vkontakte/vkui/dist/components/CellButton/CellButton';
@@ -24,7 +23,7 @@ import Icon24Cancel from '@vkontakte/icons/dist/24/cancel';
 import ErrorFormStatus from 'vk-apps-frontend/components/ErrorFormStatus';
 import SuccessFormStatus from 'vk-apps-frontend/components/SuccessfulFormStatus';
 import DivSpinner from 'vk-apps-frontend/components/DivSpinner';
-import BackIcon from 'vk-apps-frontend/components/BackIcon';
+import SmartBackButton from 'vk-apps-frontend/components/SmartBackButton';
 import DeleteConfirmationAlert from 'vk-apps-frontend/components/DeleteConfirmationAlert';
 
 import { vacanciesActions, tutorsActions } from 'vk-apps-frontend/actions/api';
@@ -116,9 +115,7 @@ class Vacancy extends React.Component {
       <View id={this.props.id} activePanel={this.props.id} popout={popout}>
         <Panel id={this.props.id}>
           <PanelHeader left={
-            <HeaderButton onClick={this.props.history.goBack}>
-              <BackIcon />
-            </HeaderButton>
+            <SmartBackButton history={this.props.history} />
           }>
             Предложение
           </PanelHeader>

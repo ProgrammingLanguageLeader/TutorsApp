@@ -8,7 +8,6 @@ import View from '@vkontakte/vkui/dist/components/View/View';
 import Panel from '@vkontakte/vkui/dist/components/Panel/Panel';
 import PanelHeader from '@vkontakte/vkui/dist/components/PanelHeader/PanelHeader';
 import Group from '@vkontakte/vkui/dist/components/Group/Group';
-import HeaderButton from '@vkontakte/vkui/dist/components/HeaderButton/HeaderButton';
 import CellButton from '@vkontakte/vkui/dist/components/CellButton/CellButton';
 import List from '@vkontakte/vkui/dist/components/List/List';
 import Div from '@vkontakte/vkui/dist/components/Div/Div';
@@ -17,7 +16,7 @@ import Icon24Add from '@vkontakte/icons/dist/24/add';
 
 import LessonCell from 'vk-apps-frontend/components/LessonCell';
 import DivSpinner from 'vk-apps-frontend/components/DivSpinner';
-import BackIcon from 'vk-apps-frontend/components/BackIcon';
+import SmartBackButton from 'vk-apps-frontend/components/SmartBackButton';
 
 import { lessonsActions } from 'vk-apps-frontend/actions/api';
 
@@ -95,9 +94,7 @@ class Schedule extends React.Component {
       <View id={this.props.id} activePanel={this.props.id}>
         <Panel id={this.props.id}>
           <PanelHeader left={
-            <HeaderButton onClick={this.props.history.goBack}>
-              <BackIcon />
-            </HeaderButton>
+            <SmartBackButton history={this.props.history} />
           }>
             Расписание
           </PanelHeader>

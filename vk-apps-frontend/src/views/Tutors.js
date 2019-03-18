@@ -5,10 +5,9 @@ import { bindActionCreators } from 'redux';
 import View from '@vkontakte/vkui/dist/components/View/View';
 import Panel from '@vkontakte/vkui/dist/components/Panel/Panel';
 import PanelHeader from '@vkontakte/vkui/dist/components/PanelHeader/PanelHeader';
-import HeaderButton from '@vkontakte/vkui/dist/components/HeaderButton/HeaderButton';
 import Footer from '@vkontakte/vkui/dist/components/Footer/Footer';
 
-import BackIcon from 'vk-apps-frontend/components/BackIcon';
+import SmartBackButton from 'vk-apps-frontend/components/SmartBackButton';
 import DivSpinner from 'vk-apps-frontend/components/DivSpinner';
 import ShortUserCard from 'vk-apps-frontend/components/ShortUserCard';
 
@@ -50,9 +49,7 @@ class Tutors extends React.Component {
       <View id={this.props.id} activePanel={this.props.id}>
         <Panel id={this.props.id}>
           <PanelHeader left={
-            <HeaderButton onClick={this.props.history.goBack}>
-              <BackIcon />
-            </HeaderButton>
+            <SmartBackButton history={this.props.history} />
           }>
             Список учителей
           </PanelHeader>

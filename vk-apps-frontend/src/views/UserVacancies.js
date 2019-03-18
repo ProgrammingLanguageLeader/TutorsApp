@@ -1,14 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Link } from 'react-router-dom';
 
 import View from '@vkontakte/vkui/dist/components/View/View';
 import Panel from '@vkontakte/vkui/dist/components/Panel/Panel';
 import PanelHeader from '@vkontakte/vkui/dist/components/PanelHeader/PanelHeader';
 import Cell from '@vkontakte/vkui/dist/components/Cell/Cell';
-import HeaderButton from '@vkontakte/vkui/dist/components/HeaderButton/HeaderButton';
-import Avatar from '@vkontakte/vkui/dist/components/Avatar/Avatar';
 import Group from '@vkontakte/vkui/dist/components/Group/Group';
 import Footer from '@vkontakte/vkui/dist/components/Footer/Footer';
 import List from '@vkontakte/vkui/dist/components/List/List';
@@ -18,11 +15,9 @@ import Icon24Add from '@vkontakte/icons/dist/24/add';
 
 import VacancyCell from 'vk-apps-frontend/components/VacancyCell';
 import DivSpinner from 'vk-apps-frontend/components/DivSpinner';
-import BackIcon from 'vk-apps-frontend/components/BackIcon';
+import SmartBackButton from 'vk-apps-frontend/components/SmartBackButton';
 
 import { vacanciesActions } from 'vk-apps-frontend/actions/api';
-
-import { ROOT_URL } from 'vk-apps-frontend/constants';
 
 const mapStateToProps = state => {
   const { currentUser } = state;
@@ -70,9 +65,7 @@ class UserVacancies extends React.Component {
       <View id={this.props.id} activePanel={this.props.id}>
         <Panel id={this.props.id}>
           <PanelHeader left={
-            <HeaderButton onClick={() => this.props.history.goBack()}>
-              <BackIcon />
-            </HeaderButton>
+            <SmartBackButton history={this.props.history} />
           }>
             Ваши предложения
           </PanelHeader>

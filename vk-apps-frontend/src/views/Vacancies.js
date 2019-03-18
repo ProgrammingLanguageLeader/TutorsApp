@@ -6,7 +6,6 @@ import View from '@vkontakte/vkui/dist/components/View/View';
 import Panel from '@vkontakte/vkui/dist/components/Panel/Panel';
 import PanelHeader from '@vkontakte/vkui/dist/components/PanelHeader/PanelHeader';
 import Cell from '@vkontakte/vkui/dist/components/Cell/Cell';
-import HeaderButton from '@vkontakte/vkui/dist/components/HeaderButton/HeaderButton';
 import Group from '@vkontakte/vkui/dist/components/Group/Group';
 import Footer from '@vkontakte/vkui/dist/components/Footer/Footer';
 import List from '@vkontakte/vkui/dist/components/List/List';
@@ -19,7 +18,7 @@ import Icon24Add from '@vkontakte/icons/dist/24/add';
 import VacancyCell from 'vk-apps-frontend/components/VacancyCell';
 import PaginationButton from 'vk-apps-frontend/components/PaginationButton';
 import DivSpinner from 'vk-apps-frontend/components/DivSpinner';
-import BackIcon from 'vk-apps-frontend/components/BackIcon';
+import SmartBackButton from 'vk-apps-frontend/components/SmartBackButton';
 
 import { vacanciesActions } from 'vk-apps-frontend/actions/api';
 
@@ -94,9 +93,7 @@ class Vacancies extends React.Component {
       <View id={this.props.id} activePanel={this.props.id}>
         <Panel id={this.props.id}>
           <PanelHeader left={
-            <HeaderButton onClick={() => this.props.history.goBack()}>
-              <BackIcon />
-            </HeaderButton>
+            <SmartBackButton history={this.props.history} />
           }>
             Поиск предложений
           </PanelHeader>

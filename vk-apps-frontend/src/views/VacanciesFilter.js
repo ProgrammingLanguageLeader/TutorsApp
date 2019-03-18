@@ -7,11 +7,10 @@ import View from '@vkontakte/vkui/dist/components/View/View';
 import Panel from '@vkontakte/vkui/dist/components/Panel/Panel';
 import PanelHeader from '@vkontakte/vkui/dist/components/PanelHeader/PanelHeader';
 import Group from '@vkontakte/vkui/dist/components/Group/Group';
-import HeaderButton from '@vkontakte/vkui/dist/components/HeaderButton/HeaderButton';
 
 import VacanciesFilterForm from 'vk-apps-frontend/forms/VacanciesFilterForm';
 
-import BackIcon from 'vk-apps-frontend/components/BackIcon';
+import SmartBackButton from 'vk-apps-frontend/components/SmartBackButton';
 
 import { vacanciesFilterActions } from 'vk-apps-frontend/actions';
 
@@ -51,9 +50,7 @@ class VacanciesFilter extends React.Component {
         <Panel id={this.props.id}>
           <PanelHeader
             left={
-              <HeaderButton onClick={this.props.history.goBack}>
-                <BackIcon />
-              </HeaderButton>
+              <SmartBackButton history={this.props.history} />
             }
           >
             Фильтр предложений
