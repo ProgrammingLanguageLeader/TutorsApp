@@ -20,6 +20,7 @@ import PopoutDiv from 'vk-apps-frontend/components/PopoutDiv';
 
 import { vkAppsUsersActions, usersActions } from 'vk-apps-frontend/actions/api';
 import { currentUserActions } from 'vk-apps-frontend/actions';
+import { appsActions } from 'vk-apps-frontend/actions/vk';
 
 const FlexedWhitePanel = styled(Panel).attrs({
   theme: "white",
@@ -152,6 +153,7 @@ const mapDispatchToProps = dispatch => {
     updateUser: bindActionCreators(usersActions.updateUser, dispatch),
     uploadAvatar: bindActionCreators(usersActions.uploadAvatar, dispatch),
     saveCurrentUserData: bindActionCreators(currentUserActions.currentUserSaveData, dispatch),
+    allowNotifications: bindActionCreators(appsActions.allowNotifications, dispatch),
   };
 };
 
@@ -190,6 +192,7 @@ class Home extends React.Component {
     this.setState({
       popout: null,
     });
+    this.props.allowNotifications();
     this.props.saveCurrentUserData(user, vkId);
   }
 
