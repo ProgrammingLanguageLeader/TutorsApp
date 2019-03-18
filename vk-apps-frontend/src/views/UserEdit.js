@@ -13,6 +13,7 @@ import Group from '@vkontakte/vkui/dist/components/Group/Group';
 
 import SmartBackButton from 'vk-apps-frontend/components/SmartBackButton';
 import DivSpinner from 'vk-apps-frontend/components/DivSpinner';
+import FormDisclaimer from 'vk-apps-frontend/components/FormDisclaimer';
 
 import { ROOT_URL } from 'vk-apps-frontend/constants';
 import { usersActions } from 'vk-apps-frontend/actions/api';
@@ -164,6 +165,10 @@ class UserEdit extends React.Component {
               </Cell>
             </Group>
           )}
+
+          <Group>
+            <FormDisclaimer />
+          </Group>
 
           {user && (
             <Group title="Изображение профиля">

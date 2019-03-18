@@ -9,6 +9,7 @@ import PanelHeader from '@vkontakte/vkui/dist/components/PanelHeader/PanelHeader
 import Group from '@vkontakte/vkui/dist/components/Group/Group';
 
 import SmartBackButton from 'vk-apps-frontend/components/SmartBackButton';
+import FormDisclaimer from 'vk-apps-frontend/components/FormDisclaimer';
 
 import VacancyForm from 'vk-apps-frontend/forms/VacancyForm';
 
@@ -64,6 +65,10 @@ class VacancyCreate extends React.Component {
           </PanelHeader >
 
           <div ref={this.startDiv} />
+
+          <Group>
+            <FormDisclaimer />
+          </Group>
 
           <Group title="Заполняемые поля">
             <Formik

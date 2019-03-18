@@ -11,6 +11,7 @@ import Group from '@vkontakte/vkui/dist/components/Group/Group';
 import SmartBackButton from 'vk-apps-frontend/components/SmartBackButton';
 import DivSpinner from 'vk-apps-frontend/components/DivSpinner';
 import SuccessfulFormStatus from 'vk-apps-frontend/components/SuccessfulFormStatus';
+import FormDisclaimer from 'vk-apps-frontend/components/FormDisclaimer';
 
 import VacancyForm from 'vk-apps-frontend/forms/VacancyForm';
 
@@ -81,6 +82,10 @@ class VacancyEdit extends React.Component {
           <div ref={this.startDiv} />
 
           {fetching && <DivSpinner />}
+
+          <Group>
+            <FormDisclaimer />
+          </Group>
 
           <Group title="Заполняемые поля">
             {success && <SuccessfulFormStatus title="Успешно" />}
