@@ -18,17 +18,18 @@ import Icon24MoneyCircle from '@vkontakte/icons/dist/24/money_circle';
 import Icon24Info from '@vkontakte/icons/dist/24/info';
 import Icon24Home from '@vkontakte/icons/dist/24/home';
 import Icon24UserAdd from '@vkontakte/icons/dist/24/user_add';
+import Icon24Delete from '@vkontakte/icons/dist/24/delete'
 import Icon24Cancel from '@vkontakte/icons/dist/24/cancel';
+import Icon24Article from '@vkontakte/icons/dist/24/article';
 
 import ErrorFormStatus from 'vk-apps-frontend/components/ErrorFormStatus';
-import SuccessFormStatus from 'vk-apps-frontend/components/SuccessfulFormStatus';
 import DivSpinner from 'vk-apps-frontend/components/DivSpinner';
 import SmartBackButton from 'vk-apps-frontend/components/SmartBackButton';
 import DeleteConfirmationAlert from 'vk-apps-frontend/components/DeleteConfirmationAlert';
 
 import { vacanciesActions, tutorsActions } from 'vk-apps-frontend/actions/api';
 
-import { ROOT_URL } from 'vk-apps-frontend/constants';
+import { educationLevelList, ROOT_URL } from 'vk-apps-frontend/constants';
 
 const mapStateToProps = state => {
   const { currentUser } = state;
@@ -42,7 +43,8 @@ const mapDispatchToProps = dispatch => {
     getVacancy: bindActionCreators(vacanciesActions.getVacancy, dispatch),
     deleteVacancy: bindActionCreators(vacanciesActions.deleteVacancy, dispatch),
     createStudentRequest: bindActionCreators(tutorsActions.createStudentRequest, dispatch),
-    getStudentRequest: bindActionCreators(tutorsActions.getStudentRequest, dispatch),
+    getStudentRequestsList: bindActionCreators(tutorsActions.getStudentRequestsList, dispatch),
+    deleteStudentRequest: bindActionCreators(tutorsActions.deleteStudentRequest, dispatch),
   };
 };
 
@@ -51,9 +53,11 @@ class Vacancy extends React.Component {
     super(props);
     this.createStudentRequest = this.createStudentRequest.bind(this);
     this.deleteVacancyButtonClick = this.deleteVacancyButtonClick.bind(this);
+    this.deleteStudentRequest = this.deleteStudentRequest.bind(this);
     this.state = {
       fetching: false,
       vacancy: null,
+      studentRequest: null,
       errors: {},
       popout: null,
     }
@@ -63,25 +67,49 @@ class Vacancy extends React.Component {
     this.setState({
       fetching: true,
     });
+    const { currentUser } = this.props;
     const { id } = this.props.match.params;
     const vacancyResponse = await this.props.getVacancy(id);
     const vacancy = vacancyResponse.status === 200 && vacancyResponse.data;
+    const studentRequestsListResponse = await this.props.getStudentRequestsList({
+      student: currentUser.id,
+      tutor: vacancy.owner.id,
+    });
+    const studentRequests = studentRequestsListResponse.status === 200
+      && studentRequestsListResponse.data.results;
+    const studentRequest = studentRequests.length > 0 && studentRequests[0];
     this.setState({
       vacancy,
+      studentRequest,
       fetching: false,
     });
   }
 
   async createStudentRequest(tutorId) {
     this.setState({
-      fetching: false,
+      fetching: true,
     });
     const response = await this.props.createStudentRequest({
       tutor: tutorId,
     });
     const errors = response.status < 400 ? {} : response;
+    const studentRequest = response.status < 400 && response.data;
     this.setState({
       fetching: false,
+      studentRequest,
+      errors,
+    });
+  }
+
+  async deleteStudentRequest(studentRequestId) {
+    this.setState({
+      fetching: true,
+    });
+    const response = await this.props.deleteStudentRequest(studentRequestId);
+    const errors = response.status < 400 ? {} : response;
+    this.setState({
+      fetching: false,
+      studentRequest: null,
       errors,
     });
   }
@@ -106,8 +134,16 @@ class Vacancy extends React.Component {
 
   render() {
     const { currentUser } = this.props;
-    const { fetching, vacancy, popout } = this.state;
-    const isEditable = currentUser.user && vacancy && currentUser.user.id === vacancy.owner.id;
+    const {
+      fetching,
+      vacancy,
+      popout,
+      studentRequest,
+      errors
+    } = this.state;
+    const isEditable = currentUser.user
+      && vacancy
+      && currentUser.user.id === vacancy.owner.id;
 
     return (
       <View id={this.props.id} activePanel={this.props.id} popout={popout}>
@@ -159,23 +195,39 @@ class Vacancy extends React.Component {
                 </Cell>
               </Group>
 
-              <Group title="Добавление в список учеников">
-                <CellButton before={<Icon24UserAdd />} onClick={() => this.createStudentRequest(vacancy.owner.id)}>
-                  Отправить заявку
-                </CellButton>
-                {this.state.success && (
-                  <Div>
-                    <SuccessFormStatus title="Успешно" />
-                  </Div>
-                )}
-                {Object.keys(this.state.errors).length > 0 && (
-                  <Div>
-                    <ErrorFormStatus errors={this.state.errors} />
-                  </Div>
-                )}
-              </Group>
+              {!isEditable && !studentRequest && (
+                <Group title="Добавление в список учеников">
+                  <CellButton
+                    before={<Icon24UserAdd/>}
+                    onClick={() => this.createStudentRequest(vacancy.owner.id)}
+                  >
+                    Отправить заявку
+                  </CellButton>
+                  {Object.keys(errors).length > 0 && (
+                    <Div>
+                      <ErrorFormStatus errors={errors}/>
+                    </Div>
+                  )}
+                </Group>
+              )}
 
-              <Group title="Информация о вакансии">
+              {studentRequest && (
+                <Group title="Управление заявкой">
+                  <CellButton
+                    before={<Icon24Delete/>}
+                    onClick={() => this.deleteStudentRequest(studentRequest.id)}
+                  >
+                    Удалить заявку
+                  </CellButton>
+                  {Object.keys(errors).length > 0 && (
+                    <Div>
+                      <ErrorFormStatus errors={errors}/>
+                    </Div>
+                  )}
+                </Group>
+              )}
+
+              <Group title="Информация о предложении">
                 <Cell
                   multiline
                   description="Предмет обучения"
@@ -187,7 +239,7 @@ class Vacancy extends React.Component {
                 <Cell
                   multiline
                   description="Стоимость занятия"
-                  before={<Icon24MoneyCircle/>}
+                  before={<Icon24MoneyCircle />}
                 >
                   {vacancy.price} рублей/час
                 </Cell>
@@ -195,6 +247,16 @@ class Vacancy extends React.Component {
                 <Cell description="Выезд на дом" before={<Icon24Home />}>
                   {vacancy.home_schooling ? "Да" : "Нет"}
                 </Cell>
+
+                {educationLevelList.map(level => {
+                  if (vacancy[level.backendField]) {
+                    return (
+                      <Cell key={level.backendField} before={<Icon24Article/>}>
+                        {level.name}
+                      </Cell>
+                    );
+                  }
+                })}
 
                 {vacancy.extra_info && (
                   <Cell
