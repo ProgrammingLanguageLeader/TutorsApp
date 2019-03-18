@@ -4,16 +4,12 @@ import { Redirect } from 'react-router-dom';
 import View from '@vkontakte/vkui/dist/components/View/View';
 import Panel from '@vkontakte/vkui/dist/components/Panel/Panel';
 
-import DivSpinner from 'vk-apps-frontend/components/DivSpinner';
-
-export default ({ id, fetching, currentUser }) => (
+export default ({ id, currentUser }) => (
   <View id={id} activePanel={id}>
     <Panel id={id}>
-      {fetching
-        ? <DivSpinner />
-        : currentUser
-          ? <Redirect to={`/user/${currentUser.id}`} />
-          : <Redirect to="/home" />
+      { currentUser
+        ? <Redirect to={`/user/${currentUser.id}`} />
+        : <Redirect to="/home" />
       }
     </Panel>
   </View>

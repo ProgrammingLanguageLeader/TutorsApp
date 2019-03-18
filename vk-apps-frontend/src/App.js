@@ -71,7 +71,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      fetching: true,
+      initializing: true,
     };
   }
 
@@ -83,7 +83,7 @@ class App extends React.Component {
   async componentDidUpdate(prevProps) {
     if (this.props.vkUserInfo !== prevProps.vkUserInfo) {
       this.setState({
-        fetching: true,
+        initializing: true,
       });
       const { id } = this.props.vkUserInfo;
       const response = await this.props.getVkAppsUser(id);
@@ -92,72 +92,75 @@ class App extends React.Component {
         this.props.saveCurrentUserData(user, vk_id);
       }
       this.setState({
-        fetching: false,
+        initializing: false,
       });
     }
   }
 
   render() {
     const { user } = this.props;
-    const { fetching } = this.state;
+    const { initializing } = this.state;
 
     return (
-      <Router history={history}>
-        <Route path="/" component={props => {
-          const { pathname } = props.location;
-          const activeView = matchView(pathname);
-          const match = getMatchedPath(pathname);
+      !initializing
+        ? (
+          <Router history={history}>
+            <Route path="/" component={props => {
+              const { pathname } = props.location;
+              const activeView = matchView(pathname);
+              const match = getMatchedPath(pathname);
 
-          return (
-            <Epic
-              activeStory="root"
-              tabbar={
-                <Tabbar hidden={!user} currentUserId={user && user.id} />
-              }
-            >
-              <Root id="root" activeView={activeView}>
-                <Entrypoint
-                  key="entrypoint"
-                  id="entrypoint"
-                  history={history}
-                  match={match}
-                  fetching={fetching}
-                  currentUser={user}
-                />
-                <Home key="home" id="home" history={history} match={match} />
+              return (
+                <Epic
+                  activeStory="root"
+                  tabbar={
+                    <Tabbar hidden={!user} currentUserId={user && user.id} />
+                  }
+                >
+                  <Root id="root" activeView={activeView}>
+                    <Entrypoint
+                      key="entrypoint"
+                      id="entrypoint"
+                      history={history}
+                      match={match}
+                      currentUser={user}
+                    />
+                    <Home key="home" id="home" history={history} match={match} />
 
-                <User key="user" id="user" history={history} match={match} />
-                <UserEdit key="user-edit" id="user-edit" history={history} match={match} />
+                    <User key="user" id="user" history={history} match={match} />
+                    <UserEdit key="user-edit" id="user-edit" history={history} match={match} />
 
-                <Vacancy key="vacancy" id="vacancy" history={history} match={match} />
-                <VacancyEdit key="vacancy-edit" id="vacancy-edit" history={history} match={match} />
-                <VacancyCreate key="vacancy-create" id="vacancy-create" history={history} match={match} />
-                <Vacancies key="vacancies" id="vacancies" history={history} match={match} />
-                <VacanciesFilter key="vacancies-filter" id="vacancies-filter" history={history} match={match} />
-                <UserVacancies key="user-vacancies" id="user-vacancies" history={history} match={match} />
+                    <Vacancy key="vacancy" id="vacancy" history={history} match={match} />
+                    <VacancyEdit key="vacancy-edit" id="vacancy-edit" history={history} match={match} />
+                    <VacancyCreate key="vacancy-create" id="vacancy-create" history={history} match={match} />
+                    <Vacancies key="vacancies" id="vacancies" history={history} match={match} />
+                    <VacanciesFilter key="vacancies-filter" id="vacancies-filter" history={history} match={match} />
+                    <UserVacancies key="user-vacancies" id="user-vacancies" history={history} match={match} />
 
-                <Schedule key="schedule" id="schedule" history={history} match={match} />
-                <Lesson key="lesson" id="lesson" history={history} match={match} />
-                <LessonEdit key="lesson-edit" id="lesson-edit" history={history} match={match} />
-                <LessonCreate key="lesson-create" id="lesson-create" history={history} match={match} />
+                    <Schedule key="schedule" id="schedule" history={history} match={match} />
+                    <Lesson key="lesson" id="lesson" history={history} match={match} />
+                    <LessonEdit key="lesson-edit" id="lesson-edit" history={history} match={match} />
+                    <LessonCreate key="lesson-create" id="lesson-create" history={history} match={match} />
 
-                <Notifications key="notifications" id="notifications" history={history} match={match} />
+                    <Notifications key="notifications" id="notifications" history={history} match={match} />
 
-                <MainMenu key="main-menu" id="main-menu" history={history} match={match} />
+                    <MainMenu key="main-menu" id="main-menu" history={history} match={match} />
 
-                <StudentRequest key="student-request" id="student-request" history={history} match={match} />
-                <OutgoingStudentRequests key="outgoing-student-requests" id="outgoing-student-requests" history={history} match={match} />
+                    <StudentRequest key="student-request" id="student-request" history={history} match={match} />
+                    <OutgoingStudentRequests key="outgoing-student-requests" id="outgoing-student-requests" history={history} match={match} />
 
-                <MoneyTransfer key="money-transfer" id="money-transfer" history={history} match={match} />
+                    <MoneyTransfer key="money-transfer" id="money-transfer" history={history} match={match} />
 
-                <Tutors key="tutors" id="tutors" history={history} match={match} />
-                <Students key="students" id="students" history={history} match={match} />
-              </Root>
-            </Epic>
-          )
-        }} />
-      </Router>
-    );
+                    <Tutors key="tutors" id="tutors" history={history} match={match} />
+                    <Students key="students" id="students" history={history} match={match} />
+                  </Root>
+                </Epic>
+              )
+            }} />
+          </Router>
+        )
+        : <div>Loading...</div>
+    )
   }
 }
 
