@@ -51,11 +51,10 @@ const Root = ({ id, activeView, match, children }) => {
 
 const mapStateToProps = state => {
   const { vkUserInfo } = state.VK.appsUser;
-  const { user, vkId } = state.currentUser;
+  const { currentUser } = state;
   return {
     vkUserInfo,
-    user,
-    vkId,
+    currentUser
   };
 };
 
@@ -99,7 +98,7 @@ class App extends React.Component {
   }
 
   render() {
-    const { user } = this.props;
+    const { currentUser } = this.props;
     const { initializing } = this.state;
 
     return (
@@ -115,7 +114,10 @@ class App extends React.Component {
                 <Epic
                   activeStory="root"
                   tabbar={
-                    <Tabbar hidden={!user} currentUserId={user && user.id} />
+                    <Tabbar
+                      hidden={!currentUser.user}
+                      currentUserId={currentUser.user && currentUser.user.id}
+                    />
                   }
                 >
                   <Root id="root" activeView={activeView}>
@@ -124,7 +126,7 @@ class App extends React.Component {
                       id="entrypoint"
                       history={history}
                       match={match}
-                      currentUser={user}
+                      currentUser={currentUser}
                     />
                     <Home key="home" id="home" history={history} match={match} />
 

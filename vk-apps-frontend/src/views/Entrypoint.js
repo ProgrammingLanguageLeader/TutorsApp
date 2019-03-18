@@ -1,16 +1,34 @@
 import React from 'react';
-import { Redirect } from 'react-router-dom';
 
 import View from '@vkontakte/vkui/dist/components/View/View';
 import Panel from '@vkontakte/vkui/dist/components/Panel/Panel';
+import ScreenSpinner from '@vkontakte/vkui/dist/components/ScreenSpinner/ScreenSpinner';
 
-export default ({ id, currentUser }) => (
-  <View id={id} activePanel={id}>
-    <Panel id={id}>
-      { currentUser
-        ? <Redirect to={`/user/${currentUser.id}`} />
-        : <Redirect to="/home" />
-      }
-    </Panel>
-  </View>
-);
+class Entrypoint extends React.Component {
+  redirect() {
+    const { user } = this.props.currentUser;
+    if (user) {
+      this.props.history.replace(`/user/${user.id}`);
+    }
+    else {
+      this.props.history.replace('/home');
+    }
+  }
+
+  componentDidMount() {
+    this.redirect.call(this);
+  }
+
+  render() {
+    const { id } = this.props;
+    return (
+      <View id={id} activePanel={id}>
+        <Panel id={id}>
+          <ScreenSpinner />
+        </Panel>
+      </View>
+    );
+  }
+}
+
+export default Entrypoint;

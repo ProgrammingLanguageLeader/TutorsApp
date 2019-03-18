@@ -166,18 +166,10 @@ class Home extends React.Component {
     }
   }
 
-  redirectIfUserRegistered() {
+  componentDidMount() {
     if (this.props.currentUser.user) {
       this.props.history.replace('/');
     }
-  }
-
-  componentDidMount() {
-    this.redirectIfUserRegistered.call(this);
-  }
-
-  componentDidUpdate() {
-    this.redirectIfUserRegistered.call(this);
   }
 
   async createUser() {
@@ -186,7 +178,7 @@ class Home extends React.Component {
     });
     const createVkAppsUserResponse = await this.props.createVkAppsUser();
     if (createVkAppsUserResponse.status >= 400) {
-      await this.setState({
+      this.setState({
         popout: <RetryLaterPopout/>,
       });
       return;
@@ -195,10 +187,10 @@ class Home extends React.Component {
     const vkId = this.props.vkUserInfo.id;
     await this.updateUserInfoFromVK(user.id);
     await this.updateAvatarFromVK(user.id);
-    this.props.saveCurrentUserData(user, vkId);
-    await this.setState({
+    this.setState({
       popout: null,
     });
+    this.props.saveCurrentUserData(user, vkId);
   }
 
   async updateUserInfoFromVK(id) {
