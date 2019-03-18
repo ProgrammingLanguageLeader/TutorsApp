@@ -23,7 +23,7 @@ import { notificationsActions } from 'vk-apps-frontend/actions/api';
 import { appsActions } from 'vk-apps-frontend/actions/vk';
 
 const FullHeightDiv = styled.div`
-  height: calc(100vh - var(--tabbar_height) - 64px - 54px);
+  min-height: calc(100vh - var(--tabbar_height) - 128px);
 `;
 
 const mapStateToProps = state => {
