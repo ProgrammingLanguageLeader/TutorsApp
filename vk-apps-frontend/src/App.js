@@ -2,7 +2,6 @@ import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Router, Route } from 'react-router-dom';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 import Epic from '@vkontakte/vkui/dist/components/Epic/Epic';
 import ScreenSpinner from '@vkontakte/vkui/dist/components/ScreenSpinner/ScreenSpinner';
@@ -30,24 +29,13 @@ import Tutors from 'vk-apps-frontend/views/Tutors';
 import Students from 'vk-apps-frontend/views/Students';
 
 import { matchView, getMatchedPath } from 'vk-apps-frontend/routes';
-import history from 'vk-apps-frontend/helpers/history';
+import history, { getLastAction } from 'vk-apps-frontend/helpers/history';
 import { appsActions } from 'vk-apps-frontend/actions/vk';
 import { currentUserActions } from 'vk-apps-frontend/actions';
 import { vkAppsUsersActions } from 'vk-apps-frontend/actions/api';
 
 import Tabbar from 'vk-apps-frontend/components/Tabbar';
-
-const Root = ({ id, activeView, match, children }) => {
-  return (
-    <ReactCSSTransitionGroup
-      transitionName="view"
-      transitionEnterTimeout={500}
-      transitionLeaveTimeout={300}
-    >
-      {children.find(child => child.props.id === activeView)}
-    </ReactCSSTransitionGroup>
-  );
-};
+import Root from 'vk-apps-frontend/components/Root';
 
 const mapStateToProps = state => {
   const { vkUserInfo } = state.VK.appsUser;
@@ -109,6 +97,7 @@ class App extends React.Component {
               const { pathname } = props.location;
               const activeView = matchView(pathname);
               const match = getMatchedPath(pathname);
+              const isBack = getLastAction() === 'POP';
 
               return (
                 <Epic
@@ -120,7 +109,7 @@ class App extends React.Component {
                     />
                   }
                 >
-                  <Root id="root" activeView={activeView}>
+                  <Root id="root" activeView={activeView} isBack={isBack}>
                     <Entrypoint
                       key="entrypoint"
                       id="entrypoint"

@@ -41,19 +41,44 @@ button, .CellButton, .Button, .Cell--expandable {
 }
 
 .view-enter {
-    opacity: 0.01;
+    position: absolute;
+    left: 100%;
 }
 
 .view-enter.view-enter-active {
-    opacity: 1;
-    transition: opacity 500ms ease-in;
+    left: 0;
+    transition: all 0.4s ease-in-out;
+    transition-delay: 0s;
 }
 
 .view-leave {
-    opacity: 1;
+    position: absolute;
+    left: 0;
 }
 
 .view-leave.view-leave-active {
-    opacity: 0.01;
-    transition: opacity 300ms ease-in;
+    left: -100%;
+    transition: all 0.4s ease-in-out;
+    transition-delay: 0s;
+}
+
+.view-back-enter {
+    position: absolute;
+    left: -100%;
+}
+
+.view-back-enter.view-back-enter-active {
+    left: 0;
+    transition: all 0.4s ease-in-out;
+    transition-delay: 0s;
+}
+
+.view-back-leave {
+    left: 0;
+}
+
+.view-back-leave.view-back-leave-active {
+    left: 100%;
+    transition: all 0.4s ease-in-out;
+    transition-delay: 0s;
 }

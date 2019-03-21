@@ -5,8 +5,10 @@ const history = createHashHistory({
 });
 
 let localHistoryLength = 0;
+let lastAction = '';
 
 history.listen((location, action) => {
+  lastAction = action;
   if (action === 'PUSH') {
     localHistoryLength++;
   }
@@ -16,5 +18,7 @@ history.listen((location, action) => {
 });
 
 export const getLocalHistoryLength = () => localHistoryLength;
+
+export const getLastAction = () => lastAction;
 
 export default history;
