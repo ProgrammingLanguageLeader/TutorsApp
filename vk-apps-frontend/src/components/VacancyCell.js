@@ -45,9 +45,11 @@ const VacancyCell = ({ vacancy, onClick }) => {
           <HiddenOverflowDiv>
             Предмет - {vacancy.subject}
           </HiddenOverflowDiv>
-          <HiddenOverflowDiv>
-            Город - {vacancy.owner.city}
-          </HiddenOverflowDiv>
+          {vacancy.owner.city && (
+            <HiddenOverflowDiv>
+              Город - {vacancy.owner.city}
+            </HiddenOverflowDiv>
+          )}
           <HiddenOverflowDiv>
             Цена - {vacancy.price} рублей/час
           </HiddenOverflowDiv>
