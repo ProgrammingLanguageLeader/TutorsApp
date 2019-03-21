@@ -1,6 +1,15 @@
 a {
     color: inherit;
     text-decoration: none;
+    cursor: pointer;
+}
+
+input {
+    -webkit-user-select: text !important;
+}
+
+button, .CellButton, .Button, .Cell--expandable {
+    cursor: pointer;
 }
 
 * {
