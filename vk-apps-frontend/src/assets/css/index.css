@@ -1,3 +1,10 @@
+:root {
+    --accent: #45a29e;
+    --header_background: #1f2833;
+    --button_primary_background: #45a29e;
+    --tabbar_active_icon: #45a29e;
+}
+
 a {
     color: inherit;
     text-decoration: none;
@@ -27,6 +34,10 @@ button, .CellButton, .Button, .Cell--expandable {
     width: auto;
     max-width: 640px;
     margin: auto;
+}
+
+.rdtPicker td.rdtActive, .rdtPicker td.rdtActive:hover {
+    background-color: var(--tabbar_active_icon);
 }
 
 .view-enter {
