@@ -113,6 +113,11 @@ class Schedule extends React.Component {
                 timeFormat={null}
                 onChange={this.handleDateChange}
                 locale="ru"
+                isValidDate={currentMoment => {
+                  const pastMonthMoment = moment().subtract(1, 'month');
+                  const nextMonthMoment = moment().add(1, 'month');
+                  return currentMoment.isAfter(pastMonthMoment) && currentMoment.isBefore(nextMonthMoment);
+                }}
               />
             </Div>
           </Group>

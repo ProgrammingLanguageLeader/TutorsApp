@@ -98,7 +98,7 @@ class LessonForm extends React.Component {
               locale="ru"
               isValidDate={currentMoment => {
                 const yesterdayMoment = moment().subtract(1, 'day');
-                const nextMonthMoment = moment().add(30, 'day');
+                const nextMonthMoment = moment().add(1, 'month');
                 return currentMoment.isAfter(yesterdayMoment) && currentMoment.isBefore(nextMonthMoment);
               }}
             />
