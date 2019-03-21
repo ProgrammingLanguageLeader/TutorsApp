@@ -21,6 +21,7 @@ import PopoutDiv from 'vk-apps-frontend/components/PopoutDiv';
 import { vkAppsUsersActions, usersActions } from 'vk-apps-frontend/actions/api';
 import { currentUserActions } from 'vk-apps-frontend/actions';
 import { appsActions } from 'vk-apps-frontend/actions/vk';
+import unescapeHtmlString from 'vk-apps-frontend/helpers/unescapeHtmlString';
 
 const FlexedWhitePanel = styled(Panel).attrs({
   theme: "white",
@@ -199,8 +200,8 @@ class Home extends React.Component {
   async updateUserInfoFromVK(id) {
     const { first_name, last_name, city } = this.props.vkUserInfo;
     await this.props.updateUser(id, {
-      first_name,
-      last_name,
+      first_name: unescapeHtmlString(first_name),
+      last_name: unescapeHtmlString(last_name),
       city: city ? city.title : null,
     });
   }
