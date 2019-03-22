@@ -67,7 +67,7 @@ button, .CellButton, .Button, .Cell--expandable {
 }
 
 .View--ios.view-leave.view-leave-active {
-    animation: animation-ios-prev-forward 600ms var(--ios-easing);
+    animation: animation-ios-prev-forward 600ms var(--ios-easing), animation-ios-fade-out 600ms var(--ios-easing);
 }
 
 .View--ios.view-back-enter.view-back-enter-active {
