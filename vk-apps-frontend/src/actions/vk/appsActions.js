@@ -27,6 +27,16 @@ const fetchCurrentUserInfo = () => dispatch => {
   VKConnect.send("VKWebAppGetUserInfo", {});
 };
 
+const setViewSettings = () => {
+  if (DEBUG) {
+    return;
+  }
+  VKConnect.send("VKWebAppSetViewSettings", {
+    "status_bar_style": "light",
+    "action_bar_color": "#1f2833"
+  });
+};
+
 const init = () => dispatch => {
   dispatch({
     type: appsConstants.VK_INIT,
@@ -102,13 +112,7 @@ const init = () => dispatch => {
   });
 
   VKConnect.send('VKWebAppInit', {});
-  if (DEBUG) {
-    return;
-  }
-  VKConnect.send("VKWebAppSetViewSettings", {
-    "status_bar_style": "light",
-    "action_bar_color": "#1f2833"
-  });
+  setViewSettings();
 };
 
 const openPayForm = (action, params) => dispatch => {
