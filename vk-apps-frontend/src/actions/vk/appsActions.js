@@ -102,6 +102,13 @@ const init = () => dispatch => {
   });
 
   VKConnect.send('VKWebAppInit', {});
+  if (DEBUG) {
+    return;
+  }
+  VKConnect.send("VKWebAppSetViewSettings", {
+    "status_bar_style": "light",
+    "action_bar_color": "#1f2833"
+  });
 };
 
 const openPayForm = (action, params) => dispatch => {
