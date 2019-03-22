@@ -40,58 +40,61 @@ button, .CellButton, .Button, .Cell--expandable {
     background-color: var(--tabbar_active_icon);
 }
 
-.view-enter {
-    position: fixed;
-    top: 0;
-    left: 100%;
+/* Animations classes */
+
+/* Android animations */
+
+.View--android.view-enter.view-enter-active {
+    animation: animation-android-next-forward 300ms var(--android-easing);
 }
 
-.view-enter.view-enter-active {
-    -webkit-transform: translateX(-100%);
-			transform: translateX(-100%);
-    transition: transform 400ms linear;
-    transition-delay: 100ms;
-    will-change: transform;
+.View--android.view-leave.view-leave-active {
+    animation: animation-android-prev-back 300ms var(--android-easing);
 }
 
-.view-leave {
+.View--android.view-back-enter.view-back-enter-active {
+    animation: animation-android-next-forward 300ms var(--android-easing);
+}
+
+.View--android.view-back-leave.view-back-leave-active {
+    animation: animation-android-prev-back 300ms var(--android-easing);
+}
+
+/* iOS animations */
+
+.View--ios.view-enter.view-enter-active {
+    animation: animation-ios-next-forward 600ms var(--ios-easing);
+}
+
+.View--ios.view-leave.view-leave-active {
+    animation: animation-ios-prev-forward 600ms var(--ios-easing);
+}
+
+.View--ios.view-back-enter.view-back-enter-active {
+    animation: animation-ios-next-back 600ms var(--ios-easing);
+}
+
+.View--ios.view-back-leave.view-back-leave-active {
+    animation: animation-ios-prev-back 600ms var(--ios-easing);
+}
+
+@keyframes animation-ios-prev-forward {
+    from {
+        transform: translate3d(0, 0, 0);
+    }
+
+    to {
+        transform: translate3d(-100%, 0, 0);
+    }
+}
+
+.View.view-enter,
+.View.view-leave,
+.View.view-back-leave,
+.View.view-back-enter {
     position: fixed;
     top: 0;
     left: 0;
-}
-
-.view-leave.view-leave-active {
-    -webkit-transform: translateX(-100%);
-			transform: translateX(-100%);
-    transition: transform 400ms linear;
-    transition-delay: 100ms;
-    will-change: transform;
-}
-
-.view-back-enter {
-    position: fixed;
-    top: 0;
-    left: -100%;
-}
-
-.view-back-enter.view-back-enter-active {
-    -webkit-transform: translateX(100%);
-			transform: translateX(100%);
-    transition: transform 400ms linear;
-    transition-delay: 100ms;
-    will-change: transform;
-}
-
-.view-back-leave {
-    position: fixed;
-    top: 0;
-    left: 0;
-}
-
-.view-back-leave.view-back-leave-active {
-    -webkit-transform: translateX(100%);
-			transform: translateX(100%);
-    transition: transform 400ms linear;
-    transition-delay: 100ms;
-    will-change: transform;
+    overflow: hidden;
+    pointer-events: none;
 }
