@@ -5,8 +5,8 @@ const Root = ({ id, activeView, isBack, match, children }) => {
   return (
     <ReactCSSTransitionGroup
       transitionName={isBack ? "view-back" : "view"}
-      transitionEnterTimeout={400}
-      transitionLeaveTimeout={400}
+      transitionEnterTimeout={500}
+      transitionLeaveTimeout={500}
     >
       {children.find(child => child.props.id === activeView)}
     </ReactCSSTransitionGroup>
