@@ -3,6 +3,9 @@
     --header_background: #1f2833;
     --button_primary_background: #45a29e;
     --tabbar_active_icon: #45a29e;
+    --datepicker_active_item_background: #45a29e;
+    --animation_time_android: 500ms;
+    --animation_time_ios: 600ms;
 }
 
 a {
@@ -21,12 +24,13 @@ button, .CellButton, .Button, .Cell--expandable {
 
 * {
     user-select: none !important;
-    -moz-user-select: none !important; /* Firefox */
-    -ms-user-select: none !important; /* Internet Explorer */
-    -khtml-user-select: none !important; /* KHTML browsers (e.g. Konqueror) */
-    -webkit-user-select: none !important; /* Chrome, Safari, and Opera */
-    -webkit-touch-callout: none !important; /* Disable Android and iOS callouts*/
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+    -webkit-user-select: none !important;
+    -webkit-touch-callout: none !important;
 }
+
+/* Date picker styles */
 
 .rdtPicker {
     border: 1px solid var(--field_border);
@@ -37,7 +41,7 @@ button, .CellButton, .Button, .Cell--expandable {
 }
 
 .rdtPicker td.rdtActive, .rdtPicker td.rdtActive:hover {
-    background-color: var(--tabbar_active_icon);
+    background-color: var(--datepicker_active_item_background);
 }
 
 /* Animations classes */
@@ -45,37 +49,48 @@ button, .CellButton, .Button, .Cell--expandable {
 /* Android animations */
 
 .View--android.view-enter.view-enter-active {
-    animation: animation-android-next-forward 300ms var(--android-easing);
+    animation: animation-android-next-forward var(--animation_time_android) var(--android-easing);
 }
 
 .View--android.view-leave.view-leave-active {
-    animation: animation-android-prev-back 300ms var(--android-easing);
+    animation: animation-android-fade-out var(--animation_time_android) var(--android-easing);
 }
 
 .View--android.view-back-enter.view-back-enter-active {
-    animation: animation-android-next-forward 300ms var(--android-easing);
+    animation: animation-android-next-forward var(--animation_time_android) var(--android-easing);
 }
 
 .View--android.view-back-leave.view-back-leave-active {
-    animation: animation-android-prev-back 300ms var(--android-easing);
+    animation: animation-android-fade-out var(--animation_time_android) var(--android-easing);
 }
 
 /* iOS animations */
 
 .View--ios.view-enter.view-enter-active {
-    animation: animation-ios-next-forward 600ms var(--ios-easing);
+    animation: animation-ios-next-forward var(--animation_time_ios) var(--ios-easing);
 }
 
 .View--ios.view-leave.view-leave-active {
-    animation: animation-ios-prev-forward 600ms var(--ios-easing), animation-ios-fade-out 600ms var(--ios-easing);
+    animation:
+            animation-ios-prev-forward var(--animation_time_ios) var(--ios-easing),
+            animation-ios-fade-out var(--animation_time_ios) var(--ios-easing);
 }
 
 .View--ios.view-back-enter.view-back-enter-active {
-    animation: animation-ios-next-back 600ms var(--ios-easing);
+    animation: animation-ios-next-back var(--animation_time_ios) var(--ios-easing);
 }
 
 .View--ios.view-back-leave.view-back-leave-active {
-    animation: animation-ios-prev-back 600ms var(--ios-easing);
+    animation: animation-ios-prev-back var(--animation_time_ios) var(--ios-easing);
+}
+
+@keyframes animation-android-fade-out {
+    from {
+        opacity: 0.3;
+    }
+    to {
+        opacity: 0;
+    }
 }
 
 @keyframes animation-ios-prev-forward {
@@ -87,6 +102,8 @@ button, .CellButton, .Button, .Cell--expandable {
         transform: translate3d(-100%, 0, 0);
     }
 }
+
+/* Common animation styles */
 
 .View.view-enter,
 .View.view-leave,

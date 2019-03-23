@@ -5,7 +5,7 @@ import { platform, IOS } from '@vkontakte/vkui/dist/lib/platform';
 
 const Root = ({ id, activeView, isBack, match, children }) => {
   const currentPlatform = platform();
-  const transitionTimeout = currentPlatform === IOS ? 600 : 300;
+  const transitionTimeout = currentPlatform === IOS ? 600 : 500;
   return (
     <ReactCSSTransitionGroup
       transitionName={isBack ? "view-back" : "view"}
