@@ -93,9 +93,7 @@ class Schedule extends React.Component {
 		return (
       <View id={this.props.id} activePanel={this.props.id}>
         <Panel id={this.props.id}>
-          <PanelHeader left={
-            <SmartBackButton history={this.props.history} />
-          }>
+          <PanelHeader>
             Расписание
           </PanelHeader>
 

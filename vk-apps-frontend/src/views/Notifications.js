@@ -16,7 +16,6 @@ import Icon24View from '@vkontakte/icons/dist/24/view';
 import Icon24Hide from '@vkontakte/icons/dist/24/hide';
 
 import NotificationCell from 'vk-apps-frontend/components/NotificationCell';
-import SmartBackButton from 'vk-apps-frontend/components/SmartBackButton';
 import DivSpinner from 'vk-apps-frontend/components/DivSpinner';
 
 import { notificationsActions } from 'vk-apps-frontend/actions/api';
@@ -117,9 +116,7 @@ class Notifications extends React.Component {
     return (
       <View id={this.props.id} activePanel={this.props.id}>
         <Panel id={this.props.id}>
-          <PanelHeader left={
-            <SmartBackButton history={this.props.history} />
-          }>
+          <PanelHeader>
             Уведомления
           </PanelHeader>
 

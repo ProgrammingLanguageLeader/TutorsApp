@@ -18,7 +18,6 @@ import Icon24Add from '@vkontakte/icons/dist/24/add';
 import VacancyCell from 'vk-apps-frontend/components/VacancyCell';
 import PaginationButton from 'vk-apps-frontend/components/PaginationButton';
 import DivSpinner from 'vk-apps-frontend/components/DivSpinner';
-import SmartBackButton from 'vk-apps-frontend/components/SmartBackButton';
 
 import { vacanciesActions } from 'vk-apps-frontend/actions/api';
 
@@ -92,9 +91,7 @@ class Vacancies extends React.Component {
     return (
       <View id={this.props.id} activePanel={this.props.id}>
         <Panel id={this.props.id}>
-          <PanelHeader left={
-            <SmartBackButton history={this.props.history} />
-          }>
+          <PanelHeader>
             Поиск предложений
           </PanelHeader>
 

@@ -8,8 +8,6 @@ import Cell from '@vkontakte/vkui/dist/components/Cell/Cell';
 import Group from '@vkontakte/vkui/dist/components/Group/Group';
 import List from '@vkontakte/vkui/dist/components/List/List';
 
-import SmartBackButton from 'vk-apps-frontend/components/SmartBackButton';
-
 const mapStateToProps = state => {
   const { user } = state.currentUser;
   return {
@@ -24,9 +22,7 @@ class MainMenu extends React.Component {
     return (
       <View id={this.props.id} activePanel={this.props.id}>
         <Panel id={this.props.id}>
-          <PanelHeader left={
-            <SmartBackButton history={this.props.history} />
-          }>
+          <PanelHeader>
             Главное меню
           </PanelHeader>
 
