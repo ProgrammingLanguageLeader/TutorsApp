@@ -55,7 +55,7 @@ button, .CellButton, .Button, .Cell--expandable {
 }
 
 .View--android.view-leave.view-leave-active {
-    animation: animation-android-fade-out var(--leave_animation_time_android) var(--android-easing);
+    animation: animation-android-prev-back var(--leave_animation_time_android) var(--android-easing);
 }
 
 .View--android.view-back-enter.view-back-enter-active {
@@ -63,7 +63,7 @@ button, .CellButton, .Button, .Cell--expandable {
 }
 
 .View--android.view-back-leave.view-back-leave-active {
-    animation: animation-android-fade-out var(--leave_animation_time_android) var(--android-easing);
+    animation: animation-android-prev-back var(--leave_animation_time_android) var(--android-easing);
 }
 
 /* iOS animations */
@@ -84,20 +84,10 @@ button, .CellButton, .Button, .Cell--expandable {
     animation: animation-ios-prev-back var(--leave_animation_time_ios) var(--ios-easing);
 }
 
-@keyframes animation-android-fade-out {
-    from {
-        opacity: 0.3;
-    }
-    to {
-        opacity: 0;
-    }
-}
-
 @keyframes animation-ios-prev-forward {
     from {
         transform: translate3d(0, 0, 0);
     }
-
     to {
         transform: translate3d(-100%, 0, 0);
     }
