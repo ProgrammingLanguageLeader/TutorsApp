@@ -61,8 +61,7 @@ class App extends React.Component {
     this.state = {
       initializing: true,
     };
-    this.historyAdapter = HistoryAdapter.getInstance();
-    this.history = this.historyAdapter.getHistory();
+    this.history = HistoryAdapter.getInstance();
   }
 
   componentDidMount() {
@@ -94,12 +93,13 @@ class App extends React.Component {
     return (
       !initializing
         ? (
-          <Router history={this.history}>
+          <Router history={this.history.getHistory()}>
             <Route path="/" component={props => {
-              const { pathname } = props.location;
+              const { location } = props;
+              const { pathname } = location;
               const activeView = matchView(pathname);
               const match = getMatchedPath(pathname);
-              const isBack = this.historyAdapter.getLastAction() === 'POP';
+              const isBack = this.history.getLastAction() === 'POP';
 
               return (
                 <Epic
@@ -108,6 +108,8 @@ class App extends React.Component {
                     <Tabbar
                       hidden={!currentUser.user}
                       currentUserId={currentUser.user && currentUser.user.id}
+                      history={this.history}
+                      location={location}
                     />
                   }
                 >

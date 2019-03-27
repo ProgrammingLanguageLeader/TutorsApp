@@ -8,13 +8,16 @@ class HistoryAdapter {
     this.history = createHashHistory({
       hashType: 'slash'
     });
-    this.historyLength = 0;
     this.lastAction = '';
+    this.localHistory = [this.history.location.pathname];
 
-    this.initListener.call(this);
     this.getHistory = this.getHistory.bind(this);
     this.getLastAction = this.getLastAction.bind(this);
     this.getLocalHistoryLength = this.getLocalHistoryLength.bind(this);
+    this.push = this.push.bind(this);
+    this.goBack = this.goBack.bind(this);
+    this.replace = this.replace.bind(this);
+    this.pushWithFlush = this.pushWithFlush.bind(this);
   }
 
   static getInstance() {
@@ -24,16 +27,39 @@ class HistoryAdapter {
     return HistoryAdapter.instance;
   }
 
-  initListener() {
-    this.history.listen((location, action) => {
-      this.lastAction = action;
-      if (action === 'PUSH') {
-        this.historyLength++;
-      }
-      else if (action === 'POP') {
-        this.historyLength--;
-      }
-    });
+  push(path) {
+    this.localHistory.push(path);
+    this.history.push(path);
+    this.lastAction = 'PUSH';
+  }
+
+  goBack() {
+    this.localHistory.pop();
+    this.history.goBack();
+    this.lastAction = 'POP';
+  }
+
+  replace(path) {
+    this.lastAction = 'REPLACE';
+    this.localHistory.pop();
+    this.history.replace(path);
+    this.localHistory.push(path);
+  }
+
+  pushWithFlush(path) {
+    const lastLocation = this.localHistory.slice(-1)[0];
+    if (lastLocation === path) {
+      return;
+    }
+    const backLength = this.localHistory.length - 1;
+    if (backLength > 0) {
+      this.history.go(-backLength);
+      setTimeout(() => {
+        this.history.replace(path);
+      }, 0);
+    }
+    this.history.replace(path);
+    this.localHistory = [path];
   }
 
   getHistory() {
@@ -45,7 +71,7 @@ class HistoryAdapter {
   }
 
   getLocalHistoryLength() {
-    return this.historyLength;
+    return this.localHistory.length;
   }
 }
 
