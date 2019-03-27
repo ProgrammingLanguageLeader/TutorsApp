@@ -4,8 +4,10 @@
     --button_primary_background: #45a29e;
     --tabbar_active_icon: #45a29e;
     --datepicker_active_item_background: #45a29e;
-    --animation_time_android: 500ms;
-    --animation_time_ios: 600ms;
+    --enter_animation_time_android: 400ms;
+    --leave_animation_time_android: 500ms;
+    --enter_animation_time_ios: 800ms;
+    --leave_animation_time_ios: 900ms;
 }
 
 a {
@@ -49,39 +51,37 @@ button, .CellButton, .Button, .Cell--expandable {
 /* Android animations */
 
 .View--android.view-enter.view-enter-active {
-    animation: animation-android-next-forward var(--animation_time_android) var(--android-easing);
+    animation: animation-android-next-forward var(--enter_animation_time_android) var(--android-easing);
 }
 
 .View--android.view-leave.view-leave-active {
-    animation: animation-android-fade-out var(--animation_time_android) var(--android-easing);
+    animation: animation-android-fade-out var(--leave_animation_time_android) var(--android-easing);
 }
 
 .View--android.view-back-enter.view-back-enter-active {
-    animation: animation-android-next-forward var(--animation_time_android) var(--android-easing);
+    animation: animation-android-next-forward var(--enter_animation_time_android) var(--android-easing);
 }
 
 .View--android.view-back-leave.view-back-leave-active {
-    animation: animation-android-fade-out var(--animation_time_android) var(--android-easing);
+    animation: animation-android-fade-out var(--leave_animation_time_android) var(--android-easing);
 }
 
 /* iOS animations */
 
 .View--ios.view-enter.view-enter-active {
-    animation: animation-ios-next-forward var(--animation_time_ios) var(--ios-easing);
+    animation: animation-ios-next-forward var(--enter_animation_time_ios) var(--ios-easing);
 }
 
 .View--ios.view-leave.view-leave-active {
-    animation:
-            animation-ios-prev-forward var(--animation_time_ios) var(--ios-easing),
-            animation-ios-fade-out var(--animation_time_ios) var(--ios-easing);
+    animation: animation-ios-prev-forward var(--leave_animation_time_ios) var(--ios-easing);
 }
 
 .View--ios.view-back-enter.view-back-enter-active {
-    animation: animation-ios-next-back var(--animation_time_ios) var(--ios-easing);
+    animation: animation-ios-next-back var(--enter_animation_time_ios) var(--ios-easing);
 }
 
 .View--ios.view-back-leave.view-back-leave-active {
-    animation: animation-ios-prev-back var(--animation_time_ios) var(--ios-easing);
+    animation: animation-ios-prev-back var(--leave_animation_time_ios) var(--ios-easing);
 }
 
 @keyframes animation-android-fade-out {
