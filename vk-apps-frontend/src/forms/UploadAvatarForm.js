@@ -35,19 +35,26 @@ class UploadAvatarForm extends React.Component {
   }
 
   static validate(values) {
+    const errorsData = {};
+    if (!UploadAvatarForm.validateAvatar(values.avatar)) {
+      errorsData.avatar = 'Неподдерживаемый тип файла'
+    }
+    return Object.keys(errorsData).length > 0
+      ? { data: errorsData }
+      : {};
+  }
+
+  static validateAvatar(avatar) {
     const validAvatarTypes = [
       'image/gif',
       'image/jpeg',
       'image/png',
       'image/svg+xml'
     ];
-    const errorsData = {};
-    if (!validAvatarTypes.includes(values.avatar.type)) {
-      errorsData.avatar = 'Неподдерживаемый тип файла'
+    if (!avatar) {
+      return true;
     }
-    return Object.keys(errorsData).length > 0
-      ? { data: errorsData }
-      : {};
+    return validAvatarTypes.includes(avatar.type)
   }
 
   async componentDidUpdate(prevProps) {
@@ -74,6 +81,7 @@ class UploadAvatarForm extends React.Component {
       handleUploadFromVK
     } = this.props;
     const { avatarThumb } = this.state;
+    const isAvatarValid = UploadAvatarForm.validateAvatar(values.avatar);
 
     return (
       <FormLayout>
@@ -100,7 +108,7 @@ class UploadAvatarForm extends React.Component {
           </File>
         </FormLayoutGroup>
 
-        { values.avatar && (
+        { values.avatar && isAvatarValid && (
           <FormLayoutGroup>
             <CenteredDiv>
               <PaddingBottomDiv>
