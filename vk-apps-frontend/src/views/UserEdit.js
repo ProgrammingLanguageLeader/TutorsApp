@@ -1,4 +1,5 @@
 import React from 'react';
+import { Prompt } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Formik } from 'formik';
@@ -43,10 +44,12 @@ class UserEdit extends React.Component {
     this.handleUploadAvatarFormSubmit = this.handleUploadAvatarFormSubmit.bind(this);
     this.fetchUser = this.fetchUser.bind(this);
     this.handleUploadAvatarFromVK = this.handleUploadAvatarFromVK.bind(this);
+    this.setShouldBlockNavigation = this.setShouldBlockNavigation.bind(this);
     this.state = {
       user: null,
       fetching: false,
       errors: {},
+      shouldBlockNavigation: false,
     }
   }
 
@@ -55,6 +58,10 @@ class UserEdit extends React.Component {
       fetching: true,
     });
     await this.fetchUser();
+  }
+
+  setShouldBlockNavigation(shouldBlockNavigation) {
+    this.setState({ shouldBlockNavigation });
   }
 
   async fetchUser() {
@@ -141,7 +148,7 @@ class UserEdit extends React.Component {
   }
 
   render() {
-    const { user, fetching } = this.state;
+    const { user, fetching, shouldBlockNavigation } = this.state;
 
     return (
       <View id={this.props.id} activePanel={this.props.id}>
@@ -151,6 +158,11 @@ class UserEdit extends React.Component {
           }>
             Изменение профиля
           </PanelHeader>
+
+          <Prompt
+            when={shouldBlockNavigation}
+            message="Возможна потеря несохраненных данных. Вы уверены, что хотите покинуть эту страницу?"
+          />
 
           {fetching && <DivSpinner />}
 
@@ -181,6 +193,7 @@ class UserEdit extends React.Component {
                   <UploadAvatarForm
                     { ...formikProps }
                     handleUploadFromVK={this.handleUploadAvatarFromVK}
+                    setShouldBlockNavigation={this.setShouldBlockNavigation}
                   />
                 }
                 onSubmit={ async (values, actions) => {
@@ -206,7 +219,12 @@ class UserEdit extends React.Component {
                   metro_station: user.metro_station,
                   bio: user.bio
                 }}
-                component={EditUserForm}
+                render={formikProps =>
+                  <EditUserForm
+                    {...formikProps}
+                    setShouldBlockNavigation={this.setShouldBlockNavigation}
+                  />
+                }
                 onSubmit={ async (values, actions) => {
                   await this.handleEditProfileSubmit(values);
                   actions.setSubmitting(false);

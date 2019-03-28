@@ -58,17 +58,19 @@ class UploadAvatarForm extends React.Component {
   }
 
   async componentDidUpdate(prevProps) {
-    if (prevProps.values.avatar === this.props.values.avatar) {
-      return;
+    if (prevProps.values.avatar !== this.props.values.avatar) {
+      const {avatar} = this.props.values;
+      const fileReader = new FileReader();
+      fileReader.onload = event => {
+        this.setState({
+          avatarThumb: event.target.result,
+        });
+      };
+      fileReader.readAsDataURL(avatar);
     }
-    const { avatar } = this.props.values;
-    const fileReader = new FileReader();
-    fileReader.onload = event => {
-      this.setState({
-        avatarThumb: event.target.result,
-      });
-    };
-    fileReader.readAsDataURL(avatar);
+    if (prevProps.dirty !== this.props.dirty) {
+      this.props.setShouldBlockNavigation(this.props.dirty);
+    }
   }
 
   render() {
