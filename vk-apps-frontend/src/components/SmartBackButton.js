@@ -18,8 +18,8 @@ const BackIcon = () => {
 
 const SmartBackButton = ({ history }) => {
   const historyAdapter = HistoryAdapter.getInstance();
-  const localHistoryLength = historyAdapter.getLocalHistoryLength();
-  return localHistoryLength > 1 && (
+  const canGoBack = historyAdapter.canGoBack();
+  return canGoBack && (
     <HeaderButton onClick={() => history.goBack()}>
       <BackIcon />
     </HeaderButton>
