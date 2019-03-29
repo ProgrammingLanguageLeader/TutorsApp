@@ -18,6 +18,12 @@ import ErrorMessageDiv from 'vk-apps-frontend/components/ErrorMessageDiv';
 import durationHumanizer from 'vk-apps-frontend/helpers/durationHumanizer';
 
 class LessonForm extends React.Component {
+  componentDidUpdate(prevProps) {
+    if (prevProps.dirty !== this.props.dirty) {
+      this.props.setShouldBlockNavigation(this.props.dirty);
+    }
+  }
+
   static validate(values) {
     const errorsData = {};
     if (!values.student) {

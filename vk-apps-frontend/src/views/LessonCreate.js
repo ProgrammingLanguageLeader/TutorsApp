@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Formik } from 'formik';
+import NavigationPrompt from 'react-router-navigation-prompt';
 import moment from 'moment';
 
 import View from '@vkontakte/vkui/dist/components/View/View';
@@ -11,6 +12,7 @@ import Group from '@vkontakte/vkui/dist/components/Group/Group';
 
 import SmartBackButton from 'vk-apps-frontend/components/SmartBackButton';
 import SuccessfulFormStatus from 'vk-apps-frontend/components/SuccessfulFormStatus';
+import ConfirmationPrompt from 'vk-apps-frontend/components/ConfirmationPrompt';
 
 import { lessonsActions, tutorsActions } from 'vk-apps-frontend/actions/api';
 
@@ -28,8 +30,10 @@ class LessonCreate extends React.Component {
     super(props);
     this.handleLessonFormSubmit = this.handleLessonFormSubmit.bind(this);
     this.scrollIntoStartDiv = this.scrollIntoStartDiv.bind(this);
+    this.setShouldBlockNavigation = this.setShouldBlockNavigation.bind(this);
     this.startDiv = React.createRef();
     this.state = {
+      shouldBlockNavigation: false,
       students: [],
       success: null,
       errors: {},
@@ -57,14 +61,19 @@ class LessonCreate extends React.Component {
     const success = response.status < 400;
     const errors = success ? {} : response;
     this.setState({
+      shouldBlockNavigation: false,
       success,
       errors,
     });
     this.scrollIntoStartDiv();
   }
 
+  setShouldBlockNavigation(shouldBlockNavigation) {
+    this.setState({ shouldBlockNavigation });
+  }
+
   render() {
-    const { students, success } = this.state;
+    const { students, success, shouldBlockNavigation } = this.state;
 
     return (
       <View id={this.props.id} activePanel={this.props.id}>
@@ -74,6 +83,16 @@ class LessonCreate extends React.Component {
           }>
             Создание урока
           </PanelHeader>
+
+          <NavigationPrompt when={shouldBlockNavigation}>
+            {({ onConfirm, onCancel }) => (
+              <ConfirmationPrompt
+                label="Некоторые данные будут потеряны. Вы действительно хотите покинуть эту страницу?"
+                onConfirm={onConfirm}
+                onCancel={onCancel}
+              />
+            )}
+          </NavigationPrompt>
 
           <div ref={this.startDiv} />
 
@@ -97,6 +116,7 @@ class LessonCreate extends React.Component {
                     {...formikProps}
                     students={students}
                     submitLabel="Создать"
+                    setShouldBlockNavigation={this.setShouldBlockNavigation}
                   />
                 )
               }
