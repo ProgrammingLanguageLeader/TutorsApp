@@ -25,7 +25,7 @@ import Icon24Article from '@vkontakte/icons/dist/24/article';
 import ErrorFormStatus from 'vk-apps-frontend/components/ErrorFormStatus';
 import DivSpinner from 'vk-apps-frontend/components/DivSpinner';
 import SmartBackButton from 'vk-apps-frontend/components/SmartBackButton';
-import DeleteConfirmationAlert from 'vk-apps-frontend/components/DeleteConfirmationAlert';
+import ConfirmationPrompt from 'vk-apps-frontend/components/ConfirmationPrompt';
 
 import { vacanciesActions, tutorsActions } from 'vk-apps-frontend/actions/api';
 
@@ -116,7 +116,7 @@ class Vacancy extends React.Component {
 
   deleteVacancyButtonClick(id) {
     const popout = (
-      <DeleteConfirmationAlert
+      <ConfirmationPrompt
         label="Вы уверены, что хотите удалить предложение?"
         onConfirm={async () => {
           await this.props.deleteVacancy(id);

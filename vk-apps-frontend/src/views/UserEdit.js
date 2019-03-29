@@ -1,5 +1,5 @@
 import React from 'react';
-import { Prompt } from 'react-router-dom';
+import NavigationPrompt from 'react-router-navigation-prompt';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Formik } from 'formik';
@@ -21,6 +21,7 @@ import { usersActions } from 'vk-apps-frontend/actions/api';
 
 import UploadAvatarForm from 'vk-apps-frontend/forms/UploadAvatarForm';
 import EditUserForm from 'vk-apps-frontend/forms/EditUserForm';
+import ConfirmationPrompt from 'vk-apps-frontend/components/ConfirmationPrompt';
 
 const mapStateToProps = state => {
   const { vkUserInfo } = state.VK.appsUser;
@@ -138,6 +139,7 @@ class UserEdit extends React.Component {
       ...values,
     };
     this.setState({
+      shouldBlockNavigation: false,
       fetching: false,
       errors,
       user,
@@ -159,10 +161,15 @@ class UserEdit extends React.Component {
             Изменение профиля
           </PanelHeader>
 
-          <Prompt
-            when={shouldBlockNavigation}
-            message="Возможна потеря несохраненных данных. Вы уверены, что хотите покинуть эту страницу?"
-          />
+          <NavigationPrompt when={shouldBlockNavigation}>
+            {({onConfirm, onCancel}) => (
+              <ConfirmationPrompt
+                label="Некоторые данные будут потеряны. Вы действительно хотите покинуть эту страницу?"
+                onConfirm={onConfirm}
+                onCancel={onCancel}
+              />
+            )}
+          </NavigationPrompt>
 
           {fetching && <DivSpinner />}
 

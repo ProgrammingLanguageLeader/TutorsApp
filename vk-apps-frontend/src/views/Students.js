@@ -10,7 +10,7 @@ import Footer from '@vkontakte/vkui/dist/components/Footer/Footer';
 import SmartBackButton from 'vk-apps-frontend/components/SmartBackButton';
 import DivSpinner from 'vk-apps-frontend/components/DivSpinner';
 import ShortUserCard from 'vk-apps-frontend/components/ShortUserCard';
-import DeleteConfirmationAlert from 'vk-apps-frontend/components/DeleteConfirmationAlert';
+import ConfirmationPrompt from 'vk-apps-frontend/components/ConfirmationPrompt';
 
 import { tutorsActions } from 'vk-apps-frontend/actions/api';
 
@@ -48,7 +48,7 @@ class Students extends React.Component {
 
   handleDeleteStudentButtonClick(id) {
     const popout = (
-      <DeleteConfirmationAlert
+      <ConfirmationPrompt
         label="Вы уверены, что хотите удалить ученика?"
         onClose={() => this.setState({
           popout: null,

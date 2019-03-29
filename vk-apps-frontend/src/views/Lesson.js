@@ -18,7 +18,7 @@ import Icon24Write from '@vkontakte/icons/dist/24/write';
 import Icon24Cancel from '@vkontakte/icons/dist/24/cancel';
 
 import ErrorFormStatus from 'vk-apps-frontend/components/ErrorFormStatus';
-import DeleteConfirmationAlert from 'vk-apps-frontend/components/DeleteConfirmationAlert';
+import ConfirmationPrompt from 'vk-apps-frontend/components/ConfirmationPrompt';
 import DivSpinner from 'vk-apps-frontend/components/DivSpinner';
 import SmartBackButton from 'vk-apps-frontend/components/SmartBackButton';
 
@@ -74,7 +74,7 @@ class Lesson extends React.Component {
 
   deleteLessonButtonClick(id) {
     const popout = (
-      <DeleteConfirmationAlert
+      <ConfirmationPrompt
         label="Вы уверены, что хотите удалить урок?"
         onConfirm={async () => {
           await this.props.deleteLesson(id);
