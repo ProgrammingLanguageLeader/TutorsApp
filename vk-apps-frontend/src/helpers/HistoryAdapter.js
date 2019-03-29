@@ -12,23 +12,27 @@ class HistoryAdapter {
       const { pathname } = location;
       switch (action) {
         case 'PUSH':
+          if (pathname === this.localHistory[this.localHistoryIndex])
+            break;
+          this.localHistoryIndex++;
+          if (this.localHistoryIndex !== this.localHistory.length) {
+            this.localHistory = this.localHistory.slice(0, this.localHistoryIndex);
+          }
           this.localHistory.push(pathname);
           break;
 
         case 'POP':
-          if (pathname === this.localHistory.slice(-2, -1)[0]) {
-            this.localHistory.pop();
+          if (pathname === this.localHistory[this.localHistoryIndex - 1]) {
+            this.localHistoryIndex--;
           }
-          else {
-            // TODO: forward button handling
-            // now it has problems with blocking history
-            // this.localHistory.push(pathname);
+          else if (pathname === this.localHistory[this.localHistoryIndex + 1]) {
+            this.localHistoryIndex++;
           }
           break;
 
         case 'REPLACE':
-          this.localHistory.pop();
-          this.localHistory.push(pathname);
+          this.localHistory[this.localHistoryIndex] = pathname;
+          this.localHistory = this.localHistory.slice(0, this.localHistoryIndex + 1);
           break;
 
         default:
@@ -39,6 +43,7 @@ class HistoryAdapter {
     });
     this.lastAction = '';
     this.localHistory = [this.history.location.pathname];
+    this.localHistoryIndex = 0;
 
     this.getHistory = this.getHistory.bind(this);
     this.getLastAction = this.getLastAction.bind(this);
@@ -80,7 +85,7 @@ class HistoryAdapter {
   }
 
   canGoBack() {
-    return this.localHistory.length > 1;
+    return this.localHistoryIndex > 0;
   }
 }
 
