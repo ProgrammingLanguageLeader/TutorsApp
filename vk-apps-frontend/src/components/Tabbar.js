@@ -56,47 +56,52 @@ class MyTabbar extends React.Component {
   }
 
   render() {
-    const { location, hidden, currentUserId, history } = this.props;
+    const { location, currentUserId, history } = this.props;
     const { unreadNotificationsCount } = this.state;
+
+    const hidden = !([
+      `/user/${currentUserId}`,
+      '/vacancies',
+      '/schedule',
+      '/notifications',
+      '/main_menu',
+    ].includes(location.pathname));
 
     return (
       !hidden && (
         <Tabbar>
           <TabbarItem
-            selected={location.pathname.startsWith('/user')}
-            onClick={() => history.pushWithFlush(`/user/${currentUserId}`)}
+            selected={location.pathname === `/user/${currentUserId}`}
+            onClick={() => history.replace(`/user/${currentUserId}`)}
           >
             <Icon28User/>
           </TabbarItem>
 
           <TabbarItem
-            selected={
-              location.pathname.startsWith('/vacancy')
-              || location.pathname.startsWith('/vacancies')
-            }
-            onClick={() => history.pushWithFlush('/vacancies')}
+            selected={location.pathname === '/vacancies'}
+            onClick={() => history.replace('/vacancies')}
           >
             <Icon28Search/>
           </TabbarItem>
 
           <TabbarItem
-            selected={location.pathname.startsWith('/schedule')}
-            onClick={() => history.pushWithFlush('/schedule')}
+            selected={location.pathname === '/schedule'}
+            onClick={() => history.replace('/schedule')}
           >
             <Icon28Newsfeed/>
           </TabbarItem>
 
           <TabbarItem
-            selected={location.pathname.startsWith('/notifications')}
+            selected={location.pathname === '/notifications'}
             label={unreadNotificationsCount ? unreadNotificationsCount : null}
-            onClick={() => history.pushWithFlush('/notifications')}
+            onClick={() => history.replace('/notifications')}
           >
             <Icon28Notification/>
           </TabbarItem>
 
           <TabbarItem
-            selected={location.pathname.startsWith('/main_menu')}
-            onClick={() => history.pushWithFlush('/main_menu')}
+            selected={location.pathname === '/main_menu'}
+            onClick={() => history.replace('/main_menu')}
           >
             <Icon28Menu/>
           </TabbarItem>

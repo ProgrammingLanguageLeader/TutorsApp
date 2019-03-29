@@ -106,7 +106,6 @@ class App extends React.Component {
                   activeStory="root"
                   tabbar={
                     <Tabbar
-                      hidden={!currentUser.user}
                       currentUserId={currentUser.user && currentUser.user.id}
                       history={this.history}
                       location={location}

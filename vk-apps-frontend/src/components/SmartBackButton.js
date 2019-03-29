@@ -6,8 +6,6 @@ import HeaderButton from '@vkontakte/vkui/dist/components/HeaderButton/HeaderBut
 import Icon28ChevronBack from '@vkontakte/icons/dist/28/chevron_back';
 import Icon24Back from '@vkontakte/icons/dist/24/back';
 
-import HistoryAdapter from 'vk-apps-frontend/helpers/HistoryAdapter';
-
 const BackIcon = () => {
   const osname = platform();
   if (osname === IOS) {
@@ -17,8 +15,7 @@ const BackIcon = () => {
 };
 
 const SmartBackButton = ({ history }) => {
-  const historyAdapter = HistoryAdapter.getInstance();
-  const canGoBack = historyAdapter.canGoBack();
+  const canGoBack = history.canGoBack();
   return canGoBack && (
     <HeaderButton onClick={() => history.goBack()}>
       <BackIcon />

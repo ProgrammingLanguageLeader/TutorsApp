@@ -1,26 +1,51 @@
-import { createMemoryHistory } from 'history';
+import { createHashHistory } from 'history';
 
 class HistoryAdapter {
   constructor() {
     if (HistoryAdapter.instance) {
       throw 'HistoryAdapter instance already exists. Use getInstance() instead';
     }
-    this.history = createMemoryHistory({
-      initialEntries: ['/'],
-      initialIndex: 0,
-      getUserConfirmation: (message, callback) => {
-        callback(window.confirm(message))
-      }
+    this.history = createHashHistory({
+      hashType: 'noslash'
     });
+    this.history.listen((location, action) => {
+      const { pathname } = location;
+      switch (action) {
+        case 'PUSH':
+          this.localHistory.push(pathname);
+          break;
+
+        case 'POP':
+          if (pathname === this.localHistory.slice(-2, -1)[0]) {
+            this.localHistory.pop();
+          }
+          else {
+            // TODO: forward button handling
+            // now it has problems with blocking history
+            // this.localHistory.push(pathname);
+          }
+          break;
+
+        case 'REPLACE':
+          this.localHistory.pop();
+          this.localHistory.push(pathname);
+          break;
+
+        default:
+          console.log(`Unknown type of action: ${action}`);
+          break;
+      }
+      this.lastAction = action;
+    });
+    this.lastAction = '';
+    this.localHistory = [this.history.location.pathname];
 
     this.getHistory = this.getHistory.bind(this);
     this.getLastAction = this.getLastAction.bind(this);
-    this.getHistoryLength = this.getHistoryLength.bind(this);
+    this.getLocalHistoryLength = this.getLocalHistoryLength.bind(this);
     this.push = this.push.bind(this);
     this.goBack = this.goBack.bind(this);
     this.replace = this.replace.bind(this);
-    this.pushWithFlush = this.pushWithFlush.bind(this);
-    this.canGoBack = this.canGoBack.bind(this);
   }
 
   static getInstance() {
@@ -42,30 +67,20 @@ class HistoryAdapter {
     this.history.replace(path);
   }
 
-  pushWithFlush(path) {
-    const lastLocation = this.history.entries.slice(-1)[0];
-    if (lastLocation === path) {
-      return;
-    }
-    this.push(path);
-    this.history.entries = this.history.entries.slice(-1);
-    this.history.index = 0;
-  }
-
   getHistory() {
     return this.history;
   }
 
   getLastAction() {
-    return this.history.action;
+    return this.lastAction;
   }
 
-  getHistoryLength() {
-    return this.history.entries.length;
+  getLocalHistoryLength() {
+    return this.localHistory.length;
   }
 
   canGoBack() {
-    return this.history.canGo(-1);
+    return this.localHistory.length > 1;
   }
 }
 
