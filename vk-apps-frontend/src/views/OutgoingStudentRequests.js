@@ -78,18 +78,7 @@ class OutgoingStudentRequests extends React.Component {
               <Cell
                 key={studentRequest.id}
                 expandable
-                description={
-                  <div>
-                    <div>
-                      Создана
-                    </div>
-                    <div>
-                      <Moment locale="ru" format="D MMMM YYYY">
-                        {studentRequest.creation_time}
-                      </Moment>
-                    </div>
-                  </div>
-                }
+                description="Нажмите для просмотра"
                 before={<Avatar size={64} src={ROOT_URL + studentRequest.tutor.avatar} />}
                 onClick={() => this.props.history.push(`/student_request/${studentRequest.id}`)}
               >

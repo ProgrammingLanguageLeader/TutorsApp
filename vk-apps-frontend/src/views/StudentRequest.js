@@ -98,7 +98,13 @@ class StudentRequest extends React.Component {
           {studentRequest && (
             <div>
               <Group title={isTutor ? "Информация об ученике" : "Информация об учителе"}>
-                <Cell before={<Avatar size={64} src={ROOT_URL + showingUser.avatar} />}>
+                <Cell
+                  expandable
+                  onClick={() => this.props.history.push(`/user/${showingUser.id}`)}
+                  before={
+                    <Avatar size={64} src={ROOT_URL + showingUser.avatar} />
+                  }
+                >
                   {showingUser.first_name} {showingUser.last_name}
                 </Cell>
 
