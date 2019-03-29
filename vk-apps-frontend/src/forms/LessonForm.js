@@ -13,7 +13,6 @@ import Slider from '@vkontakte/vkui/dist/components/Slider/Slider';
 import DivSpinner from 'vk-apps-frontend/components/DivSpinner';
 import TimePicker from 'vk-apps-frontend/components/TimePicker';
 import ErrorFormStatus from 'vk-apps-frontend/components/ErrorFormStatus';
-import ErrorMessageDiv from 'vk-apps-frontend/components/ErrorMessageDiv';
 
 import durationHumanizer from 'vk-apps-frontend/helpers/durationHumanizer';
 
@@ -62,23 +61,21 @@ class LessonForm extends React.Component {
           <DivSpinner/>
         )}
 
-        <FormLayoutGroup top="Ученик">
-          <Select
-            name="student"
-            value={values.student}
-            placeholder="Выберите ученика"
-            onChange={handleChange}
-          >
-            { students.map(student => (
-              <option value={student.id} key={student.id}>
-                {student.first_name} {student.last_name}
-              </option>
-            ))}
-          </Select>
-          {errors.data && errors.data["student"] && (
-            <ErrorMessageDiv>{errors.data["student"]}</ErrorMessageDiv>
-          )}
-        </FormLayoutGroup>
+        <Select
+          top="Ученик"
+          status={errors.data && errors.data["student"] && "error"}
+          bottom={errors.data && errors.data["student"]}
+          name="student"
+          value={values.student}
+          placeholder="Выберите ученика"
+          onChange={handleChange}
+        >
+          { students.map(student => (
+            <option value={student.id} key={student.id}>
+              {student.first_name} {student.last_name}
+            </option>
+          ))}
+        </Select>
 
         <FormLayoutGroup top="День занятия">
           <Div>
@@ -120,36 +117,30 @@ class LessonForm extends React.Component {
           </Div>
         </FormLayoutGroup>
 
-        <FormLayoutGroup top={`Длительность - ${durationHumanizer(values.duration)}`}>
-          <Slider
-            min={0.5}
-            max={4}
-            step={0.25}
-            value={values.duration.asHours()}
-            onChange={durationHours => setFieldValue(
-              "duration",
-              moment.duration(durationHours * 60, 'minutes')
-            )}
-          />
-          {errors.data && errors.data["duration"] && (
-            <ErrorMessageDiv>{errors.data["duration"]}</ErrorMessageDiv>
+        <Slider
+          top={`Длительность - ${durationHumanizer(values.duration)}`}
+          min={0.5}
+          max={4}
+          step={0.25}
+          value={values.duration.asHours()}
+          onChange={durationHours => setFieldValue(
+            "duration",
+            moment.duration(durationHours * 60, 'minutes')
           )}
-        </FormLayoutGroup>
+        />
 
-        <FormLayoutGroup top="Цена">
-          <Input
-            name="price"
-            type="number"
-            min="1"
-            max="10000"
-            inputMode="numeric"
-            onChange={handleChange}
-            value={String(values.price || "")}
-          />
-          {errors.data && errors.data["price"] && (
-            <ErrorMessageDiv>{errors.data["price"]}</ErrorMessageDiv>
-          )}
-        </FormLayoutGroup>
+        <Input
+          top="Цена"
+          status={errors.data && errors.data["price"] && "error"}
+          bottom={errors.data && errors.data["price"]}
+          name="price"
+          type="number"
+          min="1"
+          max="10000"
+          inputMode="numeric"
+          onChange={handleChange}
+          value={String(values.price || "")}
+        />
 
         <Button size="xl" onClick={handleSubmit} disabled={!isValid}>
           {submitLabel || 'Отправить'}

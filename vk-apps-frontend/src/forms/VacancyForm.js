@@ -11,7 +11,6 @@ import Textarea from '@vkontakte/vkui/dist/components/Textarea/Textarea';
 import { educationLevelList, subjectsList } from 'vk-apps-frontend/constants';
 
 import ErrorFormStatus from 'vk-apps-frontend/components/ErrorFormStatus';
-import ErrorMessageDiv from 'vk-apps-frontend/components/ErrorMessageDiv';
 
 class VacancyForm extends React.Component {
   constructor(props) {
@@ -20,6 +19,12 @@ class VacancyForm extends React.Component {
       selectSubject: '',
       inputSubject: '',
     };
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.dirty !== this.props.dirty) {
+      this.props.setShouldBlockNavigation(this.props.dirty);
+    }
   }
 
   componentDidMount() {
@@ -67,54 +72,50 @@ class VacancyForm extends React.Component {
     const { selectSubject, inputSubject } = this.state;
 
     return (
-      <FormLayout>
+      <FormLayout status="default">
         { Object.keys(errors).length > 0 && (
           <ErrorFormStatus errors={errors} />
         )}
 
-        <FormLayoutGroup top="Предмет">
-          <Select
-            name="select_subject"
-            value={selectSubject}
-            placeholder="Выберите предмет"
-            onChange={event => {
-              setFieldValue("subject", event.currentTarget.value);
-              this.setState({
-                selectSubject: event.currentTarget.value,
-                inputSubject: '',
-              });
-            }}
-          >
-            { subjectsList.map(subject => (
-              <option value={subject} key={subject}>
-                {subject}
-              </option>
-            ))}
-          </Select>
-          {errors.data && errors.data["subject"] && (
-            <ErrorMessageDiv>{errors.data["subject"]}</ErrorMessageDiv>
-          )}
-        </FormLayoutGroup>
+        <Select
+          top="Предмет"
+          status={errors.data && errors.data.subject && "error"}
+          bottom={errors.data && errors.data.subject}
+          name="select_subject"
+          value={selectSubject}
+          placeholder="Выберите предмет"
+          onChange={event => {
+            setFieldValue('subject', event.currentTarget.value);
+            this.setState({
+              selectSubject: event.currentTarget.value,
+              inputSubject: '',
+            });
+          }}
+        >
+          { subjectsList.map(subject => (
+            <option value={subject} key={subject}>
+              {subject}
+            </option>
+          ))}
+        </Select>
 
-        <FormLayoutGroup top="Если вашего предмета не оказалось в списке, введите его название вручную">
-          <Input
-            name="input_subject"
-            maxLength={128}
-            type="text"
-            placeholder="Введите название предмета"
-            value={inputSubject}
-            onChange={event => {
-              setFieldValue("subject", event.currentTarget.value);
-              this.setState({
-                selectSubject: '',
-                inputSubject: event.currentTarget.value,
-              });
-            }}
-          />
-          {errors.data && errors.data["subject"] && (
-            <ErrorMessageDiv>{errors.data["subject"]}</ErrorMessageDiv>
-          )}
-        </FormLayoutGroup>
+        <Input
+          top="Если вашего предмета не оказалось в списке, введите его название вручную"
+          status={errors.data && errors.data.subject && "error"}
+          bottom={errors.data && errors.data.subject}
+          name="input_subject"
+          maxLength={128}
+          type="text"
+          placeholder="Введите название предмета"
+          value={inputSubject}
+          onChange={event => {
+            setFieldValue("subject", event.currentTarget.value);
+            this.setState({
+              selectSubject: '',
+              inputSubject: event.currentTarget.value,
+            });
+          }}
+        />
 
         <FormLayoutGroup top="Уровень обучения">
           { educationLevelList.map(level => (
@@ -139,32 +140,28 @@ class VacancyForm extends React.Component {
           </Checkbox>
         </FormLayoutGroup>
 
-        <FormLayoutGroup top="Плата за час обучения">
-          <Input
-            name="price"
-            type="number"
-            min="1"
-            max="10000"
-            inputMode="numeric"
-            onChange={handleChange}
-            value={String(values.price || '')}
-          />
-          {errors.data && errors.data["price"] && (
-            <ErrorMessageDiv>{errors.data["price"]}</ErrorMessageDiv>
-          )}
-        </FormLayoutGroup>
+        <Input
+          top="Плата за час обучения"
+          status={errors.data && errors.data.price && "error"}
+          bottom={errors.data && errors.data.price}
+          name="price"
+          type="number"
+          min="1"
+          max="10000"
+          inputMode="numeric"
+          onChange={handleChange}
+          value={String(values.price || '')}
+        />
 
-        <FormLayoutGroup top="Дополнительная информация">
-          <Textarea
-            name="extra_info"
-            maxLength={128}
-            onChange={handleChange}
-            value={values.extra_info}
-          />
-          {errors.data && errors.data["extra_info"] && (
-            <ErrorMessageDiv>{errors.data["extra_info"]}</ErrorMessageDiv>
-          )}
-        </FormLayoutGroup>
+        <Textarea
+          top="Дополнительная информация"
+          status={errors.data && errors.data.extra_info && "error"}
+          bottom={errors.data && errors.data.extra_info}
+          name="extra_info"
+          maxLength={128}
+          onChange={handleChange}
+          value={values.extra_info}
+        />
 
         <Button size="xl" onClick={handleSubmit} disabled={!isValid}>
           {submitLabel || "Отправить"}
