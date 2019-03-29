@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Formik } from 'formik';
+import NavigationPrompt from 'react-router-navigation-prompt';
 
 import View from '@vkontakte/vkui/dist/components/View/View';
 import Panel from '@vkontakte/vkui/dist/components/Panel/Panel';
@@ -12,6 +13,7 @@ import SmartBackButton from 'vk-apps-frontend/components/SmartBackButton';
 import DivSpinner from 'vk-apps-frontend/components/DivSpinner';
 import SuccessfulFormStatus from 'vk-apps-frontend/components/SuccessfulFormStatus';
 import FormDisclaimer from 'vk-apps-frontend/components/FormDisclaimer';
+import ConfirmationPrompt from 'vk-apps-frontend/components/ConfirmationPrompt';
 
 import VacancyForm from 'vk-apps-frontend/forms/VacancyForm';
 
@@ -30,7 +32,9 @@ class VacancyEdit extends React.Component {
     this.startDiv = React.createRef();
     this.handleVacancyEditSubmit = this.handleVacancyEditSubmit.bind(this);
     this.scrollIntoViewStartDiv = this.scrollIntoViewStartDiv.bind(this);
+    this.setShouldBlockNavigation = this.setShouldBlockNavigation.bind(this);
     this.state = {
+      shouldBlockNavigation: false,
       vacancy: null,
       success: null,
       errors: {},
@@ -61,14 +65,19 @@ class VacancyEdit extends React.Component {
     const success = response.status < 400;
     const errors = success ? {} : response;
     this.setState({
+      shouldBlockNavigation: false,
       success,
       errors,
     });
     this.scrollIntoViewStartDiv();
   }
 
+  setShouldBlockNavigation(shouldBlockNavigation) {
+    this.setState({ shouldBlockNavigation });
+  }
+
   render() {
-    const { fetching, success, vacancy } = this.state;
+    const { fetching, success, vacancy, shouldBlockNavigation } = this.state;
 
     return (
       <View id={this.props.id} activePanel={this.props.id}>
@@ -78,6 +87,16 @@ class VacancyEdit extends React.Component {
           }>
             Редактирование предложения
           </PanelHeader >
+
+          <NavigationPrompt when={shouldBlockNavigation}>
+            {({ onConfirm, onCancel }) => (
+              <ConfirmationPrompt
+                label="Некоторые данные будут потеряны. Вы действительно хотите покинуть эту страницу?"
+                onConfirm={onConfirm}
+                onCancel={onCancel}
+              />
+            )}
+          </NavigationPrompt>
 
           <div ref={this.startDiv} />
 
@@ -90,31 +109,33 @@ class VacancyEdit extends React.Component {
           <Group title="Заполняемые поля">
             {success && <SuccessfulFormStatus title="Успешно" />}
 
-            <Formik
-              initialValues={{
-                ...vacancy,
-              }}
-              validate={values => {
-                this.setState({
-                  success: false,
-                });
-                return VacancyForm.validate(values)
-              }}
-              enableReinitialize
-              render={formikProps =>
-                <VacancyForm
-                  { ...formikProps }
-                  submitLabel="Редактировать"
-                />
-              }
-              onSubmit={ async (values, action) => {
-                const { id } = vacancy;
-                await this.handleVacancyEditSubmit(id, values);
-                const { errors } = this.state;
-                action.setErrors(errors);
-                action.setSubmitting(false);
-              }}
-            />
+            {vacancy && (
+              <Formik
+                initialValues={{
+                  ...vacancy,
+                }}
+                validate={values => {
+                  this.setState({
+                    success: false,
+                  });
+                  return VacancyForm.validate(values)
+                }}
+                render={formikProps =>
+                  <VacancyForm
+                    { ...formikProps }
+                    submitLabel="Редактировать"
+                    setShouldBlockNavigation={this.setShouldBlockNavigation}
+                  />
+                }
+                onSubmit={ async (values, action) => {
+                  const { id } = vacancy;
+                  await this.handleVacancyEditSubmit(id, values);
+                  const { errors } = this.state;
+                  action.setErrors(errors);
+                  action.setSubmitting(false);
+                }}
+              />
+            )}
           </Group>
         </Panel>
       </View>

@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Formik } from 'formik';
+import NavigationPrompt from 'react-router-navigation-prompt';
 
 import View from '@vkontakte/vkui/dist/components/View/View';
 import Panel from '@vkontakte/vkui/dist/components/Panel/Panel';
@@ -10,6 +11,7 @@ import Group from '@vkontakte/vkui/dist/components/Group/Group';
 
 import SmartBackButton from 'vk-apps-frontend/components/SmartBackButton';
 import FormDisclaimer from 'vk-apps-frontend/components/FormDisclaimer';
+import ConfirmationPrompt from 'vk-apps-frontend/components/ConfirmationPrompt';
 
 import VacancyForm from 'vk-apps-frontend/forms/VacancyForm';
 
@@ -27,7 +29,9 @@ class VacancyCreate extends React.Component {
     this.startDiv = React.createRef();
     this.handleCreateVacancyFormSubmit = this.handleCreateVacancyFormSubmit.bind(this);
     this.scrollIntoStartDiv = this.scrollIntoStartDiv.bind(this);
+    this.setShouldBlockNavigation = this.setShouldBlockNavigation.bind(this);
     this.state = {
+      shouldBlockNavigation: false,
       errors: {},
     };
   }
@@ -44,6 +48,7 @@ class VacancyCreate extends React.Component {
     });
     const errors = response.status < 400 ? {} : response;
     this.setState({
+      shouldBlockNavigation: false,
       errors,
     });
     if (Object.keys(errors).length === 0) {
@@ -54,7 +59,13 @@ class VacancyCreate extends React.Component {
     }
   }
 
+  setShouldBlockNavigation(shouldBlockNavigation) {
+    this.setState({ shouldBlockNavigation });
+  }
+
   render() {
+    const { shouldBlockNavigation } = this.state;
+
     return (
       <View id={this.props.id} activePanel={this.props.id}>
         <Panel id={this.props.id}>
@@ -63,6 +74,16 @@ class VacancyCreate extends React.Component {
           }>
             Создание предложения
           </PanelHeader >
+
+          <NavigationPrompt when={shouldBlockNavigation}>
+            {({ onConfirm, onCancel }) => (
+              <ConfirmationPrompt
+                label="Некоторые данные будут потеряны. Вы действительно хотите покинуть эту страницу?"
+                onConfirm={onConfirm}
+                onCancel={onCancel}
+              />
+            )}
+          </NavigationPrompt>
 
           <div ref={this.startDiv} />
 
@@ -76,12 +97,10 @@ class VacancyCreate extends React.Component {
                 <VacancyForm
                   { ...formikProps }
                   submitLabel="Создать"
+                  setShouldBlockNavigation={this.setShouldBlockNavigation}
                 />
               }
               validate={values => {
-                this.setState({
-                  success: false,
-                });
                 return VacancyForm.validate(values)
               }}
               enableReinitialize
