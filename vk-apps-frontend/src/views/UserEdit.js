@@ -123,7 +123,7 @@ class UserEdit extends React.Component {
     const response = await this.props.updateUser(id, {
       first_name: unescapeHtmlString(first_name),
       last_name: unescapeHtmlString(last_name),
-      city: city ? city.title : null,
+      city: city ? city.title : '',
     });
     const errors = response.status < 400 ? {} : response;
     this.setState({
