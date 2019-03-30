@@ -94,8 +94,8 @@ class UploadAvatarForm extends React.Component {
         {isSubmitting && <DivSpinner />}
 
         <FormLayoutGroup>
-          <Button size="xl" onClick={handleUploadFromVK}>
-            Загрузить аватар из ВКонтакте
+          <Button size="xl" onClick={handleUploadFromVK} disabled={isSubmitting}>
+            Загрузить аватар из VK
           </Button>
 
           <File
@@ -122,7 +122,7 @@ class UploadAvatarForm extends React.Component {
                 alt="Выбранное изображение"
               />
             </CenteredDiv>
-            <Button before={<Icon24Upload />} size="xl" onClick={handleSubmit}>
+            <Button before={<Icon24Upload />} size="xl" onClick={handleSubmit} disabled={isSubmitting}>
               Загрузить
             </Button>
           </FormLayoutGroup>

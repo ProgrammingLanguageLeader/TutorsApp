@@ -21,8 +21,11 @@ class EditUserForm extends React.Component {
       errors,
       handleChange,
       handleSubmit,
+      handleSyncDataWithVk,
+      isSyncing,
       isSubmitting,
     } = this.props;
+    const disabled = isSubmitting || isSyncing;
 
     return (
       <FormLayout>
@@ -32,6 +35,10 @@ class EditUserForm extends React.Component {
         {isSubmitting && (
           <DivSpinner/>
         )}
+
+        <Button size="xl" onClick={handleSyncDataWithVk} disabled={disabled}>
+          Загрузить данные из VK
+        </Button>
 
         <Input
           name="first_name"
@@ -123,7 +130,7 @@ class EditUserForm extends React.Component {
           onChange={handleChange}
         />
 
-        <Button size="xl" onClick={handleSubmit} disabled={isSubmitting}>
+        <Button size="xl" onClick={handleSubmit} disabled={disabled}>
           Сохранить
         </Button>
       </FormLayout>

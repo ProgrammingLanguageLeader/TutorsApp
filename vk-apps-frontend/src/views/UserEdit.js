@@ -15,13 +15,14 @@ import Group from '@vkontakte/vkui/dist/components/Group/Group';
 import SmartBackButton from 'vk-apps-frontend/components/SmartBackButton';
 import DivSpinner from 'vk-apps-frontend/components/DivSpinner';
 import FormDisclaimer from 'vk-apps-frontend/components/FormDisclaimer';
+import ConfirmationPrompt from 'vk-apps-frontend/components/ConfirmationPrompt';
 
 import { ROOT_URL } from 'vk-apps-frontend/constants';
 import { usersActions } from 'vk-apps-frontend/actions/api';
 
 import UploadAvatarForm from 'vk-apps-frontend/forms/UploadAvatarForm';
 import EditUserForm from 'vk-apps-frontend/forms/EditUserForm';
-import ConfirmationPrompt from 'vk-apps-frontend/components/ConfirmationPrompt';
+import unescapeHtmlString from 'vk-apps-frontend/helpers/unescapeHtmlString';
 
 const mapStateToProps = state => {
   const { vkUserInfo } = state.VK.appsUser;
@@ -45,6 +46,7 @@ class UserEdit extends React.Component {
     this.handleUploadAvatarFormSubmit = this.handleUploadAvatarFormSubmit.bind(this);
     this.fetchUser = this.fetchUser.bind(this);
     this.handleUploadAvatarFromVK = this.handleUploadAvatarFromVK.bind(this);
+    this.handleSyncDataWithVk = this.handleSyncDataWithVk.bind(this);
     this.setShouldBlockNavigation = this.setShouldBlockNavigation.bind(this);
     this.state = {
       user: null,
@@ -103,6 +105,32 @@ class UserEdit extends React.Component {
       avatar,
     });
     const errors = uploadAvatarResponse.status < 400 ? {} : uploadAvatarResponse;
+    this.setState({
+      shouldBlockNavigation: false,
+      errors,
+    });
+    if (Object.keys(errors).length === 0) {
+      this.props.history.goBack();
+    }
+  }
+
+  async handleSyncDataWithVk() {
+    this.setState({
+      fetching: true,
+    });
+    const { id } = this.props.match.params;
+    const { first_name, last_name, city } = this.props.vkUserInfo;
+    const response = await this.props.updateUser(id, {
+      first_name: unescapeHtmlString(first_name),
+      last_name: unescapeHtmlString(last_name),
+      city: city ? city.title : null,
+    });
+    const errors = response.status < 400 ? {} : response;
+    this.setState({
+      shouldBlockNavigation: false,
+      fetching: false,
+      errors,
+    });
     if (Object.keys(errors).length === 0) {
       this.props.history.goBack();
     }
@@ -116,33 +144,23 @@ class UserEdit extends React.Component {
     });
     const errors = response.status < 400 ? {} : response;
     this.setState({
-      fetching: false,
+      shouldBlockNavigation: false,
       errors,
     });
-    await this.fetchUser();
     if (Object.keys(errors).length === 0) {
       this.props.history.goBack();
     }
   }
 
   async handleEditProfileSubmit(values) {
-    this.setState({
-      fetching: true,
-    });
     const { id } = this.props.match.params;
     const response = await this.props.updateUser(id, {
       ...values
     });
     const errors = response.status < 400 ? {} : response;
-    const user = {
-      ...this.state.user,
-      ...values,
-    };
     this.setState({
       shouldBlockNavigation: false,
-      fetching: false,
       errors,
-      user,
     });
     if (Object.keys(errors).length === 0) {
       this.props.history.goBack();
@@ -229,7 +247,9 @@ class UserEdit extends React.Component {
                 render={formikProps =>
                   <EditUserForm
                     {...formikProps}
+                    handleSyncDataWithVk={this.handleSyncDataWithVk}
                     setShouldBlockNavigation={this.setShouldBlockNavigation}
+                    isSyncing={fetching}
                   />
                 }
                 onSubmit={ async (values, actions) => {
