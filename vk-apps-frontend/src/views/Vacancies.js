@@ -80,6 +80,10 @@ class Vacancies extends React.Component {
     await this.setState({
       pageNumber,
     });
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
     await this.fetchVacancies();
   }
 
@@ -109,7 +113,7 @@ class Vacancies extends React.Component {
 
           {fetching && <DivSpinner />}
 
-          {vacancies && (
+          {!fetching && (
             <div>
               <Group title="Список предложений">
                 <List>
