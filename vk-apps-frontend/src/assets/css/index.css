@@ -16,20 +16,8 @@ a {
     cursor: pointer;
 }
 
-input {
-    -webkit-user-select: text !important;
-}
-
 button, .CellButton, .Button, .Cell--expandable {
     cursor: pointer;
-}
-
-* {
-    user-select: none !important;
-    -moz-user-select: none !important;
-    -ms-user-select: none !important;
-    -webkit-user-select: none !important;
-    -webkit-touch-callout: none !important;
 }
 
 /* Date picker styles */
