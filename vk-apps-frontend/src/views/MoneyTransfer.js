@@ -34,16 +34,9 @@ const mapDispatchToProps = dispatch => {
 class MoneyTransfer extends React.Component {
   constructor(props) {
     super(props);
-    this.startDiv = React.createRef();
     this.state = {
       tutors: [],
     }
-  }
-
-  componentDidUpdate() {
-    this.startDiv.current.scrollIntoView({
-      behavior: 'smooth',
-    });
   }
 
   async componentDidMount() {
@@ -67,8 +60,6 @@ class MoneyTransfer extends React.Component {
           }>
             Перевод денег
           </PanelHeader>
-
-          <div ref={this.startDiv} />
 
           <Group title="Форма перевода">
             <Formik
@@ -101,6 +92,10 @@ class MoneyTransfer extends React.Component {
                 );
                 actions.setSubmitting(false);
                 actions.setErrors(this.props.errors || {});
+                window.scrollTo({
+                  top: 0,
+                  behavior: 'smooth',
+                });
               }}
             />
           </Group>

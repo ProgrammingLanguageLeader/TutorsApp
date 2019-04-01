@@ -46,7 +46,7 @@ class EditUserForm extends React.Component {
           top="Имя"
           status={errors.data && errors.data["first_name"] && "error"}
           bottom={errors.data && errors.data["first_name"]}
-          value={values.first_name}
+          value={values.first_name || ""}
           onChange={handleChange}
         />
 
@@ -56,7 +56,7 @@ class EditUserForm extends React.Component {
           top="Фамилия"
           status={errors.data && errors.data["last_name"] && "error"}
           bottom={errors.data && errors.data["last_name"]}
-          value={values.last_name}
+          value={values.last_name || ""}
           onChange={handleChange}
         />
 
@@ -66,7 +66,7 @@ class EditUserForm extends React.Component {
           top="Опыт преподавания"
           status={errors.data && errors.data["experience"] && "error"}
           bottom={errors.data && errors.data["experience"]}
-          value={values.experience}
+          value={values.experience || ""}
           onChange={handleChange}
         />
 
@@ -76,7 +76,7 @@ class EditUserForm extends React.Component {
           top="Образование"
           status={errors.data && errors.data["education"] && "error"}
           bottom={errors.data && errors.data["education"]}
-          value={values.education}
+          value={values.education || ""}
           onChange={handleChange}
         />
 
@@ -86,7 +86,7 @@ class EditUserForm extends React.Component {
           top="Город"
           status={errors.data && errors.data["city"] && "error"}
           bottom={errors.data && errors.data["city"]}
-          value={values.city}
+          value={values.city || ""}
           onChange={handleChange}
         />
 
@@ -96,7 +96,7 @@ class EditUserForm extends React.Component {
           top="Район"
           status={errors.data && errors.data["district"] && "error"}
           bottom={errors.data && errors.data["district"]}
-          value={values.district}
+          value={values.district || ""}
           onChange={handleChange}
         />
 
@@ -106,7 +106,7 @@ class EditUserForm extends React.Component {
           top="Улица"
           status={errors.data && errors.data["street"] && "error"}
           bottom={errors.data && errors.data["street"]}
-          value={values.street}
+          value={values.street || ""}
           onChange={handleChange}
         />
 
@@ -116,7 +116,7 @@ class EditUserForm extends React.Component {
           top="Станция метро"
           status={errors.data && errors.data["metro_station"] && "error"}
           bottom={errors.data && errors.data["metro_station"]}
-          value={values.metro_station}
+          value={values.metro_station || ""}
           onChange={handleChange}
         />
 
@@ -126,7 +126,7 @@ class EditUserForm extends React.Component {
           top="О себе"
           status={errors.data && errors.data["bio"] && "error"}
           bottom={errors.data && errors.data["bio"]}
-          value={values.bio}
+          value={values.bio || ""}
           onChange={handleChange}
         />
 

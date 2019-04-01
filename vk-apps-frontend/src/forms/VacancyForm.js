@@ -67,7 +67,7 @@ class VacancyForm extends React.Component {
       handleSubmit,
       setFieldValue,
       submitLabel,
-      isValid
+      isSubmitting
     } = this.props;
     const { selectSubject, inputSubject } = this.state;
 
@@ -82,7 +82,7 @@ class VacancyForm extends React.Component {
           status={errors.data && errors.data.subject && "error"}
           bottom={errors.data && errors.data.subject}
           name="select_subject"
-          value={selectSubject}
+          value={selectSubject || ""}
           placeholder="Выберите предмет"
           onChange={event => {
             setFieldValue('subject', event.currentTarget.value);
@@ -107,7 +107,7 @@ class VacancyForm extends React.Component {
           maxLength={128}
           type="text"
           placeholder="Введите название предмета"
-          value={inputSubject}
+          value={inputSubject || ""}
           onChange={event => {
             setFieldValue("subject", event.currentTarget.value);
             this.setState({
@@ -123,7 +123,7 @@ class VacancyForm extends React.Component {
               key={level.name}
               name={level.backendField}
               onChange={handleChange}
-              checked={values[level.backendField]}
+              checked={values[level.backendField] || false}
             >
               {level.name}
             </Checkbox>
@@ -134,7 +134,7 @@ class VacancyForm extends React.Component {
           <Checkbox
             name="home_schooling"
             onChange={handleChange}
-            checked={values.home_schooling}
+            checked={values.home_schooling || false}
           >
             Да
           </Checkbox>
@@ -151,7 +151,7 @@ class VacancyForm extends React.Component {
           inputMode="numeric"
           pattern="[0-9]*"
           onChange={handleChange}
-          value={String(values.price || '')}
+          value={String(values.price || "")}
         />
 
         <Textarea
@@ -161,10 +161,10 @@ class VacancyForm extends React.Component {
           name="extra_info"
           maxLength={128}
           onChange={handleChange}
-          value={values.extra_info}
+          value={values.extra_info || ""}
         />
 
-        <Button size="xl" onClick={handleSubmit} disabled={!isValid}>
+        <Button size="xl" onClick={handleSubmit} disabled={isSubmitting}>
           {submitLabel || "Отправить"}
         </Button>
       </FormLayout>

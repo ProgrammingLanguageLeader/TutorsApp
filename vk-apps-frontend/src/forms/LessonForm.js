@@ -48,7 +48,6 @@ class LessonForm extends React.Component {
       students,
       setFieldValue,
       submitLabel,
-      isValid,
     } = this.props;
 
     return (
@@ -66,7 +65,7 @@ class LessonForm extends React.Component {
           status={errors.data && errors.data["student"] && "error"}
           bottom={errors.data && errors.data["student"]}
           name="student"
-          value={values.student}
+          value={values.student || ""}
           placeholder="Выберите ученика"
           onChange={handleChange}
         >
@@ -143,7 +142,7 @@ class LessonForm extends React.Component {
           value={String(values.price || "")}
         />
 
-        <Button size="xl" onClick={handleSubmit} disabled={!isValid}>
+        <Button size="xl" onClick={handleSubmit} disabled={isSubmitting}>
           {submitLabel || 'Отправить'}
         </Button>
       </FormLayout>

@@ -74,7 +74,7 @@ class MoneyTransferForm extends React.Component {
           max={10000}
           inputMode="numeric"
           pattern="[0-9]*"
-          value={String(values.amount)}
+          value={String(values.amount || "")}
           onChange={handleChange}
         />
 

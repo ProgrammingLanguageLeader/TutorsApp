@@ -26,20 +26,12 @@ const mapDispatchToProps = dispatch => {
 class VacancyCreate extends React.Component {
   constructor(props) {
     super(props);
-    this.startDiv = React.createRef();
     this.handleCreateVacancyFormSubmit = this.handleCreateVacancyFormSubmit.bind(this);
-    this.scrollIntoStartDiv = this.scrollIntoStartDiv.bind(this);
     this.setShouldBlockNavigation = this.setShouldBlockNavigation.bind(this);
     this.state = {
       shouldBlockNavigation: false,
       errors: {},
     };
-  }
-
-  scrollIntoStartDiv() {
-    this.startDiv.current.scrollIntoView({
-      behavior: 'smooth'
-    });
   }
 
   async handleCreateVacancyFormSubmit(values) {
@@ -51,12 +43,6 @@ class VacancyCreate extends React.Component {
       shouldBlockNavigation: false,
       errors,
     });
-    if (Object.keys(errors).length === 0) {
-      this.props.history.goBack();
-    }
-    else {
-      this.scrollIntoStartDiv();
-    }
   }
 
   setShouldBlockNavigation(shouldBlockNavigation) {
@@ -85,8 +71,6 @@ class VacancyCreate extends React.Component {
             )}
           </NavigationPrompt>
 
-          <div ref={this.startDiv} />
-
           <Group>
             <FormDisclaimer />
           </Group>
@@ -100,15 +84,23 @@ class VacancyCreate extends React.Component {
                   setShouldBlockNavigation={this.setShouldBlockNavigation}
                 />
               }
+              validateOnChange={false}
+              validateOnBlur={false}
               validate={values => {
+                window.scrollTo({
+                  top: 0,
+                  behavior: 'smooth',
+                });
                 return VacancyForm.validate(values)
               }}
-              enableReinitialize
               onSubmit={ async (values, action) => {
                 await this.handleCreateVacancyFormSubmit(values);
                 const { errors } = this.state;
                 action.setSubmitting(false);
                 action.setErrors(errors);
+                if (Object.keys(errors.data).length === 0) {
+                  action.resetForm();
+                }
               }}
             />
           </Group>

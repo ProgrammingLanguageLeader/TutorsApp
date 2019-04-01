@@ -29,9 +29,7 @@ class LessonCreate extends React.Component {
   constructor(props) {
     super(props);
     this.handleLessonFormSubmit = this.handleLessonFormSubmit.bind(this);
-    this.scrollIntoStartDiv = this.scrollIntoStartDiv.bind(this);
     this.setShouldBlockNavigation = this.setShouldBlockNavigation.bind(this);
-    this.startDiv = React.createRef();
     this.state = {
       shouldBlockNavigation: false,
       students: [],
@@ -50,12 +48,6 @@ class LessonCreate extends React.Component {
     });
   }
 
-  scrollIntoStartDiv() {
-    this.startDiv.current.scrollIntoView({
-      behavior: 'smooth',
-    });
-  }
-
   async handleLessonFormSubmit(values) {
     const response = await this.props.createLesson(values);
     const success = response.status < 400;
@@ -65,7 +57,6 @@ class LessonCreate extends React.Component {
       success,
       errors,
     });
-    this.scrollIntoStartDiv();
   }
 
   setShouldBlockNavigation(shouldBlockNavigation) {
@@ -94,14 +85,11 @@ class LessonCreate extends React.Component {
             )}
           </NavigationPrompt>
 
-          <div ref={this.startDiv} />
-
           <Group title="Форма создания">
             {success && <SuccessfulFormStatus title="Успешно" />}
 
             <Formik
               initialValues={{
-                beginning_time: moment(),
                 duration: moment.duration(60, 'minutes'),
               }}
               validate={values => {
@@ -110,6 +98,8 @@ class LessonCreate extends React.Component {
                 });
                 return LessonForm.validate(values);
               }}
+              validateOnChange={false}
+              validateOnBlue={false}
               render={
                 formikProps => (
                   <LessonForm

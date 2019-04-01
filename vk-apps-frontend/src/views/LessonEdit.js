@@ -31,9 +31,7 @@ class LessonEdit extends React.Component {
   constructor(props) {
     super(props);
     this.handleLessonFormSubmit = this.handleLessonFormSubmit.bind(this);
-    this.scrollIntoStartDiv = this.scrollIntoStartDiv.bind(this);
     this.setShouldBlockNavigation = this.setShouldBlockNavigation.bind(this);
-    this.startDiv = React.createRef();
     this.state = {
       shouldBlockNavigation: false,
       lesson: null,
@@ -66,12 +64,6 @@ class LessonEdit extends React.Component {
     });
   }
 
-  scrollIntoStartDiv() {
-    this.startDiv.current.scrollIntoView({
-      behavior: 'smooth',
-    });
-  }
-
   async handleLessonFormSubmit(id, values) {
     const response = await this.props.updateLesson(id, values);
     const success = response.status < 400;
@@ -81,7 +73,10 @@ class LessonEdit extends React.Component {
       success,
       errors,
     });
-    this.scrollIntoStartDiv();
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
   }
 
   setShouldBlockNavigation(shouldBlockNavigation) {
@@ -109,8 +104,6 @@ class LessonEdit extends React.Component {
               />
             )}
           </NavigationPrompt>
-
-          <div ref={this.startDiv} />
 
           {fetching && <DivSpinner />}
 

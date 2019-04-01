@@ -29,9 +29,7 @@ const mapDispatchToProps = dispatch => {
 class VacancyEdit extends React.Component {
   constructor(props) {
     super(props);
-    this.startDiv = React.createRef();
     this.handleVacancyEditSubmit = this.handleVacancyEditSubmit.bind(this);
-    this.scrollIntoViewStartDiv = this.scrollIntoViewStartDiv.bind(this);
     this.setShouldBlockNavigation = this.setShouldBlockNavigation.bind(this);
     this.state = {
       shouldBlockNavigation: false,
@@ -54,12 +52,6 @@ class VacancyEdit extends React.Component {
     });
   }
 
-  scrollIntoViewStartDiv() {
-    this.startDiv.current.scrollIntoView({
-      behavior: 'smooth'
-    });
-  }
-
   async handleVacancyEditSubmit(id, values) {
     const response = await this.props.updateVacancy(id, values);
     const success = response.status < 400;
@@ -69,7 +61,10 @@ class VacancyEdit extends React.Component {
       success,
       errors,
     });
-    this.scrollIntoViewStartDiv();
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
   }
 
   setShouldBlockNavigation(shouldBlockNavigation) {
@@ -97,8 +92,6 @@ class VacancyEdit extends React.Component {
               />
             )}
           </NavigationPrompt>
-
-          <div ref={this.startDiv} />
 
           {fetching && <DivSpinner />}
 

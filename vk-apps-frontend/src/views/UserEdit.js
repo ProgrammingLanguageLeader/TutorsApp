@@ -45,7 +45,7 @@ class UserEdit extends React.Component {
     this.handleEditProfileSubmit = this.handleEditProfileSubmit.bind(this);
     this.handleUploadAvatarFormSubmit = this.handleUploadAvatarFormSubmit.bind(this);
     this.fetchUser = this.fetchUser.bind(this);
-    this.handleUploadAvatarFromVK = this.handleUploadAvatarFromVK.bind(this);
+    this.handleUploadAvatarFromVk = this.handleUploadAvatarFromVk.bind(this);
     this.handleSyncDataWithVk = this.handleSyncDataWithVk.bind(this);
     this.setShouldBlockNavigation = this.setShouldBlockNavigation.bind(this);
     this.state = {
@@ -67,6 +67,13 @@ class UserEdit extends React.Component {
     this.setState({ shouldBlockNavigation });
   }
 
+  static scrollToTop() {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+  }
+
   async fetchUser() {
     this.setState({
       fetching: true,
@@ -80,7 +87,7 @@ class UserEdit extends React.Component {
     });
   }
 
-  async handleUploadAvatarFromVK() {
+  async handleUploadAvatarFromVk() {
     const { id } = this.props.match.params;
     const { photo_200 } = this.props.vkUserInfo;
     const avatarBlob = await axios({
@@ -109,9 +116,8 @@ class UserEdit extends React.Component {
       shouldBlockNavigation: false,
       errors,
     });
-    if (Object.keys(errors).length === 0) {
-      this.props.history.goBack();
-    }
+    await this.fetchUser();
+    UserEdit.scrollToTop();
   }
 
   async handleSyncDataWithVk() {
@@ -131,9 +137,8 @@ class UserEdit extends React.Component {
       fetching: false,
       errors,
     });
-    if (Object.keys(errors).length === 0) {
-      this.props.history.goBack();
-    }
+    await this.fetchUser();
+    UserEdit.scrollToTop();
   }
 
   async handleUploadAvatarFormSubmit(values) {
@@ -147,9 +152,8 @@ class UserEdit extends React.Component {
       shouldBlockNavigation: false,
       errors,
     });
-    if (Object.keys(errors).length === 0) {
-      this.props.history.goBack();
-    }
+    await this.fetchUser();
+    UserEdit.scrollToTop();
   }
 
   async handleEditProfileSubmit(values) {
@@ -162,9 +166,7 @@ class UserEdit extends React.Component {
       shouldBlockNavigation: false,
       errors,
     });
-    if (Object.keys(errors).length === 0) {
-      this.props.history.goBack();
-    }
+    UserEdit.scrollToTop();
   }
 
   render() {
@@ -217,7 +219,7 @@ class UserEdit extends React.Component {
                 render={formikProps =>
                   <UploadAvatarForm
                     { ...formikProps }
-                    handleUploadFromVK={this.handleUploadAvatarFromVK}
+                    handleUploadFromVK={this.handleUploadAvatarFromVk}
                     setShouldBlockNavigation={this.setShouldBlockNavigation}
                   />
                 }
