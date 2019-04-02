@@ -163,6 +163,10 @@ class UserEdit extends React.Component {
     });
     const errors = response.status < 400 ? {} : response;
     this.setState({
+      user: {
+        ...this.state.user,
+        ...values
+      },
       shouldBlockNavigation: false,
       errors,
     });
@@ -246,6 +250,7 @@ class UserEdit extends React.Component {
                   metro_station: user.metro_station,
                   bio: user.bio
                 }}
+                enableReinitialize
                 render={formikProps =>
                   <EditUserForm
                     {...formikProps}
