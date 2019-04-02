@@ -65,6 +65,10 @@ class LessonCreate extends React.Component {
 
   render() {
     const { students, success, shouldBlockNavigation } = this.state;
+    const defaultLessonValues = {
+      beginning_time: moment(),
+      duration: moment.duration(60, 'minutes'),
+    };
 
     return (
       <View id={this.props.id} activePanel={this.props.id}>
@@ -89,12 +93,14 @@ class LessonCreate extends React.Component {
             {success && <SuccessfulFormStatus title="Успешно" />}
 
             <Formik
-              initialValues={{
-                duration: moment.duration(60, 'minutes'),
-              }}
+              initialValues={defaultLessonValues}
               validate={values => {
                 this.setState({
                   success: false,
+                });
+                window.scrollTo({
+                  top: 0,
+                  behavior: 'smooth',
                 });
                 return LessonForm.validate(values);
               }}
@@ -115,6 +121,9 @@ class LessonCreate extends React.Component {
                 const { errors } = this.state;
                 action.setSubmitting(false);
                 action.setErrors(errors);
+                if (Object.keys(errors).length === 0) {
+                  action.resetForm(defaultLessonValues);
+                }
               }}
             />
           </Group>

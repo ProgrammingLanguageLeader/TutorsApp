@@ -98,8 +98,8 @@ class VacancyCreate extends React.Component {
                 const { errors } = this.state;
                 action.setSubmitting(false);
                 action.setErrors(errors);
-                if (Object.keys(errors.data).length === 0) {
-                  action.resetForm();
+                if (Object.keys(errors).length === 0) {
+                  action.resetForm({});
                 }
               }}
             />
