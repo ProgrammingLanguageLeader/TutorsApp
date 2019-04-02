@@ -12,6 +12,7 @@ import Group from '@vkontakte/vkui/dist/components/Group/Group';
 import SmartBackButton from 'vk-apps-frontend/components/SmartBackButton';
 import FormDisclaimer from 'vk-apps-frontend/components/FormDisclaimer';
 import ConfirmationPrompt from 'vk-apps-frontend/components/ConfirmationPrompt';
+import SuccessfulFormStatus from 'vk-apps-frontend/components/SuccessfulFormStatus';
 
 import VacancyForm from 'vk-apps-frontend/forms/VacancyForm';
 
@@ -38,9 +39,11 @@ class VacancyCreate extends React.Component {
     const response = await this.props.createVacancy({
       ...values
     });
-    const errors = response.status < 400 ? {} : response;
+    const success = response.status < 400;
+    const errors = success ? {} : response;
     this.setState({
       shouldBlockNavigation: false,
+      success,
       errors,
     });
   }
@@ -50,7 +53,7 @@ class VacancyCreate extends React.Component {
   }
 
   render() {
-    const { shouldBlockNavigation } = this.state;
+    const { shouldBlockNavigation, success } = this.state;
 
     return (
       <View id={this.props.id} activePanel={this.props.id}>
@@ -76,6 +79,8 @@ class VacancyCreate extends React.Component {
           </Group>
 
           <Group title="Заполняемые поля">
+            {success && <SuccessfulFormStatus title="Успешно" />}
+
             <Formik
               render={formikProps =>
                 <VacancyForm
