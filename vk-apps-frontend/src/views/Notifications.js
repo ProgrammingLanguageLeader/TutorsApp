@@ -8,6 +8,7 @@ import Panel from '@vkontakte/vkui/dist/components/Panel/Panel';
 import PanelHeader from '@vkontakte/vkui/dist/components/PanelHeader/PanelHeader';
 import Group from '@vkontakte/vkui/dist/components/Group/Group';
 import List from '@vkontakte/vkui/dist/components/List/List';
+import Cell from '@vkontakte/vkui/dist/components/Cell/Cell';
 import Div from '@vkontakte/vkui/dist/components/Div/Div';
 import PullToRefresh from '@vkontakte/vkui/dist/components/PullToRefresh/PullToRefresh';
 import CellButton from '@vkontakte/vkui/dist/components/CellButton/CellButton';
@@ -46,7 +47,7 @@ class Notifications extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      refreshing: null,
+      refreshing: false,
       fetching: false,
       unreadNotifications: [],
       readNotifications: [],
@@ -86,19 +87,17 @@ class Notifications extends React.Component {
     await this.fetchNotifications();
   }
 
-  async onRefresh() {
+  onRefresh() {
     this.setState({
       refreshing: true,
-    });
-    await this.fetchNotifications();
-    setTimeout(
-      () => {
+    }, async () => {
+      await this.fetchNotifications();
+      setTimeout(() => {
         this.setState({
           refreshing: false,
         });
-      },
-      1000
-    );
+      }, 800);
+    });
   }
 
   render () {
@@ -144,7 +143,7 @@ class Notifications extends React.Component {
                       key={notification.id}
                       notification={notification}
                       buttonBefore={<Icon24Hide/>}
-                      buttonLabel={"Пометить прочитанным"}
+                      buttonLabel="Пометить прочитанным"
                       onButtonClick={
                         () => this.handleSetUnreadNotification(notification.id, false)
                       }
@@ -156,8 +155,8 @@ class Notifications extends React.Component {
                     />
                   ))}
 
-                  { !fetching && unreadNotifications.length === 0 && (
-                    <Div>Нет уведомлений</Div>
+                  { unreadNotifications.length === 0 && (
+                    <Cell>Нет уведомлений</Cell>
                   )}
                 </List>
               </Group>
@@ -169,7 +168,7 @@ class Notifications extends React.Component {
                       key={notification.id}
                       notification={notification}
                       buttonBefore={<Icon24View/>}
-                      buttonLabel={"Пометить непрочитанным"}
+                      buttonLabel="Пометить непрочитанным"
                       onButtonClick={
                         () => this.handleSetUnreadNotification(notification.id, true)
                       }
@@ -181,8 +180,8 @@ class Notifications extends React.Component {
                     />
                   ))}
 
-                  { !fetching && readNotifications.length === 0 && (
-                    <Div>Нет уведомлений</Div>
+                  { readNotifications.length === 0 && (
+                    <Cell>Нет уведомлений</Cell>
                   )}
                 </List>
               </Group>
