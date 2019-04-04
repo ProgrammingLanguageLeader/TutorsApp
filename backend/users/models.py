@@ -120,7 +120,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     )
     bio = models.TextField(
         blank=True,
-        max_length=100,
+        max_length=400,
         verbose_name=_('bio'),
         validators=[
             NoSpecialSymbolsValidator()

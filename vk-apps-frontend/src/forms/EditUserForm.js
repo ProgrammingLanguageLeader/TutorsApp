@@ -122,7 +122,7 @@ class EditUserForm extends React.Component {
 
         <Textarea
           name="bio"
-          maxLength={100}
+          maxLength={400}
           top="О себе"
           status={errors.data && errors.data["bio"] && "error"}
           bottom={errors.data && errors.data["bio"]}
