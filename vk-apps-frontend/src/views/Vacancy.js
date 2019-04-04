@@ -20,7 +20,6 @@ import Icon24Home from '@vkontakte/icons/dist/24/home';
 import Icon24UserAdd from '@vkontakte/icons/dist/24/user_add';
 import Icon24Delete from '@vkontakte/icons/dist/24/delete'
 import Icon24Cancel from '@vkontakte/icons/dist/24/cancel';
-import Icon24Article from '@vkontakte/icons/dist/24/article';
 
 import ErrorFormStatus from 'vk-apps-frontend/components/ErrorFormStatus';
 import DivSpinner from 'vk-apps-frontend/components/DivSpinner';
@@ -251,7 +250,7 @@ class Vacancy extends React.Component {
                 {educationLevelList.map(level => {
                   if (vacancy[level.backendField]) {
                     return (
-                      <Cell key={level.backendField} before={<Icon24Article/>}>
+                      <Cell key={level.backendField} before={<Icon24Info/>}>
                         {level.name}
                       </Cell>
                     );
@@ -259,11 +258,7 @@ class Vacancy extends React.Component {
                 })}
 
                 {vacancy.extra_info && (
-                  <Cell
-                    multiline
-                    description="Дополнительная информация"
-                    before={<Icon24Info />}
-                  >
+                  <Cell multiline description="Дополнительная информация">
                     {vacancy.extra_info}
                   </Cell>
                 )}

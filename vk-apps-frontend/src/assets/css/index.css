@@ -20,6 +20,10 @@ button, .CellButton, .Button, .Cell--expandable {
     cursor: pointer;
 }
 
+.Cell--multiline .Cell__main {
+    white-space: pre-line;
+}
+
 /* Date picker styles */
 
 .rdtPicker {
