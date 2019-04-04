@@ -35,11 +35,17 @@ class VacancyForm extends React.Component {
   }
 
   static getDerivedStateFromProps(props, state) {
-    if (props.values.subject !== state.selectSubject) {
-      return {
-        selectSubject: '',
-        inputSubject: props.values.subject,
-      };
+    const { subject } = props.values;
+    if (subject !== state.selectSubject) {
+      return subjectsList.find(subjectItem => subject === subjectItem)
+        ? {
+          selectSubject: subject,
+          inputSubject: '',
+        }
+        : {
+          selectSubject: '',
+          inputSubject: subject,
+        }
     }
     return state;
   }
