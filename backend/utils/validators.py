@@ -10,5 +10,5 @@ class AlphabetSymbolsValidator(RegexValidator):
 
 
 class NoSpecialSymbolsValidator(RegexValidator):
-    regex = regex.compile(r'^[\p{Alnum}\p{Punct}\p{Blank}]*$', regex.UNICODE)
+    regex = regex.compile(r'^[\p{Alnum}\p{Punct}\p{Blank}\n]*$', regex.UNICODE)
     message = _('Special symbols are not allowed')
