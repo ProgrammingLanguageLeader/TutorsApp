@@ -76,15 +76,16 @@ class Vacancies extends React.Component {
     });
   }
 
-  async handlePaginationButtonClick(pageNumber) {
-    await this.setState({
-      pageNumber,
-    });
+  handlePaginationButtonClick(pageNumber) {
     window.scrollTo({
       top: 0,
-      behavior: 'smooth',
+      behavior: 'auto',
     });
-    await this.fetchVacancies();
+    this.setState({
+      pageNumber,
+    }, async () => {
+      await this.fetchVacancies();
+    });
   }
 
   render() {
