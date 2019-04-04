@@ -93,13 +93,13 @@ class App extends React.Component {
     return (
       !initializing
         ? (
-          <Router history={this.history.getHistory()}>
+          <Router history={this.history}>
             <Route path="/" component={props => {
               const { location } = props;
               const { pathname } = location;
               const activeView = matchView(pathname);
               const match = getMatchedPath(pathname);
-              const isBack = this.history.getLastAction() === 'POP';
+              const isBack = this.history.lastAction === 'BACK';
 
               return (
                 <Epic

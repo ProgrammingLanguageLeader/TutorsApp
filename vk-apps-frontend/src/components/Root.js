@@ -3,7 +3,7 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 import { platform, IOS } from '@vkontakte/vkui/dist/lib/platform';
 
-const Root = ({ id, activeView, isBack, match, children }) => {
+const Root = ({ activeView, isBack, children }) => {
   const currentPlatform = platform();
   const transitionEnterTimeout = currentPlatform === IOS ? 800 : 400;
   const transitionLeaveTimeout = currentPlatform === IOS ? 900 : 500;
