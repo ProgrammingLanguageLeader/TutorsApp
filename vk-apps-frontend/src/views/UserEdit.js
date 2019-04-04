@@ -216,9 +216,6 @@ class UserEdit extends React.Component {
           {user && (
             <Group title="Изображение профиля">
               <Formik
-                initialValues={{
-                  avatar: null,
-                }}
                 validate={UploadAvatarForm.validate}
                 render={formikProps =>
                   <UploadAvatarForm
@@ -227,10 +224,13 @@ class UserEdit extends React.Component {
                     setShouldBlockNavigation={this.setShouldBlockNavigation}
                   />
                 }
-                onSubmit={ async (values, actions) => {
+                onSubmit={ async (values, action) => {
                   await this.handleUploadAvatarFormSubmit(values);
-                  actions.setSubmitting(false);
-                  actions.setErrors(this.state.errors)
+                  action.setSubmitting(false);
+                  action.setErrors(this.state.errors);
+                  if (Object.keys(this.state.errors).length === 0) {
+                    action.resetForm({});
+                  }
                 }}
               />
             </Group>
