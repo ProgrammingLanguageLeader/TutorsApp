@@ -16,7 +16,7 @@ a {
     cursor: pointer;
 }
 
-button, .CellButton, .Button, .Cell--expandable {
+button, .CellButton, .Button, .Cell--expandable, .TabbarItem {
     cursor: pointer;
 }
 
