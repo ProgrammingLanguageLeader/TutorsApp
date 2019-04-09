@@ -35,6 +35,7 @@ django-filter = "*"
 pyyaml = "*"
 django = "==2.1.7"
 regex = "*"
+profanityfilter = "*"
 
 [requires]
 python_version = "3.6"
