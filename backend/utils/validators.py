@@ -21,5 +21,5 @@ def validate_profanity(value):
     profanity_filter = ProfanityFilter()
     if profanity_filter.is_profane(value):
         raise ValidationError(
-            _('Profanity is not allowed')
+            _('Restricted word was detected')
         )
