@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-02 19:03+0000\n"
+"POT-Creation-Date: 2019-04-14 23:20+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -47,7 +47,7 @@ msgstr "длительность"
 msgid "ending time"
 msgstr "время окончания"
 
-#: lessons/models.py:53 tutors/models.py:46 vacancies/models.py:13
+#: lessons/models.py:53 tutors/models.py:46 vacancies/models.py:12
 msgid "creation time"
 msgstr "время создания"
 
@@ -143,7 +143,7 @@ msgstr "количество учеников"
 msgid "Tutors"
 msgstr "Учителя"
 
-#: tutors/models.py:12 users/models.py:147 vk_apps_users/models.py:17
+#: tutors/models.py:12 users/models.py:154 vk_apps_users/models.py:17
 msgid "user"
 msgstr "пользователь"
 
@@ -187,11 +187,11 @@ msgstr "Полное имя"
 msgid "Users"
 msgstr "Пользователи"
 
-#: users/models.py:26
+#: users/models.py:21
 msgid "username"
 msgstr "имя пользователя"
 
-#: users/models.py:32
+#: users/models.py:27
 msgid ""
 "Enter a valid value: minimum length is 3, maximum length is 30, alphanumeric "
 "characters, _, @, +, - are allowed"
@@ -199,39 +199,39 @@ msgstr ""
 "Введите корректное значение: минимальная длина - 3, максимальная - 30, "
 "разрешается использовать символы латинского алфавита, цифры, _, @, +, -"
 
-#: users/models.py:43
+#: users/models.py:38
 msgid "email address"
 msgstr "email адрес"
 
-#: users/models.py:47
+#: users/models.py:42
 msgid "first name"
 msgstr "имя"
 
-#: users/models.py:56
+#: users/models.py:52
 msgid "last name"
 msgstr "фамилия"
 
-#: users/models.py:66
+#: users/models.py:63
 msgid "date joined"
 msgstr "дата регистрации"
 
-#: users/models.py:70 vacancies/models.py:23
+#: users/models.py:67 vacancies/models.py:22
 msgid "active"
 msgstr "активный"
 
-#: users/models.py:74
+#: users/models.py:71
 msgid "staff"
 msgstr "сотрудник"
 
-#: users/models.py:79
+#: users/models.py:76
 msgid "experience"
 msgstr "опыт"
 
-#: users/models.py:87
+#: users/models.py:85
 msgid "education"
 msgstr "образование"
 
-#: users/models.py:95
+#: users/models.py:94
 msgid "city"
 msgstr "город"
 
@@ -239,51 +239,56 @@ msgstr "город"
 msgid "district"
 msgstr "район"
 
-#: users/models.py:111
+#: users/models.py:112
 msgid "street"
 msgstr "улица"
 
-#: users/models.py:119
+#: users/models.py:121
 msgid "metro station"
 msgstr "станция метро"
 
-#: users/models.py:129
+#: users/models.py:132
 msgid "bio"
 msgstr "о себе"
 
-#: users/models.py:137
+#: users/models.py:141
 msgid "avatar"
 msgstr "аватар"
 
-#: users/models.py:148
+#: users/models.py:155
 msgid "users"
 msgstr "пользователи"
+
+#: users/validators.py:9
+#, python-format
+msgid "The maximum file size that can be uploaded is %s"
+msgstr "Максимумальный объем файла, который может быть загружен - %s"
 
 #: utils/exception_handler.py:12
 msgid "vacations limit exceeded"
 msgstr "достигнуто ограничение по количеству предложений"
 
-#: utils/validators.py:9
+#: utils/validators.py:12
 msgid "Only alphabet symbols are allowed"
 msgstr "Разрешены только символы алфавита"
 
-#: utils/validators.py:14
+#: utils/validators.py:17
 msgid "Special symbols are not allowed"
 msgstr "Специальные символы не разрешены"
 
-#: utils/validators.py:19
-msgid "Only alphabet symbols and spaces are allowed"
-msgstr "Разрешены только символы алфавита и пробелы"
+#: utils/validators.py:24
+msgid "Restricted word was detected"
+msgstr "Обнаружено запрещенное слово"
 
 #: vacancies/apps.py:7
 msgid "Vacancies"
 msgstr "Предложения"
 
-#: vacancies/models.py:19
+#: vacancies/models.py:18
 msgid "owner"
 msgstr "владелец"
 
-#: vacancies/models.py:28
+#: vacancies/models.py:27
 msgid "subject"
 msgstr "предмет"
 
@@ -323,15 +328,15 @@ msgstr "выезд на дом"
 msgid "extra info"
 msgstr "дополнительная информация"
 
-#: vacancies/models.py:86
+#: vacancies/models.py:87
 msgid "vacancy"
 msgstr "предложение"
 
-#: vacancies/models.py:87
+#: vacancies/models.py:88
 msgid "vacancies"
 msgstr "предложения"
 
-#: vacancies/serializers.py:29
+#: vacancies/serializers.py:31
 msgid "vacancy of this subject already exists"
 msgstr "предложение по данному предмету уже существует"
 
