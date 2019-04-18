@@ -84,18 +84,19 @@
         },
         "defusedxml": {
             "hashes": [
-                "sha256:06d4515a8f8965624d6db922093eb11e77fb8f9a9ebedd1c5d6df5a0fcd0a12c",
-                "sha256:6c0b1461695877ececd6921a6a330e4392790275c5d6e88fc8ea8261445468b1"
+                "sha256:6687150770438374ab581bb7a1b327a847dd9c5749e396102de3fad4e8a3ef93",
+                "sha256:f684034d135af4c6cbb949b8a4d2ed61634515257a67299e5f940fbaa34377f5"
             ],
             "markers": "python_version >= '3.0'",
-            "version": "==0.6.0rc1"
+            "version": "==0.6.0"
         },
         "dictionary-profanity-filter": {
             "hashes": [
-                "sha256:019c8e80080e426e605034d99a5c778d85f850d3bf566af2185d6db8f097c71b"
+                "sha256:39a70111196ba43a52d64db352c332a8ebde78683d2ede4e9beabe7579811924",
+                "sha256:6d141c5fddec6f210a6ce0467207a9b8d89f5ee4b5c58eb64560636fa1c6fc63"
             ],
             "index": "pypi",
-            "version": "==1.0.3.1"
+            "version": "==1.0.4"
         },
         "django": {
             "hashes": [
@@ -152,11 +153,11 @@
         },
         "djangorestframework-simplejwt": {
             "hashes": [
-                "sha256:6e7a4edeed5f9d342dc1b4c6e00a315e09e26ca49001c7af5f864b8114e865a5",
-                "sha256:af0396b9b1aa8eb3d2306e3abad3aedc1877c326c75d89310d14bd04df2a3b28"
+                "sha256:4cb1a51bf9b098b983e1326a1cfc65fb0b3c5a2aa0fa43effdbf05dd6da5e8cb",
+                "sha256:d025211806622c53020aa4f66029f1f7305e38de6439116b4a842661fc02cf36"
             ],
             "index": "pypi",
-            "version": "==4.2.0"
+            "version": "==4.3.0"
         },
         "docopt": {
             "hashes": [
@@ -441,11 +442,11 @@
         },
         "urllib3": {
             "hashes": [
-                "sha256:61bf29cada3fc2fbefad4fdf059ea4bd1b4a86d2b6d15e1c7c0b582b9752fe39",
-                "sha256:de9529817c93f27c8ccbfead6985011db27bd0ddfcdb2d86f3f663385c6a9c22"
+                "sha256:4c291ca23bbb55c76518905869ef34bdd5f0e46af7afe6861e8375643ffee1a0",
+                "sha256:9a247273df709c4fedb38c711e44292304f73f39ab01beda9f6b9fc375669ac3"
             ],
             "index": "pypi",
-            "version": "==1.24.1"
+            "version": "==1.24.2"
         },
         "vine": {
             "hashes": [
