@@ -1,9 +1,9 @@
+from django.conf import settings
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
-from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 
-from utils.validators import NoSpecialSymbolsValidator, validate_profanity
+from utils.validators import NoSpecialSymbolsValidator
 
 
 class Vacancy(models.Model):
@@ -27,7 +27,6 @@ class Vacancy(models.Model):
         verbose_name=_('subject'),
         validators=[
             NoSpecialSymbolsValidator(),
-            validate_profanity,
         ]
     )
 
@@ -79,7 +78,6 @@ class Vacancy(models.Model):
         verbose_name=_('extra info'),
         validators=[
             NoSpecialSymbolsValidator(),
-            validate_profanity,
         ]
     )
 

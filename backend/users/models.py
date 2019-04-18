@@ -13,7 +13,7 @@ from users.managers import UserManager
 from users.validators import validate_file_max_size
 
 from utils.validators import NoSpecialSymbolsValidator, \
-    AlphabetSymbolsValidator, validate_profanity
+    AlphabetSymbolsValidator
 
 
 class User(AbstractBaseUser, PermissionsMixin):
@@ -45,7 +45,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         default='Anonymous',
         validators=[
             AlphabetSymbolsValidator(),
-            validate_profanity,
         ]
     )
     last_name = models.CharField(
@@ -55,7 +54,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         default='Anonymous',
         validators=[
             AlphabetSymbolsValidator(),
-            validate_profanity,
         ]
     )
 
@@ -78,7 +76,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         max_length=100,
         validators=[
             NoSpecialSymbolsValidator(),
-            validate_profanity,
         ]
     )
     education = models.TextField(
@@ -87,7 +84,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         max_length=100,
         validators=[
             NoSpecialSymbolsValidator(),
-            validate_profanity,
         ]
     )
     city = models.TextField(
@@ -96,7 +92,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         max_length=50,
         validators=[
             NoSpecialSymbolsValidator(),
-            validate_profanity,
         ]
     )
     district = models.TextField(
@@ -105,7 +100,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         max_length=50,
         validators=[
             NoSpecialSymbolsValidator(),
-            validate_profanity,
         ]
     )
     street = models.TextField(
@@ -114,7 +108,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         max_length=50,
         validators=[
             NoSpecialSymbolsValidator(),
-            validate_profanity,
         ]
     )
     metro_station = models.TextField(
@@ -123,7 +116,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         max_length=50,
         validators=[
             NoSpecialSymbolsValidator(),
-            validate_profanity,
         ]
     )
     bio = models.TextField(
@@ -132,7 +124,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name=_('bio'),
         validators=[
             NoSpecialSymbolsValidator(),
-            validate_profanity,
         ]
     )
     avatar = models.ImageField(
