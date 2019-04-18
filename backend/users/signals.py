@@ -4,6 +4,7 @@ from django.db import models
 from django.dispatch import receiver
 
 from users.models import User
+from users.tasks import censor_user_fields
 from users.tools import compress_avatar
 
 
@@ -41,3 +42,8 @@ def handle_avatar_on_change(sender, instance, **kwargs):
         instance.avatar = compress_avatar(new_avatar)
         if os.path.isfile(new_avatar.path):
             os.remove(new_avatar.path)
+
+
+@receiver(models.signals.post_save, sender=User)
+def handle_user_save(sender, instance, **kwargs):
+    censor_user_fields.delay(instance.pk)
