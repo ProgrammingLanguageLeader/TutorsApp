@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-14 23:20+0000\n"
+"POT-Creation-Date: 2019-04-18 23:20+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -31,7 +31,7 @@ msgstr "учитель"
 msgid "student"
 msgstr "ученик"
 
-#: lessons/models.py:31 vacancies/models.py:73
+#: lessons/models.py:31 vacancies/models.py:72
 msgid "price"
 msgstr "цена"
 
@@ -143,7 +143,7 @@ msgstr "количество учеников"
 msgid "Tutors"
 msgstr "Учителя"
 
-#: tutors/models.py:12 users/models.py:154 vk_apps_users/models.py:17
+#: tutors/models.py:12 users/models.py:145 vk_apps_users/models.py:17
 msgid "user"
 msgstr "пользователь"
 
@@ -207,55 +207,55 @@ msgstr "email адрес"
 msgid "first name"
 msgstr "имя"
 
-#: users/models.py:52
+#: users/models.py:51
 msgid "last name"
 msgstr "фамилия"
 
-#: users/models.py:63
+#: users/models.py:61
 msgid "date joined"
 msgstr "дата регистрации"
 
-#: users/models.py:67 vacancies/models.py:22
+#: users/models.py:65 vacancies/models.py:22
 msgid "active"
 msgstr "активный"
 
-#: users/models.py:71
+#: users/models.py:69
 msgid "staff"
 msgstr "сотрудник"
 
-#: users/models.py:76
+#: users/models.py:74
 msgid "experience"
 msgstr "опыт"
 
-#: users/models.py:85
+#: users/models.py:82
 msgid "education"
 msgstr "образование"
 
-#: users/models.py:94
+#: users/models.py:90
 msgid "city"
 msgstr "город"
 
-#: users/models.py:103
+#: users/models.py:98
 msgid "district"
 msgstr "район"
 
-#: users/models.py:112
+#: users/models.py:106
 msgid "street"
 msgstr "улица"
 
-#: users/models.py:121
+#: users/models.py:114
 msgid "metro station"
 msgstr "станция метро"
 
-#: users/models.py:132
+#: users/models.py:124
 msgid "bio"
 msgstr "о себе"
 
-#: users/models.py:141
+#: users/models.py:132
 msgid "avatar"
 msgstr "аватар"
 
-#: users/models.py:155
+#: users/models.py:146
 msgid "users"
 msgstr "пользователи"
 
@@ -268,17 +268,13 @@ msgstr "Максимумальный объем файла, который мо�
 msgid "vacations limit exceeded"
 msgstr "достигнуто ограничение по количеству предложений"
 
-#: utils/validators.py:12
+#: utils/validators.py:9
 msgid "Only alphabet symbols are allowed"
 msgstr "Разрешены только символы алфавита"
 
-#: utils/validators.py:17
+#: utils/validators.py:14
 msgid "Special symbols are not allowed"
 msgstr "Специальные символы не разрешены"
-
-#: utils/validators.py:24
-msgid "Restricted word was detected"
-msgstr "Обнаружено запрещенное слово"
 
 #: vacancies/apps.py:7
 msgid "Vacancies"
@@ -292,47 +288,47 @@ msgstr "владелец"
 msgid "subject"
 msgstr "предмет"
 
-#: vacancies/models.py:36
+#: vacancies/models.py:35
 msgid "ege"
 msgstr "ЕГЭ"
 
-#: vacancies/models.py:40
+#: vacancies/models.py:39
 msgid "oge"
 msgstr "ОГЭ"
 
-#: vacancies/models.py:44
+#: vacancies/models.py:43
 msgid "foreign language certificate"
 msgstr "сертификат о знании иностранного языка"
 
-#: vacancies/models.py:48
+#: vacancies/models.py:47
 msgid "primary school"
 msgstr "начальная школа"
 
-#: vacancies/models.py:52
+#: vacancies/models.py:51
 msgid "secondary school"
 msgstr "средняя школа"
 
-#: vacancies/models.py:56
+#: vacancies/models.py:55
 msgid "olympiads"
 msgstr "олимпиады"
 
-#: vacancies/models.py:60
+#: vacancies/models.py:59
 msgid "university"
 msgstr "курс высшего образования"
 
-#: vacancies/models.py:64
+#: vacancies/models.py:63
 msgid "home schooling"
 msgstr "выезд на дом"
 
-#: vacancies/models.py:79
+#: vacancies/models.py:78
 msgid "extra info"
 msgstr "дополнительная информация"
 
-#: vacancies/models.py:87
+#: vacancies/models.py:85
 msgid "vacancy"
 msgstr "предложение"
 
-#: vacancies/models.py:88
+#: vacancies/models.py:86
 msgid "vacancies"
 msgstr "предложения"
 
